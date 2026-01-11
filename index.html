@@ -267,10 +267,17 @@
             overflow: hidden;
             box-shadow: var(--shadow);
             margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary) 100%);
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
         }
         .founder-photo img {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
             display: block;
         }
         .founder-links { 
@@ -278,6 +285,7 @@
             gap: 15px; 
             margin-top: 30px; 
             flex-wrap: wrap;
+            justify-content: center;
         }
         
         /* КНИГА */
@@ -293,6 +301,11 @@
             align-items: start;
             margin-top: 30px;
         }
+        @media (max-width: 768px) {
+            .book-info {
+                grid-template-columns: 1fr;
+            }
+        }
         .book-cover {
             width: 100%;
             max-width: 300px;
@@ -300,14 +313,21 @@
             overflow: hidden;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
             transition: var(--transition);
+            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+            aspect-ratio: 3/4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
         }
         .book-cover:hover {
-            transform: translateY(-5px) rotate(2deg);
+            transform: translateY(-5px);
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
         }
         .book-cover img {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
             display: block;
         }
         .book-details {
@@ -436,7 +456,6 @@
             .section-title { font-size: 2.4rem; }
             .hero-title { font-size: 2.8rem; }
             .founder-content { grid-template-columns: 1fr; text-align: center; }
-            .book-info { grid-template-columns: 1fr; }
         }
         @media (max-width: 768px) {
             .nav-links { display: none; }
@@ -447,7 +466,27 @@
             .mission-block { padding: 40px 20px; }
             .mission-quote { font-size: 1.3rem; }
             .founder-section { padding: 40px 20px; }
-            .founder-links { justify-content: center; }
+        }
+        
+        /* Заглушки для изображений */
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .photo-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            opacity: 0.7;
+        }
+        .photo-placeholder span {
+            font-size: 0.9rem;
+            opacity: 0.7;
         }
     </style>
 </head>
@@ -585,8 +624,12 @@
                 </div>
                 <div class="founder-content">
                     <div class="founder-photo-container">
-                        <div class="founder-photo">
-                            <img src="academy-scm-landing/images/photo.jpg" alt="Дмитрий Панибратский, основатель Академии SCM">
+                        <div class="founder-photo" id="founderPhoto">
+                            <!-- Фото будет загружено через JavaScript -->
+                            <div class="photo-placeholder">
+                                <i class="fas fa-user-tie"></i>
+                                <span>Дмитрий Панибратский<br>Основатель Академии</span>
+                            </div>
                         </div>
                         <div class="founder-links">
                             <a href="https://965910-bit.github.io/Panibratsky-Dmitry/index.html" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Подробнее</a>
@@ -606,8 +649,12 @@
                             <h3 style="font-size: 1.8rem; margin-bottom: 15px; color: var(--dark);">Новая книга о цепях поставок</h3>
                             
                             <div class="book-info">
-                                <div class="book-cover">
-                                    <img src="academy-scm-landing/images/скриншот из книги.png" alt="Скриншот из новой книги по управлению цепями поставок">
+                                <div class="book-cover" id="bookCover">
+                                    <!-- Обложка книги будет загружена через JavaScript -->
+                                    <div class="photo-placeholder">
+                                        <i class="fas fa-book-open"></i>
+                                        <span>Скриншот из книги<br>"Современные подходы к управлению цепями поставок"</span>
+                                    </div>
                                 </div>
                                 <div class="book-details">
                                     <h4 class="book-title">Современные подходы к управлению цепями поставок</h4>
@@ -765,6 +812,61 @@
                     navLinks.style.display = 'none';
                 }
             });
+            
+            // Динамическая загрузка изображений с обработкой ошибок
+            function loadImage(elementId, imagePath, fallbackHtml) {
+                const img = new Image();
+                img.onload = function() {
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        element.innerHTML = `<img src="${imagePath}" alt="${elementId === 'founderPhoto' ? 'Дмитрий Панибратский' : 'Скриншот из книги'}">`;
+                    }
+                };
+                img.onerror = function() {
+                    console.log(`Изображение не найдено: ${imagePath}`);
+                    // Оставляем fallback контент
+                };
+                img.src = imagePath;
+            }
+            
+            // Пробуем разные пути к изображениям
+            const basePaths = [
+                'images/photo.jpg',
+                'academy-scm-landing/images/photo.jpg',
+                './images/photo.jpg',
+                '/academy-scm-landing/images/photo.jpg'
+            ];
+            
+            const bookPaths = [
+                'images/скриншот из книги.png',
+                'academy-scm-landing/images/скриншот из книги.png',
+                './images/скриншот из книги.png',
+                '/academy-scm-landing/images/скриншот из книги.png',
+                'images/book-screenshot.png' // альтернативное имя файла
+            ];
+            
+            // Пробуем загрузить фото основателя
+            loadImage('founderPhoto', basePaths[0], '');
+            
+            // Пробуем загрузить обложку книги
+            loadImage('bookCover', bookPaths[0], '');
+            
+            // Альтернативный метод: попробовать все пути по очереди
+            setTimeout(() => {
+                // Проверяем, загрузилось ли фото основателя
+                const founderImg = document.querySelector('#founderPhoto img');
+                if (!founderImg || !founderImg.complete || founderImg.naturalHeight === 0) {
+                    // Пробуем следующий путь
+                    loadImage('founderPhoto', basePaths[1], '');
+                }
+                
+                // Проверяем, загрузилась ли обложка книги
+                const bookImg = document.querySelector('#bookCover img');
+                if (!bookImg || !bookImg.complete || bookImg.naturalHeight === 0) {
+                    // Пробуем следующий путь
+                    loadImage('bookCover', bookPaths[1], '');
+                }
+            }, 1000);
         });
     </script>
 </body>
