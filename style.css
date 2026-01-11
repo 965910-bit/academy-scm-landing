@@ -1,0 +1,83 @@
+/* Табы с курсами */
+.courses-tabs {
+    margin-top: 50px;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 40px;
+    justify-content: center;
+}
+
+.tab-btn {
+    padding: 12px 25px;
+    background-color: var(--light);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: var(--dark);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tab-btn:hover {
+    background-color: #e5e7eb;
+}
+
+.tab-btn.active {
+    background-color: var(--primary);
+    color: white;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.5s;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.course-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.course-item {
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border-left: 4px solid var(--primary);
+}
+
+.course-item h4 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: var(--dark);
+}
+
+.course-item p {
+    color: var(--gray);
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+}
+
+.course-duration {
+    display: inline-block;
+    background-color: var(--light);
+    color: var(--primary);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
