@@ -1,157 +1,889 @@
-<!-- Детализация всех курсов -->
-<section class="section courses-detail">
-    <div class="container">
-        <h2 class="section-title">Все курсы и модули</h2>
-        <p class="section-subtitle">Полная программа обучения от новичка до эксперта</p>
-        
-        <div class="courses-tabs">
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="basic">Базовый уровень</button>
-                <button class="tab-btn" data-tab="professional">Профессиональный</button>
-                <button class="tab-btn" data-tab="expert">Экспертный</button>
-                <button class="tab-btn" data-tab="intensive">Интенсивы</button>
-                <button class="tab-btn" data-tab="soft">Soft Skills</button>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Академия Цепей Поставок | Профессиональное образование в SCM</title>
+    <meta name="description" content="Сообщество практиков управления цепями поставок. Онлайн-курсы, менторство, профессиональное развитие для руководителей и специалистов SCM.">
+    <meta name="keywords" content="SCM, логистика, цепи поставок, обучение, курсы, менторство, управление цепями поставок, образование, карьера">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    
+    <!-- Open Graph для социальных сетей -->
+    <meta property="og:title" content="Академия Цепей Поставок">
+    <meta property="og:description" content="Профессиональное сообщество и образовательная платформа для руководителей и специалистов в управлении цепями поставок">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=SCM+Academy">
+    <meta property="og:url" content="https://965910-bit.github.io/academy-scm-landing/">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Академия Цепей Поставок">
+    <meta name="twitter:description" content="Профессиональное сообщество и образовательная платформа для SCM-специалистов">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://965910-bit.github.io/academy-scm-landing/">
+    
+    <style>
+        /* Стили для предзагрузки */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+        .preloader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #2563EB;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Прелоадер -->
+    <div class="preloader" id="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Навигация -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="#home" class="logo">
+                <span class="logo-icon"><i class="fas fa-link"></i></span>
+                <span class="logo-text">SCM Academy</span>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#home" class="nav-link active">Главная</a>
+                <a href="#programs" class="nav-link">Программы</a>
+                <a href="#courses" class="nav-link">Курсы</a>
+                <a href="#about" class="nav-link">Об академии</a>
+                <a href="#expert" class="nav-link">Эксперт</a>
+                <a href="#community" class="nav-link">Сообщество</a>
+                <a href="#contact" class="nav-link btn btn-outline">Записаться</a>
             </div>
-            
-            <div class="tab-content active" id="basic">
-                <div class="course-list">
-                    <div class="course-item">
-                        <h4>SCM Base Camp</h4>
-                        <p>Основы управления цепями поставок, терминология, базовые процессы</p>
-                        <span class="course-duration">2 месяца</span>
-                    </div>
-                    <div class="course-item">
-                        <h4>Введение в логистику и закупки</h4>
-                        <p>Основные принципы, документооборот, ключевые показатели</p>
-                        <span class="course-duration">3 недели</span>
-                    </div>
-                    <div class="course-item">
-                        <h4>Основы складской логистики</h4>
-                        <p>Устройство склада, системы хранения, процессы приемки и отгрузки</p>
-                        <span class="course-duration">3 недели</span>
-                    </div>
-                    <div class="course-item">
-                        <h4>Базовые финансы SCM</h4>
-                        <p>TCO, расчет себестоимости, бюджет логистики</p>
-                        <span class="course-duration">2 недели</span>
-                    </div>
+            <button class="menu-toggle" id="menuToggle" aria-label="Меню">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Герой-секция -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="highlight">Академия Цепей Поставок</span>
+                    <br>Профессиональное сообщество практиков
+                </h1>
+                <p class="hero-subtitle">Образовательная платформа, где практический опыт трансформируется в системные знания для следующего поколения руководителей SCM</p>
+                <p class="hero-description">Мы создаем среду для обмена реальным опытом, развития профессиональных навыков и формирования отраслевых стандартов в управлении цепями поставок.</p>
+                <div class="hero-buttons">
+                    <a href="#programs" class="btn btn-primary btn-lg">
+                        <i class="fas fa-graduation-cap"></i> Выбрать программу
+                    </a>
+                    <a href="#contact" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-calendar-check"></i> Бесплатная консультация
+                    </a>
                 </div>
             </div>
-            
-            <div class="tab-content" id="professional">
-                <div class="course-list">
-                    <div class="course-item">
-                        <h4>Стратегия и финансы SCM</h4>
-                        <p>Связь SCM со стратегией бизнеса, финансовые модели, ROI проектов</p>
-                        <span class="course-duration">6 недель</span>
-                    </div>
-                    <div class="course-item">
-                        <h4>Планирование и прогнозирование</h4>
-                        <p>S&OP/IBP процессы, методы прогнозирования, работа с данными</p>
-                        <span class="course-duration">5 недель</span>
-                    </div>
-                    <div class="course-item">
-                        <h4>Управление закупками</h4>
-                        <p>Стратегия закупок, управление поставщиками, переговоры</p>
-                        <span class="course-duration">4 недели</span>
-                    </div>
-                    <div class="course-item">
-                        <h4>Логистика и транспорт</h4>
-                        <p>Оптимизация транспортных сетей, выбор перевозчиков, управление затратами</p>
-                        <span class="course-duration">4 недели</span>
-                    </div>
-                    <div class="course-item">
-                        <h4>Цифровая трансформация</h4>
-                        <p>AI, IoT, блокчейн в SCM, дорожная карта внедрения</p>
-                        <span class="course-duration">6 недель</span>
-                    </div>
-                    <div class="course-item">
-                        <h4>Управление рисками</h4>
-                        <p>Идентификация рисков, стратегии mitigation, кризисное управление</p>
-                        <span class="course-duration">4 недели</span>
-                    </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number" data-count="15">0</div>
+                    <div class="stat-label">Лет экспертного опыта</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" data-count="4">0</div>
+                    <div class="stat-label">Направления обучения</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" data-count="70">0</div>
+                    <div class="stat-label">% практики в обучении</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" data-count="100">0</div>
+                    <div class="stat-label">% гарантия результата</div>
                 </div>
             </div>
-            
-            <div class="tab-content" id="expert">
-                <div class="course-list">
-                    <div class="course-item">
-                        <h4>Стратегическое управление SCM</h4>
-                        <p>Построение операционной модели, трансформация функций SCM</p>
-                        <span class="course-duration">8 недель</span>
-                    </div>
-                    <div class="course-item">
-                        <h4>Моделирование цепей поставок</h4>
-                        <p>Simulation, optimization, цифровые двойники, сценарный анализ</p>
-                        <span class="course-duration">6 недель</span>
-                    </div>
-                    <div class="course-item">
-                        <h4>Устойчивое развитие (ESG)</h4>
-                        <p>Зеленая логистика, углеродный след, циркулярная экономика</p>
-                        <span class="course-duration">5 недель</span>
-                    </div>
-                    <div class="course-item">
-                        <h4>Управление трансформацией</h4>
-                        <p>Change management, внедрение изменений, работа с сопротивлением</p>
-                        <span class="course-duration">4 недели</span>
-                    </div>
-                </div>
+        </div>
+    </section>
+
+    <!-- Программы обучения -->
+    <section id="programs" class="section programs">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Программы обучения</h2>
+                <p class="section-subtitle">Выберите программу, соответствующую вашему уровню и карьерным целям</p>
             </div>
             
-            <div class="tab-content" id="intensive">
-                <div class="course-list">
-                    <div class="course-item">
-                        <h4>Цифровые двойники</h4>
-                        <p>Построение и использование digital twins для оптимизации</p>
-                        <span class="course-duration">2 недели</span>
+            <div class="programs-grid">
+                <!-- Base Camp -->
+                <div class="program-card">
+                    <div class="program-header">
+                        <div class="program-icon">
+                            <i class="fas fa-campground"></i>
+                        </div>
+                        <div class="program-badge">Начальный</div>
                     </div>
-                    <div class="course-item">
-                        <h4>Оптимизация транспортных сетей</h4>
-                        <p>Маршрутизация, мультимодальные перевозки, расчет оптимальных маршрутов</p>
-                        <span class="course-duration">2 недели</span>
-                    </div>
-                    <div class="course-item">
-                        <h4>Управление рисками при санкциях</h4>
-                        <p>Диверсификация поставщиков, альтернативные маршруты, юридические аспекты</p>
-                        <span class="course-duration">3 недели</span>
-                    </div>
-                    <div class="course-item">
-                        <h4>Аналитика и KPI</h4>
-                        <p>Построение дашбордов, ключевые метрики, анализ больших данных</p>
-                        <span class="course-duration">2 недели</span>
-                    </div>
-                    <div class="course-item">
-                        <h4>Международная логистика</h4>
-                        <p>Таможенное оформление, Incoterms 2020, международные перевозки</p>
-                        <span class="course-duration">3 недели</span>
+                    <h3 class="program-title">SCM Base Camp</h3>
+                    <p class="program-level">Для новичков и смежников</p>
+                    <p class="program-desc">Базовые знания и навыки для понимания основных процессов управления цепями поставок.</p>
+                    <ul class="program-features">
+                        <li><i class="fas fa-check-circle"></i> Длительность: 1-2 месяца</li>
+                        <li><i class="fas fa-check-circle"></i> Формат: онлайн-курс</li>
+                        <li><i class="fas fa-check-circle"></i> 5 практических кейсов</li>
+                        <li><i class="fas fa-check-circle"></i> Доступ к материалам 24/7</li>
+                    </ul>
+                    <div class="program-footer">
+                        <div class="program-price">
+                            <span class="price">49 000 ₽</span>
+                            <span class="price-note">или рассрочка</span>
+                        </div>
+                        <a href="#contact" class="btn btn-outline btn-block">Подробнее</a>
                     </div>
                 </div>
-            </div>
-            
-            <div class="tab-content" id="soft">
-                <div class="course-list">
-                    <div class="course-item">
-                        <h4>Переговоры с поставщиками</h4>
-                        <p>Стратегии переговоров, работа с возражениями, заключение контрактов</p>
-                        <span class="course-duration">3 недели</span>
+
+                <!-- Professional Stream -->
+                <div class="program-card featured">
+                    <div class="program-badge-main">Флагман</div>
+                    <div class="program-header">
+                        <div class="program-icon">
+                            <i class="fas fa-stream"></i>
+                        </div>
+                        <div class="program-badge">Продвинутый</div>
                     </div>
-                    <div class="course-item">
-                        <h4>Управление изменениями</h4>
-                        <p>Внедрение изменений, работа с сопротивлением, коммуникация</p>
-                        <span class="course-duration">3 недели</span>
+                    <h3 class="program-title">Professional SCM Stream</h3>
+                    <p class="program-level">Для специалистов и руководителей</p>
+                    <p class="program-desc">Глубокое погружение в стратегию, планирование, логистику и цифровизацию SCM.</p>
+                    <ul class="program-features">
+                        <li><i class="fas fa-check-circle"></i> Длительность: 6-9 месяцев</li>
+                        <li><i class="fas fa-check-circle"></i> Гибридный формат</li>
+                        <li><i class="fas fa-check-circle"></i> Персональный ментор</li>
+                        <li><i class="fas fa-check-circle"></i> Дипломный проект</li>
+                        <li><i class="fas fa-check-circle"></i> Карьерный коучинг</li>
+                    </ul>
+                    <div class="program-footer">
+                        <div class="program-price">
+                            <span class="price">450 000 ₽</span>
+                            <span class="price-note">возможна рассрочка</span>
+                        </div>
+                        <a href="#contact" class="btn btn-primary btn-block">Записаться</a>
                     </div>
-                    <div class="course-item">
-                        <h4>Презентация для руководства</h4>
-                        <p>Подготовка бизнес-кейсов, финансовая аргументация, storytelling</p>
-                        <span class="course-duration">2 недели</span>
+                </div>
+
+                <!-- Leaders Lab -->
+                <div class="program-card">
+                    <div class="program-header">
+                        <div class="program-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <div class="program-badge">Экспертный</div>
                     </div>
-                    <div class="course-item">
-                        <h4>Эффективная коммуникация</h4>
-                        <p>Межфункциональное взаимодействие, разрешение конфликтов, фасилитация</p>
-                        <span class="course-duration">3 недели</span>
+                    <h3 class="program-title">SCM Leaders Lab</h3>
+                    <p class="program-level">Для топ-менеджеров</p>
+                    <p class="program-desc">Закрытый клуб для стратегического обсуждения и формирования отраслевых стандартов.</p>
+                    <ul class="program-features">
+                        <li><i class="fas fa-check-circle"></i> Постоянное сообщество</li>
+                        <li><i class="fas fa-check-circle"></i> Закрытые встречи</li>
+                        <li><i class="fas fa-check-circle"></i> Эксклюзивные исследования</li>
+                        <li><i class="fas fa-check-circle"></i> Нетворкинг</li>
+                    </ul>
+                    <div class="program-footer">
+                        <div class="program-price">
+                            <span class="price">200 000 ₽/год</span>
+                            <span class="price-note">годовая подписка</span>
+                        </div>
+                        <a href="#contact" class="btn btn-outline btn-block">Подробнее</a>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
+
+    <!-- Все курсы -->
+    <section id="courses" class="section courses">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Все курсы и направления</h2>
+                <p class="section-subtitle">Полная программа обучения от основ до экспертного уровня</p>
+            </div>
+            
+            <div class="courses-tabs">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="basic">
+                        <i class="fas fa-campground"></i> Базовый
+                    </button>
+                    <button class="tab-btn" data-tab="professional">
+                        <i class="fas fa-stream"></i> Профессиональный
+                    </button>
+                    <button class="tab-btn" data-tab="expert">
+                        <i class="fas fa-flask"></i> Экспертный
+                    </button>
+                    <button class="tab-btn" data-tab="intensive">
+                        <i class="fas fa-water"></i> Интенсивы
+                    </button>
+                    <button class="tab-btn" data-tab="soft">
+                        <i class="fas fa-users"></i> Soft Skills
+                    </button>
+                </div>
+                
+                <div class="tab-content active" id="basic-tab">
+                    <div class="course-list">
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-book"></i></div>
+                            <div class="course-info">
+                                <h4>SCM Base Camp</h4>
+                                <p>Основы управления цепями поставок, терминология, базовые процессы, введение в SCM</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 2 месяца</span>
+                                    <span><i class="fas fa-video"></i> 12 видеоуроков</span>
+                                    <span><i class="fas fa-tasks"></i> 5 кейсов</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-shopping-cart"></i></div>
+                            <div class="course-info">
+                                <h4>Введение в логистику и закупки</h4>
+                                <p>Основные принципы логистики, управление закупками, документооборот, ключевые показатели</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 3 недели</span>
+                                    <span><i class="fas fa-video"></i> 8 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> Практические задания</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-warehouse"></i></div>
+                            <div class="course-info">
+                                <h4>Основы складской логистики</h4>
+                                <p>Устройство склада, системы хранения, процессы приемки и отгрузки, инвентаризация</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 3 недели</span>
+                                    <span><i class="fas fa-video"></i> 10 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> 3 кейса</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-chart-line"></i></div>
+                            <div class="course-info">
+                                <h4>Базовые финансы SCM</h4>
+                                <p>TCO, расчет себестоимости, бюджет логистики, финансовые показатели цепочки</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 2 недели</span>
+                                    <span><i class="fas fa-video"></i> 6 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> Финансовые расчеты</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="professional-tab">
+                    <div class="course-list">
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-chess-king"></i></div>
+                            <div class="course-info">
+                                <h4>Стратегия и финансы SCM</h4>
+                                <p>Связь SCM со стратегией бизнеса, финансовые модели, ROI проектов, управление стоимостью</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 6 недель</span>
+                                    <span><i class="fas fa-video"></i> 20 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> Стратегический проект</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-chart-bar"></i></div>
+                            <div class="course-info">
+                                <h4>Планирование и прогнозирование</h4>
+                                <p>S&OP/IBP процессы, методы прогнозирования, работа с данными, сценарное планирование</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 5 недель</span>
+                                    <span><i class="fas fa-video"></i> 16 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> Разработка S&OP</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-handshake"></i></div>
+                            <div class="course-info">
+                                <h4>Управление закупками</h4>
+                                <p>Стратегия закупок, управление поставщиками, переговоры, контрактное управление</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 4 недели</span>
+                                    <span><i class="fas fa-video"></i> 14 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> Кейсы переговоров</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-truck"></i></div>
+                            <div class="course-info">
+                                <h4>Логистика и транспорт</h4>
+                                <p>Оптимизация транспортных сетей, выбор перевозчиков, управление затратами, last-mile</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 4 недели</span>
+                                    <span><i class="fas fa-video"></i> 15 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> Оптимизация маршрутов</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-laptop-code"></i></div>
+                            <div class="course-info">
+                                <h4>Цифровая трансформация SCM</h4>
+                                <p>AI, IoT, блокчейн в SCM, дорожная карта внедрения, выбор технологий, ROI цифровизации</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 6 недель</span>
+                                    <span><i class="fas fa-video"></i> 18 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> Дорожная карта</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="course-info">
+                                <h4>Управление рисками в SCM</h4>
+                                <p>Идентификация рисков, стратегии mitigation, кризисное управление, бизнес-непрерывность</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 4 недели</span>
+                                    <span><i class="fas fa-video"></i> 12 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> План управления рисками</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="expert-tab">
+                    <div class="course-list">
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-chess-queen"></i></div>
+                            <div class="course-info">
+                                <h4>Стратегическое управление SCM</h4>
+                                <p>Построение операционной модели, трансформация функций SCM, интеграция с бизнес-стратегией</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 8 недель</span>
+                                    <span><i class="fas fa-video"></i> 24 урока</span>
+                                    <span><i class="fas fa-tasks"></i> Разработка стратегии</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-project-diagram"></i></div>
+                            <div class="course-info">
+                                <h4>Моделирование цепей поставок</h4>
+                                <p>Simulation, optimization, цифровые двойники, сценарный анализ, инструменты моделирования</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 6 недель</span>
+                                    <span><i class="fas fa-video"></i> 20 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> Создание модели</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-leaf"></i></div>
+                            <div class="course-info">
+                                <h4>Устойчивое развитие (ESG)</h4>
+                                <p>Зеленая логистика, углеродный след, циркулярная экономика, ESG отчетность в SCM</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 5 недели</span>
+                                    <span><i class="fas fa-video"></i> 16 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> ESG стратегия</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-sync-alt"></i></div>
+                            <div class="course-info">
+                                <h4>Управление трансформацией</h4>
+                                <p>Change management, внедрение изменений, работа с сопротивлением, коммуникация изменений</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 4 недели</span>
+                                    <span><i class="fas fa-video"></i> 14 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> План трансформации</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="intensive-tab">
+                    <div class="course-list">
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-robot"></i></div>
+                            <div class="course-info">
+                                <h4>Цифровые двойники в SCM</h4>
+                                <p>Построение и использование digital twins для оптимизации цепей поставок</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 2 недели</span>
+                                    <span><i class="fas fa-video"></i> 8 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> Практический проект</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-route"></i></div>
+                            <div class="course-info">
+                                <h4>Оптимизация транспортных сетей</h4>
+                                <p>Маршрутизация, мультимодальные перевозки, расчет оптимальных маршрутов</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 2 недели</span>
+                                    <span><i class="fas fa-video"></i> 6 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> Кейс оптимизации</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-shield-alt"></i></div>
+                            <div class="course-info">
+                                <h4>Управление рисками при санкциях</h4>
+                                <p>Диверсификация поставщиков, альтернативные маршруты, юридические аспекты, compliance</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 3 недели</span>
+                                    <span><i class="fas fa-video"></i> 10 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> План диверсификации</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-chart-pie"></i></div>
+                            <div class="course-info">
+                                <h4>Аналитика и KPI в SCM</h4>
+                                <p>Построение дашбордов, ключевые метрики, анализ больших данных, отчетность</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 2 недели</span>
+                                    <span><i class="fas fa-video"></i> 7 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> Разработка KPI системы</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-globe"></i></div>
+                            <div class="course-info">
+                                <h4>Международная логистика</h4>
+                                <p>Таможенное оформление, Incoterms 2020, международные перевозки, валютные риски</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 3 недели</span>
+                                    <span><i class="fas fa-video"></i> 9 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> Расчет международной поставки</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="soft-tab">
+                    <div class="course-list">
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-handshake"></i></div>
+                            <div class="course-info">
+                                <h4>Переговоры с поставщиками</h4>
+                                <p>Стратегии переговоров, работа с возражениями, заключение контрактов, win-win подход</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 3 недели</span>
+                                    <span><i class="fas fa-video"></i> 10 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> Ролевые игры</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-exchange-alt"></i></div>
+                            <div class="course-info">
+                                <h4>Управление изменениями</h4>
+                                <p>Внедрение изменений, работа с сопротивлением, коммуникация, фасилитация изменений</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 3 недели</span>
+                                    <span><i class="fas fa-video"></i> 9 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> План изменений</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-presentation"></i></div>
+                            <div class="course-info">
+                                <h4>Презентация для руководства</h4>
+                                <p>Подготовка бизнес-кейсов, финансовая аргументация, storytelling, презентация ROI</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 2 недели</span>
+                                    <span><i class="fas fa-video"></i> 6 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> Подготовка презентации</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon"><i class="fas fa-comments"></i></div>
+                            <div class="course-info">
+                                <h4>Эффективная коммуникация</h4>
+                                <p>Межфункциональное взаимодействие, разрешение конфликтов, фасилитация, обратная связь</p>
+                                <div class="course-meta">
+                                    <span><i class="far fa-clock"></i> 3 недели</span>
+                                    <span><i class="fas fa-video"></i> 8 уроков</span>
+                                    <span><i class="fas fa-tasks"></i> Коммуникационные кейсы</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Об академии -->
+    <section id="about" class="section about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Философия академии</h2>
+                <p class="section-subtitle">Настоящая экспертиза измеряется способностью передавать знания и формировать стандарты</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-quote">
+                    <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                    <blockquote>
+                        "Настоящая экспертиза измеряется не только личными достижениями, но и способностью передавать знания, развивать профессионалов и формировать новые стандарты в отрасли."
+                    </blockquote>
+                    <div class="quote-author">— Философия академии</div>
+                </div>
+                
+                <div class="about-text">
+                    <p>Академия цепей поставок — это сообщество единомышленников, где практический опыт трансформируется в системные знания для следующего поколения руководителей SCM.</p>
+                    <p>Мы верим, что лучший способ обучения — это обмен реальным опытом, разбор практических кейсов и совместное решение рабочих задач.</p>
+                </div>
+                
+                <div class="about-features">
+                    <div class="feature">
+                        <div class="feature-icon"><i class="fas fa-users"></i></div>
+                        <h4>Сообщество практиков</h4>
+                        <p>Обмен опытом с коллегами из разных отраслей, нетворкинг, совместные проекты</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon"><i class="fas fa-project-diagram"></i></div>
+                        <h4>Проектный подход</h4>
+                        <p>Работа над реальными задачами вашей компании, практическое применение знаний</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                        <h4>Карьерный рост</h4>
+                        <p>Системное развитие от специалиста до руководителя, менторство, карьерный коучинг</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <h4>Практические знания</h4>
+                        <p>70% обучения — практика, разбор кейсов, решение реальных бизнес-задач</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Эксперт -->
+    <section id="expert" class="section expert">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Наш эксперт</h2>
+                <p class="section-subtitle">Практикующий руководитель с 15+ лет опыта в управлении цепями поставок</p>
+            </div>
+            
+            <div class="expert-profile">
+                <div class="expert-photo">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                </div>
+                <div class="expert-info">
+                    <h3>Алексей Петров</h3>
+                    <p class="expert-title">Директор по цепям поставок, практикующий консультант</p>
+                    
+                    <div class="expert-details">
+                        <div class="detail">
+                            <strong><i class="fas fa-briefcase"></i> Опыт:</strong>
+                            <span>15+ лет в управлении цепями поставок</span>
+                        </div>
+                        <div class="detail">
+                            <strong><i class="fas fa-industry"></i> Индустрии:</strong>
+                            <span>FMCG, Retail, Manufacturing, Pharma</span>
+                        </div>
+                        <div class="detail">
+                            <strong><i class="fas fa-graduation-cap"></i> Образование:</strong>
+                            <span>MBA, сертификации SCOR-P, CIPM, PMP</span>
+                        </div>
+                        <div class="detail">
+                            <strong><i class="fas fa-trophy"></i> Достижения:</strong>
+                            <span>Оптимизировал цепи поставок для 20+ компаний, экономический эффект 500+ млн руб.</span>
+                        </div>
+                    </div>
+                    
+                    <div class="expert-quote">
+                        <p>"Моя миссия — передать накопленный опыт и помочь новому поколению руководителей избежать типичных ошибок, вырасти быстрее и эффективнее управлять цепями поставок."</p>
+                    </div>
+                    
+                    <div class="expert-skills">
+                        <span class="skill-tag">Стратегия SCM</span>
+                        <span class="skill-tag">Цифровая трансформация</span>
+                        <span class="skill-tag">Управление рисками</span>
+                        <span class="skill-tag">Оптимизация логистики</span>
+                        <span class="skill-tag">Управление поставщиками</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Сообщество -->
+    <section id="community" class="section community">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Профессиональное сообщество</h2>
+                <p class="section-subtitle">Больше чем обучение — это среда для роста и развития</p>
+            </div>
+            
+            <div class="community-features">
+                <div class="community-feature">
+                    <div class="feature-icon"><i class="fas fa-comments"></i></div>
+                    <h4>Закрытый чат участников</h4>
+                    <p>Обсуждение рабочих вопросов, обмен опытом, поиск решений с коллегами</p>
+                </div>
+                <div class="community-feature">
+                    <div class="feature-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <h4>Регулярные мероприятия</h4>
+                    <p>Вебинары, мастер-классы, встречи с экспертами, нетворкинг-сессии</p>
+                </div>
+                <div class="community-feature">
+                    <div class="feature-icon"><i class="fas fa-briefcase"></i></div>
+                    <h4>Карьерный хаб</h4>
+                    <p>Вакансии от компаний-партнеров, помощь в трудоустройстве, карьерный коучинг</p>
+                </div>
+                <div class="community-feature">
+                    <div class="feature-icon"><i class="fas fa-book"></i></div>
+                    <h4>Библиотека знаний</h4>
+                    <p>Кейсы, шаблоны, методички, исследования, эксклюзивные материалы</p>
+                </div>
+            </div>
+            
+            <div class="community-benefits">
+                <h3>Что дает участие в сообществе:</h3>
+                <ul>
+                    <li><i class="fas fa-check"></i> Доступ к экспертам и практикам отрасли</li>
+                    <li><i class="fas fa-check"></i> Возможность задавать вопросы и получать консультации</li>
+                    <li><i class="fas fa-check"></i> Совместные проекты и исследования</li>
+                    <li><i class="fas fa-check"></i> Участие в формировании отраслевых стандартов</li>
+                    <li><i class="fas fa-check"></i> Постоянное профессиональное развитие</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Контакты -->
+    <section id="contact" class="section contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Готовы начать обучение?</h2>
+                <p class="section-subtitle">Оставьте заявку, и мы подберем программу под ваши цели</p>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-form-container">
+                    <h3>Записаться на консультацию</h3>
+                    <form id="leadForm" class="contact-form">
+                        <div class="form-group">
+                            <label for="name"><i class="fas fa-user"></i> Ваше имя *</label>
+                            <input type="text" id="name" name="name" placeholder="Иван Иванов" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email"><i class="fas fa-envelope"></i> Email *</label>
+                            <input type="email" id="email" name="email" placeholder="ivan@example.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone"><i class="fas fa-phone"></i> Телефон</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+7 (999) 123-45-67">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="program"><i class="fas fa-graduation-cap"></i> Интересующая программа *</label>
+                            <select id="program" name="program" required>
+                                <option value="" disabled selected>Выберите программу</option>
+                                <option value="basecamp">SCM Base Camp (начальный)</option>
+                                <option value="professional">Professional SCM Stream (продвинутый)</option>
+                                <option value="leaders">SCM Leaders Lab (экспертный)</option>
+                                <option value="deepdives">SCM Deep Dives (интенсивы)</option>
+                                <option value="consult">Консультация по выбору программы</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message"><i class="fas fa-comment"></i> Ваши вопросы или цели обучения</label>
+                            <textarea id="message" name="message" placeholder="Расскажите о вашем опыте и целях обучения..." rows="4"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <input type="checkbox" id="agreement" name="agreement" required>
+                                <label for="agreement">Я соглашаюсь с обработкой персональных данных</label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">
+                            <i class="fas fa-paper-plane"></i> Отправить заявку
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="contact-info">
+                    <h3>Контакты</h3>
+                    
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="contact-text">
+                                <h4>Email</h4>
+                                <a href="mailto:contact@academyscm.ru">contact@academyscm.ru</a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                            <div class="contact-text">
+                                <h4>Телефон</h4>
+                                <a href="tel:+79991234567">+7 (999) 123-45-67</a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="contact-text">
+                                <h4>Формат обучения</h4>
+                                <p>Онлайн (доступ из любой точки мира)</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-clock"></i></div>
+                            <div class="contact-text">
+                                <h4>Время работы</h4>
+                                <p>Пн-Пт: 9:00-18:00</p>
+                                <p>Сб: 10:00-15:00</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links">
+                        <h4>Мы в соцсетях</h4>
+                        <div class="social-icons">
+                            <a href="#" class="social-icon" title="Telegram"><i class="fab fa-telegram"></i></a>
+                            <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+                            <a href="#" class="social-icon" title="VK"><i class="fab fa-vk"></i></a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-note">
+                        <p><i class="fas fa-info-circle"></i> Ответим на все ваши вопросы в течение 24 часов</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="#home" class="logo">
+                        <span class="logo-icon"><i class="fas fa-link"></i></span>
+                        <span class="logo-text">SCM Academy</span>
+                    </a>
+                    <p>Образовательная платформа для профессионалов в управлении цепями поставок</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Программы</h4>
+                        <a href="#programs">SCM Base Camp</a>
+                        <a href="#programs">Professional Stream</a>
+                        <a href="#programs">Leaders Lab</a>
+                        <a href="#programs">Deep Dives</a>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Об академии</h4>
+                        <a href="#about">Философия</a>
+                        <a href="#expert">Эксперт</a>
+                        <a href="#community">Сообщество</a>
+                        <a href="#courses">Все курсы</a>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Контакты</h4>
+                        <a href="#contact">Записаться</a>
+                        <a href="mailto:contact@academyscm.ru">Написать нам</a>
+                        <a href="#">Политика конфиденциальности</a>
+                        <a href="#">Пользовательское соглашение</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="copyright">
+                    © 2024 Академия Цепей Поставок. Все права защищены.
+                </div>
+                <div class="footer-legal">
+                    <a href="#">Политика конфиденциальности</a>
+                    <a href="#">Пользовательское соглашение</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Кнопка "Наверх" -->
+    <button id="backToTop" class="back-to-top" aria-label="Наверх">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Уведомления -->
+    <div id="notification" class="notification" style="display: none;">
+        <div class="notification-content">
+            <i class="fas fa-check-circle"></i>
+            <span class="notification-message"></span>
+            <button class="notification-close">&times;</button>
+        </div>
     </div>
-</section>
+
+    <!-- Скрипты -->
+    <script src="script.js"></script>
+</body>
+</html>
