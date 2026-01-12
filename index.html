@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* БАЗОВЫЕ СТИЛИ */
         :root {
             --primary: #0052CC;
             --primary-light: #4C9AFF;
@@ -674,9 +673,9 @@
                             
                             <div class="book-info">
                                 <div class="book-cover" id="bookCover">
-                                    <!-- Скриншот книги -->
-                                    <img src="images/скриншот из книги.png" alt="Скриншот из новой книги по управлению цепями поставок" 
-                                         onerror="handleBookImageError(this)"
+                                    <!-- Скриншот книги - ПРОБУЕМ РАЗНЫЕ ВАРИАНТЫ ИМЕН -->
+                                    <img src="images/book-screenshot.png" alt="Скриншот из новой книги по управлению цепями поставок" 
+                                         onerror="tryAlternativeBookImage(this)"
                                          style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                                 <div class="book-details">
@@ -847,20 +846,19 @@
                     }
                 }
             });
-            
-            // Проверяем загрузку изображений при загрузке страницы
-            checkImageLoad();
         });
         
-        // Функция обработки ошибки загрузки изображения книги
-        function handleBookImageError(imgElement) {
-            console.log('Ошибка загрузки скриншота книги, пробуем альтернативные пути...');
+        // Функция для попытки загрузки альтернативных изображений книги
+        function tryAlternativeBookImage(imgElement) {
+            console.log('Пробуем альтернативные пути для скриншота книги...');
             
+            // Список альтернативных имен файлов
             const alternativePaths = [
                 'images/book-screenshot.png',
                 'images/screenshot.png',
                 'images/book-preview.png',
-                'images/книга-скриншот.png'
+                'images/книга-скриншот.png',
+                'images/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%88%D0%BE%D1%82%20%D0%B8%D0%B7%20%D0%BA%D0%BD%D0%B8%D0%B3%D0%B8.png' // URL-encoded оригинальное имя
             ];
             
             let currentIndex = 0;
@@ -869,12 +867,15 @@
                 if (currentIndex >= alternativePaths.length) {
                     // Все пути испробованы, показываем заглушку
                     imgElement.style.display = 'none';
-                    imgElement.parentElement.innerHTML = `
-                        <div class="photo-placeholder" style="width:100%;height:100%;">
-                            <i class="fas fa-book-open" style="font-size:2rem;"></i>
-                            <span>Скриншот из книги<br>"Современные подходы к управлению цепями поставок"</span>
-                        </div>
-                    `;
+                    const bookCover = document.getElementById('bookCover');
+                    if (bookCover) {
+                        bookCover.innerHTML = `
+                            <div class="photo-placeholder" style="width:100%;height:100%;">
+                                <i class="fas fa-book-open" style="font-size:2rem;"></i>
+                                <span>Скриншот из книги<br>"Современные подходы к управлению цепями поставок"</span>
+                            </div>
+                        `;
+                    }
                     return;
                 }
                 
@@ -883,10 +884,11 @@
                     // Нашли рабочий путь
                     imgElement.src = alternativePaths[currentIndex];
                     imgElement.style.display = 'block';
+                    console.log('Скриншот книги загружен по пути:', alternativePaths[currentIndex]);
                 };
                 testImg.onerror = function() {
                     currentIndex++;
-                    tryNextPath();
+                    setTimeout(tryNextPath, 100); // Небольшая задержка перед следующей попыткой
                 };
                 testImg.src = alternativePaths[currentIndex];
             }
@@ -894,36 +896,21 @@
             tryNextPath();
         }
         
-        // Функция проверки загрузки изображений
-        function checkImageLoad() {
-            // Проверяем фото основателя
-            const founderImg = document.querySelector('#founderPhoto img');
-            if (founderImg) {
-                const testFounderImg = new Image();
-                testFounderImg.onload = function() {
-                    // Фото загружено успешно
-                };
-                testFounderImg.onerror = function() {
-                    // Фото не загрузилось
-                    founderImg.parentElement.innerHTML = '<div class="photo-placeholder"><i class="fas fa-user-tie"></i><span>Дмитрий Панибратский<br>Основатель Академии</span></div>';
-                };
-                testFounderImg.src = founderImg.src;
-            }
-            
-            // Проверяем скриншот книги
+        // Проверяем загрузку скриншота книги при загрузке страницы
+        window.addEventListener('load', function() {
             const bookImg = document.querySelector('#bookCover img');
             if (bookImg) {
-                const testBookImg = new Image();
-                testBookImg.onload = function() {
-                    // Скриншот загружен успешно
+                const testImg = new Image();
+                testImg.onload = function() {
+                    console.log('Скриншот книги успешно загружен');
                 };
-                testBookImg.onerror = function() {
-                    // Скриншот не загрузился, пробуем альтернативные пути
-                    handleBookImageError(bookImg);
+                testImg.onerror = function() {
+                    console.log('Основной путь не сработал, пробуем альтернативы...');
+                    tryAlternativeBookImage(bookImg);
                 };
-                testBookImg.src = bookImg.src;
+                testImg.src = bookImg.src;
             }
-        }
+        });
     </script>
 </body>
 </html>
