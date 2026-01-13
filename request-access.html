@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запрос доступа | SCM Академия</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-header">
+            <a href="index.html" class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>SCM Академия</span>
+            </a>
+            <h1>Запрос доступа к системе</h1>
+            <p>Заполните форму для получения доступа к платформе SCM Академия</p>
+        </div>
+        
+        <div class="login-box">
+            <div class="access-form">
+                <form id="accessRequestForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">Имя</label>
+                            <input type="text" id="firstName" name="firstName" required placeholder="Введите ваше имя">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Фамилия</label>
+                            <input type="text" id="lastName" name="lastName" required placeholder="Введите вашу фамилию">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email адрес</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" required placeholder="example@company.com">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="company">Организация / Компания</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-building"></i>
+                            <input type="text" id="company" name="company" placeholder="Название вашей организации">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="position">Должность</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-briefcase"></i>
+                            <input type="text" id="position" name="position" placeholder="Ваша текущая должность">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="role">Желаемая роль в системе</label>
+                        <select id="role" name="role" required>
+                            <option value="">Выберите роль</option>
+                            <option value="student">Студент (обучение на курсах)</option>
+                            <option value="teacher">Преподаватель (ведение курсов)</option>
+                            <option value="admin">Администратор (управление платформой)</option>
+                            <option value="corporate">Корпоративный доступ (для компаний)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="purpose">Цель использования платформы</label>
+                        <textarea id="purpose" name="purpose" rows="4" placeholder="Опишите, для каких целей вам нужен доступ к платформе..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="courses">Интересующие курсы (если известно)</label>
+                        <textarea id="courses" name="courses" rows="3" placeholder="Укажите курсы, которые вас интересуют..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox">
+                            <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                            <span>Я согласен с <a href="#" target="_blank">правилами использования</a> и <a href="#" target="_blank">политикой конфиденциальности</a></span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox">
+                            <input type="checkbox" id="newsletter" name="newsletter">
+                            <span>Я хочу получать новости и обновления платформы</span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block" id="submitRequestButton">
+                        <i class="fas fa-paper-plane"></i> Отправить запрос на доступ
+                    </button>
+                </form>
+            </div>
+            
+            <div class="request-info">
+                <h3><i class="fas fa-info-circle"></i> Что происходит после отправки запроса?</h3>
+                <ol>
+                    <li><strong>Проверка заявки:</strong> Наши администраторы проверят вашу заявку в течение 1-2 рабочих дней</li>
+                    <li><strong>Одобрение:</strong> После одобрения вы получите email с данными для входа</li>
+                    <li><strong>Доступ:</strong> Вы сможете войти в систему с предоставленными учетными данными</li>
+                    <li><strong>Обучение:</strong> Для новых пользователей доступно обучение работе с платформой</li>
+                </ol>
+                
+                <div class="contact-support">
+                    <p><strong>Есть вопросы?</strong></p>
+                    <p>Свяжитесь с нашей службой поддержки:</p>
+                    <p><i class="fas fa-envelope"></i> support@scm-academy.ru</p>
+                    <p><i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
+                </div>
+            </div>
+            
+            <div class="back-to-login">
+                <a href="login.html"><i class="fas fa-arrow-left"></i> Вернуться к странице входа</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Уведомления -->
+    <div class="alert alert-danger" id="errorAlert" style="display: none;">
+        <div class="alert-content">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorMessage"></span>
+            <button class="alert-close">&times;</button>
+        </div>
+    </div>
+
+    <div class="alert alert-success" id="successAlert" style="display: none;">
+        <div class="alert-content">
+            <i class="fas fa-check-circle"></i>
+            <span id="successMessage"></span>
+            <button class="alert-close">&times;</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Обработка формы запроса доступа
+            document.getElementById('accessRequestForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const button = document.getElementById('submitRequestButton');
+                const originalText = button.innerHTML;
+                
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка запроса...';
+                button.disabled = true;
+                
+                // Собираем данные формы
+                const formData = {
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value,
+                    company: document.getElementById('company').value,
+                    position: document.getElementById('position').value,
+                    role: document.getElementById('role').value,
+                    purpose: document.getElementById('purpose').value,
+                    courses: document.getElementById('courses').value,
+                    newsletter: document.getElementById('newsletter').checked
+                };
+                
+                // Имитация отправки запроса
+                setTimeout(() => {
+                    // Сохраняем запрос в localStorage для демонстрации
+                    const requests = JSON.parse(localStorage.getItem('scm_access_requests') || '[]');
+                    requests.push({
+                        ...formData,
+                        date: new Date().toISOString(),
+                        status: 'pending'
+                    });
+                    localStorage.setItem('scm_access_requests', JSON.stringify(requests));
+                    
+                    // Показываем успешное сообщение
+                    showSuccess('Ваш запрос на доступ успешно отправлен! Мы свяжемся с вами в течение 1-2 рабочих дней.');
+                    
+                    // Очищаем форму
+                    this.reset();
+                    
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }, 2000);
+            });
+            
+            function showError(message) {
+                const errorAlert = document.getElementById('errorAlert');
+                const errorMessage = document.getElementById('errorMessage');
+                
+                errorMessage.textContent = message;
+                errorAlert.style.display = 'block';
+                
+                setTimeout(() => {
+                    errorAlert.style.display = 'none';
+                }, 5000);
+                
+                errorAlert.querySelector('.alert-close').addEventListener('click', function() {
+                    errorAlert.style.display = 'none';
+                });
+            }
+            
+            function showSuccess(message) {
+                const successAlert = document.getElementById('successAlert');
+                const successMessage = document.getElementById('successMessage');
+                
+                successMessage.textContent = message;
+                successAlert.style.display = 'block';
+                
+                setTimeout(() => {
+                    successAlert.style.display = 'none';
+                }, 5000);
+                
+                successAlert.querySelector('.alert-close').addEventListener('click', function() {
+                    successAlert.style.display = 'none';
+                });
+            }
+        });
+    </script>
+    
+    <style>
+        .access-form {
+            margin-bottom: 40px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .request-info {
+            background: var(--light);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .request-info h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .request-info ol {
+            margin-left: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .request-info li {
+            margin-bottom: 10px;
+            padding-left: 5px;
+        }
+        
+        .contact-support {
+            border-top: 1px solid var(--gray-light);
+            padding-top: 20px;
+        }
+        
+        .contact-support p {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        select,
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
+        }
+    </style>
+</body>
+</html>
