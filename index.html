@@ -434,6 +434,86 @@
             box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
         }
         
+        /* СЕКЦИЯ ЛИЧНЫХ КАБИНЕТОВ */
+        .cabinet-access {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 24px;
+            padding: 60px;
+            margin: 60px 0;
+            border: 2px solid var(--light);
+        }
+        .cabinet-access .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+        .cabinet-access .section-subtitle {
+            font-size: 1.1rem;
+            max-width: 600px;
+        }
+        .access-container {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        .access-icon {
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 25px;
+        }
+        .access-description {
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        .access-requirements {
+            background: rgba(0, 82, 204, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        .access-requirements h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .requirement-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .requirement-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark);
+        }
+        .requirement-list i {
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+        .demo-note {
+            background: linear-gradient(135deg, rgba(255, 171, 0, 0.1) 0%, rgba(255, 171, 0, 0.05) 100%);
+            border-left: 4px solid var(--warning);
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+            text-align: left;
+        }
+        .demo-note h4 {
+            color: #E5A50A;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
         /* ФУТЕР */
         .footer {
             background: var(--dark);
@@ -460,6 +540,8 @@
         @media (max-width: 992px) {
             .section-title { font-size: 2.4rem; }
             .hero-title { font-size: 2.8rem; }
+            .cabinet-access { padding: 40px 20px; }
+            .access-container { padding: 30px 20px; }
         }
         @media (max-width: 768px) {
             .nav-links { 
@@ -525,6 +607,7 @@
                 <a href="#programs">Программы</a>
                 <a href="#courses">Курсы</a>
                 <a href="#founder">Основатель</a>
+                <a href="#personal-cabinets">Личный кабинет</a>
                 <a href="#contact" class="btn btn-secondary">Записаться</a>
             </div>
             <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
@@ -544,7 +627,7 @@
                 </p>
                 <div class="hero-buttons">
                     <a href="#programs" class="btn btn-primary"><i class="fas fa-graduation-cap"></i> Выбрать программу</a>
-                    <a href="#contact" class="btn btn-secondary"><i class="fas fa-calendar-check"></i> Консультация</a>
+                    <a href="#personal-cabinets" class="btn btn-secondary"><i class="fas fa-user-circle"></i> Доступ в систему</a>
                 </div>
             </div>
         </div>
@@ -634,6 +717,60 @@
                 <div class="course-item">
                     <h4>Устойчивость и управление рисками</h4>
                     <p>Построение resilient supply chains. ESG, диверсификация, сценарное планирование в условиях нестабильности.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Доступ к личным кабинетам -->
+    <section id="personal-cabinets">
+        <div class="container">
+            <div class="cabinet-access">
+                <h2 class="section-title">Доступ к образовательной платформе</h2>
+                <p class="section-subtitle">Личный кабинет для управления обучением и коммуникации</p>
+                
+                <div class="access-container">
+                    <div class="access-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    
+                    <h3 style="margin-bottom: 20px; color: var(--dark);">Закрытая образовательная система</h3>
+                    
+                    <p class="access-description">
+                        Все участники программ SCM Академии получают доступ к персонализированной платформе обучения, 
+                        где размещены учебные материалы, задания, расписания и инструменты для коммуникации.
+                    </p>
+                    
+                    <div class="access-requirements">
+                        <h4><i class="fas fa-check-circle"></i> Доступ предоставляется:</h4>
+                        <ul class="requirement-list">
+                            <li><i class="fas fa-user-graduate"></i> Студентам текущих образовательных программ</li>
+                            <li><i class="fas fa-chalkboard-teacher"></i> Преподавателям и экспертам академии</li>
+                            <li><i class="fas fa-users-cog"></i> Административному персоналу</li>
+                            <li><i class="fas fa-shield-alt"></i> Супервайзерам и менеджерам программ</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="demo-note">
+                        <h4><i class="fas fa-info-circle"></i> Информация о демо-доступе</h4>
+                        <p>
+                            Для ознакомления с функционалом системы доступны тестовые аккаунты с разными уровнями доступа.
+                            После входа вы будете перенаправлены в соответствующий личный кабинет.
+                        </p>
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px; flex-wrap: wrap;">
+                        <a href="login.html" class="btn btn-primary" style="padding: 16px 40px;">
+                            <i class="fas fa-sign-in-alt"></i> Войти в систему
+                        </a>
+                        <a href="#contact" class="btn btn-secondary" style="padding: 16px 40px;">
+                            <i class="fas fa-question-circle"></i> Получить доступ
+                        </a>
+                    </div>
+                    
+                    <p style="margin-top: 25px; color: var(--gray); font-size: 0.9rem;">
+                        <i class="fas fa-exclamation-triangle"></i> Доступ к системе предоставляется после регистрации на программы обучения.
+                    </p>
                 </div>
             </div>
         </div>
@@ -767,13 +904,23 @@
                     <h4>Навигация</h4>
                     <a href="#philosophy">Философия</a>
                     <a href="#programs">Программы</a>
+                    <a href="#courses">Курсы</a>
                     <a href="#founder">Основатель</a>
+                    <a href="#personal-cabinets">Личный кабинет</a>
                     <a href="#contact">Контакты</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Обучение</h4>
+                    <a href="login.html">Вход в систему</a>
+                    <a href="#contact">Запись на программы</a>
+                    <a href="#contact">Корпоративное обучение</a>
+                    <a href="#contact">Вебинары и мероприятия</a>
                 </div>
             </div>
             <hr style="border-color: #405175; margin: 40px 0;">
             <p style="text-align: center; color: #B3BAC5; font-size: 0.9rem;">
                 © 2024 Академия Управления Цепями Поставок. Все права защищены.
+                <br>Версия системы: 2.0.0 | Обновлено: Январь 2026
             </p>
         </div>
     </footer>
@@ -846,26 +993,26 @@
                     }
                 }
             });
+            
+            // Проверка авторизации для кнопки "Личный кабинет"
+            checkAuthStatus();
         });
         
         // Функция для попытки загрузки альтернативных изображений книги
         function tryAlternativeBookImage(imgElement) {
             console.log('Пробуем альтернативные пути для скриншота книги...');
             
-            // Список альтернативных имен файлов
             const alternativePaths = [
                 'images/book-screenshot.png',
                 'images/screenshot.png',
                 'images/book-preview.png',
-                'images/книга-скриншот.png',
-                'images/%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%88%D0%BE%D1%82%20%D0%B8%D0%B7%20%D0%BA%D0%BD%D0%B8%D0%B3%D0%B8.png' // URL-encoded оригинальное имя
+                'images/книга-скриншот.png'
             ];
             
             let currentIndex = 0;
             
             function tryNextPath() {
                 if (currentIndex >= alternativePaths.length) {
-                    // Все пути испробованы, показываем заглушку
                     imgElement.style.display = 'none';
                     const bookCover = document.getElementById('bookCover');
                     if (bookCover) {
@@ -881,19 +1028,32 @@
                 
                 const testImg = new Image();
                 testImg.onload = function() {
-                    // Нашли рабочий путь
                     imgElement.src = alternativePaths[currentIndex];
                     imgElement.style.display = 'block';
-                    console.log('Скриншот книги загружен по пути:', alternativePaths[currentIndex]);
                 };
                 testImg.onerror = function() {
                     currentIndex++;
-                    setTimeout(tryNextPath, 100); // Небольшая задержка перед следующей попыткой
+                    setTimeout(tryNextPath, 100);
                 };
                 testImg.src = alternativePaths[currentIndex];
             }
             
             tryNextPath();
+        }
+        
+        // Проверка авторизации
+        function checkAuthStatus() {
+            const userData = sessionStorage.getItem('scm_user');
+            const loginBtn = document.querySelector('a[href="login.html"]');
+            
+            if (userData) {
+                const user = JSON.parse(userData);
+                // Если пользователь авторизован, меняем текст кнопки
+                if (loginBtn) {
+                    loginBtn.innerHTML = '<i class="fas fa-user-circle"></i> Личный кабинет';
+                    loginBtn.href = 'dashboard/index.html';
+                }
+            }
         }
         
         // Проверяем загрузку скриншота книги при загрузке страницы
