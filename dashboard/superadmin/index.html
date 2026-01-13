@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Супер-Администратор | SCM Академия</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Подключение системы авторизации -->
+    <script src="../auth-system.js"></script>
+    <style>
+        :root {
+            --primary: #0052CC;
+            --primary-light: #4C9AFF;
+            --secondary: #00B8D9;
+            --accent: #36B37E;
+            --warning: #FFAB00;
+            --danger: #FF5630;
+            --purple: #6554C0;
+            --dark: #172B4D;
+            --light: #F4F5F7;
+            --gray: #6B778C;
+            --gray-light: #DFE1E6;
+            --white: #FFFFFF;
+            --shadow: 0 8px 30px rgba(23, 43, 77, 0.1);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: #f8fafc;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Боковая панель супер-админа */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #172B4D 0%, #0052CC 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-area {
+            padding: 30px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info {
+            padding: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4C9AFF 0%, #00B8D9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .user-role {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .nav-menu {
+            padding: 25px 0;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px 25px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-left-color: var(--accent);
+            font-weight: 600;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .logout-btn {
+            margin: 20px 25px;
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: var(--radius);
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            width: calc(100% - 50px);
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Основной контент */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+            max-width: calc(100% - 280px);
+            background: #f8fafc;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .notification-btn {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--gray);
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .notification-btn:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--danger);
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 82, 204, 0.3);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent) 0%, #57D9A3 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning) 0%, #FFC400 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger) 0%, #FF8F73 100%);
+            color: white;
+        }
+
+        /* Дашборд супер-админа */
+        .superadmin-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1400px) {
+            .superadmin-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .superadmin-grid {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            .main-content {
+                margin-left: 0;
+                max-width: 100%;
+            }
+        }
+
+        .admin-stat-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-top: 4px solid var(--primary);
+        }
+
+        .admin-stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(23, 43, 77, 0.15);
+        }
+
+        .admin-stat-card.warning { border-top-color: var(--warning); }
+        .admin-stat-card.success { border-top-color: var(--accent); }
+        .admin-stat-card.danger { border-top-color: var(--danger); }
+        .admin-stat-card.purple { border-top-color: var(--purple); }
+
+        .admin-stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .admin-stat-card.warning .admin-stat-value {
+            background: linear-gradient(135deg, var(--warning) 0%, #FFC400 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .admin-stat-card.success .admin-stat-value {
+            background: linear-gradient(135deg, var(--accent) 0%, #57D9A3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .admin-stat-card.danger .admin-stat-value {
+            background: linear-gradient(135deg, var(--danger) 0%, #FF8F73 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .admin-stat-card.purple .admin-stat-value {
+            background: linear-gradient(135deg, var(--purple) 0%, #8777D9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .admin-stat-label {
+            color: var(--gray);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Таблицы управления */
+        .admin-table-container {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .admin-table-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-table-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 20px 30px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .admin-table th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .admin-table tr:hover td {
+            background: rgba(0, 82, 204, 0.03);
+        }
+
+        .admin-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .user-role-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .role-superadmin {
+            background: rgba(101, 84, 192, 0.15);
+            color: var(--purple);
+        }
+
+        .role-admin {
+            background: rgba(0, 82, 204, 0.15);
+            color: var(--primary);
+        }
+
+        .role-teacher {
+            background: rgba(0, 184, 217, 0.15);
+            color: var(--secondary);
+        }
+
+        .role-student {
+            background: rgba(54, 179, 126, 0.15);
+            color: var(--accent);
+        }
+
+        .user-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-active {
+            background: rgba(54, 179, 126, 0.15);
+            color: var(--accent);
+        }
+
+        .status-inactive {
+            background: rgba(107, 119, 140, 0.15);
+            color: var(--gray);
+        }
+
+        .status-blocked {
+            background: rgba(255, 86, 48, 0.15);
+            color: var(--danger);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--light);
+            color: var(--gray);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .action-btn.edit:hover {
+            background: rgba(0, 82, 204, 0.15);
+            color: var(--primary);
+        }
+
+        .action-btn.block:hover {
+            background: rgba(255, 86, 48, 0.15);
+            color: var(--danger);
+        }
+
+        .action-btn.delete:hover {
+            background: rgba(255, 86, 48, 0.25);
+            color: var(--danger);
+        }
+
+        .action-btn.view:hover {
+            background: rgba(54, 179, 126, 0.15);
+            color: var(--accent);
+        }
+
+        /* Секции быстрых действий */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .quick-action-card {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .quick-action-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-light);
+            box-shadow: 0 10px 25px rgba(0, 82, 204, 0.15);
+        }
+
+        .quick-action-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .action-1 .quick-action-icon { background: rgba(0, 82, 204, 0.15); color: var(--primary); }
+        .action-2 .quick-action-icon { background: rgba(54, 179, 126, 0.15); color: var(--accent); }
+        .action-3 .quick-action-icon { background: rgba(255, 171, 0, 0.15); color: var(--warning); }
+        .action-4 .quick-action-icon { background: rgba(101, 84, 192, 0.15); color: var(--purple); }
+
+        .quick-action-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .quick-action-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius);
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalAppear 0.3s ease;
+        }
+
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--gray-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
+        }
+
+        /* Лоадер */
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--light);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Боковая панель -->
+    <aside class="sidebar">
+        <div class="logo-area">
+            <a href="../index.html" class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>SCM Академия</span>
+            </a>
+        </div>
+
+        <div class="user-info">
+            <div class="user-avatar" id="userAvatar">ИИ</div>
+            <div>
+                <div class="user-name" id="userName">Иван Иванов</div>
+                <div class="user-role" id="userRole">Супер-Администратор</div>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Главная панель</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-users-cog"></i>
+                <span>Управление пользователями</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-book-open"></i>
+                <span>Все курсы</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Аналитика системы</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-cogs"></i>
+                <span>Настройки системы</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-shield-alt"></i>
+                <span>Безопасность</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <span>Финансы и платежи</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-history"></i>
+                <span>Журнал действий</span>
+            </a>
+        </nav>
+
+        <button class="logout-btn" id="logoutButton">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Выйти из системы</span>
+        </button>
+    </aside>
+
+    <!-- Основной контент -->
+    <main class="main-content">
+        <header class="header">
+            <h1 class="page-title">Главная панель управления</h1>
+            <div class="header-actions">
+                <button class="notification-btn" id="notificationButton">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <button class="btn btn-primary" id="createUserButton">
+                    <i class="fas fa-plus"></i>
+                    <span>Создать пользователя</span>
+                </button>
+                <button class="btn btn-accent" id="backupButton">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>Резервная копия</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Статистика системы -->
+        <section class="superadmin-grid">
+            <div class="admin-stat-card">
+                <div class="admin-stat-value">1,428</div>
+                <div class="admin-stat-label">
+                    <i class="fas fa-users" style="color: var(--primary);"></i>
+                    Всего пользователей
+                </div>
+            </div>
+            <div class="admin-stat-card warning">
+                <div class="admin-stat-value">47</div>
+                <div class="admin-stat-label">
+                    <i class="fas fa-chalkboard-teacher" style="color: var(--warning);"></i>
+                    Активные курсы
+                </div>
+            </div>
+            <div class="admin-stat-card success">
+                <div class="admin-stat-value">94.7%</div>
+                <div class="admin-stat-label">
+                    <i class="fas fa-server" style="color: var(--accent);"></i>
+                    Стабильность системы
+                </div>
+            </div>
+            <div class="admin-stat-card danger">
+                <div class="admin-stat-value">12</div>
+                <div class="admin-stat-label">
+                    <i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i>
+                    Требует внимания
+                </div>
+            </div>
+        </section>
+
+        <!-- Быстрые действия -->
+        <section class="quick-actions">
+            <div class="quick-action-card action-1" id="quickAction1">
+                <div class="quick-action-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h4>Добавить администратора</h4>
+                <p>Создать новую учетную запись администратора системы</p>
+            </div>
+            <div class="quick-action-card action-2" id="quickAction2">
+                <div class="quick-action-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <h4>Настройки системы</h4>
+                <p>Изменить основные параметры и настройки платформы</p>
+            </div>
+            <div class="quick-action-card action-3" id="quickAction3">
+                <div class="quick-action-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <h4>Отчет за месяц</h4>
+                <p>Сформировать полный отчет о работе системы</p>
+            </div>
+            <div class="quick-action-card action-4" id="quickAction4">
+                <div class="quick-action-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <h4>Управление БД</h4>
+                <p>Очистка, оптимизация и резервное копирование</p>
+            </div>
+        </section>
+
+        <!-- Таблица пользователей -->
+        <div class="admin-table-container">
+            <div class="admin-table-header">
+                <h3>Управление пользователями</h3>
+                <div>
+                    <button class="btn" id="filterUsersButton" style="background: var(--light); margin-right: 10px;">
+                        <i class="fas fa-filter"></i> Фильтровать
+                    </button>
+                    <button class="btn btn-primary" id="refreshUsersButton">
+                        <i class="fas fa-sync-alt"></i> Обновить
+                    </button>
+                </div>
+            </div>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Имя пользователя</th>
+                        <th>Email</th>
+                        <th>Роль</th>
+                        <th>Статус</th>
+                        <th>Дата регистрации</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <tr>
+                        <td>#1001</td>
+                        <td>Алексей Петров</td>
+                        <td>alexey.p@example.com</td>
+                        <td><span class="user-role-badge role-admin">Администратор</span></td>
+                        <td><span class="user-status status-active">Активен</span></td>
+                        <td>14.01.2026</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn edit" title="Редактировать" data-user-id="1001">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn block" title="Заблокировать" data-user-id="1001">
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                                <button class="action-btn view" title="Подробнее" data-user-id="1001">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#1002</td>
+                        <td>Мария Сидорова</td>
+                        <td>maria.s@example.com</td>
+                        <td><span class="user-role-badge role-teacher">Преподаватель</span></td>
+                        <td><span class="user-status status-active">Активен</span></td>
+                        <td>13.01.2026</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn edit" title="Редактировать" data-user-id="1002">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn block" title="Заблокировать" data-user-id="1002">
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                                <button class="action-btn view" title="Подробнее" data-user-id="1002">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#1003</td>
+                        <td>Сергей Кузнецов</td>
+                        <td>sergey.k@example.com</td>
+                        <td><span class="user-role-badge role-student">Студент</span></td>
+                        <td><span class="user-status status-inactive">Неактивен</span></td>
+                        <td>12.01.2026</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn edit" title="Редактировать" data-user-id="1003">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn block" title="Заблокировать" data-user-id="1003">
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                                <button class="action-btn view" title="Подробнее" data-user-id="1003">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#1004</td>
+                        <td>Анна Волкова</td>
+                        <td>anna.v@example.com</td>
+                        <td><span class="user-role-badge role-admin">Администратор</span></td>
+                        <td><span class="user-status status-blocked">Заблокирован</span></td>
+                        <td>10.01.2026</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn edit" title="Редактировать" data-user-id="1004">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn block" title="Разблокировать" data-user-id="1004">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="action-btn delete" title="Удалить" data-user-id="1004">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="padding: 20px 30px; border-top: 1px solid var(--gray-light);">
+                <button class="btn" style="width: 100%; background: var(--light);">
+                    <i class="fas fa-plus"></i> Загрузить больше пользователей
+                </button>
+            </div>
+        </div>
+
+        <!-- Таблица курсов -->
+        <div class="admin-table-container">
+            <div class="admin-table-header">
+                <h3>Управление курсами</h3>
+                <button class="btn btn-accent" id="createCourseButton">
+                    <i class="fas fa-plus"></i>
+                    <span>Создать курс</span>
+                </button>
+            </div>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID курса</th>
+                        <th>Название курса</th>
+                        <th>Преподаватель</th>
+                        <th>Студентов</th>
+                        <th>Статус</th>
+                        <th>Дата создания</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#C-202</td>
+                        <td>Основы веб-разработки</td>
+                        <td>Мария Сидорова</td>
+                        <td>124</td>
+                        <td><span class="user-status status-active">Активен</span></td>
+                        <td>05.01.2026</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn edit" title="Редактировать курс">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn view" title="Просмотр курса">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#C-203</td>
+                        <td>Продвинутый JavaScript</td>
+                        <td>Иван Иванов</td>
+                        <td>87</td>
+                        <td><span class="user-status status-active">Активен</span></td>
+                        <td>03.01.2026</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn edit" title="Редактировать курс">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn view" title="Просмотр курса">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#C-204</td>
+                        <td>React и современный фронтенд</td>
+                        <td>Мария Сидорова</td>
+                        <td>54</td>
+                        <td><span class="user-status status-active">Активен</span></td>
+                        <td>01.01.2026</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn edit" title="Редактировать курс">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn view" title="Просмотр курса">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Секция системных уведомлений -->
+        <div class="admin-table-container">
+            <div class="admin-table-header">
+                <h3>Системные уведомления</h3>
+                <button class="btn" style="background: var(--light);">
+                    <i class="fas fa-check-double"></i> Отметить все как прочитанные
+                </button>
+            </div>
+            <div style="padding: 20px 30px;">
+                <div style="display: flex; align-items: center; padding: 15px; background: rgba(0, 82, 204, 0.05); border-radius: 8px; margin-bottom: 10px;">
+                    <div style="background: var(--primary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; margin-bottom: 5px;">Обновление системы запланировано</div>
+                        <div style="color: var(--gray); font-size: 0.9rem;">Запланировано обновление системы на 20 января 2026, 03:00</div>
+                    </div>
+                    <span style="color: var(--warning); font-weight: 600;">Важно</span>
+                </div>
+                <div style="display: flex; align-items: center; padding: 15px; background: rgba(54, 179, 126, 0.05); border-radius: 8px; margin-bottom: 10px;">
+                    <div style="background: var(--accent); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; margin-bottom: 5px;">Новый администратор добавлен</div>
+                        <div style="color: var(--gray); font-size: 0.9rem;">Алексей Петров был добавлен как администратор системы</div>
+                    </div>
+                    <span style="color: var(--gray); font-size: 0.9rem;">14.01.2026</span>
+                </div>
+                <div style="display: flex; align-items: center; padding: 15px; background: rgba(255, 171, 0, 0.05); border-radius: 8px;">
+                    <div style="background: var(--warning); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; margin-bottom: 5px;">Требуется внимание: неактивные пользователи</div>
+                        <div style="color: var(--gray); font-size: 0.9rem;">12 пользователей неактивны более 30 дней</div>
+                    </div>
+                    <span style="color: var(--danger); font-weight: 600;">Срочно</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно создания пользователя -->
+    <div class="modal" id="createUserModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Создание нового пользователя</h3>
+                <button class="close-modal" id="closeCreateUserModal">&times;</button>
+            </div>
+            <form id="createUserForm">
+                <div class="form-group">
+                    <label for="newUserName">Имя и фамилия</label>
+                    <input type="text" id="newUserName" required placeholder="Введите имя пользователя">
+                </div>
+                <div class="form-group">
+                    <label for="newUserEmail">Email</label>
+                    <input type="email" id="newUserEmail" required placeholder="Введите email">
+                </div>
+                <div class="form-group">
+                    <label for="newUserRole">Роль пользователя</label>
+                    <select id="newUserRole" required>
+                        <option value="">Выберите роль</option>
+                        <option value="admin">Администратор</option>
+                        <option value="teacher">Преподаватель</option>
+                        <option value="student">Студент</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="newUserPassword">Пароль</label>
+                    <input type="password" id="newUserPassword" required placeholder="Введите пароль">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Подтверждение пароля</label>
+                    <input type="password" id="confirmPassword" required placeholder="Подтвердите пароль">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-user-plus"></i> Создать пользователя
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно создания курса -->
+    <div class="modal" id="createCourseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Создание нового курса</h3>
+                <button class="close-modal" id="closeCreateCourseModal">&times;</button>
+            </div>
+            <form id="createCourseForm">
+                <div class="form-group">
+                    <label for="courseName">Название курса</label>
+                    <input type="text" id="courseName" required placeholder="Введите название курса">
+                </div>
+                <div class="form-group">
+                    <label for="courseDescription">Описание курса</label>
+                    <textarea id="courseDescription" rows="3" placeholder="Введите описание курса"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="courseInstructor">Преподаватель</label>
+                    <select id="courseInstructor" required>
+                        <option value="">Выберите преподавателя</option>
+                        <option value="1">Мария Сидорова</option>
+                        <option value="2">Иван Иванов</option>
+                        <option value="3">Дмитрий Панибратский</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="courseCategory">Категория курса</label>
+                    <select id="courseCategory" required>
+                        <option value="">Выберите категорию</option>
+                        <option value="web">Веб-разработка</option>
+                        <option value="scm">Управление цепями поставок</option>
+                        <option value="analytics">Аналитика данных</option>
+                        <option value="management">Менеджмент</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-accent" style="width: 100%;">
+                    <i class="fas fa-plus"></i> Создать курс
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Основной функционал супер-администратора
+        document.addEventListener('DOMContentLoaded', function() {
+            // Проверка авторизации через auth-system.js
+            if (!window.authSystem || !window.authSystem.checkSession()) {
+                return;
+            }
+
+            // Получение данных текущего пользователя
+            const user = window.authSystem.getCurrentUser();
+            if (user) {
+                // Обновление информации о пользователе
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userRole').textContent = 'Супер-Администратор';
+                
+                // Обновление инициалов в аватаре
+                const initials = user.name.split(' ').map(n => n[0]).join('');
+                document.getElementById('userAvatar').textContent = initials;
+            }
+
+            // ========== УПРАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯМИ ==========
+            
+            // Кнопка создания пользователя
+            document.getElementById('createUserButton').addEventListener('click', function() {
+                document.getElementById('createUserModal').classList.add('active');
+            });
+
+            // Закрытие модального окна создания пользователя
+            document.getElementById('closeCreateUserModal').addEventListener('click', function() {
+                document.getElementById('createUserModal').classList.remove('active');
+            });
+
+            // Обработка формы создания пользователя
+            document.getElementById('createUserForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('newUserName').value;
+                const email = document.getElementById('newUserEmail').value;
+                const role = document.getElementById('newUserRole').value;
+                const password = document.getElementById('newUserPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                // Проверка совпадения паролей
+                if (password !== confirmPassword) {
+                    alert('Пароли не совпадают!');
+                    return;
+                }
+                
+                // Имитация создания пользователя
+                const button = this.querySelector('button[type="submit"]');
+                const originalText = button.innerHTML;
+                button.innerHTML = '<div class="loader"></div> Создание...';
+                button.disabled = true;
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    
+                    // Закрытие модального окна
+                    document.getElementById('createUserModal').classList.remove('active');
+                    
+                    // Очистка формы
+                    this.reset();
+                    
+                    // Показ уведомления об успехе
+                    alert(`Пользователь ${name} успешно создан с ролью "${role}"`);
+                    
+                    // Добавление пользователя в таблицу (имитация)
+                    const tableBody = document.getElementById('usersTableBody');
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>#${Math.floor(Math.random() * 9000 + 1000)}</td>
+                        <td>${name}</td>
+                        <td>${email}</td>
+                        <td><span class="user-role-badge ${role === 'admin' ? 'role-admin' : role === 'teacher' ? 'role-teacher' : 'role-student'}">${role === 'admin' ? 'Администратор' : role === 'teacher' ? 'Преподаватель' : 'Студент'}</span></td>
+                        <td><span class="user-status status-active">Активен</span></td>
+                        <td>${new Date().toLocaleDateString('ru-RU')}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn edit" title="Редактировать">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn block" title="Заблокировать">
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                                <button class="action-btn view" title="Подробнее">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.prepend(newRow);
+                    
+                    // Обновление статистики
+                    const statValue = document.querySelector('.admin-stat-card .admin-stat-value');
+                    const currentCount = parseInt(statValue.textContent.replace(/,/g, ''));
+                    statValue.textContent = (currentCount + 1).toLocaleString();
+                    
+                }, 1500);
+            });
+
+            // Обработка кнопок действий в таблице пользователей
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.action-btn.edit')) {
+                    const btn = e.target.closest('.action-btn.edit');
+                    const userId = btn.dataset.userId;
+                    const userName = btn.closest('tr').querySelector('td:nth-child(2)').textContent;
+                    alert(`Редактирование пользователя: ${userName} (ID: ${userId})`);
+                }
+                
+                if (e.target.closest('.action-btn.block')) {
+                    const btn = e.target.closest('.action-btn.block');
+                    const userId = btn.dataset.userId;
+                    const userName = btn.closest('tr').querySelector('td:nth-child(2)').textContent;
+                    const statusCell = btn.closest('tr').querySelector('.user-status');
+                    
+                    if (btn.title === 'Заблокировать') {
+                        if (confirm(`Заблокировать пользователя ${userName}?`)) {
+                            statusCell.textContent = 'Заблокирован';
+                            statusCell.className = 'user-status status-blocked';
+                            btn.title = 'Разблокировать';
+                            btn.innerHTML = '<i class="fas fa-check"></i>';
+                            
+                            // Обновление статистики "Требует внимания"
+                            const attentionStat = document.querySelector('.admin-stat-card.danger .admin-stat-value');
+                            const currentAttention = parseInt(attentionStat.textContent);
+                            attentionStat.textContent = (currentAttention + 1).toString();
+                        }
+                    } else {
+                        if (confirm(`Разблокировать пользователя ${userName}?`)) {
+                            statusCell.textContent = 'Активен';
+                            statusCell.className = 'user-status status-active';
+                            btn.title = 'Заблокировать';
+                            btn.innerHTML = '<i class="fas fa-ban"></i>';
+                            
+                            // Обновление статистики "Требует внимания"
+                            const attentionStat = document.querySelector('.admin-stat-card.danger .admin-stat-value');
+                            const currentAttention = parseInt(attentionStat.textContent);
+                            attentionStat.textContent = Math.max(0, currentAttention - 1).toString();
+                        }
+                    }
+                }
+                
+                if (e.target.closest('.action-btn.delete')) {
+                    const btn = e.target.closest('.action-btn.delete');
+                    const userId = btn.dataset.userId;
+                    const userName = btn.closest('tr').querySelector('td:nth-child(2)').textContent;
+                    
+                    if (confirm(`Удалить пользователя ${userName}? Это действие нельзя отменить.`)) {
+                        const row = btn.closest('tr');
+                        row.style.opacity = '0.5';
+                        
+                        setTimeout(() => {
+                            row.remove();
+                            
+                            // Обновление статистики
+                            const statValue = document.querySelector('.admin-stat-card .admin-stat-value');
+                            const currentCount = parseInt(statValue.textContent.replace(/,/g, ''));
+                            statValue.textContent = Math.max(0, currentCount - 1).toLocaleString();
+                            
+                            alert(`Пользователь ${userName} удален`);
+                        }, 500);
+                    }
+                }
+                
+                if (e.target.closest('.action-btn.view')) {
+                    const btn = e.target.closest('.action-btn.view');
+                    const userId = btn.dataset.userId;
+                    const userName = btn.closest('tr').querySelector('td:nth-child(2)').textContent;
+                    alert(`Подробная информация о пользователе: ${userName}\n\nID: ${userId}\nEmail: ${btn.closest('tr').querySelector('td:nth-child(3)').textContent}\nРоль: ${btn.closest('tr').querySelector('.user-role-badge').textContent}\nСтатус: ${btn.closest('tr').querySelector('.user-status').textContent}\nДата регистрации: ${btn.closest('tr').querySelector('td:nth-child(6)').textContent}`);
+                }
+            });
+
+            // ========== УПРАВЛЕНИЕ КУРСАМИ ==========
+            
+            // Кнопка создания курса
+            document.getElementById('createCourseButton').addEventListener('click', function() {
+                document.getElementById('createCourseModal').classList.add('active');
+            });
+
+            // Закрытие модального окна создания курса
+            document.getElementById('closeCreateCourseModal').addEventListener('click', function() {
+                document.getElementById('createCourseModal').classList.remove('active');
+            });
+
+            // Обработка формы создания курса
+            document.getElementById('createCourseForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const courseName = document.getElementById('courseName').value;
+                const courseDescription = document.getElementById('courseDescription').value;
+                const instructor = document.getElementById('courseInstructor').value;
+                const category = document.getElementById('courseCategory').value;
+                
+                // Имитация создания курса
+                const button = this.querySelector('button[type="submit"]');
+                const originalText = button.innerHTML;
+                button.innerHTML = '<div class="loader"></div> Создание...';
+                button.disabled = true;
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    
+                    // Закрытие модального окна
+                    document.getElementById('createCourseModal').classList.remove('active');
+                    
+                    // Очистка формы
+                    this.reset();
+                    
+                    // Показ уведомления об успехе
+                    alert(`Курс "${courseName}" успешно создан`);
+                    
+                    // Обновление статистики "Активные курсы"
+                    const coursesStat = document.querySelector('.admin-stat-card.warning .admin-stat-value');
+                    const currentCourses = parseInt(coursesStat.textContent);
+                    coursesStat.textContent = (currentCourses + 1).toString();
+                    
+                }, 1500);
+            });
+
+            // ========== БЫСТРЫЕ ДЕЙСТВИЯ ==========
+            
+            document.getElementById('quickAction1').addEventListener('click', function() {
+                // Добавление администратора
+                document.getElementById('createUserModal').classList.add('active');
+                document.getElementById('newUserRole').value = 'admin';
+            });
+
+            document.getElementById('quickAction2').addEventListener('click', function() {
+                alert('Открытие панели настроек системы');
+            });
+
+            document.getElementById('quickAction3').addEventListener('click', function() {
+                const button = this.querySelector('h4');
+                const originalText = button.textContent;
+                button.textContent = 'Формирование отчета...';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    alert('Отчет за месяц успешно сформирован и отправлен на ваш email');
+                }, 2000);
+            });
+
+            document.getElementById('quickAction4').addEventListener('click', function() {
+                const button = this.querySelector('h4');
+                const originalText = button.textContent;
+                button.textContent = 'Оптимизация БД...';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    alert('База данных успешно оптимизирована. Освобождено 2.4 ГБ пространства.');
+                }, 2500);
+            });
+
+            // ========== ДРУГИЕ ФУНКЦИИ ==========
+            
+            // Уведомления
+            document.getElementById('notificationButton').addEventListener('click', function() {
+                alert('У вас 3 новых уведомления:\n\n1. Обновление системы запланировано\n2. Новый администратор добавлен\n3. Требуется внимание: неактивные пользователи');
+                this.querySelector('.notification-badge').style.display = 'none';
+            });
+
+            // Резервное копирование
+            document.getElementById('backupButton').addEventListener('click', function() {
+                const button = this;
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Создание резервной копии...';
+                button.disabled = true;
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    alert('Резервная копия успешно создана и сохранена в облачном хранилище');
+                }, 3000);
+            });
+
+            // Фильтрация пользователей
+            document.getElementById('filterUsersButton').addEventListener('click', function() {
+                alert('Открытие панели фильтрации пользователей\n\nДоступные фильтры:\n• По роли\n• По статусу\n• По дате регистрации\n• По активности');
+            });
+
+            // Обновление списка пользователей
+            document.getElementById('refreshUsersButton').addEventListener('click', function() {
+                const button = this;
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Обновление...';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    alert('Список пользователей успешно обновлен');
+                }, 1000);
+            });
+
+            // Закрытие модальных окон при клике вне их
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.classList.remove('active');
+                }
+            });
+
+            // Автоматическое обновление данных каждые 30 секунд (имитация)
+            setInterval(() => {
+                // Обновляем случайную статистику
+                const stats = document.querySelectorAll('.admin-stat-value');
+                if (stats.length > 0) {
+                    const randomStat = stats[Math.floor(Math.random() * stats.length)];
+                    const currentValue = parseInt(randomStat.textContent.replace(/%/g, '').replace(/,/g, ''));
+                    
+                    if (!isNaN(currentValue)) {
+                        const change = Math.random() > 0.5 ? 1 : -1;
+                        const newValue = Math.max(0, currentValue + change);
+                        
+                        if (randomStat.textContent.includes('%')) {
+                            randomStat.textContent = newValue.toFixed(1) + '%';
+                        } else {
+                            randomStat.textContent = newValue.toLocaleString();
+                        }
+                    }
+                }
+                
+                // Обновляем уведомления
+                const badge = document.getElementById('notificationButton').querySelector('.notification-badge');
+                const currentCount = parseInt(badge.textContent);
+                if (currentCount < 5 && Math.random() > 0.7) {
+                    badge.textContent = (currentCount + 1).toString();
+                    badge.style.display = 'flex';
+                }
+            }, 30000);
+        });
+    </script>
+</body>
+</html>
