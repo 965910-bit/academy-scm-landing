@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход в систему - SCM Академия</title>
+    <title>Вход в систему | SCM Академия</title>
+    <meta name="description" content="Авторизация в закрытой образовательной платформе SCM Академии">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -14,6 +15,8 @@
             --primary-light: #4C9AFF;
             --secondary: #00B8D9;
             --accent: #36B37E;
+            --warning: #FFAB00;
+            --danger: #FF5630;
             --dark: #172B4D;
             --light: #F4F5F7;
             --gray: #6B778C;
@@ -22,170 +25,258 @@
             --radius: 12px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            background: linear-gradient(135deg, #172B4D 0%, #0052CC 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
+        
         .login-container {
             width: 100%;
             max-width: 480px;
         }
+        
         .login-header {
             text-align: center;
             margin-bottom: 40px;
+            color: white;
         }
-        .logo {
-            font-size: 1.8rem;
+        
+        .login-logo {
+            font-size: 2.2rem;
             font-weight: 800;
-            color: var(--primary);
-            text-decoration: none;
-            display: inline-flex;
+            margin-bottom: 15px;
+            display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
+            justify-content: center;
+            gap: 12px;
         }
-        .login-header h1 {
-            font-size: 2rem;
-            color: var(--dark);
-            margin-bottom: 10px;
-        }
-        .login-header p {
-            color: var(--gray);
+        
+        .login-subtitle {
+            opacity: 0.9;
             font-size: 1.1rem;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
         }
+        
         .login-card {
             background: var(--white);
-            padding: 50px 40px;
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
+            padding: 50px 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.5s ease;
         }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         .form-group {
             margin-bottom: 25px;
         }
+        
         .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
             color: var(--dark);
+            font-size: 0.95rem;
         }
-        .form-group input, .form-group select {
+        
+        .form-control {
             width: 100%;
             padding: 16px;
             border: 2px solid var(--light);
             border-radius: var(--radius);
-            font-family: 'Inter', sans-serif;
             font-size: 1rem;
+            font-family: 'Inter', sans-serif;
             transition: var(--transition);
+            background: var(--white);
         }
-        .form-group input:focus, .form-group select:focus {
+        
+        .form-control:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
         }
-        .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            color: var(--white);
-            border: none;
-            border-radius: var(--radius);
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-        .demo-accounts {
-            margin: 30px 0;
-            padding: 20px;
-            background: rgba(0, 82, 204, 0.05);
-            border-radius: var(--radius);
-            border-left: 4px solid var(--primary);
-        }
-        .demo-accounts h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-        }
-        .demo-account {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            background: var(--white);
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border: 1px solid var(--light);
-        }
-        .account-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .account-role {
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-        .use-btn {
-            padding: 8px 16px;
-            background: transparent;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-        .use-btn:hover {
-            background: var(--primary);
-            color: var(--white);
-        }
-        .login-footer {
-            text-align: center;
-            margin-top: 30px;
-            color: var(--gray);
-        }
-        .login-footer a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .login-footer a:hover {
-            text-decoration: underline;
-        }
-        .error-message {
-            color: #ff4d4f;
-            font-size: 0.9rem;
-            margin-top: 5px;
-            display: none;
-        }
+        
         .password-container {
             position: relative;
         }
-        .toggle-password {
+        
+        .password-toggle {
             position: absolute;
-            right: 16px;
+            right: 15px;
             top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
             color: var(--gray);
             cursor: pointer;
+            font-size: 1.1rem;
+            padding: 5px;
+            transition: var(--transition);
         }
+        
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 82, 204, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--light);
+            color: var(--dark);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--light);
+            box-shadow: none;
+            transform: translateY(-2px);
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light);
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .login-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            background: rgba(255, 86, 48, 0.1);
+            color: #FF5630;
+            padding: 14px;
+            border-radius: var(--radius);
+            margin-bottom: 25px;
+            display: none;
+            font-size: 0.9rem;
+            text-align: center;
+            border: 1px solid rgba(255, 86, 48, 0.2);
+        }
+        
+        .success-message {
+            background: rgba(54, 179, 126, 0.1);
+            color: #36B37E;
+            padding: 14px;
+            border-radius: var(--radius);
+            margin-bottom: 25px;
+            display: none;
+            font-size: 0.9rem;
+            text-align: center;
+            border: 1px solid rgba(54, 179, 126, 0.2);
+        }
+        
+        .back-home {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-home:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray);
+        }
+        
+        .forgot-password {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
         @media (max-width: 768px) {
+            .login-card {
+                padding: 35px 25px;
+            }
+            .back-home {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin-bottom: 30px;
+                justify-content: center;
+                width: fit-content;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .form-options {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+        
+        @media (max-width: 480px) {
             .login-card {
                 padding: 30px 20px;
             }
@@ -193,171 +284,347 @@
     </style>
 </head>
 <body>
+    <a href="index.html" class="back-home">
+        <i class="fas fa-arrow-left"></i> Вернуться на сайт
+    </a>
+    
     <div class="login-container">
         <div class="login-header">
-            <a href="index.html" class="logo">
-                <i class="fas fa-network-wired"></i> SCM Академия
-            </a>
-            <h1>Вход в образовательную платформу</h1>
-            <p>Доступ к личному кабинету и учебным материалам</p>
+            <div class="login-logo">
+                <i class="fas fa-network-wired"></i>
+                <span>SCM Академия</span>
+            </div>
+            <p class="login-subtitle">Вход в закрытую образовательную платформу</p>
         </div>
         
         <div class="login-card">
+            <div id="errorMessage" class="error-message"></div>
+            <div id="successMessage" class="success-message"></div>
+            
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="username">Email или логин</label>
-                    <input type="text" id="username" placeholder="Введите ваш email или логин" required>
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" id="username" class="form-control" required 
+                           placeholder="Введите логин" autocomplete="username">
                 </div>
                 
                 <div class="form-group">
                     <label for="password">Пароль</label>
                     <div class="password-container">
-                        <input type="password" id="password" placeholder="Введите пароль" required>
-                        <button type="button" class="toggle-password" id="togglePassword">
+                        <input type="password" id="password" class="form-control" required
+                               placeholder="Введите пароль" autocomplete="current-password">
+                        <button type="button" class="password-toggle" id="togglePassword">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
-                    <div class="error-message" id="passwordError">
-                        Неверный пароль. Попробуйте снова.
-                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="role">Тип аккаунта</label>
-                    <select id="role">
-                        <option value="student">Студент</option>
-                        <option value="teacher">Преподаватель</option>
-                        <option value="admin">Администратор</option>
-                        <option value="demo">Демо-доступ</option>
-                    </select>
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        <span>Запомнить меня</span>
+                    </label>
+                    <a href="#" class="forgot-password" id="forgotPassword">Забыли пароль?</a>
                 </div>
                 
-                <button type="submit" class="btn">
+                <button type="submit" class="btn" id="loginButton">
                     <i class="fas fa-sign-in-alt"></i> Войти в систему
                 </button>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="index.html#contact" class="btn btn-secondary">
+                        <i class="fas fa-user-plus"></i> Запросить доступ
+                    </a>
+                </div>
             </form>
             
-            <div class="demo-accounts">
-                <h3><i class="fas fa-user-shield"></i> Демо-аккаунты для тестирования</h3>
-                <div class="demo-account">
-                    <div class="account-info">
-                        <i class="fas fa-user-graduate"></i>
-                        <div>
-                            <strong>student@demo.scm</strong>
-                            <div class="account-role">Студент</div>
-                        </div>
-                    </div>
-                    <button class="use-btn" data-username="student@demo.scm" data-password="demo123" data-role="student">
-                        Использовать
-                    </button>
-                </div>
-                <div class="demo-account">
-                    <div class="account-info">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                        <div>
-                            <strong>teacher@demo.scm</strong>
-                            <div class="account-role">Преподаватель</div>
-                        </div>
-                    </div>
-                    <button class="use-btn" data-username="teacher@demo.scm" data-password="demo123" data-role="teacher">
-                        Использовать
-                    </button>
-                </div>
-                <div class="demo-account">
-                    <div class="account-info">
-                        <i class="fas fa-user-cog"></i>
-                        <div>
-                            <strong>admin@demo.scm</strong>
-                            <div class="account-role">Администратор</div>
-                        </div>
-                    </div>
-                    <button class="use-btn" data-username="admin@demo.scm" data-password="demo123" data-role="admin">
-                        Использовать
-                    </button>
-                </div>
-            </div>
-            
             <div class="login-footer">
-                <p>Нет аккаунта? <a href="index.html#contact">Зарегистрируйтесь на программу обучения</a></p>
-                <p style="margin-top: 10px;">
-                    <a href="index.html"><i class="fas fa-arrow-left"></i> Вернуться на главную страницу</a>
+                <p>© 2024 SCM Академия. Закрытая образовательная платформа.</p>
+                <p>Версия системы: 2.0.0 | Только для авторизованных пользователей</p>
+                <p style="margin-top: 10px; color: rgba(255, 255, 255, 0.5); background: rgba(0, 0, 0, 0.2); padding: 8px; border-radius: 6px; display: inline-block;">
+                    <i class="fas fa-lock"></i> Доступ ограничен: Admin / SuperAdmin / Teacher / Student
                 </p>
             </div>
         </div>
     </div>
-
+    
     <script>
+        // Основная система авторизации с ролями
         document.addEventListener('DOMContentLoaded', function() {
-            // Переключение видимости пароля
+            const loginForm = document.getElementById('loginForm');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
             const togglePassword = document.getElementById('togglePassword');
             const passwordInput = document.getElementById('password');
+            const forgotPasswordLink = document.getElementById('forgotPassword');
+            const rememberMe = document.getElementById('rememberMe');
             
+            // База данных пользователей с разными ролями и правами
+            const users = {
+                // Суперадминистратор - полный доступ ко всему
+                'Admin': {
+                    password: 'Osen2026',
+                    role: 'superadmin',
+                    name: 'Главный Администратор',
+                    email: 'admin@scm-academy.ru',
+                    permissions: ['*'],
+                    description: 'Полный доступ ко всем функциям системы',
+                    redirect: 'dashboard/index.html'
+                },
+                // Администратор - доступ к управлению пользователями и контенту
+                'admin': {
+                    password: 'AdminPass123',
+                    role: 'admin',
+                    name: 'Администратор Системы',
+                    email: 'support@scm-academy.ru',
+                    permissions: ['users.*', 'courses.*', 'content.*', 'reports.*'],
+                    description: 'Управление пользователями и контентом',
+                    redirect: 'dashboard/index.html'
+                },
+                // Преподаватель - доступ к учебным материалам и студентам
+                'teacher': {
+                    password: 'Teach2024#',
+                    role: 'teacher',
+                    name: 'Преподаватель СКМ',
+                    email: 'teacher@scm-academy.ru',
+                    permissions: ['courses.view', 'courses.edit', 'students.*', 'grades.*'],
+                    description: 'Управление курсами и студентами',
+                    redirect: 'dashboard/index.html'
+                },
+                // Студент - доступ только к своим курсам
+                'student': {
+                    password: 'Student2024$',
+                    role: 'student',
+                    name: 'Студент Академии',
+                    email: 'student@scm-academy.ru',
+                    permissions: ['courses.view', 'materials.view', 'assignments.submit'],
+                    description: 'Доступ к учебным материалам',
+                    redirect: 'dashboard/index.html'
+                }
+            };
+            
+            // Проверка, если пользователь уже вошел
+            checkExistingSession();
+            
+            // Переключение видимости пароля
             togglePassword.addEventListener('click', function() {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
-                this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                this.innerHTML = type === 'password' ? 
+                    '<i class="fas fa-eye"></i>' : 
+                    '<i class="fas fa-eye-slash"></i>';
             });
             
-            // Использование демо-аккаунтов
-            document.querySelectorAll('.use-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    document.getElementById('username').value = this.dataset.username;
-                    document.getElementById('password').value = this.dataset.password;
-                    document.getElementById('role').value = this.dataset.role;
-                });
-            });
-            
-            // Обработка формы входа
-            document.getElementById('loginForm').addEventListener('submit', function(e) {
+            // Забыли пароль
+            forgotPasswordLink.addEventListener('click', function(e) {
                 e.preventDefault();
-                
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
-                const role = document.getElementById('role').value;
-                const errorMessage = document.getElementById('passwordError');
-                
-                // Проверка демо-аккаунтов (простая имитация)
-                const demoAccounts = {
-                    'student@demo.scm': { password: 'demo123', role: 'student', name: 'Демо Студент' },
-                    'teacher@demo.scm': { password: 'demo123', role: 'teacher', name: 'Демо Преподаватель' },
-                    'admin@demo.scm': { password: 'demo123', role: 'admin', name: 'Демо Администратор' }
-                };
-                
-                // Проверка логина
-                if (demoAccounts[username] && demoAccounts[username].password === password) {
-                    // Успешный вход
-                    const userData = {
-                        username: username,
-                        name: demoAccounts[username].name,
-                        role: role,
-                        loginTime: new Date().toISOString()
-                    };
-                    
-                    // Сохраняем данные пользователя
-                    localStorage.setItem('scm_user', JSON.stringify(userData));
-                    localStorage.setItem('scm_auth_token', 'demo_token_' + Date.now());
-                    
-                    // Перенаправляем в личный кабинет
-                    window.location.href = 'dashboard/index.html';
+                const username = document.getElementById('username').value.trim();
+                if (username && users[username]) {
+                    alert(`Для восстановления пароля пользователя ${users[username].name} обратитесь к суперадминистратору.\n\nEmail суперадминистратора: admin@scm-academy.ru`);
                 } else {
-                    // Неверные данные
-                    errorMessage.style.display = 'block';
-                    passwordInput.focus();
-                    
-                    // Скрываем ошибку через 3 секунды
-                    setTimeout(() => {
-                        errorMessage.style.display = 'none';
-                    }, 3000);
+                    alert('Для восстановления пароля обратитесь к администратору системы по email: admin@scm-academy.ru\n\nУкажите ваш логин для идентификации.');
                 }
             });
             
-            // Проверка, если пользователь уже авторизован
-            const userData = localStorage.getItem('scm_user');
-            if (userData) {
-                const user = JSON.parse(userData);
-                document.getElementById('username').value = user.username;
-                document.getElementById('role').value = user.role;
+            // Обработка формы входа
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const usernameInput = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                
+                // Скрываем предыдущие сообщения
+                hideMessages();
+                
+                // Проверка пользователя
+                let userKey = null;
+                let userFound = null;
+                
+                // Проверяем по username (чувствительность к регистру только для логина)
+                if (users[usernameInput]) {
+                    userKey = usernameInput;
+                    userFound = users[usernameInput];
+                } else {
+                    // Проверяем по email (нечувствительно к регистру)
+                    for (const key in users) {
+                        if (users[key].email.toLowerCase() === usernameInput.toLowerCase()) {
+                            userKey = key;
+                            userFound = users[key];
+                            break;
+                        }
+                    }
+                }
+                
+                if (userFound) {
+                    if (userFound.password === password) {
+                        // Сохраняем данные пользователя
+                        const userData = {
+                            username: userKey,
+                            role: userFound.role,
+                            name: userFound.name,
+                            email: userFound.email,
+                            permissions: userFound.permissions,
+                            description: userFound.description,
+                            loggedIn: true,
+                            timestamp: new Date().getTime(),
+                            remember: rememberMe.checked,
+                            lastLogin: new Date().toLocaleString('ru-RU')
+                        };
+                        
+                        // Сохраняем в sessionStorage (действует до закрытия вкладки)
+                        sessionStorage.setItem('scm_user', JSON.stringify(userData));
+                        
+                        // Если выбрано "Запомнить меня", сохраняем также в localStorage
+                        if (rememberMe.checked) {
+                            localStorage.setItem('scm_user_remember', JSON.stringify({
+                                username: userData.username,
+                                remember: true,
+                                timestamp: new Date().getTime()
+                            }));
+                        } else {
+                            localStorage.removeItem('scm_user_remember');
+                        }
+                        
+                        // Записываем в историю входов
+                        saveLoginHistory(userData);
+                        
+                        // Показываем успешное сообщение с информацией о роли
+                        showMessage(`Авторизация успешна! Добро пожаловать, ${userFound.name} (${userFound.role}). Перенаправление...`, 'success');
+                        
+                        // Блокируем кнопку входа
+                        const loginButton = document.getElementById('loginButton');
+                        loginButton.disabled = true;
+                        loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Перенаправление...';
+                        
+                        // Редрект в личный кабинет через 1.5 секунды
+                        setTimeout(() => {
+                            window.location.href = userFound.redirect || 'dashboard/index.html';
+                        }, 1500);
+                        
+                    } else {
+                        showMessage('Неверный пароль. Попробуйте еще раз.', 'error');
+                        passwordInput.focus();
+                        passwordInput.select();
+                    }
+                } else {
+                    showMessage('Пользователь не найден. Проверьте имя пользователя или email.', 'error');
+                    document.getElementById('username').focus();
+                }
+            });
+            
+            // Функция для сохранения истории входов
+            function saveLoginHistory(userData) {
+                let loginHistory = localStorage.getItem('scm_login_history') || '[]';
+                loginHistory = JSON.parse(loginHistory);
+                
+                loginHistory.push({
+                    username: userData.username,
+                    role: userData.role,
+                    timestamp: new Date().getTime(),
+                    date: new Date().toISOString(),
+                    ip: 'local' // В реальной системе здесь будет IP пользователя
+                });
+                
+                // Ограничиваем историю последними 50 входами
+                if (loginHistory.length > 50) {
+                    loginHistory = loginHistory.slice(-50);
+                }
+                
+                localStorage.setItem('scm_login_history', JSON.stringify(loginHistory));
             }
+            
+            function showMessage(message, type) {
+                hideMessages();
+                
+                if (type === 'error') {
+                    errorMessage.textContent = message;
+                    errorMessage.style.display = 'block';
+                    
+                    // Автоматическое скрытие через 5 секунд
+                    setTimeout(() => {
+                        errorMessage.style.display = 'none';
+                    }, 5000);
+                } else if (type === 'success') {
+                    successMessage.textContent = message;
+                    successMessage.style.display = 'block';
+                }
+            }
+            
+            function hideMessages() {
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
+            }
+            
+            // Проверка существующей сессии
+            function checkExistingSession() {
+                // Проверяем sessionStorage
+                const savedUser = sessionStorage.getItem('scm_user');
+                if (savedUser) {
+                    try {
+                        const userData = JSON.parse(savedUser);
+                        // Проверяем, не прошло ли 12 часов с момента входа
+                        const hoursSinceLogin = (new Date().getTime() - userData.timestamp) / (1000 * 60 * 60);
+                        if (hoursSinceLogin < 12 && userData.loggedIn) {
+                            // Автоматический редирект
+                            showMessage(`Обнаружена активная сессия для ${userData.name}. Перенаправление...`, 'success');
+                            
+                            // Блокируем форму
+                            loginForm.style.opacity = '0.7';
+                            loginForm.style.pointerEvents = 'none';
+                            
+                            setTimeout(() => {
+                                window.location.href = 'dashboard/index.html';
+                            }, 1500);
+                            return;
+                        } else {
+                            // Сессия истекла
+                            sessionStorage.removeItem('scm_user');
+                            showMessage('Сессия истекла. Пожалуйста, войдите снова.', 'error');
+                        }
+                    } catch (e) {
+                        // Ошибка при парсинге JSON
+                        sessionStorage.removeItem('scm_user');
+                    }
+                }
+                
+                // Проверяем localStorage для "Запомнить меня"
+                const rememberedUser = localStorage.getItem('scm_user_remember');
+                if (rememberedUser) {
+                    try {
+                        const { username, timestamp } = JSON.parse(rememberedUser);
+                        // Проверяем, не прошло ли 30 дней
+                        const daysSinceRemember = (new Date().getTime() - timestamp) / (1000 * 60 * 60 * 24);
+                        if (daysSinceRemember < 30) {
+                            document.getElementById('username').value = username;
+                            rememberMe.checked = true;
+                        } else {
+                            localStorage.removeItem('scm_user_remember');
+                        }
+                    } catch (e) {
+                        localStorage.removeItem('scm_user_remember');
+                    }
+                }
+            }
+            
+            // Автофокус на поле ввода
+            setTimeout(() => {
+                document.getElementById('username').focus();
+            }, 300);
+            
+            // Добавляем подсказку при наведении на поле пароля
+            passwordInput.addEventListener('focus', function() {
+                const username = document.getElementById('username').value.trim();
+                if (username && users[username]) {
+                    this.title = `Роль: ${users[username].role}\nПрава: ${users[username].permissions.join(', ')}`;
+                }
+            });
+            
+            // Информация о доступных аккаунтах (только для разработки)
+            console.log('Доступные аккаунты для входа:');
+            console.log('1. Суперадминистратор: Admin / Osen2026');
+            console.log('2. Администратор: admin / AdminPass123');
+            console.log('3. Преподаватель: teacher / Teach2024#');
+            console.log('4. Студент: student / Student2024$');
         });
     </script>
 </body>
