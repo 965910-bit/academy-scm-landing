@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личные кабинеты | SCM Академия</title>
+    <style>
+        /* Стили аналогичные login.html */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #172B4D 0%, #0052CC 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: white;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 50px; }
+        .dashboard-title { font-size: 2.5rem; margin-bottom: 20px; }
+        .user-welcome { font-size: 1.2rem; opacity: 0.9; }
+        .cabinets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .cabinet-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .cabinet-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .cabinet-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .cabinet-name { font-size: 1.5rem; margin-bottom: 15px; }
+        .cabinet-desc { opacity: 0.8; margin-bottom: 25px; line-height: 1.6; }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: white;
+            color: #0052CC;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="dashboard-title">Личные кабинеты SCM Академии</h1>
+            <p class="user-welcome" id="welcomeMessage">Добро пожаловать в систему</p>
+        </div>
+        
+        <div class="cabinets-grid">
+            <div class="cabinet-card">
+                <div class="cabinet-icon">👑</div>
+                <h3 class="cabinet-name">Супер-Администратор</h3>
+                <p class="cabinet-desc">Полный контроль системы, управление пользователями, курсами и настройками платформы.</p>
+                <a href="superadmin/" class="btn">Перейти в кабинет</a>
+            </div>
+            
+            <div class="cabinet-card">
+                <div class="cabinet-icon">⚙️</div>
+                <h3 class="cabinet-name">Администратор</h3>
+                <p class="cabinet-desc">Управление курсами, пользователями и контентом образовательной платформы.</p>
+                <a href="admin/" class="btn">Перейти в кабинет</a>
+            </div>
+            
+            <div class="cabinet-card">
+                <div class="cabinet-icon">👨‍🏫</div>
+                <h3 class="cabinet-name">Преподаватель</h3>
+                <p class="cabinet-desc">Создание курсов, проверка заданий, работа со студентами и учебными материалами.</p>
+                <a href="teacher/" class="btn">Перейти в кабинет</a>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 60px;">
+            <a href="../login.html?logout=true" style="color: white; opacity: 0.8; text-decoration: none;">
+                <i class="fas fa-sign-out-alt"></i> Выйти из системы
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // Отображаем информацию о пользователе
+        const userData = sessionStorage.getItem('scm_user');
+        if (userData) {
+            const user = JSON.parse(userData);
+            document.getElementById('welcomeMessage').textContent = 
+                `Добро пожаловать, ${user.name}! Ваша роль: ${user.role === 'superadmin' ? 'Супер-Администратор' : 
+                user.role === 'admin' ? 'Администратор' : 
+                user.role === 'teacher' ? 'Преподаватель' : 'Студент'}`;
+        } else {
+            // Если нет данных - редирект на вход
+            window.location.href = '../login.html';
+        }
+    </script>
+</body>
+</html>
