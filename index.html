@@ -9,12 +9,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
     <style>
         :root {
             --primary: #0052CC;
             --primary-light: #4C9AFF;
             --secondary: #00B8D9;
             --accent: #36B37E;
+            --warning: #FFAB00;
             --dark: #172B4D;
             --light: #F4F5F7;
             --gray: #6B778C;
@@ -84,6 +86,14 @@
         .btn-secondary:hover {
             background: var(--primary);
             color: var(--white);
+        }
+        .btn-ghost {
+            background: transparent;
+            color: var(--dark);
+            border: 2px solid transparent;
+        }
+        .btn-ghost:hover {
+            border-color: var(--primary);
         }
         .highlight { color: var(--secondary); font-weight: 700; }
         
@@ -627,7 +637,7 @@
                 </p>
                 <div class="hero-buttons">
                     <a href="#programs" class="btn btn-primary"><i class="fas fa-graduation-cap"></i> Выбрать программу</a>
-                    <a href="#personal-cabinets" class="btn btn-secondary"><i class="fas fa-user-circle"></i> Доступ в систему</a>
+                    <a href="login.html" class="btn btn-secondary"><i class="fas fa-user-circle"></i> Войти в систему</a>
                 </div>
             </div>
         </div>
@@ -719,6 +729,16 @@
                     <p>Построение resilient supply chains. ESG, диверсификация, сценарное планирование в условиях нестабильности.</p>
                 </div>
             </div>
+            <div class="tab-content" id="expert">
+                <div class="course-item">
+                    <h4>Стратегическое лидерство в SCM</h4>
+                    <p>Формирование видения, управление изменениями, построение высокоэффективных команд.</p>
+                </div>
+                <div class="course-item">
+                    <h4>Инновации и будущее цепей поставок</h4>
+                    <p>Blockchain, AI, автономные системы, устойчивое развитие и создание экосистем.</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -754,7 +774,7 @@
                     <div class="demo-note">
                         <h4><i class="fas fa-info-circle"></i> Информация о демо-доступе</h4>
                         <p>
-                            Для ознакомления с функционалом системы доступны тестовые аккаунты с разными уровнями доступа.
+                            Для ознакомления с функционалом системы доступны тестовые аккаунты. 
                             После входа вы будете перенаправлены в соответствующий личный кабинет.
                         </p>
                     </div>
@@ -788,12 +808,18 @@
                     <div class="founder-photo-container">
                         <div class="founder-photo" id="founderPhoto">
                             <!-- Фото основателя -->
-                            <img src="images/photo.jpg" alt="Дмитрий Панибратский, основатель Академии SCM" 
-                                 onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\"photo-placeholder\"><i class=\"fas fa-user-tie\"></i><span>Дмитрий Панибратский<br>Основатель Академии</span></div>';">
+                            <div class="photo-placeholder">
+                                <i class="fas fa-user-tie"></i>
+                                <span>Дмитрий Панибратский<br>Основатель Академии SCM</span>
+                            </div>
                         </div>
                         <div class="founder-links">
-                            <a href="https://965910-bit.github.io/Panibratsky-Dmitry/index.html" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Подробнее</a>
-                            <a href="#contact" class="btn btn-secondary"><i class="fas fa-calendar-alt"></i> Консультация</a>
+                            <a href="https://965910-bit.github.io/Panibratsky-Dmitry/index.html" target="_blank" class="btn btn-primary">
+                                <i class="fas fa-external-link-alt"></i> Подробнее
+                            </a>
+                            <a href="#contact" class="btn btn-secondary">
+                                <i class="fas fa-calendar-alt"></i> Консультация
+                            </a>
                         </div>
                     </div>
                     <div>
@@ -810,10 +836,11 @@
                             
                             <div class="book-info">
                                 <div class="book-cover" id="bookCover">
-                                    <!-- Скриншот книги - ПРОБУЕМ РАЗНЫЕ ВАРИАНТЫ ИМЕН -->
-                                    <img src="images/book-screenshot.png" alt="Скриншот из новой книги по управлению цепями поставок" 
-                                         onerror="tryAlternativeBookImage(this)"
-                                         style="width: 100%; height: 100%; object-fit: cover;">
+                                    <!-- Скриншот книги -->
+                                    <div class="photo-placeholder">
+                                        <i class="fas fa-book-open"></i>
+                                        <span>Скриншот из книги<br>"Современные подходы<br>к управлению цепями поставок"</span>
+                                    </div>
                                 </div>
                                 <div class="book-details">
                                     <h4 class="book-title">Современные подходы к управлению цепями поставок</h4>
@@ -878,7 +905,11 @@
                             <option>SCM Base Camp</option>
                             <option>Professional SCM Stream</option>
                             <option>SCM Leaders Lab</option>
+                            <option>Консультация</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Ваши вопросы или комментарии" rows="4"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary" style="width: 100%;">
                         <i class="fas fa-paper-plane"></i> Отправить заявку
@@ -915,6 +946,13 @@
                     <a href="#contact">Запись на программы</a>
                     <a href="#contact">Корпоративное обучение</a>
                     <a href="#contact">Вебинары и мероприятия</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Контакты</h4>
+                    <a href="#contact">Обратная связь</a>
+                    <a href="#contact">Техническая поддержка</a>
+                    <a href="#contact">Сотрудничество</a>
+                    <a href="#contact">Вакансии</a>
                 </div>
             </div>
             <hr style="border-color: #405175; margin: 40px 0;">
@@ -994,56 +1032,13 @@
                 }
             });
             
-            // Проверка авторизации для кнопки "Личный кабинет"
+            // Проверка авторизации
             checkAuthStatus();
         });
         
-        // Функция для попытки загрузки альтернативных изображений книги
-        function tryAlternativeBookImage(imgElement) {
-            console.log('Пробуем альтернативные пути для скриншота книги...');
-            
-            const alternativePaths = [
-                'images/book-screenshot.png',
-                'images/screenshot.png',
-                'images/book-preview.png',
-                'images/книга-скриншот.png'
-            ];
-            
-            let currentIndex = 0;
-            
-            function tryNextPath() {
-                if (currentIndex >= alternativePaths.length) {
-                    imgElement.style.display = 'none';
-                    const bookCover = document.getElementById('bookCover');
-                    if (bookCover) {
-                        bookCover.innerHTML = `
-                            <div class="photo-placeholder" style="width:100%;height:100%;">
-                                <i class="fas fa-book-open" style="font-size:2rem;"></i>
-                                <span>Скриншот из книги<br>"Современные подходы к управлению цепями поставок"</span>
-                            </div>
-                        `;
-                    }
-                    return;
-                }
-                
-                const testImg = new Image();
-                testImg.onload = function() {
-                    imgElement.src = alternativePaths[currentIndex];
-                    imgElement.style.display = 'block';
-                };
-                testImg.onerror = function() {
-                    currentIndex++;
-                    setTimeout(tryNextPath, 100);
-                };
-                testImg.src = alternativePaths[currentIndex];
-            }
-            
-            tryNextPath();
-        }
-        
         // Проверка авторизации
         function checkAuthStatus() {
-            const userData = sessionStorage.getItem('scm_user');
+            const userData = localStorage.getItem('scm_user');
             const loginBtn = document.querySelector('a[href="login.html"]');
             
             if (userData) {
@@ -1055,22 +1050,6 @@
                 }
             }
         }
-        
-        // Проверяем загрузку скриншота книги при загрузке страницы
-        window.addEventListener('load', function() {
-            const bookImg = document.querySelector('#bookCover img');
-            if (bookImg) {
-                const testImg = new Image();
-                testImg.onload = function() {
-                    console.log('Скриншот книги успешно загружен');
-                };
-                testImg.onerror = function() {
-                    console.log('Основной путь не сработал, пробуем альтернативы...');
-                    tryAlternativeBookImage(bookImg);
-                };
-                testImg.src = bookImg.src;
-            }
-        });
     </script>
 </body>
 </html>
