@@ -1,0 +1,19 @@
+# Запрет прямого доступа к папке dashboard
+<FilesMatch "\.(html|php)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Разрешить доступ только через index.html в dashboard
+<Files "index.html">
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+# Запретить просмотр содержимого директорий
+Options -Indexes
+
+# Защита от XSS
+Header set X-XSS-Protection "1; mode=block"
+Header set X-Content-Type-Options nosniff
+Header set X-Frame-Options DENY
