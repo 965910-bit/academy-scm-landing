@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Реестр сертификатов | Академия SCM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+            color: #1e293b;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header (копия стилей с главной страницы Академии) */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            text-decoration: none;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #64748b;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            color: #1e40af;
+        }
+
+        /* Main content */
+        .main-content {
+            padding: 120px 0 60px;
+            min-height: calc(100vh - 200px);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 12px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: #64748b;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-box button {
+            padding: 12px 25px;
+            background-color: #1e40af;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .search-box button:hover {
+            background-color: #1e3a8a;
+        }
+
+        .status-filter select {
+            padding: 12px 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: white;
+            min-width: 200px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .cert-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .cert-table th {
+            background-color: #1e40af;
+            color: white;
+            font-weight: 600;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .cert-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #1e293b;
+        }
+
+        .cert-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status.active {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .status.expired {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-top: 30px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0f172a;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">АКАДЕМИЯ SCM</a>
+            <nav>
+                <ul>
+                    <li><a href="index.html#philosophy">Философия</a></li>
+                    <li><a href="index.html#programs">Программы</a></li>
+                    <li><a href="index.html#about">Об Академии</a></li>
+                    <li><a href="registry.html" class="active">Реестр</a></li>
+                    <li><a href="index.html#contact">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Реестр сертифицированных специалистов</h1>
+                <p class="page-subtitle">Проверка подлинности сертификатов, выданных Академией управления цепями поставок</p>
+            </div>
+
+            <div class="filters">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Номер сертификата или фамилия...">
+                    <button id="searchBtn">Найти</button>
+                </div>
+                <div class="status-filter">
+                    <select id="statusSelect">
+                        <option value="all">Все статусы</option>
+                        <option value="active">Действительные</option>
+                        <option value="expired">Истекшие</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="tableContainer" class="table-responsive">
+                <div class="loading">Загрузка данных...</div>
+            </div>
+            <p class="footer-note">* Информация обновляется еженедельно. Для официального подтверждения обратитесь в учебный отдел.</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Академия Управления Цепями Поставок. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tableContainer = document.getElementById('tableContainer');
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const statusSelect = document.getElementById('statusSelect');
+
+            let certificatesData = [];
+            let filteredData = [];
+
+            // Загрузка данных из JSON-файла (мы создадим его дальше)
+            fetch('certificates.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    certificatesData = data;
+                    filteredData = [...certificatesData];
+                    renderTable(filteredData);
+                })
+                .catch(error => {
+                    tableContainer.innerHTML = `<div class="no-data">Ошибка загрузки данных: ${error.message}. Попробуйте позже.</div>`;
+                });
+
+            function renderTable(data) {
+                if (!data || data.length === 0) {
+                    tableContainer.innerHTML = '<div class="no-data">Сертификаты не найдены</div>';
+                    return;
+                }
+
+                let html = `
+                    <table class="cert-table">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Регистрационный номер</th>
+                                <th>ФИО владельца</th>
+                                <th>Наименование сертификата</th>
+                                <th>Дата выдачи</th>
+                                <th>Срок действия</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                data.forEach((cert, index) => {
+                    const issueDate = cert.issueDate.split('-').reverse().join('.');
+                    const expiryDate = cert.expiryDate.split('-').reverse().join('.');
+                    const statusClass = cert.status === 'active' ? 'active' : 'expired';
+                    const statusText = cert.status === 'active' ? 'Действителен' : 'Истек';
+
+                    html += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td><strong>${cert.regNumber}</strong></td>
+                            <td>${cert.fullName}</td>
+                            <td>${cert.certName}</td>
+                            <td>${issueDate}</td>
+                            <td>${expiryDate}</td>
+                            <td><span class="status ${statusClass}">${statusText}</span></td>
+                        </tr>
+                    `;
+                });
+
+                html += `</tbody></table>`;
+                tableContainer.innerHTML = html;
+            }
+
+            function filterData() {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+                const statusFilter = statusSelect.value;
+
+                filteredData = certificatesData.filter(cert => {
+                    const matchesSearch = searchTerm === '' ||
+                        cert.regNumber.toLowerCase().includes(searchTerm) ||
+                        cert.fullName.toLowerCase().includes(searchTerm);
+                    const matchesStatus = statusFilter === 'all' || cert.status === statusFilter;
+                    return matchesSearch && matchesStatus;
+                });
+
+                renderTable(filteredData);
+            }
+
+            searchBtn.addEventListener('click', filterData);
+            searchInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') filterData();
+            });
+            statusSelect.addEventListener('change', filterData);
+        });
+    </script>
+</body>
+</html>
