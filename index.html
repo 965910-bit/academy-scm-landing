@@ -3,740 +3,542 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Академия Управления Цепями Поставок | Точка сборки нового логистического мышления</title>
-    <meta name="description" content="Образовательная платформа, где рождаются лидеры, способные строить цепочки, создающие ценность и конкурентные преимущества.">
+    <title>Академия SCM | Образовательная платформа</title>
+    <meta name="description" content="Академия управления цепями поставок: курсы, вебинары, менторство. Подготовка лидеров SCM нового поколения.">
+    <meta name="yandex-verification" content="108fc8ce05da4c6d" />
+    <meta name="google-site-verification" content="tW6Uf1tlUY4yhc8WBO3rzq3mpKtyTYixR48nzy0RnuI" />
+    <link rel="canonical" href="https://965910-bit.github.io/academy-scm-landing/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <!-- Яндекс.Метрика -->
+    <script type="text/javascript" >
+        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+        ym(105620027, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true,
+            webvisor:true
+        });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/105620027" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C5X9R6HPQY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-C5X9R6HPQY');
+    </script>
     <style>
-        :root {
-            --primary: #0052CC;
-            --primary-light: #4C9AFF;
-            --secondary: #00B8D9;
-            --accent: #36B37E;
-            --warning: #FFAB00;
-            --dark: #172B4D;
-            --light: #F4F5F7;
-            --gray: #6B778C;
-            --white: #FFFFFF;
-            --shadow: 0 8px 30px rgba(23, 43, 77, 0.1);
-            --radius: 12px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
         body {
             font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--dark);
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            overflow-x: hidden;
+            background: #ffffff;
+            color: #0f172a;
+            line-height: 1.5;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
             padding: 0 20px;
         }
-        section { padding: 100px 0; }
-        .section-title {
-            font-size: 2.8rem;
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .section-subtitle {
-            font-size: 1.2rem;
-            color: var(--gray);
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto 60px;
-        }
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 16px 32px;
-            border-radius: var(--radius);
-            font-weight: 600;
-            text-decoration: none;
-            transition: var(--transition);
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            color: var(--white);
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow);
-        }
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-        .btn-secondary:hover {
-            background: var(--primary);
-            color: var(--white);
-        }
-        .btn-ghost {
-            background: transparent;
-            color: var(--dark);
-            border: 2px solid transparent;
-        }
-        .btn-ghost:hover {
-            border-color: var(--primary);
-        }
-        .highlight { color: var(--secondary); font-weight: 700; }
-        
-        /* НАВИГАЦИЯ */
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
+        /* Header */
+        header {
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
-            z-index: 1000;
-            padding: 20px 0;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+            padding: 20px 0;
         }
         .logo {
-            font-size: 1.5rem;
+            font-size: 24px;
             font-weight: 800;
-            color: var(--primary);
+            color: #1e40af;
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            letter-spacing: -0.5px;
         }
-        .nav-links { display: flex; gap: 40px; align-items: center; }
-        .nav-links a {
-            color: var(--dark);
+        .logo span {
+            color: #d4af37;
+        }
+        nav a {
+            margin-left: 32px;
             text-decoration: none;
+            color: #475569;
             font-weight: 500;
-            transition: var(--transition);
+            transition: color 0.2s;
         }
-        .nav-links a:hover { color: var(--primary); }
-        .menu-toggle { display: none; }
-        
-        /* ГЕРОЙ */
+        nav a:hover {
+            color: #1e40af;
+        }
+        /* Hero */
         .hero {
-            padding: 180px 0 100px;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -30%;
-            width: 80%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(76, 154, 255, 0.1) 0%, transparent 70%);
-            z-index: -1;
-        }
-        .hero-content {
-            max-width: 900px;
-            margin: 0 auto;
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            padding: 80px 0 60px;
             text-align: center;
         }
-        .hero-title {
-            font-size: 3.5rem;
+        .hero h1 {
+            font-size: 48px;
             font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 30px;
-        }
-        .hero-subtitle {
-            font-size: 1.3rem;
-            color: var(--gray);
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        /* ЦИТАТА-МИССИЯ */
-        .mission-block {
-            background: linear-gradient(135deg, #172B4D 0%, #0052CC 100%);
-            color: var(--white);
-            padding: 80px 40px;
-            border-radius: 24px;
-            margin: 60px auto;
-            max-width: 900px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-        .mission-block::before {
-            content: '✧';
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 2rem;
-            opacity: 0.3;
-        }
-        .mission-quote {
-            font-size: 1.6rem;
-            line-height: 1.8;
-            font-style: italic;
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 1;
-        }
-        .mission-author {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        
-        /* КАРТОЧКИ */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-        .card {
-            background: var(--white);
-            padding: 40px 30px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            border-top: 4px solid var(--primary);
-        }
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(23, 43, 77, 0.15);
-        }
-        .card-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
             margin-bottom: 20px;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #0f172a, #1e40af);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        .card-title {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: var(--dark);
+        .hero p {
+            font-size: 18px;
+            color: #475569;
+            max-width: 700px;
+            margin: 0 auto;
         }
-        .card-text { color: var(--gray); line-height: 1.6; }
-        
-        /* ОСНОВАТЕЛЬ */
-        .founder-section {
-            background: var(--white);
-            border-radius: 24px;
-            padding: 60px;
-            box-shadow: var(--shadow);
+        .hero-quote {
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(30,64,175,0.05);
+            border-radius: 20px;
+            border-left: 4px solid #d4af37;
+            font-style: italic;
+            color: #334155;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .founder-header {
+        /* Section common */
+        .section {
+            padding: 80px 0;
+        }
+        .section-header {
             text-align: center;
             margin-bottom: 50px;
         }
-        .founder-name {
-            font-size: 2.5rem;
-            color: var(--dark);
-            margin-bottom: 10px;
+        .section-header h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
         }
-        .founder-title {
-            color: var(--gray);
-            font-size: 1.1rem;
+        .section-header p {
+            color: #64748b;
+            max-width: 700px;
+            margin: 0 auto;
         }
-        .founder-content {
+        /* Three pillars */
+        .pillars-grid {
             display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 50px;
-            align-items: start;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
         }
-        @media (max-width: 992px) {
-            .founder-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-        }
-        .founder-photo-container {
+        .pillar-card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
             text-align: center;
+            transition: transform 0.2s;
         }
-        .founder-photo {
-            width: 100%;
-            max-width: 300px;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary) 100%);
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-        .founder-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .founder-links { 
-            display: flex; 
-            gap: 15px; 
-            margin-top: 30px; 
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        /* КНИГА */
-        .book-section {
-            margin-top: 50px;
-            padding-top: 50px;
-            border-top: 2px solid var(--light);
-        }
-        .book-info {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 40px;
-            align-items: start;
-            margin-top: 30px;
-        }
-        @media (max-width: 768px) {
-            .book-info {
-                grid-template-columns: 1fr;
-            }
-        }
-        .book-cover {
-            width: 100%;
-            max-width: 300px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-            transition: var(--transition);
-            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
-            aspect-ratio: 3/4;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-        }
-        .book-cover:hover {
+        .pillar-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
         }
-        .book-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+        .pillar-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(30,64,175,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
         }
-        .book-details {
-            flex: 1;
+        .pillar-icon i {
+            font-size: 32px;
+            color: #1e40af;
         }
-        .book-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--accent) 0%, #00B8D9 100%);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
+        .pillar-card h3 {
+            font-size: 22px;
             margin-bottom: 15px;
         }
-        .book-title {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            color: var(--dark);
+        .pillar-card p {
+            color: #64748b;
         }
-        .book-description {
-            color: var(--gray);
-            line-height: 1.6;
+        /* Programs */
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .program-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+        .program-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+        }
+        .program-badge {
+            display: inline-block;
+            background: #d4af37;
+            color: #0f172a;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
             margin-bottom: 20px;
         }
-        .book-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 25px;
+        .program-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
         }
-        .book-feature {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--gray);
+        .program-card p {
+            color: #64748b;
+            margin-bottom: 20px;
         }
-        .book-feature i {
-            color: var(--accent);
-        }
-        
-        /* ТАБЫ */
-        .tabs { display: flex; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
-        .tab-btn {
-            padding: 12px 24px;
-            background: var(--light);
-            border: none;
-            border-radius: 50px;
+        .program-link {
+            color: #1e40af;
+            text-decoration: none;
             font-weight: 600;
-            color: var(--dark);
-            cursor: pointer;
-            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
-        .tab-btn.active {
-            background: var(--primary);
-            color: var(--white);
-        }
-        .tab-content { display: none; animation: fadeIn 0.5s ease; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .course-item {
-            background: var(--white);
-            padding: 25px;
-            border-radius: var(--radius);
-            margin-bottom: 15px;
-            border-left: 4px solid var(--accent);
-            transition: var(--transition);
-        }
-        .course-item:hover {
-            transform: translateX(10px);
-            box-shadow: var(--shadow);
-        }
-        
-        /* ФОРМА */
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-            background: var(--white);
-            padding: 50px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-        }
-        .form-group { margin-bottom: 25px; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid var(--light);
-            border-radius: var(--radius);
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
-        }
-        
-        /* СЕКЦИЯ ЛИЧНЫХ КАБИНЕТОВ */
-        .cabinet-access {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border-radius: 24px;
-            padding: 60px;
-            margin: 60px 0;
-            border: 2px solid var(--light);
-        }
-        .cabinet-access .section-title {
-            font-size: 2.2rem;
-            margin-bottom: 15px;
-        }
-        .cabinet-access .section-subtitle {
-            font-size: 1.1rem;
-            max-width: 600px;
-        }
-        .access-container {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 40px;
+        /* Modules */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
             margin-top: 40px;
-            box-shadow: var(--shadow);
-            text-align: center;
         }
-        .access-icon {
-            font-size: 3.5rem;
-            color: var(--primary);
-            margin-bottom: 25px;
+        .module-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 24px;
+            border-left: 3px solid #d4af37;
         }
-        .access-description {
-            color: var(--gray);
-            line-height: 1.6;
-            margin-bottom: 30px;
-            font-size: 1.1rem;
+        .module-card h4 {
+            font-size: 18px;
+            margin-bottom: 12px;
         }
-        .access-requirements {
-            background: rgba(0, 82, 204, 0.05);
-            border-radius: 12px;
-            padding: 25px;
-            margin: 30px 0;
-            text-align: left;
+        .module-card p {
+            color: #64748b;
+            font-size: 14px;
         }
-        .access-requirements h4 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            display: flex;
+        /* Platform Access */
+        .platform-section {
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+            border-radius: 32px;
+            padding: 50px;
+            margin: 40px 0;
+        }
+        .platform-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
             align-items: center;
-            gap: 10px;
         }
-        .requirement-list {
+        .platform-info h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .platform-info ul {
             list-style: none;
-            padding-left: 0;
+            margin: 20px 0;
         }
-        .requirement-list li {
-            padding: 8px 0;
+        .platform-info li {
+            margin-bottom: 12px;
+            padding-left: 24px;
+            position: relative;
+        }
+        .platform-info li:before {
+            content: "✓";
+            color: #d4af37;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        .demo-btn {
+            display: inline-block;
+            background: #1e40af;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        /* Founder */
+        .founder-section {
+            background: #f8fafc;
+            border-radius: 32px;
+            padding: 50px;
+            margin: 40px 0;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+        .founder-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e40af, #d4af37);
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: var(--dark);
+            justify-content: center;
+            color: white;
+            font-size: 60px;
         }
-        .requirement-list i {
-            color: var(--accent);
-            font-size: 1.1rem;
-        }
-        .demo-note {
-            background: linear-gradient(135deg, rgba(255, 171, 0, 0.1) 0%, rgba(255, 171, 0, 0.05) 100%);
-            border-left: 4px solid var(--warning);
-            padding: 20px;
-            margin: 30px 0;
-            border-radius: 8px;
-            text-align: left;
-        }
-        .demo-note h4 {
-            color: #E5A50A;
+        .founder-info h3 {
+            font-size: 28px;
             margin-bottom: 10px;
+        }
+        .founder-info .title {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+        /* Book */
+        .book-card {
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+            border-radius: 32px;
+            padding: 40px;
+            display: flex;
+            gap: 40px;
+            margin: 40px 0;
+        }
+        .book-cover {
+            width: 180px;
+            height: 250px;
+            background: #e2e8f0;
+            border-radius: 12px;
             display: flex;
             align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #64748b;
+        }
+        .book-info h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        .book-tags {
+            display: flex;
+            flex-wrap: wrap;
             gap: 10px;
+            margin-top: 20px;
         }
-        
-        /* ФУТЕР */
-        .footer {
-            background: var(--dark);
-            color: var(--white);
-            padding: 60px 0 30px;
-            margin-top: 100px;
+        .book-tag {
+            background: rgba(30,64,175,0.1);
+            color: #1e40af;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
         }
-        .footer-content {
+        /* CTA */
+        .cta-section {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            text-align: center;
+            padding: 80px 0;
+            border-radius: 32px;
+            margin: 40px 0;
+        }
+        .cta-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .cta-section p {
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .cta-btn {
+            display: inline-block;
+            background: #d4af37;
+            color: #0f172a;
+            padding: 14px 32px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        /* Footer */
+        footer {
+            background: #0f172a;
+            color: white;
+            padding: 50px 0 30px;
+            margin-top: 40px;
+        }
+        .footer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 40px;
             margin-bottom: 40px;
         }
-        .footer-links a {
-            color: #B3BAC5;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 10px;
-            transition: var(--transition);
+        .footer-col h4 {
+            margin-bottom: 20px;
+            font-size: 18px;
         }
-        .footer-links a:hover { color: var(--white); }
-        
-        /* АДАПТИВ */
-        @media (max-width: 992px) {
-            .section-title { font-size: 2.4rem; }
-            .hero-title { font-size: 2.8rem; }
-            .cabinet-access { padding: 40px 20px; }
-            .access-container { padding: 30px 20px; }
+        .footer-col ul {
+            list-style: none;
+        }
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+        .footer-col ul li a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+        }
+        .footer-col ul li a:hover {
+            color: white;
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
         }
         @media (max-width: 768px) {
-            .nav-links { 
-                display: none; 
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: white;
-                flex-direction: column;
-                padding: 20px;
-                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            }
-            .nav-links.active {
-                display: flex;
-            }
-            .menu-toggle { 
-                display: block; 
-                background: none; 
-                border: none; 
-                font-size: 1.5rem; 
-                color: var(--dark); 
-                cursor: pointer;
-            }
-            .hero { padding: 150px 0 60px; }
-            .hero-title { font-size: 2.2rem; }
-            .section { padding: 60px 0; }
-            .mission-block { padding: 40px 20px; }
-            .mission-quote { font-size: 1.3rem; }
-            .founder-section { padding: 40px 20px; }
-        }
-        
-        /* Заглушки для изображений */
-        .photo-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
-        }
-        .photo-placeholder i {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            opacity: 0.7;
-        }
-        .photo-placeholder span {
-            font-size: 0.9rem;
-            opacity: 0.7;
-            line-height: 1.4;
+            .hero h1 { font-size: 32px; }
+            .nav-container { flex-direction: column; gap: 15px; }
+            nav a { margin-left: 0; margin-right: 15px; }
+            .platform-grid, .founder-section, .book-card { flex-direction: column; text-align: center; }
+            .platform-info ul { text-align: left; }
+            .section-header h2 { font-size: 28px; }
         }
     </style>
 </head>
 <body>
-    <!-- Навигация -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo"><i class="fas fa-network-wired"></i> SCM Академия</a>
-            <div class="nav-links" id="navLinks">
-                <a href="#philosophy">Философия</a>
+    <header>
+        <div class="container nav-container">
+            <a href="/academy-scm-landing/" class="logo">Академия<span>SCM</span></a>
+            <nav>
                 <a href="#programs">Программы</a>
-                <a href="#courses">Курсы</a>
+                <a href="#modules">Курсы</a>
+                <a href="#platform">Доступ</a>
                 <a href="#founder">Основатель</a>
-                <a href="#personal-cabinets">Личный кабинет</a>
-                <!-- ДОБАВЛЕНО: ссылка на Реестр -->
-                <a href="реестр/registry.html">Реестр</a>
-                <a href="#contact" class="btn btn-secondary">Записаться</a>
-            </div>
-            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <a href="#contact">Контакты</a>
+            </nav>
         </div>
-    </nav>
+    </header>
 
-    <!-- Герой -->
     <section class="hero">
         <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">
-                    <span class="highlight">Академия Управления Цепями Поставок</span><br>
-                    Точка сборки нового логистического мышления
-                </h1>
-                <p class="hero-subtitle">
-                    Образовательная платформа, где рождаются лидеры, способные строить цепочки, которые не просто доставляют товары, но создают ценность, устойчивость и конкурентные преимущества в мире постоянных изменений.
-                </p>
-                <div class="hero-buttons">
-                    <a href="#programs" class="btn btn-primary"><i class="fas fa-graduation-cap"></i> Выбрать программу</a>
-                    <a href="login.html" class="btn btn-secondary"><i class="fas fa-user-circle"></i> Войти в систему</a>
+            <h1>Академия Управления Цепями Поставок</h1>
+            <p>Точка сборки нового логистического мышления</p>
+            <div class="hero-quote">
+                <p>«Академия управления цепями поставок — это не просто учебное заведение, а точка сборки нового логистического мышления, где рождаются лидеры, способные строить цепочки, которые не просто доставляют товары, но и создают ценность, устойчивость и конкурентные преимущества в мире постоянных изменений.»</p>
+                <p style="margin-top: 15px; font-style: normal;">— Наша философия и миссия</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Три основы нового мышления</h2>
+                <p>Мы трансформируем подход к управлению цепями поставок</p>
+            </div>
+            <div class="pillars-grid">
+                <div class="pillar-card">
+                    <div class="pillar-icon"><i class="fas fa-brain"></i></div>
+                    <h3>Мышление вместо шаблонов</h3>
+                    <p>Развиваем способность видеть систему целиком, прогнозировать изменения и создавать уникальные решения, а не следовать готовым инструкциям.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Цепочки как актив</h3>
+                    <p>Учим рассматривать SCM не как затратный центр, а как стратегический актив, способный генерировать устойчивые конкурентные преимущества.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon"><i class="fas fa-users"></i></div>
+                    <h3>Сообщество лидеров</h3>
+                    <p>Создаем среду для обмена глубинным опытом, совместных проектов и формирования нового качества профессиональных связей.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Философия и Миссия -->
-    <section id="philosophy">
+    <section id="programs" class="section" style="background: #f8fafc;">
         <div class="container">
-            <div class="mission-block">
-                <p class="mission-quote">
-                    "Академия управления цепями поставок — это не просто учебное заведение, а точка сборки нового логистического мышления, где рождаются лидеры, способные строить цепочки, которые не просто доставляют товары, но и создают ценность, устойчивость и конкурентные преимущества в мире постоянных изменений."
-                </p>
-                <p class="mission-author">— Наша философия и миссия</p>
+            <div class="section-header">
+                <h2>Программы для лидеров нового типа</h2>
+                <p>Образовательные траектории, соответствующие уровню вашего мышления</p>
             </div>
-            <h2 class="section-title">Три основы нового мышления</h2>
-            <p class="section-subtitle">Мы трансформируем подход к управлению цепями поставок</p>
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="card-icon"><i class="fas fa-brain"></i></div>
-                    <h3 class="card-title">Мышление вместо шаблонов</h3>
-                    <p class="card-text">Развиваем способность видеть систему целиком, прогнозировать изменения и создавать уникальные решения, а не следовать готовым инструкциям.</p>
+            <div class="programs-grid">
+                <div class="program-card">
+                    <div class="program-badge">Старт 2026</div>
+                    <h3>🌐 SCM Base Camp</h3>
+                    <p>Формирование фундаментального понимания цепей поставок как единой системы. Для начинающих и специалистов смежных областей.</p>
+                    <a href="#contact" class="program-link">Узнать подробнее →</a>
                 </div>
-                <div class="card">
-                    <div class="card-icon"><i class="fas fa-link"></i></div>
-                    <h3 class="card-title">Цепочки как актив</h3>
-                    <p class="card-text">Учим рассматривать SCM не как затратный центр, а как стратегический актив, способный генерировать устойчивые конкурентные преимущества.</p>
+                <div class="program-card">
+                    <div class="program-badge">Старт 2027</div>
+                    <h3>📈 Professional SCM Stream</h3>
+                    <p>Глубокое погружение в стратегию, цифровизацию и оптимизацию. Развитие навыков управления комплексными трансформациями.</p>
+                    <a href="#contact" class="program-link">Узнать подробнее →</a>
                 </div>
-                <div class="card">
-                    <div class="card-icon"><i class="fas fa-users"></i></div>
-                    <h3 class="card-title">Сообщество лидеров</h3>
-                    <p class="card-text">Создаем среду для обмена глубинным опытом, совместных проектов и формирования нового качества профессиональных связей.</p>
+                <div class="program-card">
+                    <div class="program-badge">По приглашениям</div>
+                    <h3>🧪 Leaders Lab</h3>
+                    <p>Закрытый клуб для топ-менеджеров. Фокус на стратегическом лидерстве, инновациях и формировании отраслевых стандартов.</p>
+                    <a href="#contact" class="program-link">Узнать подробнее →</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Программы -->
-    <section id="programs" style="background: var(--white);">
+    <section id="modules" class="section">
         <div class="container">
-            <h2 class="section-title">Программы для лидеров нового типа</h2>
-            <p class="section-subtitle">Образовательные траектории, соответствующие уровню вашего мышления</p>
-            <div class="cards-grid">
-                <div class="card">
-                    <div class="card-icon"><i class="fas fa-campground"></i></div>
-                    <h3 class="card-title">SCM Base Camp</h3>
-                    <p class="card-text">Формирование фундаментального понимания цепей поставок как единой системы. Для начинающих и специалистов смежных областей.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon"><i class="fas fa-stream"></i></div>
-                    <h3 class="card-title">Professional SCM Stream</h3>
-                    <p class="card-text">Глубокое погружение в стратегию, цифровизацию и оптимизацию. Развитие навыков управления комплексными трансформациями.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon"><i class="fas fa-flask"></i></div>
-                    <h3 class="card-title">Leaders Lab</h3>
-                    <p class="card-text">Закрытый клуб для топ-менеджеров. Фокус на стратегическом лидерстве, инновациях и формировании отраслевых стандартов.</p>
-                </div>
+            <div class="section-header">
+                <h2>Детализация курсов</h2>
+                <p>Практические модули, формирующие компетенции будущего</p>
             </div>
-        </div>
-    </section>
-
-    <!-- Курсы -->
-    <section id="courses">
-        <div class="container">
-            <h2 class="section-title">Детализация курсов</h2>
-            <p class="section-subtitle">Практические модули, формирующие компетенции будущего</p>
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="basic">Базовый</button>
-                <button class="tab-btn" data-tab="professional">Профессиональный</button>
-                <button class="tab-btn" data-tab="expert">Экспертный</button>
-            </div>
-            <div class="tab-content active" id="basic">
-                <div class="course-item">
+            <div class="modules-grid">
+                <div class="module-card">
                     <h4>SCM Base Camp: Введение в системное мышление</h4>
                     <p>Основы управления цепями поставок, терминология, понимание потоков и взаимосвязей в системе.</p>
                 </div>
-                <div class="course-item">
+                <div class="module-card">
                     <h4>Финансы и KPI в цепях поставок</h4>
                     <p>Как измерять и создавать ценность. TCO, расчет себестоимости, ключевые показатели эффективности.</p>
                 </div>
-            </div>
-            <div class="tab-content" id="professional">
-                <div class="course-item">
+                <div class="module-card">
                     <h4>Стратегия и цифровая трансформация SCM</h4>
                     <p>Интеграция SCM в бизнес-стратегию. Дорожные карты цифровизации, AI, IoT, цифровые двойники.</p>
                 </div>
-                <div class="course-item">
+                <div class="module-card">
                     <h4>Устойчивость и управление рисками</h4>
                     <p>Построение resilient supply chains. ESG, диверсификация, сценарное планирование в условиях нестабильности.</p>
                 </div>
-            </div>
-            <div class="tab-content" id="expert">
-                <div class="course-item">
+                <div class="module-card">
                     <h4>Стратегическое лидерство в SCM</h4>
                     <p>Формирование видения, управление изменениями, построение высокоэффективных команд.</p>
                 </div>
-                <div class="course-item">
+                <div class="module-card">
                     <h4>Инновации и будущее цепей поставок</h4>
                     <p>Blockchain, AI, автономные системы, устойчивое развитие и создание экосистем.</p>
                 </div>
@@ -744,316 +546,108 @@
         </div>
     </section>
 
-    <!-- Доступ к личным кабинетам -->
-    <section id="personal-cabinets">
+    <section id="platform" class="section" style="background: #f8fafc;">
         <div class="container">
-            <div class="cabinet-access">
-                <h2 class="section-title">Доступ к образовательной платформе</h2>
-                <p class="section-subtitle">Личный кабинет для управления обучением и коммуникации</p>
-                
-                <div class="access-container">
-                    <div class="access-icon">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                    
-                    <h3 style="margin-bottom: 20px; color: var(--dark);">Закрытая образовательная система</h3>
-                    
-                    <p class="access-description">
-                        Все участники программ SCM Академии получают доступ к персонализированной платформе обучения, 
-                        где размещены учебные материалы, задания, расписания и инструменты для коммуникации.
-                    </p>
-                    
-                    <div class="access-requirements">
-                        <h4><i class="fas fa-check-circle"></i> Доступ предоставляется:</h4>
-                        <ul class="requirement-list">
-                            <li><i class="fas fa-user-graduate"></i> Студентам текущих образовательных программ</li>
-                            <li><i class="fas fa-chalkboard-teacher"></i> Преподавателям и экспертам академии</li>
-                            <li><i class="fas fa-users-cog"></i> Административному персоналу</li>
-                            <li><i class="fas fa-shield-alt"></i> Супервайзерам и менеджерам программ</li>
+            <div class="platform-section">
+                <div class="platform-grid">
+                    <div class="platform-info">
+                        <h3>Доступ к образовательной платформе</h3>
+                        <p>Личный кабинет для управления обучением и коммуникации</p>
+                        <ul>
+                            <li>Студентам текущих образовательных программ</li>
+                            <li>Преподавателям и экспертам академии</li>
+                            <li>Административному персоналу</li>
+                            <li>Супервайзерам и менеджерам программ</li>
                         </ul>
+                        <a href="#" class="demo-btn">Демо-доступ</a>
                     </div>
-                    
-                    <div class="demo-note">
-                        <h4><i class="fas fa-info-circle"></i> Информация о демо-доступе</h4>
-                        <p>
-                            Для ознакомления с функционалом системы доступны тестовые аккаунты. 
-                            После входа вы будете перенаправлены в соответствующий личный кабинет.
-                        </p>
+                    <div class="platform-info">
+                        <h3>Закрытая образовательная система</h3>
+                        <p>Все участники программ SCM Академии получают доступ к персонализированной платформе обучения, где размещены учебные материалы, задания, расписания и инструменты для коммуникации.</p>
+                        <p style="margin-top: 20px; font-size: 14px;">Для ознакомления с функционалом системы доступны тестовые аккаунты.</p>
                     </div>
-                    
-                    <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px; flex-wrap: wrap;">
-                        <a href="login.html" class="btn btn-primary" style="padding: 16px 40px;">
-                            <i class="fas fa-sign-in-alt"></i> Войти в систему
-                        </a>
-                        <a href="#contact" class="btn btn-secondary" style="padding: 16px 40px;">
-                            <i class="fas fa-question-circle"></i> Получить доступ
-                        </a>
-                    </div>
-                    
-                    <p style="margin-top: 25px; color: var(--gray); font-size: 0.9rem;">
-                        <i class="fas fa-exclamation-triangle"></i> Доступ к системе предоставляется после регистрации на программы обучения.
-                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Основатель -->
-    <section id="founder">
+    <section id="founder" class="section">
         <div class="container">
             <div class="founder-section">
-                <div class="founder-header">
-                    <h2 class="founder-name">Дмитрий Панибратский</h2>
-                    <p class="founder-title">Основатель Академии, практикующий руководитель SCM с 15+ лет опыта</p>
+                <div class="founder-photo">
+                    <i class="fas fa-user-tie"></i>
                 </div>
-                <div class="founder-content">
-                    <div class="founder-photo-container">
-                        <div class="founder-photo" id="founderPhoto">
-                            <!-- Фото основателя -->
-                            <div class="photo-placeholder">
-                                <i class="fas fa-user-tie"></i>
-                                <span>Дмитрий Панибратский<br>Основатель Академии SCM</span>
-                            </div>
-                        </div>
-                        <div class="founder-links">
-                            <a href="https://965910-bit.github.io/Panibratsky-Dmitry/index.html" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> Подробнее
-                            </a>
-                            <a href="#contact" class="btn btn-secondary">
-                                <i class="fas fa-calendar-alt"></i> Консультация
-                            </a>
-                        </div>
-                    </div>
-                    <div>
-                        <p style="font-size: 1.2rem; line-height: 1.8; margin-bottom: 30px;">
-                            "Моя миссия — систематизировать практический опыт и передавать его следующему поколению руководителей SCM. Мы создаем не просто курсы, а среду для трансформации мышления."
-                        </p>
-                        
-                        <!-- Секция о книге -->
-                        <div class="book-section">
-                            <div class="book-badge">
-                                <i class="fas fa-book"></i> В процессе создания
-                            </div>
-                            <h3 style="font-size: 1.8rem; margin-bottom: 15px; color: var(--dark);">Новая книга о цепях поставок</h3>
-                            
-                            <div class="book-info">
-                                <div class="book-cover" id="bookCover">
-                                    <!-- Скриншот книги -->
-                                    <div class="photo-placeholder">
-                                        <i class="fas fa-book-open"></i>
-                                        <span>Скриншот из книги<br>"Современные подходы<br>к управлению цепями поставок"</span>
-                                    </div>
-                                </div>
-                                <div class="book-details">
-                                    <h4 class="book-title">Современные подходы к управлению цепями поставок</h4>
-                                    <p class="book-description">
-                                        Дмитрий Панибратский в настоящее время завершает работу над книгой, в которой систематизирует 15+ лет практического опыта в области SCM. 
-                                        Книга представляет собой практическое руководство по построению resilient supply chains в условиях нестабильности.
-                                    </p>
-                                    
-                                    <div style="background: linear-gradient(135deg, #f0f7ff 0%, #e6f7ff 100%); padding: 20px; border-radius: 12px; margin: 20px 0;">
-                                        <h4 style="margin-bottom: 10px; color: var(--primary);">О чем книга:</h4>
-                                        <ul style="color: var(--gray); line-height: 1.6; padding-left: 20px;">
-                                            <li>Стратегическое управление цепями поставок как источник конкурентного преимущества</li>
-                                            <li>Цифровая трансформация и внедрение AI в логистические процессы</li>
-                                            <li>Управление рисками и создание устойчивых supply chains</li>
-                                            <li>Практические кейсы из опыта автора</li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div class="book-features">
-                                        <div class="book-feature">
-                                            <i class="fas fa-calendar-alt"></i>
-                                            <span>Планируемый выход: <strong>2026 год</strong></span>
-                                        </div>
-                                        <div class="book-feature">
-                                            <i class="fas fa-file-alt"></i>
-                                            <span>Формат: бумажная и электронная версии</span>
-                                        </div>
-                                        <div class="book-feature">
-                                            <i class="fas fa-globe"></i>
-                                            <span>Языки: русский и английский</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <p style="margin-top: 20px; color: var(--primary); font-weight: 600;">
-                                        <i class="fas fa-bell"></i> Следите за анонсами на нашем сайте и в социальных сетях
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                <div class="founder-info">
+                    <h3>Дмитрий Панибратский</h3>
+                    <p class="title">Основатель Академии SCM, практикующий руководитель SCM с 15+ лет опыта</p>
+                    <p>«Моя миссия — систематизировать практический опыт и передавать его следующему поколению руководителей SCM. Мы создаем не просто курсы, а среду для трансформации мышления.»</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="book-card">
+                <div class="book-cover">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div class="book-info">
+                    <h3>Новая книга о цепях поставок</h3>
+                    <p><strong>«Современные подходы к управлению цепями поставок»</strong></p>
+                    <p>Дмитрий Панибратский в настоящее время завершает работу над книгой, в которой систематизирует 15+ лет практического опыта в области SCM. Книга представляет собой практическое руководство по построению resilient supply chains в условиях нестабильности.</p>
+                    <div class="book-tags">
+                        <span class="book-tag">Планируемый выход: 2026</span>
+                        <span class="book-tag">Бумажная и электронная версии</span>
+                        <span class="book-tag">Русский и английский</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Контакты -->
-    <section id="contact">
+    <section id="contact" class="cta-section">
         <div class="container">
-            <h2 class="section-title">Готовы трансформировать свое мышление?</h2>
-            <p class="section-subtitle">Оставьте заявку для консультации по подбору программы</p>
-            <div class="contact-form">
-                <form id="leadForm">
-                    <div class="form-group">
-                        <input type="text" placeholder="Ваше имя" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" placeholder="Email" required>
-                    </div>
-                    <div class="form-group">
-                        <select required>
-                            <option value="" disabled selected>Интересующая программа</option>
-                            <option>SCM Base Camp</option>
-                            <option>Professional SCM Stream</option>
-                            <option>SCM Leaders Lab</option>
-                            <option>Консультация</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <textarea placeholder="Ваши вопросы или комментарии" rows="4"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">
-                        <i class="fas fa-paper-plane"></i> Отправить заявку
-                    </button>
-                </form>
-            </div>
+            <h2>Готовы трансформировать свое мышление?</h2>
+            <p>Оставьте заявку для консультации по подбору программы</p>
+            <a href="https://965910-bit.github.io/Panibratsky-Dmitry/contact.html" target="_blank" class="cta-btn">Оставить заявку</a>
         </div>
     </section>
 
-    <!-- Футер -->
-    <footer class="footer">
+    <footer>
         <div class="container">
-            <div class="footer-content">
-                <div>
-                    <h3 style="margin-bottom: 20px;">SCM Академия</h3>
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Академия SCM</h4>
                     <p>Точка сборки нового логистического мышления</p>
-                    <p style="margin-top: 20px; color: #B3BAC5; font-size: 0.9rem;">
-                        Основатель: <a href="https://965910-bit.github.io/Panibratsky-Dmitry/index.html" target="_blank" style="color: #4C9AFF;">Дмитрий Панибратский</a>
-                        <br>Новая книга выходит в 2026 году
-                    </p>
                 </div>
-                <div class="footer-links">
+                <div class="footer-col">
                     <h4>Навигация</h4>
-                    <a href="#philosophy">Философия</a>
-                    <a href="#programs">Программы</a>
-                    <a href="#courses">Курсы</a>
-                    <a href="#founder">Основатель</a>
-                    <a href="#personal-cabinets">Личный кабинет</a>
-                    <!-- ДОБАВЛЕНО: ссылка на Реестр в футере -->
-                    <a href="реестр/registry.html">Реестр</a>
-                    <a href="#contact">Контакты</a>
+                    <ul>
+                        <li><a href="#programs">Программы</a></li>
+                        <li><a href="#modules">Курсы</a></li>
+                        <li><a href="#platform">Доступ</a></li>
+                        <li><a href="#founder">Основатель</a></li>
+                    </ul>
                 </div>
-                <div class="footer-links">
-                    <h4>Обучение</h4>
-                    <a href="login.html">Вход в систему</a>
-                    <a href="#contact">Запись на программы</a>
-                    <a href="#contact">Корпоративное обучение</a>
-                    <a href="#contact">Вебинары и мероприятия</a>
-                </div>
-                <div class="footer-links">
+                <div class="footer-col">
                     <h4>Контакты</h4>
-                    <a href="#contact">Обратная связь</a>
-                    <a href="#contact">Техническая поддержка</a>
-                    <a href="#contact">Сотрудничество</a>
-                    <a href="#contact">Вакансии</a>
+                    <ul>
+                        <li><a href="mailto:academy@scm.ru">academy@scm.ru</a></li>
+                        <li><a href="https://t.me/LogisticaandSupplyChain" target="_blank">Telegram-канал</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Реестр сертификатов</h4>
+                    <ul>
+                        <li><a href="https://965910-bit.github.io/academy-scm-landing/реестр/registry.html">Проверить подлинность</a></li>
+                    </ul>
                 </div>
             </div>
-            <hr style="border-color: #405175; margin: 40px 0;">
-            <p style="text-align: center; color: #B3BAC5; font-size: 0.9rem;">
-                © 2024 Академия Управления Цепями Поставок. Все права защищены.
-                <br>Версия системы: 2.0.0 | Обновлено: Январь 2026
-            </p>
+            <div class="copyright">
+                &copy; 2026 Академия SCM. Все права защищены.
+            </div>
         </div>
     </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Мобильное меню
-            const menuToggle = document.getElementById('menuToggle');
-            const navLinks = document.getElementById('navLinks');
-            if (menuToggle) {
-                menuToggle.addEventListener('click', () => {
-                    navLinks.classList.toggle('active');
-                    menuToggle.innerHTML = navLinks.classList.contains('active') 
-                        ? '<i class="fas fa-times"></i>' 
-                        : '<i class="fas fa-bars"></i>';
-                });
-            }
-            
-            // Закрытие меню при клике на ссылку
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navLinks.classList.remove('active');
-                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-                });
-            });
-            
-            // Табы
-            document.querySelectorAll('.tab-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                    button.classList.add('active');
-                    document.getElementById(button.dataset.tab).classList.add('active');
-                });
-            });
-            
-            // Форма
-            document.getElementById('leadForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                alert('Спасибо! Ваша заявка принята. Мы свяжемся с вами в течение 24 часов.');
-                this.reset();
-            });
-            
-            // Плавная прокрутка
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    if(targetId === '#') return;
-                    const targetElement = document.querySelector(targetId);
-                    if(targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 100,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-            
-            // Адаптивное меню при изменении размера окна
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768) {
-                    navLinks.classList.remove('active');
-                    navLinks.style.display = 'flex';
-                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-                } else {
-                    navLinks.style.display = '';
-                    if (!navLinks.classList.contains('active')) {
-                        navLinks.style.display = 'none';
-                    }
-                }
-            });
-            
-            // Проверка авторизации
-            checkAuthStatus();
-        });
-        
-        // Проверка авторизации
-        function checkAuthStatus() {
-            const userData = localStorage.getItem('scm_user');
-            const loginBtn = document.querySelector('a[href="login.html"]');
-            
-            if (userData) {
-                const user = JSON.parse(userData);
-                // Если пользователь авторизован, меняем текст кнопки
-                if (loginBtn) {
-                    loginBtn.innerHTML = '<i class="fas fa-user-circle"></i> Личный кабинет';
-                    loginBtn.href = 'dashboard/index.html';
-                }
-            }
-        }
-    </script>
 </body>
 </html>
