@@ -1,24 +1,15 @@
 [
     {
         "id": 1,
-        "regNumber": "CTSCP-RU-2023-00317",
+        "regNumber": "CPL-RU-2020-00189",
         "fullName": "Панибратский Дмитрий Сергеевич",
-        "certName": "CTSC-Р (Certified in Transformation for Supply Chain - Russia)",
-        "issueDate": "2023-11-18",
-        "expiryDate": "2028-11-18",
-        "status": "active"
+        "certName": "CPL (Certified in Russian Logistics)",
+        "issueDate": "2020-05-15",
+        "expiryDate": "2025-05-15",
+        "status": "expired"
     },
     {
         "id": 2,
-        "regNumber": "CSCP-RU-2022-00425",
-        "fullName": "Панибратский Дмитрий Сергеевич",
-        "certName": "CSCP-Р (Certified Supply Chain Professional - Russia)",
-        "issueDate": "2022-02-10",
-        "expiryDate": "2027-02-10",
-        "status": "active"
-    },
-    {
-        "id": 3,
         "regNumber": "CLTD-RU-2021-00567",
         "fullName": "Панибратский Дмитрий Сергеевич",
         "certName": "CLTD-Р (Certified in Logistics, Transportation and Distribution - Russia)",
@@ -27,13 +18,22 @@
         "status": "active"
     },
     {
-        "id": 4,
-        "regNumber": "CPL-RU-2020-00189",
+        "id": 3,
+        "regNumber": "CSCP-RU-2022-00425",
         "fullName": "Панибратский Дмитрий Сергеевич",
-        "certName": "CPL (Certified in Russian Logistics)",
-        "issueDate": "2020-05-15",
-        "expiryDate": "2025-05-15",
-        "status": "expired"
+        "certName": "CSCP-Р (Certified Supply Chain Professional - Russia)",
+        "issueDate": "2022-02-10",
+        "expiryDate": "2027-02-10",
+        "status": "active"
+    },
+    {
+        "id": 4,
+        "regNumber": "CTSCP-RU-2023-00317",
+        "fullName": "Панибратский Дмитрий Сергеевич",
+        "certName": "CTSC-Р (Certified in Transformation for Supply Chain - Russia)",
+        "issueDate": "2023-11-18",
+        "expiryDate": "2028-11-18",
+        "status": "active"
     },
     {
         "id": 5,
