@@ -4,8 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Реестр сертификатов | Академия SCM</title>
+    <meta name="description" content="Проверка подлинности сертификатов в области управления цепями поставок. Реестр сертифицированных специалистов Академии SCM.">
+    <meta name="yandex-verification" content="108fc8ce05da4c6d" />
+    <meta name="google-site-verification" content="tW6Uf1tlUY4yhc8WBO3rzq3mpKtyTYixR48nzy0RnuI" />
+    <link rel="canonical" href="https://965910-bit.github.io/academy-scm-landing/реестр/registry.html">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Яндекс.Метрика -->
+    <script type="text/javascript" >
+        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+        ym(105620027, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true,
+            webvisor:true
+        });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/105620027" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C5X9R6HPQY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-C5X9R6HPQY');
+    </script>
     <style>
         * {
             margin: 0;
@@ -26,7 +53,6 @@
             padding: 0 20px;
         }
 
-        /* Header (копия стилей с главной страницы Академии) */
         header {
             background-color: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -71,7 +97,6 @@
             color: #1e40af;
         }
 
-        /* Main content */
         .main-content {
             padding: 120px 0 60px;
             min-height: calc(100vh - 200px);
@@ -211,7 +236,6 @@
             margin-top: 30px;
         }
 
-        /* Footer */
         footer {
             background-color: #0f172a;
             color: white;
@@ -223,14 +247,14 @@
 <body>
     <header>
         <div class="container nav-container">
-            <a href="index.html" class="logo">АКАДЕМИЯ SCM</a>
+            <a href="../index.html" class="logo">АКАДЕМИЯ SCM</a>
             <nav>
                 <ul>
-                    <li><a href="index.html#philosophy">Философия</a></li>
-                    <li><a href="index.html#programs">Программы</a></li>
-                    <li><a href="index.html#about">Об Академии</a></li>
+                    <li><a href="../index.html#philosophy">Философия</a></li>
+                    <li><a href="../index.html#programs">Программы</a></li>
+                    <li><a href="../index.html#about">Об Академии</a></li>
                     <li><a href="registry.html" class="active">Реестр</a></li>
-                    <li><a href="index.html#contact">Контакты</a></li>
+                    <li><a href="../index.html#contact">Контакты</a></li>
                 </ul>
             </nav>
         </div>
@@ -280,7 +304,6 @@
             let certificatesData = [];
             let filteredData = [];
 
-            // Загрузка данных из JSON-файла (мы создадим его дальше)
             fetch('certificates.json')
                 .then(response => {
                     if (!response.ok) {
