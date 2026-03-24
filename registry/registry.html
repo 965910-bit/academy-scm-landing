@@ -35,7 +35,6 @@
         gtag('config', 'G-C5X9R6HPQY');
     </script>
     <style>
-        /* стили полностью сохранены, как в предыдущей версии, они здесь */
         * {
             margin: 0;
             padding: 0;
@@ -110,29 +109,23 @@
             max-width: 700px;
             margin: 0 auto;
         }
-        .filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-            margin-bottom: 40px;
-        }
         .search-box {
-            flex: 1;
-            min-width: 250px;
-            max-width: 400px;
             display: flex;
-            gap: 10px;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
         }
         .search-box input {
-            flex: 1;
+            width: 100%;
+            max-width: 400px;
             padding: 12px 20px;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
             font-size: 1rem;
         }
         .search-box button {
-            padding: 12px 25px;
+            padding: 12px 28px;
             background-color: #1e40af;
             color: white;
             border: none;
@@ -143,14 +136,6 @@
         }
         .search-box button:hover {
             background-color: #1e3a8a;
-        }
-        .status-filter select {
-            padding: 12px 20px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-            background-color: white;
-            min-width: 200px;
         }
         .table-responsive {
             overflow-x: auto;
@@ -239,22 +224,13 @@
                 <p class="page-subtitle">Проверка подлинности сертификатов, выданных Академией управления цепями поставок</p>
             </div>
 
-            <div class="filters">
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Номер сертификата или фамилия...">
-                    <button id="searchBtn">Найти</button>
-                </div>
-                <div class="status-filter">
-                    <select id="statusSelect">
-                        <option value="all">Все статусы</option>
-                        <option value="active">Действительные</option>
-                        <option value="expired">Истекшие</option>
-                    </select>
-                </div>
+            <div class="search-box">
+                <input type="text" id="certNumber" placeholder="Введите номер сертификата (например, CPL-RU-2020-00189)">
+                <button id="searchBtn">Найти</button>
             </div>
 
-            <div id="tableContainer" class="table-responsive">
-                <div class="no-data">Введите номер или фамилию для поиска</div>
+            <div id="resultContainer" class="table-responsive">
+                <div class="no-data">Введите номер сертификата для проверки</div>
             </div>
             <p class="footer-note">* Информация обновляется еженедельно. Для официального подтверждения обратитесь в учебный отдел.</p>
         </div>
@@ -268,40 +244,44 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const tableContainer = document.getElementById('tableContainer');
-            const searchInput = document.getElementById('searchInput');
+            const resultContainer = document.getElementById('resultContainer');
+            const certNumberInput = document.getElementById('certNumber');
             const searchBtn = document.getElementById('searchBtn');
-            const statusSelect = document.getElementById('statusSelect');
 
             let certificatesData = [];
-            let filteredData = [];
 
             fetch('certificates.json')
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     return response.json();
                 })
                 .then(data => {
                     certificatesData = data;
-                    // Не показываем данные сразу
                 })
                 .catch(error => {
-                    tableContainer.innerHTML = `<div class="no-data">Ошибка загрузки данных: ${error.message}. Попробуйте позже.</div>`;
+                    resultContainer.innerHTML = `<div class="no-data">Ошибка загрузки данных: ${error.message}. Попробуйте позже.</div>`;
                 });
 
-            function renderTable(data) {
-                if (!data || data.length === 0) {
-                    tableContainer.innerHTML = '<div class="no-data">Сертификаты не найдены</div>';
+            function showCertificate(regNumber) {
+                if (!certificatesData.length) {
+                    resultContainer.innerHTML = '<div class="loading">Загрузка данных...</div>';
+                    return;
+                }
+                const cert = certificatesData.find(c => c.regNumber.toLowerCase() === regNumber.trim().toLowerCase());
+                if (!cert) {
+                    resultContainer.innerHTML = '<div class="no-data">Сертификат с указанным номером не найден. Проверьте правильность ввода.</div>';
                     return;
                 }
 
-                let html = `
+                const issueDate = cert.issueDate.split('-').reverse().join('.');
+                const expiryDate = cert.expiryDate.split('-').reverse().join('.');
+                const statusClass = cert.status === 'active' ? 'active' : 'expired';
+                const statusText = cert.status === 'active' ? 'Действителен' : 'Истек';
+
+                const html = `
                     <table class="cert-table">
                         <thead>
                             <tr>
-                                <th>№</th>
                                 <th>Регистрационный номер</th>
                                 <th>ФИО владельца</th>
                                 <th>Наименование сертификата</th>
@@ -310,53 +290,33 @@
                                 <th>Статус</th>
                             </thead>
                             <tbody>
+                                <tr>
+                                    <td><strong>${cert.regNumber}</strong></td>
+                                    <td>${cert.fullName}</td>
+                                    <td>${cert.certName}</td>
+                                    <td>${issueDate}</td>
+                                    <td>${expiryDate}</td>
+                                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
                 `;
-
-                data.forEach((cert, index) => {
-                    const issueDate = cert.issueDate.split('-').reverse().join('.');
-                    const expiryDate = cert.expiryDate.split('-').reverse().join('.');
-                    const statusClass = cert.status === 'active' ? 'active' : 'expired';
-                    const statusText = cert.status === 'active' ? 'Действителен' : 'Истек';
-
-                    html += `
-                        <tr>
-                            <td data-label="№">${index + 1}</td>
-                            <td data-label="Регистрационный номер"><strong>${cert.regNumber}</strong></td>
-                            <td data-label="ФИО владельца">${cert.fullName}</td>
-                            <td data-label="Наименование сертификата">${cert.certName}</td>
-                            <td data-label="Дата выдачи">${issueDate}</td>
-                            <td data-label="Срок действия">${expiryDate}</td>
-                            <td data-label="Статус"><span class="status ${statusClass}">${statusText}</span></td>
-                        </tr>
-                    `;
-                });
-
-                html += `</tbody>
-                     </table>`;
-                tableContainer.innerHTML = html;
+                resultContainer.innerHTML = html;
             }
 
-            function filterData() {
-                if (!certificatesData.length) return;
-                const searchTerm = searchInput.value.trim().toLowerCase();
-                const statusFilter = statusSelect.value;
-
-                filteredData = certificatesData.filter(cert => {
-                    const matchesSearch = searchTerm === '' ||
-                        cert.regNumber.toLowerCase().includes(searchTerm) ||
-                        cert.fullName.toLowerCase().includes(searchTerm);
-                    const matchesStatus = statusFilter === 'all' || cert.status === statusFilter;
-                    return matchesSearch && matchesStatus;
-                });
-
-                renderTable(filteredData);
+            function handleSearch() {
+                const number = certNumberInput.value.trim();
+                if (number === '') {
+                    resultContainer.innerHTML = '<div class="no-data">Введите номер сертификата для проверки</div>';
+                    return;
+                }
+                showCertificate(number);
             }
 
-            searchBtn.addEventListener('click', filterData);
-            searchInput.addEventListener('keyup', (e) => {
-                if (e.key === 'Enter') filterData();
+            searchBtn.addEventListener('click', handleSearch);
+            certNumberInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') handleSearch();
             });
-            statusSelect.addEventListener('change', filterData);
         });
     </script>
 </body>
