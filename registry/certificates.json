@@ -34,5 +34,14 @@
         "issueDate": "2020-05-15",
         "expiryDate": "2025-05-15",
         "status": "expired"
+    },
+    {
+        "id": 5,
+        "regNumber": "CDTL-RU-2025-00001",
+        "fullName": "Панибратский Дмитрий Сергеевич",
+        "certName": "CDTL (Chief Digital Transformation Leader)",
+        "issueDate": "2025-03-24",
+        "expiryDate": "2030-03-24",
+        "status": "active"
     }
 ]
