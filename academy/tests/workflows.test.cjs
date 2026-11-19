@@ -498,3 +498,15 @@ test('Документы: поиск, локальный черновик, пр�
  a.value('[name="query"]','переподготовке');a.submit('#document-search');assert.equal(a.w.document.querySelectorAll('[data-document-draft]').length,1);a.click('[data-document-draft="retraining"]');assert.equal(a.state().documentDrafts[0].status,'draft');assert.equal(a.$('[data-document-review]'),null);
  const b=app(a.state());b.role('admin');b.tab('documents');b.click('[data-document-review]');assert.equal(b.state().documentDrafts[0].status,'reviewed');assert.ok(!b.$('[data-document-issue]'));b.click('[data-document-remove]');assert.equal(b.state().documentDrafts.length,0);b.dom.window.close();a.dom.window.close();
 });
+
+test('Документы: заполнение, сохранение, повторное открытие и несохранённый предпросмотр',()=>{
+ const a=app();a.role('learner');a.tab('documents');a.click('[data-document-draft="contract"]');assert.ok(a.$('#document-editor'));
+ a.value('[name="title"]','Проект договора обучения');a.value('[name="organization"]','Учебная организация');a.value('[name="recipient"]','Участник Первый');a.value('[name="date"]','2026-11-19');a.value('[name="field_0"]','Стороны проекта');a.value('[name="body"]','Первая строка\nВторая строка');a.submit('#document-editor');
+ let r=a.state().documentDrafts[0];assert.equal(r.content.recipient,'Участник Первый');assert.equal(r.content.values[0],'Стороны проекта');assert.equal(r.revision,2);
+ a.click('[data-document-back]');a.click('[data-document-edit]');assert.equal(a.$('[name="body"]').value,'Первая строка\nВторая строка');a.value('[name="body"]','Предпросмотр без сохранения');a.click('[data-document-preview]');assert.match(a.$('#document-print-frame').getAttribute('srcdoc'),/Предпросмотр без сохранения/);assert.equal(a.state().documentDrafts[0].content.body,'Первая строка\nВторая строка');
+ a.w.confirm=()=>false;a.click('[data-document-back]');assert.ok(a.$('#document-editor'));a.w.confirm=()=>true;a.click('[data-document-back]');a.click('[data-document-edit]');assert.equal(a.$('[name="body"]').value,'Первая строка\nВторая строка');a.dom.window.close();
+});
+test('Документы: изменение проверенного проекта снимает отметку, старые записи открываются',()=>{
+ const a=app();a.role('learner');a.tab('documents');a.click('[data-document-draft="study-certificate"]');const stored=a.state();stored.documentDrafts[0].status='reviewed';stored.documentDrafts[0].reviewedAt='2026-11-19';delete stored.documentDrafts[0].content;delete stored.documentDrafts[0].revision;
+ const b=app(stored);b.role('admin');b.tab('documents');b.click('[data-document-edit]');assert.match(b.$('#main').textContent,/снимет отметку/);b.value('[name="body"]','Изменённое содержание справки');b.submit('#document-editor');const r=b.state().documentDrafts[0];assert.equal(r.status,'draft');assert.equal(r.reviewedAt,undefined);assert.equal(r.revision,2);assert.equal(r.content.body,'Изменённое содержание справки');b.dom.window.close();a.dom.window.close();
+});

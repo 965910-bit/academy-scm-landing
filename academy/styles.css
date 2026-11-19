@@ -1906,3 +1906,12 @@ th {
 .knowledge-grid .card details p { margin-top: 12px; }
 .knowledge-related { padding: 20px; border-radius: 16px; background: #f3edfc; overflow-wrap: anywhere; }
 .document-pass{background:linear-gradient(125deg,#29134c,#7140df 70%,#c955b9);color:white;padding:28px;border-radius:22px;max-width:650px;overflow-wrap:anywhere;box-shadow:0 12px 30px #7140df30}.document-pass h3{font-size:clamp(24px,5vw,36px);color:white}.document-pass p{color:#f1e8ff}.document-pass>span{letter-spacing:.08em;font-weight:800}
+/* Document projects: readable editor and isolated printable preview. */
+#document-editor { min-width: 0; }
+#document-editor textarea { resize: vertical; min-height: 80px; }
+#document-editor [name="body"] { min-height: 230px; }
+.document-editor-actions { flex-wrap: wrap; }
+.document-editor-actions .button { white-space: normal; }
+.document-preview { min-width: 0; }
+.document-preview iframe { display: block; width: 100%; height: 900px; border: 1px solid #dfd3ef; border-radius: 12px; background: white; }
+@media(max-width:600px) { .document-preview iframe { height: 680px; } .document-editor-actions { display: grid; grid-template-columns: minmax(0,1fr); } }
