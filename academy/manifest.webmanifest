@@ -1,0 +1,11 @@
+{
+  "name": "Академия SCM — учебная лаборатория",
+  "short_name": "SCM Академия",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#faf9fe",
+  "theme_color": "#7140df",
+  "icons": [{"src":"assets/app-icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]
+}

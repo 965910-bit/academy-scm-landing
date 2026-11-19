@@ -21,6 +21,10 @@ function app(storage) {
   };
   w.confirm = () => true;
   if (storage) w.localStorage.setItem(key, JSON.stringify(storage));
+  w.eval(fs.readFileSync(path.join(root, "offline-config.js"), "utf8"));
+  w.eval(fs.readFileSync(path.join(root, "offline.js"), "utf8"));
+  w.eval(fs.readFileSync(path.join(root, "learning.js"), "utf8"));
+  w.eval(fs.readFileSync(path.join(root, "portal.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
   const $ = (s) => w.document.querySelector(s);
   const click = (s) => {
@@ -210,4 +214,116 @@ test("Возврат из кабинета по ссылке подвала от
   assert.ok(a.$("#questions"));
   assert.equal(a.w.document.querySelectorAll("#questions details").length, 4);
   a.dom.window.close();
+});
+
+function quiz(a, correct = true) {
+  a.role('learner');
+  a.tab('courses');
+  a.click('[data-learn-module="inventory"]');
+  a.click('[data-learning-action="start-test"]');
+  a.$(`[name="q0"][value="${correct ? 1 : 0}"]`).checked = true;
+  a.$(`[name="q1"][value="${correct ? 2 : 0}"]`).checked = true;
+  a.value('[name="reason"]', 'Учитываю спрос за срок поставки, ожидаемые поступления и неудовлетворённый спрос.');
+  a.$('[name="declaration"]').checked = true;
+  a.submit('#learning-quiz');
+}
+test('Учебный кабинет: три модуля и поиск по навыку', () => {
+  const a = app(); a.role('learner'); a.tab('courses');
+  assert.equal(a.w.document.querySelectorAll('.learning-course').length, 3);
+  a.value('[name="query"]', 'сервис'); a.submit('#course-search');
+  assert.equal(a.w.document.querySelectorAll('.learning-course').length, 1);
+  a.value('[name="query"]', '<img src=x>'); a.submit('#course-search');
+  assert.equal(a.$('#main img'), null); assert.match(a.$('#main').textContent, /Ничего не найдено/);
+  a.dom.window.close();
+});
+test('Прочтение не подтверждает навык и сохраняется отдельно', () => {
+  const a=app(); a.role('learner'); a.tab('courses'); a.click('[data-learn-module="inventory"]'); a.click('[data-learning-action="mark-read"]');
+  assert.deepEqual(a.state().learning.read, ['inventory']); assert.equal(a.state().learning.attempts.length, 0);
+  a.tab('skills'); assert.match(a.$('#main').textContent, /Теория прочитана/); a.dom.window.close();
+});
+test('Лаборатория: правильная формула, округление, единицы и сохранение', () => {
+  const a=app(); const calc=a.w.SCMLearning.calculateInventory;
+  const r=calc({demand:80,lead:7,sigma:15,z:1.645});
+  assert.equal(r.expected,560); assert.equal(r.reorder,626); assert.ok(Math.abs(r.safety-65.2789)<.01);
+  assert.equal(calc({demand:20,lead:5,sigma:0,z:1}).reorder,100);
+  a.role('learner'); a.tab('lab'); a.submit('#inventory-form');
+  assert.equal(a.state().learning.lab.result.reorder,626); assert.match(a.$('#inventory-result').textContent,/626/); a.dom.window.close();
+});
+test('Лаборатория отвергает отрицательные, бесконечные и пустые параметры',()=>{
+  const a=app();
+  for(const bad of [{demand:-1},{lead:0},{sigma:-2},{z:5},{demand:Infinity},{lead:NaN}]){
+    assert.throws(()=>a.w.SCMLearning.calculateInventory({demand:80,lead:7,sigma:15,z:1.645,...bad}));
+  }
+  a.role('learner');a.tab('lab');a.value('[name="sigma"]','');a.submit('#inventory-form');assert.match(a.$('#toast').textContent,/Заполните все/);assert.equal(a.state(),null);a.dom.window.close();
+});
+test('Корректная попытка ждёт преподавателя, а не выпускает credential',()=>{
+  const a=app();quiz(a);const attempt=a.state().learning.attempts[0];assert.equal(attempt.score,2);assert.equal(attempt.status,'pending');assert.equal(attempt.recordCode,undefined);a.tab('skills');assert.match(a.$('#main').textContent,/Ожидает проверки/);a.dom.window.close();
+});
+test('Неполный тест и пустое обоснование не сохраняются',()=>{
+  const a=app();a.role('learner');a.tab('courses');a.click('[data-learn-module="inventory"]');a.click('[data-learning-action="start-test"]');a.submit('#learning-quiz');assert.equal(a.state(),null);assert.match(a.$('#toast').textContent,/Ответьте на вопросы/);a.dom.window.close();
+});
+test('Неверная попытка требует повторения и не попадает в автоматическое подтверждение',()=>{
+  const a=app();quiz(a,false);assert.equal(a.state().learning.attempts[0].score,0);assert.equal(a.state().learning.attempts[0].status,'revision');a.role('teacher');a.tab('reviews');assert.equal(a.$('.learning-review-form'),null);a.dom.window.close();
+});
+test('Учебный цикл: преподаватель рассматривает → навык → локальная проверка работодателем',()=>{
+  const a=app();quiz(a);a.role('teacher');a.tab('reviews');
+  a.value('[name="feedback"]','Коротко');a.submit('.learning-review-form');assert.equal(a.state().learning.attempts[0].status,'pending');
+  a.value('[name="feedback"]','Обоснование соответствует учебным критериям. Допущения модели указаны корректно.');a.$('[name="reviewed"]').checked=true;a.submit('.learning-review-form');
+  const result=a.state().learning.attempts[0];assert.equal(result.status,'approved');assert.match(result.recordCode,/^DEMO-/);
+  a.role('learner');a.tab('skills');assert.match(a.$('#main').textContent,/Подтверждено в демо/);
+  a.role('employer');a.value('[name="code"]',result.recordCode);a.submit('#learning-verify');assert.match(a.$('#verification-result').textContent,/ЛОКАЛЬНАЯ ЗАПИСЬ НАЙДЕНА/);assert.doesNotMatch(a.$('#verification-result').textContent,/Обоснование соответствует/);
+  a.value('[name="code"]','DEMO-unknown');a.submit('#learning-verify');assert.match(a.$('#verification-result').textContent,/Запись не найдена/);a.dom.window.close();
+});
+test('Преподаватель может вернуть корректный тест на доработку',()=>{
+  const a=app();quiz(a);a.role('teacher');a.tab('reviews');a.value('[name="decision"]','revision');a.value('[name="feedback"]','Уточните допущения о независимости спроса и постоянстве срока поставки.');a.$('[name="reviewed"]').checked=true;a.submit('.learning-review-form');assert.equal(a.state().learning.attempts[0].status,'revision');assert.equal(a.state().learning.attempts[0].recordCode,undefined);a.dom.window.close();
+});
+test('Задание преподавателя доступно слушателю, решение проверяется с обратной связью',()=>{
+  const a=app();a.role('teacher');a.tab('assignments');a.value('[name="title"]','План запасов');a.value('[name="body"]','Обоснуйте точку заказа и ограничения модели.');a.value('[name="deadline"]','2027-02-01');a.submit('#assignment-form');
+  a.role('learner');a.tab('work');a.value('[name="body"]','Позицию запаса сравниваю с точкой заказа. Для независимого спроса учитываю корень из срока поставки.');a.submit('.learning-work-form');assert.equal(a.state().learning.submissions.length,1);
+  a.role('teacher');a.tab('reviews');a.value('[name="feedback"]','Пояснение принято в демо. Дополнительно укажите единицы измерения.');a.$('[name="reviewed"]').checked=true;a.submit('.learning-review-form');assert.equal(a.state().learning.submissions[0].status,'approved');a.dom.window.close();
+});
+test('Предметный помощник честно обозначен как правила, без вызова LLM',()=>{
+  const a=app();a.role('learner');a.tab('assistant');a.value('[name="topic"]','service');a.submit('#learning-assistant');assert.match(a.$('#assistant-response').textContent,/CSL ≠ fill rate/);assert.match(a.$('#assistant-response').textContent,/НЕ LLM/);a.dom.window.close();
+});
+test('Учебные результаты переживают перезагрузку; админ видит локальные события',()=>{
+  const a=app();quiz(a);const b=app(a.state());b.role('admin');b.tab('activity');assert.match(b.$('#main').textContent,/Сохранена учебная попытка/);b.role('learner');b.tab('skills');assert.match(b.$('#main').textContent,/Ожидает проверки/);b.dom.window.close();a.dom.window.close();
+});
+test('Офлайн-манифест включает все скрипты оболочки и только существующие публичные ресурсы',()=>{
+  const a=app();const config=a.w.SCM_OFFLINE_CONFIG;
+  assert.ok(config.files.includes('learning.js'));assert.ok(config.files.includes('app.js'));
+  for(const file of config.files){assert.ok(!file.includes('..'));assert.ok(fs.existsSync(path.join(root,file==='./'?'index.html':file)));}
+  a.role('learner');a.tab('offline');assert.match(a.$('#main').textContent,/Без серверной синхронизации/);a.dom.window.close();
+});
+test('Без service worker офлайн-подготовка честно сообщает ограничение',async()=>{
+  const a=app();await assert.rejects(a.w.SCMOffline.prepare(),/HTTPS/);a.dom.window.close();
+});
+
+async function route(a, hash) {
+  a.w.location.hash = hash;
+  await new Promise(resolve => a.w.setTimeout(resolve, 0));
+}
+test('Портал: каталог, поиск, пустой результат и сброс', async()=>{
+ const a=app();await route(a,'/catalog');assert.equal(a.w.document.querySelectorAll('.portal-card').length,7);
+ a.value('[name="query"]','MBA');a.submit('#portal-search');assert.equal(a.w.document.querySelectorAll('.portal-card').length,1);
+ a.value('[name="query"]','<img src=x>');a.submit('#portal-search');assert.match(a.$('#main').textContent,/Ничего не найдено/);assert.equal(a.$('#main img'),null);
+ a.click('[data-portal-reset]');assert.equal(a.w.document.querySelectorAll('.portal-card').length,7);a.dom.window.close();
+});
+test('Портал: подробные страницы всех семи направлений, закрытый приём и неверный адрес',async()=>{
+ const a=app();for(const id of ['higher','mba','intensive','retraining','international','corporate','seminars']){
+  await route(a,'/program/'+id);assert.ok(a.$('#portal-curriculum'));assert.equal(a.w.document.querySelectorAll('#portal-curriculum details').length,4);assert.equal(a.$('[data-portal-apply]').disabled,true);
+ }
+ await route(a,'/program/unknown');assert.match(a.$('#main').textContent,/не опубликовано/);a.dom.window.close();
+});
+test('Портал: сравнение ограничено тремя и удаление работает',async()=>{
+ const a=app();await route(a,'/catalog');for(const id of ['higher','mba','intensive','retraining'])a.click(`[data-compare="${id}"]`);
+ assert.match(a.$('#toast').textContent,/не больше трёх/);await route(a,'/compare');assert.equal(a.w.document.querySelectorAll('.portal-table thead th').length,4);
+ a.click('[data-compare="mba"]');assert.equal(a.w.document.querySelectorAll('.portal-table thead th').length,3);a.dom.window.close();
+});
+test('Портал: подбор по цели и переход из кабинета обратно на главную',async()=>{
+ const a=app();await route(a,'/advisor');a.value('[name="goal"]','business');a.submit('#portal-advisor');await new Promise(r=>a.w.setTimeout(r,0));assert.equal(a.w.document.querySelectorAll('.portal-card').length,1);assert.match(a.$('#main').textContent,/Внутренняя академия/);
+ a.role('learner');await route(a,'/admission');assert.ok(a.$('.portal-page'));await route(a,'home');assert.ok(a.$('.hero'));a.dom.window.close();
+});
+test('Портал: скрытая программа недоступна по прямой ссылке, открытая ведёт в нужную заявку',async()=>{
+ const a=app();a.enable();await route(a,'/program/intensive');a.click('[data-portal-apply]');assert.equal(a.$('[name="program"]').value,'intensive');
+ a.role('admin');a.tab('directions');a.$('[name="higher-visible"]').checked=false;a.submit('#settings-form');await route(a,'/program/higher');assert.match(a.$('#main').textContent,/не опубликовано/);a.dom.window.close();
 });
