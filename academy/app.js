@@ -1,6 +1,8 @@
 "use strict";
 (() => {
-  const KEY = "scm-academy-demo-v1";
+ function start() {
+  const identity = window.SCMIdentity;
+  const KEY = "scm-academy-workspace-v2";
   const programs = [
     {
       id: "higher",
@@ -118,7 +120,7 @@
   let state = initial(),
     storageOK = true;
   try {
-    const raw = JSON.parse(localStorage.getItem(KEY));
+    const raw = identity ? identity.workspace : null;
     if (raw?.version === 1) {
       state = {
         ...state,
@@ -150,6 +152,7 @@
   let role = null,
     tab = "overview",
     filter = "all";
+  if (identity?.user) { role = (identity.target || identity.user).role; if (["admin","admissions"].includes(role)) tab="accounts"; }
   const main = document.querySelector("#main");
   const esc = (s) =>
     String(s ?? "").replace(
@@ -186,6 +189,7 @@
   }
   function save() {
     try {
+      if (identity?.remote) { return identity.save(state); }
       localStorage.setItem(KEY, JSON.stringify(state));
       storageOK = true;
       return true;
@@ -210,22 +214,23 @@
   const knowledge = window.SCMKnowledge.create({state: () => state, esc, save, render, toast});
   const portal = window.SCMPortal.create({
     programs, settings: () => state.settings, isOpen: open, esc,
-    apply: p => { role = "applicant"; tab = "application"; location.hash = "cabinet"; render(); main.querySelector("[name=program]").value = p.id; window.scrollTo(0, 0); }
+    apply: p => { if (!identity?.user || identity.user.role !== "applicant") {login();return;} role = "applicant"; tab = "application"; location.hash = "cabinet"; render(); main.querySelector("[name=program]").value = p.id; window.scrollTo(0, 0); }
   });
   function shell() {
-    const roles = { applicant: ['АП','Абитуриент'], learner: ['СЛ','Слушатель'], teacher: ['ПР','Преподаватель'], admin: ['АД','Администратор'], employer: ['РБ','Работодатель'] };
+    const roles = { applicant: ['АП','Абитуриент'], learner: ['СЛ','Слушатель'], teacher: ['ПР','Преподаватель'], admin: ['АД','Администратор'], employer: ['РБ','Работодатель'], admissions: ['ПК','Приёмная комиссия'] };
     const menus = {
       applicant: [['overview','Мой маршрут'],['application','Подать заявку'],['intake-documents','Документы для приёма'],['documents','Документы'],['messages','Сообщения']],
       learner: [['overview','Мой учебный маршрут'],['studyplan','Назначенное обучение'],['planner','Сроки и учебный план'],['courses','Учебные модули'],['lab','Лаборатория запасов'],['decisionlab','Практикум решений'],['knowledge','База знаний'],['documents','Документы'],['skills','Карта навыков'],['work','Практические задания'],['assistant','Предметный помощник'],['offline','Без сети'],['messages','Сообщения']],
       teacher: [['overview','Учебные группы'],['decisionlab','Практикум решений'],['knowledge','База знаний'],['documents','Документы'],['responses','Назначенные работы'],['monitoring','Мониторинг обучения'],['reviews','Проверка работ'],['grading','Учебная ведомость'],['assignments','Создать задание'],['messages','Сообщения']],
-      admin: [['overview','Обзор платформы'],['decisionlab','Практикум решений'],['knowledge','База знаний'],['documents','Документы'],['library','Библиотека модулей'],['students','Студенты и группы'],['allocations','Назначение обучения'],['responses','Проверка назначений'],['monitoring','Мониторинг обучения'],['directions','Направления и допуски'],['applications','Заявки'],['activity','Учебные события'],['messages','Сообщения']],
+      admissions: [['accounts','Учётные записи']],
+      admin: [['accounts','Пользователи и права'],['overview','Обзор платформы'],['decisionlab','Практикум решений'],['knowledge','База знаний'],['documents','Документы'],['library','Библиотека модулей'],['students','Студенты и группы'],['allocations','Назначение обучения'],['responses','Проверка назначений'],['monitoring','Мониторинг обучения'],['directions','Направления и допуски'],['applications','Заявки'],['activity','Учебные события'],['messages','Сообщения']],
       employer: [['overview','Проверка учебной записи']]
     };
     const [avatar,name] = roles[role] || roles.applicant;
-    return `<div class="container"><div class="workspace"><aside class="sidebar"><div class="profile"><div class="avatar">${avatar}</div><b>${name}</b><p>Личный кабинет</p></div>${(menus[role]||menus.applicant).map(([id,label])=>`<button data-tab="${id}" class="${tab===id?'active':''}">${label}</button>`).join('')}<button data-action="logout">← На главную платформы</button></aside><section>${!storageOK?'<div class="warning">Постоянное хранилище недоступно. Данные могут не сохраниться.</div>':''}${dashboard()}</section></div></div>`;
+    return `<div class="container"><div class="workspace"><aside class="sidebar"><div class="profile"><div class="avatar">${avatar}</div><b>${esc((identity?.target||identity?.user)?.name||name)}</b><p>${name}</p></div>${(menus[role]||menus.applicant).map(([id,label])=>`<button data-tab="${id}" class="${tab===id?'active':''}">${label}</button>`).join('')}<button data-action="export">Экспорт рабочего пространства</button><button data-action="logout">Выйти из учётной записи</button></aside><section>${!storageOK?'<div class="warning">Постоянное хранилище недоступно. Данные могут не сохраниться.</div>':''}${identity?.banner?.()||''}${dashboard()}</section></div></div>`;
   }
   function heading(title, sub) {
-    return `<div class="dashboard-head"><div><span class="eyebrow">${role === "admin" ? "УПРАВЛЕНИЕ АКАДЕМИЕЙ" : role === "teacher" ? "КАБИНЕТ ПРЕПОДАВАТЕЛЯ" : "КАБИНЕТ АБИТУРИЕНТА"}</span><h1>${title}</h1><p class="subtle">${sub}</p></div><span class="badge">ЛОКАЛЬНО</span></div>`;
+    return `<div class="dashboard-head"><div><span class="eyebrow">${role === "admin" ? "УПРАВЛЕНИЕ АКАДЕМИЕЙ" : role === "teacher" ? "КАБИНЕТ ПРЕПОДАВАТЕЛЯ" : "КАБИНЕТ АБИТУРИЕНТА"}</span><h1>${title}</h1><p class="subtle">${sub}</p></div><span class="badge">КАБИНЕТ</span></div>`;
   }
   function landing() {
     const shown = programs.filter(
@@ -246,9 +251,12 @@
       )
       .join(
         "",
-      )}</div><div class="grid">${shown.map((p) => `<article class="card" data-direction="${p.id}"><span class="course-icon" aria-hidden="true">${{ higher: "◈", mba: "↗", intensive: "ϟ", retraining: "▦", international: "◎", corporate: "⬡", seminars: "✳" }[p.id]}</span><span class="number">${p.code}</span><h3>${p.title}</h3><p>${p.text}</p><p class="micro">${p.document}</p><div class="card-meta"><span>${p.duration}</span><span class="badge ${open(p) ? "" : "planned"}">${open(p) ? "Локальный приём открыт" : "Подготовка к запуску"}</span></div><a class="portal-detail-link" href="#/program/${p.id}">Подробнее о программе →</a><button class="button outline small" data-program="${p.id}">${open(p) ? "Подать заявку ↗" : "Посмотреть условия ↗"}</button></article>`).join("") || '<p class="empty">В этой категории пока нет опубликованных направлений.</p>'}</div><p class="micro" style="margin-top:20px">Даты, стоимость и преподаватели будут опубликованы после утверждения программ. Дипломы государственного образца и международные партнёрства не заявляются.</p></section><section class="section" id="approach"><div class="dark"><div class="approach-intro"><span class="eyebrow">НЕ ПРОСТО НАБОР ЛЕКЦИЙ</span><h2>Учиться видеть<br>всю цепь.</h2><p>Закупки, производство, запасы, транспорт и клиентский сервис — не отдельные дисциплины, а части одного решения.</p><button class="button lime" data-action="login">Открыть личный кабинет ↗</button></div><div class="steps"><div class="step"><b>01</b><div><h3>Определить задачу</h3><p>Выбрать направление и сформулировать задачу для развития.</p></div></div><div class="step"><b>02</b><div><h3>Проверить на практике</h3><p>Работать с кейсами, данными и обратной связью преподавателя.</p></div></div><div class="step"><b>03</b><div><h3>Собрать решение</h3><p>Связать инструменты в проект изменений для своей цепи поставок.</p></div></div></div></div></section><section class="section" id="platform"><span class="eyebrow">ВАША ТОЧКА ВХОДА</span><div class="section-head"><h2>Не просто учиться.<br>Быть частью системы.</h2><p>У каждого своя роль. У всех — общее пространство для развития.</p></div><div class="role-grid"><article class="role-card"><span class="role-symbol" aria-hidden="true">↗</span><span class="number">01 / ПОСТУПЛЕНИЕ</span><h3>Мой следующий уровень</h3><p>Выбор направления, заявка и её статус. Понятный маршрут от интереса к поступлению.</p><button class="button outline" data-role-entry="applicant">Я абитуриент ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">✳</span><span class="number">02 / ПРЕПОДАВАНИЕ</span><h3>Делиться опытом. Менять мышление.</h3><p>Учебные группы, задания и ведомость — инструменты преподавателя в одном кабинете.</p><button class="button outline" data-role-entry="teacher">Я преподаватель ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">◈</span><span class="number">03 / УПРАВЛЕНИЕ</span><h3>Вся академия под контролем</h3><p>Семь направлений, условия запуска и заявки. Раздельное управление публикацией и приёмом.</p><button class="button outline" data-role-entry="admin">Управление платформой ↗</button></article></div></section><section class="section" id="enterprise"><div class="enterprise"><div><span class="eyebrow">КОРПОРАТИВНАЯ АКАДЕМИЯ</span><h2>Одна команда.<br>Общий язык управления.</h2><p>От матрицы компетенций до проектной работы: создайте внутреннюю траекторию развития под процессы вашего предприятия.</p></div><button class="button" data-program="corporate">Обсудить формат ↗</button></div></section><section class="section faq" id="questions"><span class="eyebrow">ЕСТЬ ВОПРОСЫ?</span><div class="faq-layout"><h2>Всё важное.<br>Без мелкого шрифта.</h2><div><details><summary>Какие направления уже открыты?</summary><p>Текущий статус указан на карточке каждого направления. По умолчанию все программы планируются, приём закрыт. Администратор может открыть локальный приём после заполнения оснований проверки.</p></details><details><summary>Какой документ я получу?</summary><p>Это зависит от программы и подтверждённых правовых оснований. Условия выдачи документов будут опубликованы до реального набора. Международные сертификаты не выдаются автоматически за собственный курс академии.</p></details><details><summary>Можно ли обучить команду компании?</summary><p>Для этого предусмотрено направление «Внутренняя академия предприятия». Состав программы, формат и условия нужно согласовать отдельно. Пока раздел описывает будущий сценарий.</p></details><details><summary>Это уже действующая учебная платформа?</summary><p>Сейчас это интерактивный прототип. Можно проверить роли, заявки и учебные инструменты. Данные сохраняются только в вашем браузере; реальные документы и персональные данные вводить нельзя.</p></details></div></div></section></div>`;
+      )}</div><div class="grid">${shown.map((p) => `<article class="card" data-direction="${p.id}"><span class="course-icon" aria-hidden="true">${{ higher: "◈", mba: "↗", intensive: "ϟ", retraining: "▦", international: "◎", corporate: "⬡", seminars: "✳" }[p.id]}</span><span class="number">${p.code}</span><h3>${p.title}</h3><p>${p.text}</p><p class="micro">${p.document}</p><div class="card-meta"><span>${p.duration}</span><span class="badge ${open(p) ? "" : "planned"}">${open(p) ? "Приём открыт" : "Подготовка к запуску"}</span></div><a class="portal-detail-link" href="#/program/${p.id}">Подробнее о программе →</a><button class="button outline small" data-program="${p.id}">${open(p) ? "Подать заявку ↗" : "Посмотреть условия ↗"}</button></article>`).join("") || '<p class="empty">В этой категории пока нет опубликованных направлений.</p>'}</div><p class="micro" style="margin-top:20px">Даты, стоимость и преподаватели будут опубликованы после утверждения программ. Дипломы государственного образца и международные партнёрства не заявляются.</p></section><section class="section" id="approach"><div class="dark"><div class="approach-intro"><span class="eyebrow">НЕ ПРОСТО НАБОР ЛЕКЦИЙ</span><h2>Учиться видеть<br>всю цепь.</h2><p>Закупки, производство, запасы, транспорт и клиентский сервис — не отдельные дисциплины, а части одного решения.</p><button class="button lime" data-action="login">Открыть личный кабинет ↗</button></div><div class="steps"><div class="step"><b>01</b><div><h3>Определить задачу</h3><p>Выбрать направление и сформулировать задачу для развития.</p></div></div><div class="step"><b>02</b><div><h3>Проверить на практике</h3><p>Работать с кейсами, данными и обратной связью преподавателя.</p></div></div><div class="step"><b>03</b><div><h3>Собрать решение</h3><p>Связать инструменты в проект изменений для своей цепи поставок.</p></div></div></div></div></section><section class="section" id="platform"><span class="eyebrow">ВАША ТОЧКА ВХОДА</span><div class="section-head"><h2>Не просто учиться.<br>Быть частью системы.</h2><p>У каждого своя роль. У всех — общее пространство для развития.</p></div><div class="role-grid"><article class="role-card"><span class="role-symbol" aria-hidden="true">↗</span><span class="number">01 / ПОСТУПЛЕНИЕ</span><h3>Мой следующий уровень</h3><p>Выбор направления, заявка и её статус. Понятный маршрут от интереса к поступлению.</p><button class="button outline" data-role-entry="applicant">Я абитуриент ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">✳</span><span class="number">02 / ПРЕПОДАВАНИЕ</span><h3>Делиться опытом. Менять мышление.</h3><p>Учебные группы, задания и ведомость — инструменты преподавателя в одном кабинете.</p><button class="button outline" data-role-entry="teacher">Я преподаватель ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">◈</span><span class="number">03 / УПРАВЛЕНИЕ</span><h3>Вся академия под контролем</h3><p>Семь направлений, условия запуска и заявки. Раздельное управление публикацией и приёмом.</p><button class="button outline" data-role-entry="admin">Управление платформой ↗</button></article></div></section><section class="section" id="enterprise"><div class="enterprise"><div><span class="eyebrow">КОРПОРАТИВНАЯ АКАДЕМИЯ</span><h2>Одна команда.<br>Общий язык управления.</h2><p>От матрицы компетенций до проектной работы: создайте внутреннюю траекторию развития под процессы вашего предприятия.</p></div><button class="button" data-program="corporate">Обсудить формат ↗</button></div></section><section class="section faq" id="questions"><span class="eyebrow">ЕСТЬ ВОПРОСЫ?</span><div class="faq-layout"><h2>Всё важное.<br>Без мелкого шрифта.</h2><div><details><summary>Какие направления уже открыты?</summary><p>Текущий статус указан на карточке каждого направления. По умолчанию все программы планируются, приём закрыт. Администратор может открыть локальный приём после заполнения оснований проверки.</p></details><details><summary>Какой документ я получу?</summary><p>Это зависит от программы и подтверждённых правовых оснований. Условия выдачи документов будут опубликованы до реального набора. Международные сертификаты не выдаются автоматически за собственный курс академии.</p></details><details><summary>Можно ли обучить команду компании?</summary><p>Для этого предусмотрено направление «Внутренняя академия предприятия». Состав программы, формат и условия нужно согласовать отдельно. Пока раздел описывает будущий сценарий.</p></details><details><summary>Как получить доступ к учебной платформе?</summary><p>Сейчас это учебная платформа. Для доступа нужна учётная запись, которую создаёт администратор или приёмная комиссия. Права определяются назначенной ролью.</p></details></div></div></section></div>`;
   }
   function dashboard() {
+    const accountScreen = identity?.render?.(role, tab);
+    if (accountScreen != null) return accountScreen;
+    if (role === "admissions") return "<p>Приёмная комиссия: управление учётными записями.</p>";
     const documentScreen = documents.render(role, tab);
     if (documentScreen !== null) return documentScreen;
     const knowledgeScreen = knowledge.render(role, tab);
@@ -291,7 +299,7 @@
   function applicationForm(selected = "") {
     const available = programs.filter(open);
     return available.length
-      ? `<form id="application-form" class="panel"><label>Направление<select name="program" required>${available.map((p) => `<option value="${p.id}" ${selected === p.id ? "selected" : ""}>${p.title}</option>`).join("")}</select></label><div class="two-col"><label>Вымышленное имя<input name="name" required maxlength="100" value="Алексей"></label><label>Тестовый email<input name="email" type="email" required maxlength="150" value="applicant@example.test"></label></div><label>Учебная задача<textarea name="goal" required maxlength="1500" placeholder="Например: снизить избыточные запасы в учебном кейсе"></textarea></label><label class="check"><input type="checkbox" required>Подтверждаю, что использую только вымышленные данные и понимаю, что заявка сохраняется в этом браузере, а не отправляется в академию.</label><button class="button">Сохранить заявку ↗</button></form>`
+      ? `<form id="application-form" class="panel"><label>Направление<select name="program" required>${available.map((p) => `<option value="${p.id}" ${selected === p.id ? "selected" : ""}>${p.title}</option>`).join("")}</select></label><div class="two-col"><label>ФИО<input name="name" required maxlength="100" value="${esc(identity?.remote?(identity.target||identity.user)?.name||'':'Алексей')}"></label><label>Email<input name="email" type="email" required maxlength="150" value="${identity?.remote?'':'applicant@example.test'}"></label></div><label>Учебная задача<textarea name="goal" required maxlength="1500" placeholder="Например: снизить избыточные запасы в учебном кейсе"></textarea></label><label class="check"><input type="checkbox" required>Понимаю, что это запись рабочего пространства. Рассмотрение учебной частью и зачисление оформляются отдельно.</label><button class="button">Сохранить заявку ↗</button></form>`
       : `<div class="empty"><h3>Приём пока не открыт</h3><p>Администратору нужно проверить основания, заполнить сведения и включить приём по направлению.</p><a href="#programs" class="button outline small" data-action="logout">Посмотреть направления</a></div>`;
   }
   function applicationList(edit) {
@@ -304,7 +312,7 @@
       return (
         heading(
           "Направления и допуски",
-          "Настройки меняют каталог и формы в этом браузере, а не на публичном сервере.",
+          "Настройки меняют каталог и формы в этом рабочем пространстве, а не на публичном сервере.",
         ) +
         `<div class="warning">Галочка не подтверждает наличие лицензии. Перед открытием реального набора необходима юридическая проверка лицензии, аккредитации, договоров и партнёрских прав. Все направления по умолчанию опубликованы как планируемые, приём закрыт.</div><form id="settings-form">${programs
           .map((p) => {
@@ -315,7 +323,7 @@
       );
     if (tab === "applications")
       return (
-        heading("Приёмная комиссия", "Заявки, созданные в этом браузере.") +
+        heading("Приёмная комиссия", "Заявки, созданные в этом рабочем пространстве.") +
         `<div class="panel">${applicationList(true)}</div>`
       );
     return (
@@ -323,7 +331,7 @@
         "Платформа под контролем",
         "Семь направлений. Раздельное управление публикацией и приёмом.",
       ) +
-      `<div class="metrics"><div class="metric"><b>${programs.filter((p) => state.settings[p.id].visible).length}/7</b><span>опубликовано</span></div><div class="metric"><b>${programs.filter(open).length}</b><span>локальный приём открыт</span></div><div class="metric"><b>${state.applications.length}</b><span>заявок в браузере</span></div></div><div class="panel"><h3>Учебно-методическая база</h3><p>12 вводных модулей и семь маршрутов. Студентов в локальном реестре: ${state.curriculum?.students?.length || 0}; назначений: ${state.curriculum?.allocations?.length || 0}.</p><div class="actions"><button class="button small" data-tab="library">Библиотека модулей ↗</button><button class="button outline small" data-tab="students">Добавить студента</button><button class="button outline small" data-tab="allocations">Назначить обучение</button></div></div><div class="panel"><h3>Готовность к запуску</h3><p>Витрина → проверка оснований → публикация условий → открытие приёма.</p><p class="subtle">Для реальной эксплуатации ещё нужны серверная авторизация и роли, база данных, аудит изменений, защищённые документы, договоры и согласия.</p><button class="button small" data-tab="directions">Настроить направления ↗</button></div><div class="panel"><h3>Данные прототипа</h3><p class="subtle">Экспорт содержит заявки и сообщения из этого браузера. Сброс удаляет только данные нового раздела academy/.</p><div class="actions"><button class="button outline small" data-action="export">Экспорт JSON</button><button class="button outline small" data-action="reset">Сбросить локальные данные</button></div></div>`
+      `<div class="metrics"><div class="metric"><b>${programs.filter((p) => state.settings[p.id].visible).length}/7</b><span>опубликовано</span></div><div class="metric"><b>${programs.filter(open).length}</b><span>локальный приём открыт</span></div><div class="metric"><b>${state.applications.length}</b><span>заявок в браузере</span></div></div><div class="panel"><h3>Учебно-методическая база</h3><p>12 вводных модулей и семь маршрутов. Студентов в локальном реестре: ${state.curriculum?.students?.length || 0}; назначений: ${state.curriculum?.allocations?.length || 0}.</p><div class="actions"><button class="button small" data-tab="library">Библиотека модулей ↗</button><button class="button outline small" data-tab="students">Добавить студента</button><button class="button outline small" data-tab="allocations">Назначить обучение</button></div></div><div class="panel"><h3>Готовность к запуску</h3><p>Витрина → проверка оснований → публикация условий → открытие приёма.</p><p class="subtle">Учётные записи и рабочие пространства защищены серверной сессией. Официальные документы, договоры и электронные подписи подключаются отдельными процессами.</p><button class="button small" data-tab="directions">Настроить направления ↗</button></div><div class="panel"><h3>Рабочие данные</h3><p class="subtle">Экспорт содержит заявки и сообщения из этого браузера. Сброс удаляет только данные нового раздела academy/.</p><div class="actions"><button class="button outline small" data-action="export">Экспорт JSON</button><button class="button outline small" data-action="reset">Сбросить локальные данные</button></div></div>`
     );
   }
   const learners = [
@@ -353,7 +361,7 @@
         "Рабочий стол преподавателя",
         "Учебные группы, задания и обратная связь в одном месте.",
       ) +
-      `<div class="metrics"><div class="metric"><b>01</b><span>учебная группа</span></div><div class="metric"><b>03</b><span>учебных слушателя</span></div><div class="metric"><b>${state.assignments.length}</b><span>заданий создано</span></div></div><div class="panel"><span class="badge">SCM-01 · ЛОКАЛЬНО</span><h3>Основы системного управления запасами</h3><p class="subtle">Учебная группа для проверки интерфейса. Не настоящий поток академии.</p><div class="actions"><button class="button small" data-tab="grading">Открыть ведомость ↗</button><button class="button outline small" data-tab="assignments">Создать задание</button></div></div>`
+      `<div class="metrics"><div class="metric"><b>01</b><span>учебная группа</span></div><div class="metric"><b>03</b><span>учебных слушателя</span></div><div class="metric"><b>${state.assignments.length}</b><span>заданий создано</span></div></div><div class="panel"><span class="badge">SCM-01 · КАБИНЕТ</span><h3>Основы системного управления запасами</h3><p class="subtle">Учебная группа для проверки интерфейса. Не настоящий поток академии.</p><div class="actions"><button class="button small" data-tab="grading">Открыть ведомость ↗</button><button class="button outline small" data-tab="assignments">Создать задание</button></div></div>`
     );
   }
   function messages() {
@@ -370,10 +378,11 @@
     const pageTitle = main.querySelector("h1")?.textContent.trim();
     document.title = pageTitle ? `${pageTitle} — Академия SCM` : "Академия SCM";
     document.querySelector("#account-button").textContent = role
-      ? "Сменить роль ↗"
+      ? "Мой кабинет ↗"
       : "Личный кабинет ↗";
   }
   function login() {
+    if (identity?.user) { role = (identity.target || identity.user).role; tab = role === "admin" || role === "admissions" ? "accounts" : "overview"; render(); return; }
     document.querySelector("#login-dialog").showModal();
   }
   const menuToggle = document.querySelector('.mobile-menu-toggle');
@@ -392,24 +401,21 @@
     .forEach((button) =>
       button.addEventListener("click", () => button.closest("dialog").close()),
     );
-  document.querySelector("#login-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    role = new FormData(e.target).get("role");
-    learning.resetView();
-    curriculum.resetView();
-    studyTools.resetView();
-    decisionLab.resetView();
-    knowledge.resetView();
-    documents.resetView();
-    tab = "overview";
-    document.querySelector("#login-dialog").close();
-    location.hash = "cabinet";
-    render();
-    window.scrollTo(0, 0);
+  document.querySelector("#login-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const form=event.target, data=new FormData(form), status=document.querySelector('#login-status');
+    const complete=user=>{learning.resetView();curriculum.resetView();studyTools.resetView();decisionLab.resetView();knowledge.resetView();documents.resetView(); if(identity?.remote){location.hash='cabinet';location.reload();return;} role=user.role;tab='overview';document.querySelector('#login-dialog').close();render(); };
+    if(!identity){status.textContent='Сервис входа недоступен. Для кабинетов требуется сервер академии.';return;}
+    const button=form.querySelector('button[type="submit"]');button.disabled=true;
+    try { const result=identity.login(data.get('name'),data.get('password'));
+      if(result?.then)result.then(complete).catch(err=>status.textContent=err.message).finally(()=>button.disabled=false);
+      else {complete(result);button.disabled=false;}
+    }catch(err){status.textContent=err.message;button.disabled=false;}
   });
   document.addEventListener("click", (e) => {
     const t = e.target.closest("button,a");
     if (!t) return;
+    if (identity?.click?.(t, render)) return;
     if (documents.click(t, role)) return;
     if (knowledge.click(t, role)) return;
     if (decisionLab.click(t, role)) return;
@@ -419,7 +425,6 @@
     if (portalAction) { if (typeof portalAction === "string") toast(portalAction); else if (!t.dataset.portalApply) render(); return; }
     if (learning.click(t, role)) return;
     if (t.dataset.roleEntry) {
-      document.querySelector("#login-form select").value = t.dataset.roleEntry;
       login();
       return;
     }
@@ -446,6 +451,7 @@
     if (t.dataset.program) {
       const p = programs.find((p) => p.id === t.dataset.program);
       if (open(p)) {
+        if (!identity?.user || identity.user.role !== "applicant") {login();return;}
         role = "applicant";
         tab = "application";
         location.hash = "cabinet";
@@ -464,13 +470,14 @@
         login();
         break;
       case "logout":
+        if(identity?.remote){identity.logout().catch(err=>toast(err.message));return;}
         role = null;
         tab = "overview";
         render();
         location.hash = t.hash || "home";
         break;
       case "reset":
-        if (confirm("Удалить все локальные данные академии?")) {
+        if (confirm("Очистить текущее рабочее пространство? Учётные записи и пароли не удаляются.")) {
           state = initial();
           learning.resetView();
     curriculum.resetView();
@@ -481,7 +488,7 @@
           for (const p of programs) state.settings[p.id].admissions = false;
           save();
           render();
-          toast("Локальные данные сброшены");
+          toast("Рабочее пространство очищено");
         }
         break;
       case "export": {
@@ -490,7 +497,7 @@
         });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = "scm-academy-local.json";
+        a.download = "scm-academy-workspace.json";
         a.click();
         setTimeout(() => URL.revokeObjectURL(a.href), 1000);
         break;
@@ -502,7 +509,7 @@
     if (t.dataset.grade && role === "teacher") {
       state.grades[t.dataset.grade] = t.value;
       save();
-      toast("Результат сохранён в этом браузере");
+      toast("Результат сохранён в этом рабочем пространстве");
     }
     if (t.dataset.applicationStatus && role === "admin") {
       const a = state.applications.find(
@@ -519,6 +526,7 @@
     const form = e.target;
     if (form.id === "login-form") return;
     e.preventDefault();
+    if (identity?.submit?.(form, render)) return;
     if (documents.submit(form, role)) return;
     if (knowledge.submit(form, role)) return;
     if (decisionLab.submit(form, role)) return;
@@ -559,7 +567,7 @@
       state.settings = next;
       save();
       render();
-      toast("Настройки сохранены в этом браузере");
+      toast("Настройки сохранены в этом рабочем пространстве");
     }
     if (form.id === "application-form" && role === "applicant") {
       const p = programs.find((p) => p.id === f.get("program"));
@@ -642,4 +650,6 @@
     document.querySelector(location.hash)?.scrollIntoView();
   });
   render();
+ }
+ if(window.SCMIdentity?.ready) window.SCMIdentity.ready.then(start); else start();
 })();

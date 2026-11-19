@@ -4,7 +4,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { JSDOM } = require("jsdom");
 const root = path.resolve(__dirname, "..");
-const key = "scm-academy-demo-v1";
+const key = "scm-academy-workspace-v2";
 function app(storage) {
   const dom = new JSDOM(
     fs.readFileSync(path.join(root, "index.html"), "utf8"),
@@ -32,6 +32,8 @@ function app(storage) {
   w.TextEncoder = TextEncoder;
   w.eval(fs.readFileSync(path.join(root, "study-tools.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "decision-lab.js"), "utf8"));
+  // Identity double for synchronous UI regression tests only. Real access is tested against HTTP.
+  w.SCMIdentity={workspace:storage||null,user:null,login(name){this.user={id:name,name,role:name};return this.user;}};
   w.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
   const $ = (s) => w.document.querySelector(s);
   const click = (s) => {
@@ -43,8 +45,10 @@ function app(storage) {
       new w.Event("submit", { bubbles: true, cancelable: true }),
     );
   const role = (r) => {
+    w.SCMIdentity.user=null;
     click("#account-button");
-    $("#login-form select").value = r;
+    $("#login-form [name=name]").value = r;
+    $("#login-form [name=password]").value = "fixture-password";
     submit("#login-form");
   };
   const tab = (t) => click(`[data-tab="${t}"]`);
@@ -200,15 +204,16 @@ test("Подвал остаётся внутри платформы и не со
   }
   a.dom.window.close();
 });
-test("Ролевые карточки и подвал открывают правильный демо-вход", () => {
+test("Карточки открывают единый вход без выбора прав", () => {
   const a = app();
   for (const role of ["applicant", "teacher", "admin"]) {
     a.click(`.role-card [data-role-entry="${role}"]`);
     assert.equal(a.$("#login-dialog").open, true);
-    assert.equal(a.$("#login-form select").value, role);
+    assert.equal(a.$("#login-form select"), null);
     a.$("#login-dialog").close();
   }
   a.click('footer [data-role-entry="teacher"]');
+  a.value('#login-form [name=name]','teacher');
   a.submit("#login-form");
   assert.match(a.$("#main").textContent, /Рабочий стол преподавателя/);
   a.dom.window.close();
@@ -299,7 +304,7 @@ test('Офлайн-манифест включает все скрипты об�
   const a=app();const config=a.w.SCM_OFFLINE_CONFIG;
   assert.ok(config.files.includes('learning.js'));assert.ok(config.files.includes('app.js'));
   for(const file of config.files){assert.ok(!file.includes('..'));assert.ok(fs.existsSync(path.join(root,file==='./'?'index.html':file)));}
-  a.role('learner');a.tab('offline');assert.match(a.$('#main').textContent,/Без серверной синхронизации/);a.dom.window.close();
+  a.role('learner');a.tab('offline');assert.match(a.$('#main').textContent,/Для входа и сохранения на сервере нужна сеть/);a.dom.window.close();
 });
 test('Без service worker офлайн-подготовка честно сообщает ограничение',async()=>{
   const a=app();await assert.rejects(a.w.SCMOffline.prepare(),/HTTPS/);a.dom.window.close();
@@ -331,7 +336,7 @@ test('Портал: подбор по цели и переход из кабин
  a.role('learner');await route(a,'/admission');assert.ok(a.$('.portal-page'));await route(a,'home');assert.ok(a.$('.hero'));a.dom.window.close();
 });
 test('Портал: скрытая программа недоступна по прямой ссылке, открытая ведёт в нужную заявку',async()=>{
- const a=app();a.enable();await route(a,'/program/intensive');a.click('[data-portal-apply]');assert.equal(a.$('[name="program"]').value,'intensive');
+ const a=app();a.enable();a.role('applicant');await route(a,'/program/intensive');a.click('[data-portal-apply]');assert.equal(a.$('[name="program"]').value,'intensive');
  a.role('admin');a.tab('directions');a.$('[name="higher-visible"]').checked=false;a.submit('#settings-form');await route(a,'/program/higher');assert.match(a.$('#main').textContent,/не опубликовано/);a.dom.window.close();
 });
 
@@ -346,12 +351,12 @@ test('Старые локальные записи сохраняются при
  b.role('employer');b.value('[name="code"]','DEMO-EXISTING');b.submit('#learning-verify');assert.match(b.$('#verification-result').textContent,/ЗАПИСЬ НАЙДЕНА/);
  b.role('applicant');b.tab('documents');assert.match(b.$('#main').textContent,/Портфолио/);assert.doesNotMatch(b.$('#main').textContent,/демо|demo/i);b.dom.window.close();a.dom.window.close();
 });
-test('Все кабинеты используют новые подписи и сохраняют предупреждения о локальном режиме',()=>{
+test('Все кабинеты используют новые подписи и единый вход',()=>{
  const a=app();for(const r of ['applicant','learner','teacher','admin','employer']){
   a.role(r);const tabs=[...a.w.document.querySelectorAll('.sidebar [data-tab]')].map(t=>t.dataset.tab);
   for(const tab of tabs){a.tab(tab);assert.doesNotMatch(a.$('#main').textContent,/демо|demo/i,`${r}/${tab}`);}
  }
- assert.match(a.$('#main').textContent,/не доказывает личность/);a.click('#account-button');assert.match(a.$('#login-dialog').textContent,/не настоящая авторизация/);a.dom.window.close();
+ assert.match(a.$('#main').textContent,/не доказывает личность/);a.click('#account-button');assert.match(a.$('#login-dialog').textContent,/Введите ФИО и пароль/);a.dom.window.close();
 });
 
 function curriculumStudent(a,name='Участник 01',cohort='SCM-01'){
