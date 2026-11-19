@@ -189,7 +189,7 @@
   }
   function save() {
     try {
-      if (identity?.remote) { return identity.save(state); }
+      if (identity?.remote || identity?.local) { return identity.save(state); }
       localStorage.setItem(KEY, JSON.stringify(state));
       storageOK = true;
       return true;
@@ -401,10 +401,16 @@
     .forEach((button) =>
       button.addEventListener("click", () => button.closest("dialog").close()),
     );
+  const ownerLoginName = value => String(value||'').normalize('NFKC').trim().replace(/\s+/g,' ').toLocaleLowerCase('ru') === 'герасимов дмитрий сергеевич';
+  const loginNameField=document.querySelector('#login-form [name="name"]');
+  const refreshLoginPassword=()=>{const password=document.querySelector('#login-form [name="password"]');const owner=ownerLoginName(loginNameField.value);password.required=!owner;password.closest('label').hidden=owner;password.closest('label').style.display=owner?'none':'';if(owner)password.value='';};
+  loginNameField.addEventListener('input',refreshLoginPassword);
+  loginNameField.addEventListener('change',refreshLoginPassword);
   document.querySelector("#login-form").addEventListener("submit", (event) => {
     event.preventDefault();
+    refreshLoginPassword();
     const form=event.target, data=new FormData(form), status=document.querySelector('#login-status');
-    const complete=user=>{learning.resetView();curriculum.resetView();studyTools.resetView();decisionLab.resetView();knowledge.resetView();documents.resetView(); if(identity?.remote){location.hash='cabinet';location.reload();return;} role=user.role;tab='overview';document.querySelector('#login-dialog').close();render(); };
+    const complete=user=>{learning.resetView();curriculum.resetView();studyTools.resetView();decisionLab.resetView();knowledge.resetView();documents.resetView(); if(identity?.remote||identity?.local){location.hash='cabinet';location.reload();return;} role=user.role;tab='overview';document.querySelector('#login-dialog').close();render(); };
     if(!identity){status.textContent='Сервис входа недоступен. Для кабинетов требуется сервер академии.';return;}
     const button=form.querySelector('button[type="submit"]');button.disabled=true;
     try { const result=identity.login(data.get('name'),data.get('password'));
@@ -470,7 +476,7 @@
         login();
         break;
       case "logout":
-        if(identity?.remote){identity.logout().catch(err=>toast(err.message));return;}
+        if(identity?.remote||identity?.local){identity.logout().catch(err=>toast(err.message));return;}
         role = null;
         tab = "overview";
         render();
