@@ -28,6 +28,7 @@ function app(storage) {
   w.eval(fs.readFileSync(path.join(root, "curriculum.js"), "utf8"));
   w.TextEncoder = TextEncoder;
   w.eval(fs.readFileSync(path.join(root, "study-tools.js"), "utf8"));
+  w.eval(fs.readFileSync(path.join(root, "decision-lab.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
   const $ = (s) => w.document.querySelector(s);
   const click = (s) => {
@@ -425,4 +426,35 @@ test('Форма решения не показывается после пер�
  const a=app();curriculumStudent(a);curriculumStudent(a,'Другой','B');curriculumAllocate(a);a.role('learner');a.tab('studyplan');a.click('[data-curriculum-allocation]');
  // The UI is not an authentication boundary; this checks accidental cross-profile writes.
  const old=a.state();old.curriculum.activeStudent=old.curriculum.students[1].id;const b=app(old);b.role('learner');b.tab('studyplan');assert.equal(b.$('#curriculum-answer'),null);b.dom.window.close();a.dom.window.close();
+});
+
+test('Тренажёр закупок: цена заказа, брак и чувствительность',()=>{
+ const a=app();const r=a.w.SCMDecisionLab.procurement({quantity:1000,priceA:100,freightA:10000,defectA:0,priceB:105,freightB:2000,defectB:2});
+ assert.equal(r.a.total,110000);assert.equal(r.a.unit,110);assert.equal(r.b.total,107000);assert.equal(r.b.usable,980);assert.ok(Math.abs(r.b.unit-109.183673)<.0001);assert.ok(r.stress.unit>110);a.dom.window.close();
+});
+test('Тренажёр доставки не скрывает непокрытый спрос',()=>{
+ const a=app();const r=a.w.SCMDecisionLab.transport({demand:600,fixedA:30000,variableA:0,capacityA:600,fixedB:24000,variableB:0,capacityB:400});assert.equal(r.a.unit,50);assert.equal(r.b.unit,60);assert.equal(r.b.unserved,200);assert.equal(r.stress.unserved,80);a.dom.window.close();
+});
+test('Тренажёры отклоняют бесконечность, дробное количество и недопустимый брак',()=>{
+ const a=app();const p={quantity:1000,priceA:100,freightA:10000,defectA:0,priceB:105,freightB:2000,defectB:2};
+ for(const bad of [{quantity:0},{quantity:1.5},{defectB:100},{priceA:Infinity},{freightB:-1},{priceB:NaN}])assert.throws(()=>a.w.SCMDecisionLab.procurement({...p,...bad}));
+ a.role('learner');a.tab('decisionlab');a.value('[name="priceA"]','');a.submit('#decision-calculate');assert.match(a.$('#toast').textContent,/Заполните все/);assert.equal(a.$('#decision-save'),null);a.dom.window.close();
+});
+test('Сценарий сохраняет снимок, экранирует обоснование и переживает перезагрузку',()=>{
+ const a=app();a.role('learner');a.tab('decisionlab');a.submit('#decision-calculate');a.value('[name="reason"]','<img src=x> Выбираю вариант только после проверки качества, срока и чувствительности к доле брака.');a.submit('#decision-save');assert.equal(a.state().decisionCases.length,1);assert.equal(a.$('#main img'),null);assert.equal(a.state().decisionCases[0].version,1);
+ a.click('[data-decision-model="transport"]');a.submit('#decision-calculate');assert.equal(a.state().decisionCases[0].inputs.quantity,1000);
+ const b=app(a.state());b.role('admin');b.tab('decisionlab');assert.match(b.$('#main').textContent,/Выбираю вариант/);assert.ok(b.$('[data-decision-report]'));b.click('[data-decision-delete]');assert.equal(b.state().decisionCases.length,0);b.dom.window.close();a.dom.window.close();
+});
+test('Отчёт расчёта содержит формулы и ограничения, но не credential',()=>{
+ const a=app();a.role('learner');a.tab('decisionlab');a.submit('#decision-calculate');a.value('[name="reason"]','Выбор зависит от требований к качеству, сроку и условий компенсации брака.');a.submit('#decision-save');const text=a.w.SCMDecisionLab.report(a.state().decisionCases[0]);assert.match(text,/Исходные данные/);assert.match(text,/Формула/);assert.match(text,/Без проверки преподавателем/);assert.equal(a.w.document.querySelectorAll('[data-decision-template]').length,3);a.dom.window.close();
+});
+
+test('Транспортная модель валидирует границы и не делит на ноль при нулевом тарифе',()=>{
+ const a=app(),f=a.w.SCMDecisionLab.transport,v={demand:600,fixedA:30000,variableA:0,capacityA:600,fixedB:24000,variableB:0,capacityB:400};
+ for(const bad of [{demand:0},{capacityA:0},{demand:1.5},{variableB:-1},{fixedA:Infinity},{capacityB:NaN}])assert.throws(()=>f({...v,...bad}));
+ assert.equal(f({...v,fixedA:0,variableA:0}).a.unit,0);assert.equal(f({...v,demand:1}).stress.delivered,1);a.dom.window.close();
+});
+test('Лимит разборов не удаляет старые записи автоматически',()=>{
+ const a=app();a.role('learner');a.tab('decisionlab');a.submit('#decision-calculate');a.value('[name="reason"]','Учебное решение основано на сравнении затрат и ограничениях качества поставки.');a.submit('#decision-save');const old=a.state();old.decisionCases=Array.from({length:20},(_,i)=>({...old.decisionCases[0],id:`case-${i}`}));
+ const b=app(old);b.role('learner');b.tab('decisionlab');b.submit('#decision-calculate');b.value('[name="reason"]','Ещё одно учебное решение с допущениями и проверкой границ модели поставки.');b.submit('#decision-save');assert.equal(b.state().decisionCases.length,20);assert.equal(b.state().decisionCases[0].id,'case-0');assert.match(b.$('#toast').textContent,/Лимит 20/);b.dom.window.close();a.dom.window.close();
 });
