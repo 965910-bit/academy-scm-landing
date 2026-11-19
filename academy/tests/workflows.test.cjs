@@ -356,7 +356,7 @@ test('Все кабинеты используют новые подписи и 
   a.role(r);const tabs=[...a.w.document.querySelectorAll('.sidebar [data-tab]')].map(t=>t.dataset.tab);
   for(const tab of tabs){a.tab(tab);assert.doesNotMatch(a.$('#main').textContent,/демо|demo/i,`${r}/${tab}`);}
  }
- assert.match(a.$('#main').textContent,/не доказывает личность/);a.click('#account-button');assert.match(a.$('#login-dialog').textContent,/Введите ФИО и пароль/);a.dom.window.close();
+ assert.match(a.$('#main').textContent,/не доказывает личность/);a.click('#account-button');assert.match(a.$('#login-dialog').textContent,/вход по ФИО без пароля/);a.dom.window.close();
 });
 
 function curriculumStudent(a,name='Участник 01',cohort='SCM-01'){
