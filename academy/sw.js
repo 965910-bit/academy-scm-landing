@@ -1,4 +1,4 @@
-/* Only the public application shell is cached. Local demo data is not synced to any server. */
+/* Only the public application shell is cached. Private authenticated API responses are never cached. */
 "use strict";
 importScripts("./offline-config.js");
 const { cacheName, files } = self.SCM_OFFLINE_CONFIG;

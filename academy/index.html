@@ -27,12 +27,12 @@
     <script src="curriculum.js" defer></script>
     <script src="study-tools.js" defer></script>
     <script src="decision-lab.js" defer></script>
+    <script src="identity.js" defer></script>
     <script src="app.js" defer></script>
   </head>
   <body>
     <div class="notice">
-      Прототип платформы · данные сохраняются только в этом браузере · не
-      вводите реальные персональные данные
+      Вход по учётной записи · доступ предоставляют администратор и приёмная комиссия
     </div>
     <header class="header">
       <a class="brand" href="#home" aria-label="Академия SCM, главная"
@@ -84,20 +84,15 @@
       </div>
     </footer>
     <dialog id="login-dialog">
-      <form id="login-form">
+      <form id="login-form" method="post" action="/api/login">
         <button class="close" type="button" aria-label="Закрыть">×</button
         ><span class="eyebrow">ЛИЧНОЕ ПРОСТРАНСТВО</span>
         <h2>Войти в академию</h2>
-        <p>Выберите роль для просмотра кабинета. Это не настоящая авторизация.</p>
-        <label
-          >Роль<select name="role">
-            <option value="applicant">Абитуриент</option>
-            <option value="learner">Слушатель · учебная лаборатория</option>
-            <option value="teacher">Преподаватель</option>
-            <option value="employer">Работодатель · локальная проверка</option>
-            <option value="admin">Администратор</option>
-          </select></label
-        ><button class="button" type="submit">Открыть кабинет ↗</button>
+        <p>Введите ФИО и пароль, выданные администратором или приёмной комиссией.</p>
+        <label>Фамилия, имя, отчество<input name="name" autocomplete="username" required maxlength="160"></label>
+        <label>Пароль<input name="password" type="password" autocomplete="current-password" required maxlength="256"></label>
+        <p id="login-status" role="status" aria-live="polite"></p>
+        <button class="button" type="submit">Войти ↗</button>
       </form>
     </dialog>
     <dialog id="program-dialog">
