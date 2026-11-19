@@ -1,0 +1,10 @@
+# Include these locations inside your HTTPS server block.
+# Run Node.js with PUBLIC_ORIGIN=https://scm-news.online and durable DATA_DIR.
+# Proxy the entire site so HTML and API always use the same application.
+location / {
+    proxy_pass http://127.0.0.1:4173;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_http_version 1.1;
+}

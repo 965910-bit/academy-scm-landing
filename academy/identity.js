@@ -1,6 +1,6 @@
 'use strict';
 window.SCMIdentity=(()=>{
- const api=async(url,method='GET',data)=>{const response=await fetch('/api/'+url,{method,credentials:'same-origin',cache:'no-store',headers:method==='GET'?{}:{'Content-Type':'application/json'},body:data===undefined?undefined:JSON.stringify(data)});const value=await response.json();if(!response.ok)throw Error(value.error||'Сервис недоступен.');return value;};
+ const api=async(url,method='GET',data)=>{const response=await fetch('/api/'+url,{method,credentials:'same-origin',cache:'no-store',headers:method==='GET'?{}:{'Content-Type':'application/json'},body:data===undefined?undefined:JSON.stringify(data)});let value;try{value=await response.json();}catch{throw Error('Сервер авторизации недоступен: /api/ вернул страницу вместо данных. Откройте сайт через сервер Академии; для опубликованного домена настройте проксирование /api/ на Node.js.');}if(!response.ok)throw Error(value.error||'Сервис недоступен.');return value;};
  const labels={admin:'Администратор',admissions:'Приёмная комиссия',applicant:'Абитуриент',learner:'Слушатель',teacher:'Преподаватель',employer:'Работодатель'};
  const identity={remote:true,user:null,workspace:null,revision:0,users:[],target:null,error:'',queue:Promise.resolve(),saving:false};
  const e=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
