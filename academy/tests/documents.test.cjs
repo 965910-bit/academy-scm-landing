@@ -29,3 +29,16 @@ test('Публичный реестр пуст, без вымышленных в
  const doc=new JSDOM(fs.readFileSync(path.join(root,'registry/registry.html'),'utf8')).window.document;assert.equal(doc.querySelectorAll('input').length,1);for(const s of doc.querySelectorAll('script[src]'))assert.ok(!s.src.startsWith('http'));assert.equal(doc.querySelector('meta[name="referrer"]').content,'no-referrer');
  const self={};vm.runInNewContext(fs.readFileSync(path.join(root,'academy/offline-config.js'),'utf8'),{self});assert.ok(!self.SCM_OFFLINE_CONFIG.files.some(f=>f.includes('published.json')||f.includes('registry')));
 });
+
+test('HTML документа: все реквизиты и текст экранируются, печатная версия не содержит скриптов',()=>{
+ const window={};vm.runInNewContext(fs.readFileSync(path.join(root,'academy/documents/catalog.js'),'utf8'),{window});vm.runInNewContext(fs.readFileSync(path.join(root,'academy/documents.js'),'utf8'),{window});
+ const type=window.SCMDocumentCatalog.find(t=>t.id==='contract');
+ const payload='<img src=x onerror="alert(1)"><script>bad()</script>';
+ const html=window.SCMDocuments.html(type,{title:payload,organization:payload,recipient:payload,date:'2026-11-19',body:payload+'\nСтрока 2',values:{0:payload}});
+ const doc=new JSDOM(html).window.document;assert.equal(doc.querySelectorAll('script,img,iframe,form').length,0);assert.equal(doc.querySelectorAll('[onerror]').length,0);assert.equal(doc.querySelector('h1').textContent,payload);assert.match(doc.querySelector('.body').textContent,/Строка 2/);assert.match(doc.querySelector('.warning').textContent,/НЕ ВЫДАННЫЙ/);assert.match(doc.querySelector('style').textContent,/@page.*A4/);assert.match(doc.querySelector('meta[http-equiv="Content-Security-Policy"]').content,/default-src 'none'/);
+});
+test('Редактор поддерживает все 32 типа, ограничивает объём и экспортирует текст без потери кириллицы',()=>{
+ const window={};vm.runInNewContext(fs.readFileSync(path.join(root,'academy/documents/catalog.js'),'utf8'),{window});vm.runInNewContext(fs.readFileSync(path.join(root,'academy/documents.js'),'utf8'),{window});
+ for(const type of window.SCMDocumentCatalog){const fields=window.SCMDocuments.fieldLabels(type);assert.ok(fields.length>=3);const data=window.SCMDocuments.content(type,{body:'Текст проекта',values:{0:'Первый реквизит'}});assert.equal(Object.keys(data.values).length,fields.length);assert.match(window.SCMDocuments.markdown(type,data),/Первый реквизит/);assert.match(window.SCMDocuments.html(type,data),/Текст проекта/);}
+ const value=window.SCMDocuments.content(window.SCMDocumentCatalog[0],{body:'x'.repeat(14000),values:{0:'x'.repeat(3000)}});assert.equal(value.body.length,12000);assert.equal(value.values[0].length,2000);
+});
