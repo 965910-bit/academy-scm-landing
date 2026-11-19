@@ -27,6 +27,8 @@ function app(storage) {
   w.eval(fs.readFileSync(path.join(root, "portal.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "documents/catalog.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "documents.js"), "utf8"));
+  w.eval(fs.readFileSync(path.join(root, "vendor/qrcode.js"), "utf8"));
+  w.eval(fs.readFileSync(path.join(root, "student-card.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "knowledge.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "curriculum.js"), "utf8"));
   w.TextEncoder = TextEncoder;
@@ -511,9 +513,8 @@ test('Документы: изменение проверенного проек
  const b=app(stored);b.role('admin');b.tab('documents');b.click('[data-document-edit]');assert.match(b.$('#main').textContent,/снимет отметку/);b.value('[name="body"]','Изменённое содержание справки');b.submit('#document-editor');const r=b.state().documentDrafts[0];assert.equal(r.status,'draft');assert.equal(r.reviewedAt,undefined);assert.equal(r.revision,2);assert.equal(r.content.body,'Изменённое содержание справки');b.dom.window.close();a.dom.window.close();
 });
 
-test('Студенческий билет виден в меню и открывает заполнение, сохранённые карточки и печать',()=>{
- const a=app();try{a.role('admin');assert.ok(a.$('.sidebar [data-tab="student-card"]'));a.tab('student-card');assert.match(a.$('#main').textContent,/Студенческий билет/);assert.equal(a.$('[data-document-draft="contract"]'),null);
- a.click('[data-document-draft="student-card"]');assert.ok(a.$('#document-editor'));a.value('[name="recipient"]','Герасимов Дмитрий Сергеевич');a.submit('#document-editor');a.click('[data-document-back]');assert.match(a.$('#main').textContent,/Сохранённые студенческие билеты/);a.click('[data-document-edit]');assert.equal(a.$('[name="recipient"]').value,'Герасимов Дмитрий Сергеевич');assert.ok(a.$('[data-document-preview]'));assert.ok(a.$('[data-document-html]'));assert.ok(a.$('[data-document-print]'));
- a.role('learner');assert.ok(a.$('.sidebar [data-tab="student-card"]'));
+test('Студенческий билет: ID-бейдж с QR и отдельным пунктом меню',()=>{
+ const a=app();try{a.role('admin');a.tab('student-card');assert.ok(a.$('.scm-id'));assert.ok(a.$('.scm-id-code svg'));assert.ok(a.$('#student-card-form'));assert.ok(a.$('[data-student-card-action="issue"]'));assert.ok(a.$('[data-student-card-action="print"]'));
+ a.role('learner');assert.ok(a.$('.student-card-corner'));assert.ok(a.$('.sidebar [data-tab="student-card"]'));
  }finally{a.dom.window.close();}
 });
