@@ -39,3 +39,16 @@ test('Сервер: ограничение попыток входа и Secure-c
  const directory=fs.mkdtempSync(path.join(os.tmpdir(),'scm-rate-')),s=createService({directory});await new Promise(r=>s.server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+s.server.address().port;
  try{for(let i=0;i<11;i++){const r=await fetch(origin+'/api/login',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({name:'Неизвестный Пользователь',password:'invalid'})});assert.equal(r.status,i===10?429:401);}}finally{await new Promise(r=>s.server.close(r));s.db.close();fs.rmSync(directory,{recursive:true,force:true});}
 });
+
+test('Начальный администратор из окружения входит без обязательной смены; перезапуск не меняет пароль',async()=>{
+ const directory=fs.mkdtempSync(path.join(os.tmpdir(),'scm-provision-')),service=createService({directory,secure:false});
+ try{
+ const env={BOOTSTRAP_ADMIN_NAME:'Тестовый Первый Администратор',BOOTSTRAP_ADMIN_PASSWORD:'test-only-password'};
+ assert.equal(await service.provisionAdministrator(env),true);
+ const before=service.db.prepare("SELECT password,must_change FROM users WHERE role='admin'").get();assert.equal(before.must_change,0);
+ assert.equal(await service.provisionAdministrator({...env,BOOTSTRAP_ADMIN_PASSWORD:'different-password'}),false);
+ assert.equal(service.db.prepare("SELECT password FROM users WHERE role='admin'").get().password,before.password);
+ await new Promise(r=>service.server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+service.server.address().port;
+ const r=await fetch(origin+'/api/login',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({name:env.BOOTSTRAP_ADMIN_NAME,password:env.BOOTSTRAP_ADMIN_PASSWORD})});assert.equal(r.status,200);assert.equal((await r.json()).user.mustChange,false);
+ }finally{await new Promise(r=>service.server.listening?service.server.close(r):r());service.db.close();fs.rmSync(directory,{recursive:true,force:true});}
+});

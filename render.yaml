@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: academy-scm
+    runtime: node
+    plan: starter
+    buildCommand: node --version
+    startCommand: npm start
+    healthCheckPath: /academy/
+    disk:
+      name: academy-data
+      mountPath: /var/data/academy
+      sizeGB: 1
+    envVars:
+      - key: NODE_VERSION
+        value: 22.16.0
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /var/data/academy
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: BOOTSTRAP_ADMIN_NAME
+        sync: false
+      - key: BOOTSTRAP_ADMIN_PASSWORD
+        sync: false
+      - key: BOOTSTRAP_ADMIN_REQUIRE_CHANGE
+        value: "0"
