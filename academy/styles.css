@@ -1884,3 +1884,9 @@ th {
 .curriculum-track { border-bottom: 1px solid var(--line); padding: 16px 0; }
 .curriculum-track summary { cursor: pointer; font-weight: 700; line-height: 1.5; }
 .curriculum-track li { margin: 10px 0; line-height: 1.5; }
+.study-filters { display: flex; align-items: end; flex-wrap: wrap; gap: 16px; }
+.study-filters label { flex: 1 1 200px; margin: 0; }
+.study-agenda { margin-top: 24px; }
+.study-agenda h2 { font-size: clamp(23px, 3vw, 32px); line-height: 1.2; }
+.study-event-head { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.study-event-head time { font-weight: 700; color: #6435c2; }

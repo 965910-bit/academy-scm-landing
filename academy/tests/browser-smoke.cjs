@@ -124,7 +124,16 @@ const path = require('node:path');
     assert.equal(await p.locator('[data-curriculum-allocation]').count(),3);
     await p.locator('[data-curriculum-allocation]').first().click();
     await p.locator('[name="answer"]').fill('Объясняю решение: учитываю ожидаемый спрос за поставку, страховой запас, независимость спроса и постоянный срок.');
-    await p.locator('#curriculum-answer button').click();
+    await p.locator('[data-save-draft]').click();
+    await p.reload(); await role('learner'); await tab('planner');
+    const calendarDownload=p.waitForEvent('download');
+    await p.locator('[data-study-calendar]').click();
+    const download=await calendarDownload;
+    assert.equal(download.suggestedFilename(), 'scm-study-deadlines.ics');
+    assert.match(fs.readFileSync(await download.path(), 'utf8'), /BEGIN:VCALENDAR/);
+    await p.locator('[data-study-open]').first().click();
+    assert.match(await p.locator('[name="answer"]').inputValue(), /Объясняю решение/);
+    await p.locator('#curriculum-answer button:not([data-save-draft])').click();
     await role('teacher'); await tab('responses');
     await p.locator('[name="decision"]').selectOption('approved');
     await p.locator('[name="feedback"]').fill('Учебное решение рассмотрено по критериям. Допущения явно перечислены, требуется проверка перед применением.');
@@ -147,7 +156,7 @@ const path = require('node:path');
           }
           assert.equal(await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `${r}/${t} overflow at ${width}px`);
           assert.doesNotMatch(await p.locator('body').innerText(), /демо|demo/i, `${r}/${t} contains removed label`);
-          if (width === 390 && ['lab', 'directions', 'grading', 'library', 'allocations', 'studyplan', 'responses'].includes(t)) await screenshot(`mobile-${r}-${t}`);
+          if (width === 390 && ['planner', 'monitoring', 'lab', 'directions', 'grading', 'library', 'allocations', 'studyplan', 'responses'].includes(t)) await screenshot(`mobile-${r}-${t}`);
         }
       }
       await p.locator('.mobile-menu-toggle').click();
