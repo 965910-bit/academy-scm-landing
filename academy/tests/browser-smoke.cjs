@@ -106,6 +106,33 @@ const path = require('node:path');
       assert.equal(await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `Course overflow at ${width}px`);
       await screenshot(`mobile-courses-${width}`);
     }
+    await role('admin'); await tab('library');
+    assert.equal(await p.locator('[data-curriculum-module]').count(), 12);
+    await screenshot('admin-content-library');
+    await p.locator('[data-curriculum-module="procurement"]').click();
+    await p.getByRole('heading', {name:'Практическое задание', exact:true}).waitFor();
+    await tab('students');
+    await p.locator('[name="name"]').fill('Участник 01');
+    await p.locator('[name="cohort"]').fill('SCM-01');
+    await p.locator('#curriculum-student button').click();
+    await tab('allocations');
+    await p.locator('[name="target"]').selectOption('group:SCM-01');
+    await p.locator('[name="module"]').selectOption('track:intensive');
+    await p.locator('[name="due"]').fill('2027-03-01');
+    await p.locator('#curriculum-allocate button').click();
+    await role('learner'); await tab('studyplan');
+    assert.equal(await p.locator('[data-curriculum-allocation]').count(),3);
+    await p.locator('[data-curriculum-allocation]').first().click();
+    await p.locator('[name="answer"]').fill('Объясняю решение: учитываю ожидаемый спрос за поставку, страховой запас, независимость спроса и постоянный срок.');
+    await p.locator('#curriculum-answer button').click();
+    await role('teacher'); await tab('responses');
+    await p.locator('[name="decision"]').selectOption('approved');
+    await p.locator('[name="feedback"]').fill('Учебное решение рассмотрено по критериям. Допущения явно перечислены, требуется проверка перед применением.');
+    await p.locator('[name="reviewed"]').check();
+    await p.locator('.curriculum-review button').click();
+    await p.getByText(/Проверено локально/).first().waitFor();
+    await p.reload(); await role('learner'); await tab('studyplan');
+    await p.getByText('Проверено локально',{exact:true}).waitFor();
     // Every role and cabinet screen remains usable on phone and tablet widths.
     for (const width of [320, 390, 768]) {
       await p.setViewportSize({ width, height: 844 });
@@ -120,7 +147,7 @@ const path = require('node:path');
           }
           assert.equal(await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `${r}/${t} overflow at ${width}px`);
           assert.doesNotMatch(await p.locator('body').innerText(), /демо|demo/i, `${r}/${t} contains removed label`);
-          if (width === 390 && ['lab', 'directions', 'grading'].includes(t)) await screenshot(`mobile-${r}-${t}`);
+          if (width === 390 && ['lab', 'directions', 'grading', 'library', 'allocations', 'studyplan', 'responses'].includes(t)) await screenshot(`mobile-${r}-${t}`);
         }
       }
       await p.locator('.mobile-menu-toggle').click();

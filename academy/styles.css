@@ -1877,3 +1877,10 @@ th {
   .metrics { grid-template-columns: minmax(0, 1fr); }
   .metric { min-width: 0; }
 }
+/* Teaching library shares the responsive cabinet shell. */
+.curriculum-grid .card h2 { font-size: 24px; line-height: 1.2; letter-spacing: -.5px; }
+.curriculum-grid .card { display: flex; flex-direction: column; }
+.curriculum-grid .card .button { margin-top: auto; }
+.curriculum-track { border-bottom: 1px solid var(--line); padding: 16px 0; }
+.curriculum-track summary { cursor: pointer; font-weight: 700; line-height: 1.5; }
+.curriculum-track li { margin: 10px 0; line-height: 1.5; }

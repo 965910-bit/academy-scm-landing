@@ -201,6 +201,7 @@
     state: () => state, esc, save, render, toast,
     navigate: (nextRole, nextTab) => { role = nextRole; tab = nextTab; location.hash = 'cabinet'; render(); window.scrollTo(0,0); }
   });
+  const curriculum = window.SCMCurriculum.create({ state: () => state, esc, save, render, toast });
   const portal = window.SCMPortal.create({
     programs, settings: () => state.settings, isOpen: open, esc,
     apply: p => { role = "applicant"; tab = "application"; location.hash = "cabinet"; render(); main.querySelector("[name=program]").value = p.id; window.scrollTo(0, 0); }
@@ -209,9 +210,9 @@
     const roles = { applicant: ['АП','Абитуриент'], learner: ['СЛ','Слушатель'], teacher: ['ПР','Преподаватель'], admin: ['АД','Администратор'], employer: ['РБ','Работодатель'] };
     const menus = {
       applicant: [['overview','Мой маршрут'],['application','Подать заявку'],['documents','Документы'],['messages','Сообщения']],
-      learner: [['overview','Мой учебный маршрут'],['courses','Учебные модули'],['lab','Лаборатория запасов'],['skills','Карта навыков'],['work','Практические задания'],['assistant','Предметный помощник'],['offline','Без сети'],['messages','Сообщения']],
-      teacher: [['overview','Учебные группы'],['reviews','Проверка работ'],['grading','Учебная ведомость'],['assignments','Создать задание'],['messages','Сообщения']],
-      admin: [['overview','Обзор платформы'],['directions','Направления и допуски'],['applications','Заявки'],['activity','Учебные события'],['messages','Сообщения']],
+      learner: [['overview','Мой учебный маршрут'],['studyplan','Назначенное обучение'],['courses','Учебные модули'],['lab','Лаборатория запасов'],['skills','Карта навыков'],['work','Практические задания'],['assistant','Предметный помощник'],['offline','Без сети'],['messages','Сообщения']],
+      teacher: [['overview','Учебные группы'],['responses','Назначенные работы'],['reviews','Проверка работ'],['grading','Учебная ведомость'],['assignments','Создать задание'],['messages','Сообщения']],
+      admin: [['overview','Обзор платформы'],['library','Библиотека модулей'],['students','Студенты и группы'],['allocations','Назначение обучения'],['responses','Проверка назначений'],['directions','Направления и допуски'],['applications','Заявки'],['activity','Учебные события'],['messages','Сообщения']],
       employer: [['overview','Проверка учебной записи']]
     };
     const [avatar,name] = roles[role] || roles.applicant;
@@ -242,6 +243,8 @@
       )}</div><div class="grid">${shown.map((p) => `<article class="card" data-direction="${p.id}"><span class="course-icon" aria-hidden="true">${{ higher: "◈", mba: "↗", intensive: "ϟ", retraining: "▦", international: "◎", corporate: "⬡", seminars: "✳" }[p.id]}</span><span class="number">${p.code}</span><h3>${p.title}</h3><p>${p.text}</p><p class="micro">${p.document}</p><div class="card-meta"><span>${p.duration}</span><span class="badge ${open(p) ? "" : "planned"}">${open(p) ? "Локальный приём открыт" : "Подготовка к запуску"}</span></div><a class="portal-detail-link" href="#/program/${p.id}">Подробнее о программе →</a><button class="button outline small" data-program="${p.id}">${open(p) ? "Подать заявку ↗" : "Посмотреть условия ↗"}</button></article>`).join("") || '<p class="empty">В этой категории пока нет опубликованных направлений.</p>'}</div><p class="micro" style="margin-top:20px">Даты, стоимость и преподаватели будут опубликованы после утверждения программ. Дипломы государственного образца и международные партнёрства не заявляются.</p></section><section class="section" id="approach"><div class="dark"><div class="approach-intro"><span class="eyebrow">НЕ ПРОСТО НАБОР ЛЕКЦИЙ</span><h2>Учиться видеть<br>всю цепь.</h2><p>Закупки, производство, запасы, транспорт и клиентский сервис — не отдельные дисциплины, а части одного решения.</p><button class="button lime" data-action="login">Открыть личный кабинет ↗</button></div><div class="steps"><div class="step"><b>01</b><div><h3>Определить задачу</h3><p>Выбрать направление и сформулировать задачу для развития.</p></div></div><div class="step"><b>02</b><div><h3>Проверить на практике</h3><p>Работать с кейсами, данными и обратной связью преподавателя.</p></div></div><div class="step"><b>03</b><div><h3>Собрать решение</h3><p>Связать инструменты в проект изменений для своей цепи поставок.</p></div></div></div></div></section><section class="section" id="platform"><span class="eyebrow">ВАША ТОЧКА ВХОДА</span><div class="section-head"><h2>Не просто учиться.<br>Быть частью системы.</h2><p>У каждого своя роль. У всех — общее пространство для развития.</p></div><div class="role-grid"><article class="role-card"><span class="role-symbol" aria-hidden="true">↗</span><span class="number">01 / ПОСТУПЛЕНИЕ</span><h3>Мой следующий уровень</h3><p>Выбор направления, заявка и её статус. Понятный маршрут от интереса к поступлению.</p><button class="button outline" data-role-entry="applicant">Я абитуриент ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">✳</span><span class="number">02 / ПРЕПОДАВАНИЕ</span><h3>Делиться опытом. Менять мышление.</h3><p>Учебные группы, задания и ведомость — инструменты преподавателя в одном кабинете.</p><button class="button outline" data-role-entry="teacher">Я преподаватель ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">◈</span><span class="number">03 / УПРАВЛЕНИЕ</span><h3>Вся академия под контролем</h3><p>Семь направлений, условия запуска и заявки. Раздельное управление публикацией и приёмом.</p><button class="button outline" data-role-entry="admin">Управление платформой ↗</button></article></div></section><section class="section" id="enterprise"><div class="enterprise"><div><span class="eyebrow">КОРПОРАТИВНАЯ АКАДЕМИЯ</span><h2>Одна команда.<br>Общий язык управления.</h2><p>От матрицы компетенций до проектной работы: создайте внутреннюю траекторию развития под процессы вашего предприятия.</p></div><button class="button" data-program="corporate">Обсудить формат ↗</button></div></section><section class="section faq" id="questions"><span class="eyebrow">ЕСТЬ ВОПРОСЫ?</span><div class="faq-layout"><h2>Всё важное.<br>Без мелкого шрифта.</h2><div><details><summary>Какие направления уже открыты?</summary><p>Текущий статус указан на карточке каждого направления. По умолчанию все программы планируются, приём закрыт. Администратор может открыть локальный приём после заполнения оснований проверки.</p></details><details><summary>Какой документ я получу?</summary><p>Это зависит от программы и подтверждённых правовых оснований. Условия выдачи документов будут опубликованы до реального набора. Международные сертификаты не выдаются автоматически за собственный курс академии.</p></details><details><summary>Можно ли обучить команду компании?</summary><p>Для этого предусмотрено направление «Внутренняя академия предприятия». Состав программы, формат и условия нужно согласовать отдельно. Пока раздел описывает будущий сценарий.</p></details><details><summary>Это уже действующая учебная платформа?</summary><p>Сейчас это интерактивный прототип. Можно проверить роли, заявки и учебные инструменты. Данные сохраняются только в вашем браузере; реальные документы и персональные данные вводить нельзя.</p></details></div></div></section></div>`;
   }
   function dashboard() {
+    const curriculumScreen = curriculum.render(role, tab);
+    if (curriculumScreen !== null) return curriculumScreen;
     if (tab === "messages") return messages();
     const learningScreen = learning.render(role, tab);
     if (learningScreen !== null) return learningScreen;
@@ -306,7 +309,7 @@
         "Платформа под контролем",
         "Семь направлений. Раздельное управление публикацией и приёмом.",
       ) +
-      `<div class="metrics"><div class="metric"><b>${programs.filter((p) => state.settings[p.id].visible).length}/7</b><span>опубликовано</span></div><div class="metric"><b>${programs.filter(open).length}</b><span>локальный приём открыт</span></div><div class="metric"><b>${state.applications.length}</b><span>заявок в браузере</span></div></div><div class="panel"><h3>Готовность к запуску</h3><p>Витрина → проверка оснований → публикация условий → открытие приёма.</p><p class="subtle">Для реальной эксплуатации ещё нужны серверная авторизация и роли, база данных, аудит изменений, защищённые документы, договоры и согласия.</p><button class="button small" data-tab="directions">Настроить направления ↗</button></div><div class="panel"><h3>Данные прототипа</h3><p class="subtle">Экспорт содержит заявки и сообщения из этого браузера. Сброс удаляет только данные нового раздела academy/.</p><div class="actions"><button class="button outline small" data-action="export">Экспорт JSON</button><button class="button outline small" data-action="reset">Сбросить локальные данные</button></div></div>`
+      `<div class="metrics"><div class="metric"><b>${programs.filter((p) => state.settings[p.id].visible).length}/7</b><span>опубликовано</span></div><div class="metric"><b>${programs.filter(open).length}</b><span>локальный приём открыт</span></div><div class="metric"><b>${state.applications.length}</b><span>заявок в браузере</span></div></div><div class="panel"><h3>Учебно-методическая база</h3><p>12 вводных модулей и семь маршрутов. Студентов в локальном реестре: ${state.curriculum?.students?.length || 0}; назначений: ${state.curriculum?.allocations?.length || 0}.</p><div class="actions"><button class="button small" data-tab="library">Библиотека модулей ↗</button><button class="button outline small" data-tab="students">Добавить студента</button><button class="button outline small" data-tab="allocations">Назначить обучение</button></div></div><div class="panel"><h3>Готовность к запуску</h3><p>Витрина → проверка оснований → публикация условий → открытие приёма.</p><p class="subtle">Для реальной эксплуатации ещё нужны серверная авторизация и роли, база данных, аудит изменений, защищённые документы, договоры и согласия.</p><button class="button small" data-tab="directions">Настроить направления ↗</button></div><div class="panel"><h3>Данные прототипа</h3><p class="subtle">Экспорт содержит заявки и сообщения из этого браузера. Сброс удаляет только данные нового раздела academy/.</p><div class="actions"><button class="button outline small" data-action="export">Экспорт JSON</button><button class="button outline small" data-action="reset">Сбросить локальные данные</button></div></div>`
     );
   }
   const learners = [
@@ -379,6 +382,7 @@
     e.preventDefault();
     role = new FormData(e.target).get("role");
     learning.resetView();
+    curriculum.resetView();
     tab = "overview";
     document.querySelector("#login-dialog").close();
     location.hash = "cabinet";
@@ -388,6 +392,7 @@
   document.addEventListener("click", (e) => {
     const t = e.target.closest("button,a");
     if (!t) return;
+    if (curriculum.click(t, role)) return;
     const portalAction = portal.click(t);
     if (portalAction) { if (typeof portalAction === "string") toast(portalAction); else if (!t.dataset.portalApply) render(); return; }
     if (learning.click(t, role)) return;
@@ -446,6 +451,7 @@
         if (confirm("Удалить все локальные данные академии?")) {
           state = initial();
           learning.resetView();
+    curriculum.resetView();
           for (const p of programs) state.settings[p.id].admissions = false;
           save();
           render();
@@ -487,6 +493,7 @@
     const form = e.target;
     if (form.id === "login-form") return;
     e.preventDefault();
+    if (curriculum.submit(form, role)) return;
     if (portal.submit(form)) { render(); return; }
     if (learning.submit(form, role)) return;
     const f = new FormData(form);
