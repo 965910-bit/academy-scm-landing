@@ -1890,3 +1890,11 @@ th {
 .study-agenda h2 { font-size: clamp(23px, 3vw, 32px); line-height: 1.2; }
 .study-event-head { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .study-event-head time { font-weight: 700; color: #6435c2; }
+#decision-calculate + .panel h2, .decision-record h3 { overflow-wrap: anywhere; }
+.decision-record { padding: 20px 0; border-bottom: 1px solid var(--line); }
+.decision-record p { white-space: pre-wrap; overflow-wrap: anywhere; }
+#decision-calculate input { width: 100%; }
+@media (max-width: 650px) {
+  #decision-save .button { width: 100%; }
+  .decision-record .actions { flex-direction: column; align-items: stretch; }
+}

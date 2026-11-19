@@ -142,6 +142,22 @@ const path = require('node:path');
     await p.getByText(/Проверено локально/).first().waitFor();
     await p.reload(); await role('learner'); await tab('studyplan');
     await p.getByText('Проверено локально',{exact:true}).waitFor();
+    await role('learner'); await tab('decisionlab');
+    await p.locator('#decision-calculate button').click();
+    await p.locator('#decision-save [name="reason"]').fill('Выбор поставщика зависит не только от цены: проверяю пригодный выход, чувствительность к браку и условия компенсации.');
+    await p.locator('#decision-save button').click();
+    const reportDownload=p.waitForEvent('download');
+    await p.locator('[data-decision-report]').first().click();
+    const report=await reportDownload;
+    assert.match(fs.readFileSync(await report.path(),'utf8'),/Без проверки преподавателем/);
+    const templateDownload=p.waitForEvent('download');
+    await p.locator('[data-decision-template="project"]').click();
+    const template=await templateDownload;
+    assert.match(fs.readFileSync(await template.path(),'utf8'),/Паспорт учебного SCM-проекта/);
+    await p.locator('[data-decision-model="transport"]').click();
+    await p.locator('#decision-calculate button').click();
+    await p.getByRole('rowheader',{name:'Непокрытый спрос, ед.'}).waitFor();
+    await screenshot('decision-lab-transport');
     // Every role and cabinet screen remains usable on phone and tablet widths.
     for (const width of [320, 390, 768]) {
       await p.setViewportSize({ width, height: 844 });
@@ -150,13 +166,14 @@ const path = require('node:path');
         const tabs = await p.locator('.sidebar [data-tab]').evaluateAll(items => items.map(e => e.dataset.tab));
         for (const t of tabs) {
           await tab(t);
+          if (t === 'decisionlab') await p.locator('#decision-calculate button').click();
           if (await p.evaluate(() => document.documentElement.scrollWidth > innerWidth)) {
             console.log(await p.evaluate(() => [...document.querySelectorAll('body *')].filter(e => e.getBoundingClientRect().right > innerWidth + 1).map(e => [e.tagName,e.className,e.getBoundingClientRect().width,e.getBoundingClientRect().right])));
             await screenshot(`overflow-${r}-${t}-${width}`);
           }
           assert.equal(await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `${r}/${t} overflow at ${width}px`);
           assert.doesNotMatch(await p.locator('body').innerText(), /демо|demo/i, `${r}/${t} contains removed label`);
-          if (width === 390 && ['planner', 'monitoring', 'lab', 'directions', 'grading', 'library', 'allocations', 'studyplan', 'responses'].includes(t)) await screenshot(`mobile-${r}-${t}`);
+          if (width === 390 && ['decisionlab', 'planner', 'monitoring', 'lab', 'directions', 'grading', 'library', 'allocations', 'studyplan', 'responses'].includes(t)) await screenshot(`mobile-${r}-${t}`);
         }
       }
       await p.locator('.mobile-menu-toggle').click();
