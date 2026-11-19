@@ -179,3 +179,35 @@ test("Сброс из админки удаляет локальные заяв�
   assert.equal(a.state().settings.intensive.admissions, false);
   a.dom.window.close();
 });
+
+test("Подвал остаётся внутри платформы и не содержит перехода на старый сайт", () => {
+  const a = app();
+  assert.doesNotMatch(a.$("footer").textContent, /Основной сайт/);
+  for (const link of a.w.document.querySelectorAll("footer a")) {
+    assert.ok(link.getAttribute("href").startsWith("#"));
+    assert.ok(a.$(link.getAttribute("href")));
+  }
+  a.dom.window.close();
+});
+test("Ролевые карточки и подвал открывают правильный демо-вход", () => {
+  const a = app();
+  for (const role of ["applicant", "teacher", "admin"]) {
+    a.click(`.role-card [data-role-entry="${role}"]`);
+    assert.equal(a.$("#login-dialog").open, true);
+    assert.equal(a.$("#login-form select").value, role);
+    a.$("#login-dialog").close();
+  }
+  a.click('footer [data-role-entry="teacher"]');
+  a.submit("#login-form");
+  assert.match(a.$("#main").textContent, /Рабочий стол преподавателя/);
+  a.dom.window.close();
+});
+test("Возврат из кабинета по ссылке подвала открывает раздел вопросов", () => {
+  const a = app();
+  a.role("applicant");
+  a.w.location.hash = "#questions";
+  a.w.dispatchEvent(new a.w.Event("hashchange"));
+  assert.ok(a.$("#questions"));
+  assert.equal(a.w.document.querySelectorAll("#questions details").length, 4);
+  a.dom.window.close();
+});
