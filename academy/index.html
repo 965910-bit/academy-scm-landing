@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Академия SCM — школа системного управления цепями поставок</title>
+    <meta
+      name="description"
+      content="Семь направлений развития в SCM: от практических семинаров до корпоративной академии. Программы, поступление и личные кабинеты."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="notice">
+      Прототип платформы · данные сохраняются только в этом браузере · не
+      вводите реальные персональные данные
+    </div>
+    <header class="header">
+      <a class="brand" href="#home" aria-label="Академия SCM, главная"
+        ><span class="brand-icon">S<span>↗</span></span
+        ><span
+          >АКАДЕМИЯ <b>SCM</b><small>SUPPLY CHAIN MANAGEMENT</small></span
+        ></a
+      >
+      <nav aria-label="Основная навигация">
+        <a href="#programs">Программы</a><a href="#approach">Подход</a
+        ><a href="#enterprise">Для компаний</a>
+      </nav>
+      <button class="button small" id="account-button">Личный кабинет ↗</button>
+    </header>
+    <main id="main"></main>
+    <footer>
+      <a class="brand" href="#home">АКАДЕМИЯ SCM</a>
+      <p>Управление цепями поставок — как система.</p>
+      <p>
+        Демонстрационная платформа. Лицензии, аккредитация и партнёрства не
+        заявляются.
+      </p>
+      <a href="../index.html">Основной сайт ↗</a>
+    </footer>
+    <dialog id="login-dialog">
+      <form id="login-form">
+        <button class="close" type="button" aria-label="Закрыть">×</button
+        ><span class="eyebrow">ЛИЧНОЕ ПРОСТРАНСТВО</span>
+        <h2>Войти в академию</h2>
+        <p>Выберите роль для просмотра демо. Это не настоящая авторизация.</p>
+        <label
+          >Роль<select name="role">
+            <option value="applicant">Абитуриент</option>
+            <option value="teacher">Преподаватель</option>
+            <option value="admin">Администратор</option>
+          </select></label
+        ><button class="button" type="submit">Открыть кабинет ↗</button>
+      </form>
+    </dialog>
+    <dialog id="program-dialog">
+      <button type="button" class="close" aria-label="Закрыть условия">
+        ×
+      </button>
+      <div id="program-detail"></div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <noscript
+      >Для каталога и демонстрационных кабинетов включите JavaScript.
+      <a href="../index.html">Основной сайт</a></noscript
+    >
+  </body>
+</html>
