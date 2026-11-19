@@ -269,8 +269,8 @@ test('Учебный цикл: преподаватель рассматрива
   const a=app();quiz(a);a.role('teacher');a.tab('reviews');
   a.value('[name="feedback"]','Коротко');a.submit('.learning-review-form');assert.equal(a.state().learning.attempts[0].status,'pending');
   a.value('[name="feedback"]','Обоснование соответствует учебным критериям. Допущения модели указаны корректно.');a.$('[name="reviewed"]').checked=true;a.submit('.learning-review-form');
-  const result=a.state().learning.attempts[0];assert.equal(result.status,'approved');assert.match(result.recordCode,/^DEMO-/);
-  a.role('learner');a.tab('skills');assert.match(a.$('#main').textContent,/Подтверждено в демо/);
+  const result=a.state().learning.attempts[0];assert.equal(result.status,'approved');assert.match(result.recordCode,/^LOCAL-/);
+  a.role('learner');a.tab('skills');assert.match(a.$('#main').textContent,/Проверено локально/);
   a.role('employer');a.value('[name="code"]',result.recordCode);a.submit('#learning-verify');assert.match(a.$('#verification-result').textContent,/ЛОКАЛЬНАЯ ЗАПИСЬ НАЙДЕНА/);assert.doesNotMatch(a.$('#verification-result').textContent,/Обоснование соответствует/);
   a.value('[name="code"]','DEMO-unknown');a.submit('#learning-verify');assert.match(a.$('#verification-result').textContent,/Запись не найдена/);a.dom.window.close();
 });
@@ -326,4 +326,23 @@ test('Портал: подбор по цели и переход из кабин
 test('Портал: скрытая программа недоступна по прямой ссылке, открытая ведёт в нужную заявку',async()=>{
  const a=app();a.enable();await route(a,'/program/intensive');a.click('[data-portal-apply]');assert.equal(a.$('[name="program"]').value,'intensive');
  a.role('admin');a.tab('directions');a.$('[name="higher-visible"]').checked=false;a.submit('#settings-form');await route(a,'/program/higher');assert.match(a.$('#main').textContent,/не опубликовано/);a.dom.window.close();
+});
+
+test('Мобильное меню раскрывается, закрывается по Escape и ссылке',()=>{
+ const a=app();a.click('.mobile-menu-toggle');assert.equal(a.$('.mobile-menu-toggle').getAttribute('aria-expanded'),'true');
+ a.w.document.dispatchEvent(new a.w.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert.equal(a.$('.mobile-menu-toggle').getAttribute('aria-expanded'),'false');
+ a.click('.mobile-menu-toggle');a.click('#primary-navigation a');assert.equal(a.$('.mobile-menu-toggle').getAttribute('aria-expanded'),'false');a.dom.window.close();
+});
+test('Старые локальные записи сохраняются при обновлении подписей и кодов',()=>{
+ const a=app();quiz(a);const old=a.state();old.learning.attempts[0].status='approved';old.learning.attempts[0].recordCode='DEMO-EXISTING';old.documents=[{id:'old-doc',type:'Портфолио · демо'}];
+ const b=app(old);b.role('learner');b.tab('skills');assert.match(b.$('#main').textContent,/LOCAL-EXISTING/);assert.doesNotMatch(b.$('#main').textContent,/демо|demo/i);
+ b.role('employer');b.value('[name="code"]','DEMO-EXISTING');b.submit('#learning-verify');assert.match(b.$('#verification-result').textContent,/ЗАПИСЬ НАЙДЕНА/);
+ b.role('applicant');b.tab('documents');assert.match(b.$('#main').textContent,/Портфолио/);assert.doesNotMatch(b.$('#main').textContent,/демо|demo/i);b.dom.window.close();a.dom.window.close();
+});
+test('Все кабинеты используют новые подписи и сохраняют предупреждения о локальном режиме',()=>{
+ const a=app();for(const r of ['applicant','learner','teacher','admin','employer']){
+  a.role(r);const tabs=[...a.w.document.querySelectorAll('.sidebar [data-tab]')].map(t=>t.dataset.tab);
+  for(const tab of tabs){a.tab(tab);assert.doesNotMatch(a.$('#main').textContent,/демо|demo/i,`${r}/${tab}`);}
+ }
+ assert.match(a.$('#main').textContent,/не доказывает личность/);a.click('#account-button');assert.match(a.$('#login-dialog').textContent,/не настоящая авторизация/);a.dom.window.close();
 });

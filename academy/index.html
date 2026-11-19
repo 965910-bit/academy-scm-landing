@@ -30,7 +30,8 @@
           >АКАДЕМИЯ <b>SCM</b><small>SUPPLY CHAIN MANAGEMENT</small></span
         ></a
       >
-      <nav aria-label="Основная навигация">
+      <button class="mobile-menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">Меню ☰</button>
+      <nav id="primary-navigation" aria-label="Основная навигация">
         <a href="#/catalog">Каталог</a><a href="#/admission">Поступление</a><a href="#platform">Платформа</a
         ><a href="#approach">Подход</a><a href="#enterprise">Для компаний</a>
       </nav>
@@ -66,7 +67,7 @@
       <div class="footer-bottom">
         <span>АКАДЕМИЯ SCM · УПРАВЛЕНИЕ ЦЕПЯМИ ПОСТАВОК</span
         ><span
-          >Демонстрационная платформа. Лицензии, аккредитация и партнёрства не
+          >Учебная платформа. Лицензии, аккредитация и партнёрства не
           заявляются.</span
         >
       </div>
@@ -76,7 +77,7 @@
         <button class="close" type="button" aria-label="Закрыть">×</button
         ><span class="eyebrow">ЛИЧНОЕ ПРОСТРАНСТВО</span>
         <h2>Войти в академию</h2>
-        <p>Выберите роль для просмотра демо. Это не настоящая авторизация.</p>
+        <p>Выберите роль для просмотра кабинета. Это не настоящая авторизация.</p>
         <label
           >Роль<select name="role">
             <option value="applicant">Абитуриент</option>
@@ -96,7 +97,7 @@
     </dialog>
     <div id="toast" role="status" aria-live="polite"></div>
     <noscript
-      >Для каталога и демонстрационных кабинетов включите JavaScript. Каталог и
+      >Для каталога и личных кабинетов включите JavaScript. Каталог и
       кабинеты работают с включённым JavaScript.</noscript
     >
   </body>

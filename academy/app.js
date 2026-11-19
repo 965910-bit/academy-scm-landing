@@ -39,7 +39,7 @@
       requirement:
         "Проверка договора и формата услуги. При реализации образовательной программы требуется проверка лицензирования.",
       document:
-        "Демонстрационный формат. Вид подтверждения участия уточняется.",
+        "Учебный формат. Вид подтверждения участия уточняется.",
     },
     {
       id: "retraining",
@@ -112,7 +112,7 @@
     messages: [],
     grades: {},
     assignments: [],
-    profile: { name: "Алексей · демо", email: "applicant@example.test" },
+    profile: { name: "Алексей", email: "applicant@example.test" },
     status: "На рассмотрении",
   });
   let state = initial(),
@@ -141,6 +141,11 @@
   } catch {
     storageOK = false;
   }
+  // Preserve existing local records while removing obsolete generated labels.
+  const cleanLegacyName = value => typeof value === 'string' ? value.replace(/ · демо$/i, '') : value;
+  if (state.profile) state.profile.name = cleanLegacyName(state.profile.name);
+  for (const application of state.applications) application.name = cleanLegacyName(application.name);
+  for (const document of state.documents) document.type = cleanLegacyName(document.type);
   window.SCMLearning.ensure(state);
   let role = null,
     tab = "overview",
@@ -201,19 +206,19 @@
     apply: p => { role = "applicant"; tab = "application"; location.hash = "cabinet"; render(); main.querySelector("[name=program]").value = p.id; window.scrollTo(0, 0); }
   });
   function shell() {
-    const roles = { applicant: ['АП','Абитуриент'], learner: ['СЛ','Демо-слушатель'], teacher: ['ПР','Преподаватель'], admin: ['АД','Администратор'], employer: ['РБ','Работодатель'] };
+    const roles = { applicant: ['АП','Абитуриент'], learner: ['СЛ','Слушатель'], teacher: ['ПР','Преподаватель'], admin: ['АД','Администратор'], employer: ['РБ','Работодатель'] };
     const menus = {
       applicant: [['overview','Мой маршрут'],['application','Подать заявку'],['documents','Документы'],['messages','Сообщения']],
       learner: [['overview','Мой учебный маршрут'],['courses','Учебные модули'],['lab','Лаборатория запасов'],['skills','Карта навыков'],['work','Практические задания'],['assistant','Предметный помощник'],['offline','Без сети'],['messages','Сообщения']],
-      teacher: [['overview','Учебные группы'],['reviews','Проверка работ'],['grading','Демо-ведомость'],['assignments','Создать задание'],['messages','Сообщения']],
+      teacher: [['overview','Учебные группы'],['reviews','Проверка работ'],['grading','Учебная ведомость'],['assignments','Создать задание'],['messages','Сообщения']],
       admin: [['overview','Обзор платформы'],['directions','Направления и допуски'],['applications','Заявки'],['activity','Учебные события'],['messages','Сообщения']],
       employer: [['overview','Проверка учебной записи']]
     };
     const [avatar,name] = roles[role] || roles.applicant;
-    return `<div class="container"><div class="workspace"><aside class="sidebar"><div class="profile"><div class="avatar">${avatar}</div><b>${name}</b><p>Демонстрационный кабинет</p></div>${(menus[role]||menus.applicant).map(([id,label])=>`<button data-tab="${id}" class="${tab===id?'active':''}">${label}</button>`).join('')}<button data-action="logout">← На главную платформы</button></aside><section>${!storageOK?'<div class="warning">Постоянное хранилище недоступно. Данные могут не сохраниться.</div>':''}${dashboard()}</section></div></div>`;
+    return `<div class="container"><div class="workspace"><aside class="sidebar"><div class="profile"><div class="avatar">${avatar}</div><b>${name}</b><p>Личный кабинет</p></div>${(menus[role]||menus.applicant).map(([id,label])=>`<button data-tab="${id}" class="${tab===id?'active':''}">${label}</button>`).join('')}<button data-action="logout">← На главную платформы</button></aside><section>${!storageOK?'<div class="warning">Постоянное хранилище недоступно. Данные могут не сохраниться.</div>':''}${dashboard()}</section></div></div>`;
   }
   function heading(title, sub) {
-    return `<div class="dashboard-head"><div><span class="eyebrow">${role === "admin" ? "УПРАВЛЕНИЕ АКАДЕМИЕЙ" : role === "teacher" ? "КАБИНЕТ ПРЕПОДАВАТЕЛЯ" : "КАБИНЕТ АБИТУРИЕНТА"}</span><h1>${title}</h1><p class="subtle">${sub}</p></div><span class="badge">ДЕМО</span></div>`;
+    return `<div class="dashboard-head"><div><span class="eyebrow">${role === "admin" ? "УПРАВЛЕНИЕ АКАДЕМИЕЙ" : role === "teacher" ? "КАБИНЕТ ПРЕПОДАВАТЕЛЯ" : "КАБИНЕТ АБИТУРИЕНТА"}</span><h1>${title}</h1><p class="subtle">${sub}</p></div><span class="badge">ЛОКАЛЬНО</span></div>`;
   }
   function landing() {
     const shown = programs.filter(
@@ -234,7 +239,7 @@
       )
       .join(
         "",
-      )}</div><div class="grid">${shown.map((p) => `<article class="card" data-direction="${p.id}"><span class="course-icon" aria-hidden="true">${{ higher: "◈", mba: "↗", intensive: "ϟ", retraining: "▦", international: "◎", corporate: "⬡", seminars: "✳" }[p.id]}</span><span class="number">${p.code}</span><h3>${p.title}</h3><p>${p.text}</p><p class="micro">${p.document}</p><div class="card-meta"><span>${p.duration}</span><span class="badge ${open(p) ? "" : "planned"}">${open(p) ? "Демо-приём открыт" : "Подготовка к запуску"}</span></div><a class="portal-detail-link" href="#/program/${p.id}">Подробнее о программе →</a><button class="button outline small" data-program="${p.id}">${open(p) ? "Подать демо-заявку ↗" : "Посмотреть условия ↗"}</button></article>`).join("") || '<p class="empty">В этой категории пока нет опубликованных направлений.</p>'}</div><p class="micro" style="margin-top:20px">Даты, стоимость и преподаватели будут опубликованы после утверждения программ. Дипломы государственного образца и международные партнёрства не заявляются.</p></section><section class="section" id="approach"><div class="dark"><div class="approach-intro"><span class="eyebrow">НЕ ПРОСТО НАБОР ЛЕКЦИЙ</span><h2>Учиться видеть<br>всю цепь.</h2><p>Закупки, производство, запасы, транспорт и клиентский сервис — не отдельные дисциплины, а части одного решения.</p><button class="button lime" data-action="login">Открыть личный кабинет ↗</button></div><div class="steps"><div class="step"><b>01</b><div><h3>Определить задачу</h3><p>Выбрать направление и сформулировать задачу для развития.</p></div></div><div class="step"><b>02</b><div><h3>Проверить на практике</h3><p>Работать с кейсами, данными и обратной связью преподавателя.</p></div></div><div class="step"><b>03</b><div><h3>Собрать решение</h3><p>Связать инструменты в проект изменений для своей цепи поставок.</p></div></div></div></div></section><section class="section" id="platform"><span class="eyebrow">ВАША ТОЧКА ВХОДА</span><div class="section-head"><h2>Не просто учиться.<br>Быть частью системы.</h2><p>У каждого своя роль. У всех — общее пространство для развития.</p></div><div class="role-grid"><article class="role-card"><span class="role-symbol" aria-hidden="true">↗</span><span class="number">01 / ПОСТУПЛЕНИЕ</span><h3>Мой следующий уровень</h3><p>Выбор направления, заявка и её статус. Понятный маршрут от интереса к поступлению.</p><button class="button outline" data-role-entry="applicant">Я абитуриент ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">✳</span><span class="number">02 / ПРЕПОДАВАНИЕ</span><h3>Делиться опытом. Менять мышление.</h3><p>Учебные группы, задания и ведомость — инструменты преподавателя в одном кабинете.</p><button class="button outline" data-role-entry="teacher">Я преподаватель ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">◈</span><span class="number">03 / УПРАВЛЕНИЕ</span><h3>Вся академия под контролем</h3><p>Семь направлений, условия запуска и заявки. Раздельное управление публикацией и приёмом.</p><button class="button outline" data-role-entry="admin">Управление платформой ↗</button></article></div></section><section class="section" id="enterprise"><div class="enterprise"><div><span class="eyebrow">КОРПОРАТИВНАЯ АКАДЕМИЯ</span><h2>Одна команда.<br>Общий язык управления.</h2><p>От матрицы компетенций до проектной работы: создайте внутреннюю траекторию развития под процессы вашего предприятия.</p></div><button class="button" data-program="corporate">Обсудить формат ↗</button></div></section><section class="section faq" id="questions"><span class="eyebrow">ЕСТЬ ВОПРОСЫ?</span><div class="faq-layout"><h2>Всё важное.<br>Без мелкого шрифта.</h2><div><details><summary>Какие направления уже открыты?</summary><p>Текущий статус указан на карточке каждого направления. По умолчанию все программы планируются, приём закрыт. Администратор может открыть демо-приём после заполнения оснований проверки.</p></details><details><summary>Какой документ я получу?</summary><p>Это зависит от программы и подтверждённых правовых оснований. Условия выдачи документов будут опубликованы до реального набора. Международные сертификаты не выдаются автоматически за собственный курс академии.</p></details><details><summary>Можно ли обучить команду компании?</summary><p>Для этого предусмотрено направление «Внутренняя академия предприятия». Состав программы, формат и условия нужно согласовать отдельно. Пока раздел демонстрирует будущий сценарий.</p></details><details><summary>Это уже действующая учебная платформа?</summary><p>Сейчас это интерактивный прототип. Можно проверить роли, заявки и учебные инструменты. Данные сохраняются только в вашем браузере; реальные документы и персональные данные вводить нельзя.</p></details></div></div></section></div>`;
+      )}</div><div class="grid">${shown.map((p) => `<article class="card" data-direction="${p.id}"><span class="course-icon" aria-hidden="true">${{ higher: "◈", mba: "↗", intensive: "ϟ", retraining: "▦", international: "◎", corporate: "⬡", seminars: "✳" }[p.id]}</span><span class="number">${p.code}</span><h3>${p.title}</h3><p>${p.text}</p><p class="micro">${p.document}</p><div class="card-meta"><span>${p.duration}</span><span class="badge ${open(p) ? "" : "planned"}">${open(p) ? "Локальный приём открыт" : "Подготовка к запуску"}</span></div><a class="portal-detail-link" href="#/program/${p.id}">Подробнее о программе →</a><button class="button outline small" data-program="${p.id}">${open(p) ? "Подать заявку ↗" : "Посмотреть условия ↗"}</button></article>`).join("") || '<p class="empty">В этой категории пока нет опубликованных направлений.</p>'}</div><p class="micro" style="margin-top:20px">Даты, стоимость и преподаватели будут опубликованы после утверждения программ. Дипломы государственного образца и международные партнёрства не заявляются.</p></section><section class="section" id="approach"><div class="dark"><div class="approach-intro"><span class="eyebrow">НЕ ПРОСТО НАБОР ЛЕКЦИЙ</span><h2>Учиться видеть<br>всю цепь.</h2><p>Закупки, производство, запасы, транспорт и клиентский сервис — не отдельные дисциплины, а части одного решения.</p><button class="button lime" data-action="login">Открыть личный кабинет ↗</button></div><div class="steps"><div class="step"><b>01</b><div><h3>Определить задачу</h3><p>Выбрать направление и сформулировать задачу для развития.</p></div></div><div class="step"><b>02</b><div><h3>Проверить на практике</h3><p>Работать с кейсами, данными и обратной связью преподавателя.</p></div></div><div class="step"><b>03</b><div><h3>Собрать решение</h3><p>Связать инструменты в проект изменений для своей цепи поставок.</p></div></div></div></div></section><section class="section" id="platform"><span class="eyebrow">ВАША ТОЧКА ВХОДА</span><div class="section-head"><h2>Не просто учиться.<br>Быть частью системы.</h2><p>У каждого своя роль. У всех — общее пространство для развития.</p></div><div class="role-grid"><article class="role-card"><span class="role-symbol" aria-hidden="true">↗</span><span class="number">01 / ПОСТУПЛЕНИЕ</span><h3>Мой следующий уровень</h3><p>Выбор направления, заявка и её статус. Понятный маршрут от интереса к поступлению.</p><button class="button outline" data-role-entry="applicant">Я абитуриент ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">✳</span><span class="number">02 / ПРЕПОДАВАНИЕ</span><h3>Делиться опытом. Менять мышление.</h3><p>Учебные группы, задания и ведомость — инструменты преподавателя в одном кабинете.</p><button class="button outline" data-role-entry="teacher">Я преподаватель ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">◈</span><span class="number">03 / УПРАВЛЕНИЕ</span><h3>Вся академия под контролем</h3><p>Семь направлений, условия запуска и заявки. Раздельное управление публикацией и приёмом.</p><button class="button outline" data-role-entry="admin">Управление платформой ↗</button></article></div></section><section class="section" id="enterprise"><div class="enterprise"><div><span class="eyebrow">КОРПОРАТИВНАЯ АКАДЕМИЯ</span><h2>Одна команда.<br>Общий язык управления.</h2><p>От матрицы компетенций до проектной работы: создайте внутреннюю траекторию развития под процессы вашего предприятия.</p></div><button class="button" data-program="corporate">Обсудить формат ↗</button></div></section><section class="section faq" id="questions"><span class="eyebrow">ЕСТЬ ВОПРОСЫ?</span><div class="faq-layout"><h2>Всё важное.<br>Без мелкого шрифта.</h2><div><details><summary>Какие направления уже открыты?</summary><p>Текущий статус указан на карточке каждого направления. По умолчанию все программы планируются, приём закрыт. Администратор может открыть локальный приём после заполнения оснований проверки.</p></details><details><summary>Какой документ я получу?</summary><p>Это зависит от программы и подтверждённых правовых оснований. Условия выдачи документов будут опубликованы до реального набора. Международные сертификаты не выдаются автоматически за собственный курс академии.</p></details><details><summary>Можно ли обучить команду компании?</summary><p>Для этого предусмотрено направление «Внутренняя академия предприятия». Состав программы, формат и условия нужно согласовать отдельно. Пока раздел описывает будущий сценарий.</p></details><details><summary>Это уже действующая учебная платформа?</summary><p>Сейчас это интерактивный прототип. Можно проверить роли, заявки и учебные инструменты. Данные сохраняются только в вашем браузере; реальные документы и персональные данные вводить нельзя.</p></details></div></div></section></div>`;
   }
   function dashboard() {
     if (tab === "messages") return messages();
@@ -254,22 +259,22 @@
       return (
         heading(
           "Мои документы",
-          "Только демонстрационные названия и статусы, без загрузки содержимого файлов.",
+          "Только условные названия и статусы, без загрузки содержимого файлов.",
         ) +
-        `<div class="warning">Не добавляйте паспорт, СНИЛС или реальные документы. В рабочей версии потребуется защищённое файловое хранилище.</div><form id="document-form" class="panel"><label>Тип документа<select name="type"><option>Документ об образовании · демо</option><option>Заявление · демо</option><option>Портфолио · демо</option></select></label><button class="button">Добавить демо-запись</button></form><div class="panel">${state.documents.length ? state.documents.map((d) => `<p>${esc(d.type)} <span class="badge">Запись добавлена</span> <button class="link" data-remove-doc="${esc(d.id)}">Удалить</button></p>`).join("") : "Пока нет документов."}</div>`
+        `<div class="warning">Не добавляйте паспорт, СНИЛС или реальные документы. В рабочей версии потребуется защищённое файловое хранилище.</div><form id="document-form" class="panel"><label>Тип документа<select name="type"><option>Документ об образовании</option><option>Заявление</option><option>Портфолио</option></select></label><button class="button">Добавить запись</button></form><div class="panel">${state.documents.length ? state.documents.map((d) => `<p>${esc(d.type)} <span class="badge">Запись добавлена</span> <button class="link" data-remove-doc="${esc(d.id)}">Удалить</button></p>`).join("") : "Пока нет документов."}</div>`
       );
     return (
       heading(
         "Ваш следующий шаг",
         "Выберите программу, подготовьте заявку и отслеживайте её статус.",
       ) +
-      `<div class="metrics"><div class="metric"><b>${state.applications.length}</b><span>демо-заявок</span></div><div class="metric"><b>${state.documents.length}</b><span>записей документов</span></div><div class="metric"><b>${programs.filter(open).length}</b><span>направлений с демо-приёмом</span></div></div><div class="two-col"><div class="panel"><h3>Маршрут поступления</h3><p>01 — Выбор программы<br>02 — Заявка и документы<br>03 — Рассмотрение приёмной комиссией<br>04 — Решение и договор</p><button class="button small" data-tab="application">Выбрать программу ↗</button></div><div class="panel"><h3>Мои заявки</h3>${applicationList(false)}</div></div><div class="panel"><h3>Обучение — после зачисления</h3><p class="subtle">Расписание, материалы и задания станут доступны в рабочей системе после зачисления. Сейчас вы в демонстрационном кабинете абитуриента.</p></div>`
+      `<div class="metrics"><div class="metric"><b>${state.applications.length}</b><span>локальных заявок</span></div><div class="metric"><b>${state.documents.length}</b><span>записей документов</span></div><div class="metric"><b>${programs.filter(open).length}</b><span>направлений с локальным приёмом</span></div></div><div class="two-col"><div class="panel"><h3>Маршрут поступления</h3><p>01 — Выбор программы<br>02 — Заявка и документы<br>03 — Рассмотрение приёмной комиссией<br>04 — Решение и договор</p><button class="button small" data-tab="application">Выбрать программу ↗</button></div><div class="panel"><h3>Мои заявки</h3>${applicationList(false)}</div></div><div class="panel"><h3>Обучение — после зачисления</h3><p class="subtle">Расписание, материалы и задания станут доступны в рабочей системе после зачисления. Сейчас вы в локальном кабинете абитуриента.</p></div>`
     );
   }
   function applicationForm(selected = "") {
     const available = programs.filter(open);
     return available.length
-      ? `<form id="application-form" class="panel"><label>Направление<select name="program" required>${available.map((p) => `<option value="${p.id}" ${selected === p.id ? "selected" : ""}>${p.title}</option>`).join("")}</select></label><div class="two-col"><label>Демонстрационное имя<input name="name" required maxlength="100" value="Алексей · демо"></label><label>Тестовый email<input name="email" type="email" required maxlength="150" value="applicant@example.test"></label></div><label>Учебная задача<textarea name="goal" required maxlength="1500" placeholder="Например: снизить избыточные запасы в учебном кейсе"></textarea></label><label class="check"><input type="checkbox" required>Подтверждаю, что использую только вымышленные данные и понимаю, что заявка сохраняется в этом браузере, а не отправляется в академию.</label><button class="button">Сохранить демо-заявку ↗</button></form>`
+      ? `<form id="application-form" class="panel"><label>Направление<select name="program" required>${available.map((p) => `<option value="${p.id}" ${selected === p.id ? "selected" : ""}>${p.title}</option>`).join("")}</select></label><div class="two-col"><label>Вымышленное имя<input name="name" required maxlength="100" value="Алексей"></label><label>Тестовый email<input name="email" type="email" required maxlength="150" value="applicant@example.test"></label></div><label>Учебная задача<textarea name="goal" required maxlength="1500" placeholder="Например: снизить избыточные запасы в учебном кейсе"></textarea></label><label class="check"><input type="checkbox" required>Подтверждаю, что использую только вымышленные данные и понимаю, что заявка сохраняется в этом браузере, а не отправляется в академию.</label><button class="button">Сохранить заявку ↗</button></form>`
       : `<div class="empty"><h3>Приём пока не открыт</h3><p>Администратору нужно проверить основания, заполнить сведения и включить приём по направлению.</p><a href="#programs" class="button outline small" data-action="logout">Посмотреть направления</a></div>`;
   }
   function applicationList(edit) {
@@ -287,7 +292,7 @@
         `<div class="warning">Галочка не подтверждает наличие лицензии. Перед открытием реального набора необходима юридическая проверка лицензии, аккредитации, договоров и партнёрских прав. Все направления по умолчанию опубликованы как планируемые, приём закрыт.</div><form id="settings-form">${programs
           .map((p) => {
             const s = state.settings[p.id];
-            return `<fieldset class="panel"><legend>${p.code}</legend><h3>${p.title}</h3><p class="subtle">${p.requirement}</p><label class="check"><input type="checkbox" name="${p.id}-visible" ${s.visible ? "checked" : ""}>Показать на витрине</label><label class="check"><input type="checkbox" name="${p.id}-verified" ${s.verified ? "checked" : ""}>Основания и условия проверены ответственным лицом (демо)</label><div class="two-col"><label>Реквизиты оснований / результат проверки<input name="${p.id}-evidence" maxlength="500" value="${esc(s.evidence)}" placeholder="Лицензия, реестр, договор или обоснование формата"></label><label>Дата проверки<input type="date" name="${p.id}-date" max="${new Date().toISOString().slice(0, 10)}" value="${esc(s.checkedAt)}"></label></div><label class="check"><input type="checkbox" name="${p.id}-admissions" ${s.admissions ? "checked" : ""}>Открыть демо-приём (нужны публикация, проверка, реквизиты и дата)</label></fieldset>`;
+            return `<fieldset class="panel"><legend>${p.code}</legend><h3>${p.title}</h3><p class="subtle">${p.requirement}</p><label class="check"><input type="checkbox" name="${p.id}-visible" ${s.visible ? "checked" : ""}>Показать на витрине</label><label class="check"><input type="checkbox" name="${p.id}-verified" ${s.verified ? "checked" : ""}>Основания и условия проверены ответственным лицом (локальная настройка)</label><div class="two-col"><label>Реквизиты оснований / результат проверки<input name="${p.id}-evidence" maxlength="500" value="${esc(s.evidence)}" placeholder="Лицензия, реестр, договор или обоснование формата"></label><label>Дата проверки<input type="date" name="${p.id}-date" max="${new Date().toISOString().slice(0, 10)}" value="${esc(s.checkedAt)}"></label></div><label class="check"><input type="checkbox" name="${p.id}-admissions" ${s.admissions ? "checked" : ""}>Открыть локальный приём (нужны публикация, проверка, реквизиты и дата)</label></fieldset>`;
           })
           .join("")}<button class="button">Сохранить настройки</button></form>`
       );
@@ -301,20 +306,20 @@
         "Платформа под контролем",
         "Семь направлений. Раздельное управление публикацией и приёмом.",
       ) +
-      `<div class="metrics"><div class="metric"><b>${programs.filter((p) => state.settings[p.id].visible).length}/7</b><span>опубликовано</span></div><div class="metric"><b>${programs.filter(open).length}</b><span>демо-приём открыт</span></div><div class="metric"><b>${state.applications.length}</b><span>заявок в браузере</span></div></div><div class="panel"><h3>Готовность к запуску</h3><p>Витрина → проверка оснований → публикация условий → открытие приёма.</p><p class="subtle">Для реальной эксплуатации ещё нужны серверная авторизация и роли, база данных, аудит изменений, защищённые документы, договоры и согласия.</p><button class="button small" data-tab="directions">Настроить направления ↗</button></div><div class="panel"><h3>Данные прототипа</h3><p class="subtle">Экспорт содержит заявки и сообщения из этого браузера. Сброс удаляет только данные нового раздела academy/.</p><div class="actions"><button class="button outline small" data-action="export">Экспорт JSON</button><button class="button outline small" data-action="reset">Сбросить демо-данные</button></div></div>`
+      `<div class="metrics"><div class="metric"><b>${programs.filter((p) => state.settings[p.id].visible).length}/7</b><span>опубликовано</span></div><div class="metric"><b>${programs.filter(open).length}</b><span>локальный приём открыт</span></div><div class="metric"><b>${state.applications.length}</b><span>заявок в браузере</span></div></div><div class="panel"><h3>Готовность к запуску</h3><p>Витрина → проверка оснований → публикация условий → открытие приёма.</p><p class="subtle">Для реальной эксплуатации ещё нужны серверная авторизация и роли, база данных, аудит изменений, защищённые документы, договоры и согласия.</p><button class="button small" data-tab="directions">Настроить направления ↗</button></div><div class="panel"><h3>Данные прототипа</h3><p class="subtle">Экспорт содержит заявки и сообщения из этого браузера. Сброс удаляет только данные нового раздела academy/.</p><div class="actions"><button class="button outline small" data-action="export">Экспорт JSON</button><button class="button outline small" data-action="reset">Сбросить локальные данные</button></div></div>`
     );
   }
   const learners = [
-    ["student-1", "Анна · демо"],
-    ["student-2", "Михаил · демо"],
-    ["student-3", "Елена · демо"],
+    ["student-1", "Анна"],
+    ["student-2", "Михаил"],
+    ["student-3", "Елена"],
   ];
   function teacher() {
     if (tab === "grading")
       return (
         heading(
           "Ведомость",
-          "Учебная группа SCM-01 · демонстрационные слушатели",
+          "Учебная группа SCM-01 · вымышленные слушатели",
         ) +
         `<div class="panel"><h3>Практикум: управление запасами</h3><div class="table-scroll"><table><thead><tr><th>Слушатель</th><th>Результат</th></tr></thead><tbody>${learners.map(([id, name]) => `<tr><td>${name}</td><td><select data-grade="${id}" aria-label="Результат: ${name}">${["Не проверено", "На доработку", "Зачёт"].map((g) => `<option ${state.grades[id] === g ? "selected" : ""}>${g}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table></div><p class="micro">Ведомость учебная, не является документом об аттестации.</p></div>`
       );
@@ -331,14 +336,14 @@
         "Рабочий стол преподавателя",
         "Учебные группы, задания и обратная связь в одном месте.",
       ) +
-      `<div class="metrics"><div class="metric"><b>01</b><span>демо-группа</span></div><div class="metric"><b>03</b><span>демо-слушателя</span></div><div class="metric"><b>${state.assignments.length}</b><span>заданий создано</span></div></div><div class="panel"><span class="badge">SCM-01 · ДЕМО</span><h3>Основы системного управления запасами</h3><p class="subtle">Учебная группа для проверки интерфейса. Не настоящий поток академии.</p><div class="actions"><button class="button small" data-tab="grading">Открыть ведомость ↗</button><button class="button outline small" data-tab="assignments">Создать задание</button></div></div>`
+      `<div class="metrics"><div class="metric"><b>01</b><span>учебная группа</span></div><div class="metric"><b>03</b><span>учебных слушателя</span></div><div class="metric"><b>${state.assignments.length}</b><span>заданий создано</span></div></div><div class="panel"><span class="badge">SCM-01 · ЛОКАЛЬНО</span><h3>Основы системного управления запасами</h3><p class="subtle">Учебная группа для проверки интерфейса. Не настоящий поток академии.</p><div class="actions"><button class="button small" data-tab="grading">Открыть ведомость ↗</button><button class="button outline small" data-tab="assignments">Создать задание</button></div></div>`
     );
   }
   function messages() {
     return (
       heading(
         "Сообщения",
-        "Локальная демонстрационная переписка между ролями, без отправки email.",
+        "Локальная переписка между ролями, без отправки email.",
       ) +
       `<div class="panel">${state.messages.length ? state.messages.map((m) => `<article><span class="badge">${esc({ applicant: "Абитуриент", learner: "Слушатель", teacher: "Преподаватель", admin: "Администратор", employer: "Работодатель" }[m.role])} · ${date(m.created)}</span><p style="white-space:pre-wrap">${esc(m.body)}</p></article>`).join("") : "Сообщений пока нет."}</div><form id="message-form" class="panel"><label>Новое сообщение<textarea name="body" required maxlength="2000" placeholder="Только вымышленные сведения"></textarea></label><button class="button">Сохранить сообщение</button></form>`
     );
@@ -354,7 +359,17 @@
   function login() {
     document.querySelector("#login-dialog").showModal();
   }
-  document.querySelector("#account-button").addEventListener("click", login);
+  const menuToggle = document.querySelector('.mobile-menu-toggle');
+  const primaryNavigation = document.querySelector('#primary-navigation');
+  const closeMenu = () => { menuToggle.setAttribute('aria-expanded', 'false'); primaryNavigation.classList.remove('is-open'); };
+  menuToggle.addEventListener('click', () => {
+    const expanded = menuToggle.getAttribute('aria-expanded') !== 'true';
+    menuToggle.setAttribute('aria-expanded', String(expanded));
+    primaryNavigation.classList.toggle('is-open', expanded);
+  });
+  primaryNavigation.addEventListener('click', e => { if (e.target.closest('a')) closeMenu(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && menuToggle.getAttribute('aria-expanded') === 'true') { closeMenu(); menuToggle.focus(); } });
+  document.querySelector("#account-button").addEventListener("click", () => { closeMenu(); login(); });
   document
     .querySelectorAll("dialog .close")
     .forEach((button) =>
@@ -428,13 +443,13 @@
         location.hash = t.hash || "home";
         break;
       case "reset":
-        if (confirm("Удалить все локальные данные демо-академии?")) {
+        if (confirm("Удалить все локальные данные академии?")) {
           state = initial();
           learning.resetView();
           for (const p of programs) state.settings[p.id].admissions = false;
           save();
           render();
-          toast("Демо-данные сброшены");
+          toast("Локальные данные сброшены");
         }
         break;
       case "export": {
@@ -443,7 +458,7 @@
         });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = "scm-academy-demo.json";
+        a.download = "scm-academy-local.json";
         a.click();
         setTimeout(() => URL.revokeObjectURL(a.href), 1000);
         break;
@@ -532,7 +547,7 @@
       save();
       tab = "overview";
       render();
-      toast("Демо-заявка сохранена. Она не отправлена в академию.");
+      toast("Заявка сохранена. Она не отправлена в академию.");
     }
     if (form.id === "document-form" && role === "applicant") {
       state.documents.push({ id: id(), type: f.get("type") });

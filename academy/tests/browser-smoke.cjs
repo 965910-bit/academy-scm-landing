@@ -51,6 +51,7 @@ const path = require('node:path');
         await p.goto(base + '#/' + route);
         await p.locator('.portal-page').waitFor();
         assert.equal(await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `Portal ${route} overflow at ${width}px`);
+        assert.doesNotMatch(await p.locator('body').innerText(), /демо|demo/i);
         await screenshot(`portal-${route.replace('/', '-')}-${width}`);
       }
     }
@@ -72,7 +73,7 @@ const path = require('node:path');
     await p.locator('[name="reviewed"]').check();
     await p.locator('.learning-review-form button').click();
     await role('learner'); await tab('skills');
-    await p.getByText('Подтверждено в демо', { exact: true }).waitFor();
+    await p.getByText('Проверено локально', { exact: true }).waitFor();
     const code = await p.evaluate(() => JSON.parse(localStorage.getItem('scm-academy-demo-v1')).learning.attempts[0].recordCode);
     await role('employer');
     await p.locator('[name="code"]').fill(code);
@@ -104,6 +105,32 @@ const path = require('node:path');
       await role('learner'); await tab('courses');
       assert.equal(await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `Course overflow at ${width}px`);
       await screenshot(`mobile-courses-${width}`);
+    }
+    // Every role and cabinet screen remains usable on phone and tablet widths.
+    for (const width of [320, 390, 768]) {
+      await p.setViewportSize({ width, height: 844 });
+      for (const r of ['applicant', 'learner', 'teacher', 'admin', 'employer']) {
+        await role(r);
+        const tabs = await p.locator('.sidebar [data-tab]').evaluateAll(items => items.map(e => e.dataset.tab));
+        for (const t of tabs) {
+          await tab(t);
+          if (await p.evaluate(() => document.documentElement.scrollWidth > innerWidth)) {
+            console.log(await p.evaluate(() => [...document.querySelectorAll('body *')].filter(e => e.getBoundingClientRect().right > innerWidth + 1).map(e => [e.tagName,e.className,e.getBoundingClientRect().width,e.getBoundingClientRect().right])));
+            await screenshot(`overflow-${r}-${t}-${width}`);
+          }
+          assert.equal(await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `${r}/${t} overflow at ${width}px`);
+          assert.doesNotMatch(await p.locator('body').innerText(), /демо|demo/i, `${r}/${t} contains removed label`);
+          if (width === 390 && ['lab', 'directions', 'grading'].includes(t)) await screenshot(`mobile-${r}-${t}`);
+        }
+      }
+      await p.locator('.mobile-menu-toggle').click();
+      await p.locator('#primary-navigation a[href="#/catalog"]').click();
+      await p.locator('#portal-search').waitFor();
+      assert.equal(await p.locator('.mobile-menu-toggle').getAttribute('aria-expanded'), 'false');
+      await p.locator('.mobile-menu-toggle').click();
+      await p.keyboard.press('Escape');
+      assert.equal(await p.locator('.mobile-menu-toggle').getAttribute('aria-expanded'), 'false');
+      await screenshot(`mobile-navigation-${width}`);
     }
     assert.deepEqual(errors, []);
     console.log('PASS: desktop/mobile, calculator, learning/review/verification, offline hash reload, no page errors.');
