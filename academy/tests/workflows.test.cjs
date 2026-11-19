@@ -25,6 +25,7 @@ function app(storage) {
   w.eval(fs.readFileSync(path.join(root, "offline.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "learning.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "portal.js"), "utf8"));
+  w.eval(fs.readFileSync(path.join(root, "curriculum.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
   const $ = (s) => w.document.querySelector(s);
   const click = (s) => {
@@ -345,4 +346,38 @@ test('Все кабинеты используют новые подписи и 
   for(const tab of tabs){a.tab(tab);assert.doesNotMatch(a.$('#main').textContent,/демо|demo/i,`${r}/${tab}`);}
  }
  assert.match(a.$('#main').textContent,/не доказывает личность/);a.click('#account-button');assert.match(a.$('#login-dialog').textContent,/не настоящая авторизация/);a.dom.window.close();
+});
+
+function curriculumStudent(a,name='Участник 01',cohort='SCM-01'){
+ a.role('admin');a.tab('students');a.value('[name="name"]',name);a.value('[name="cohort"]',cohort);a.submit('#curriculum-student');
+}
+function curriculumAllocate(a,module='inventory',target){
+ a.tab('allocations');a.value('[name="target"]',target||`student:${a.state().curriculum.students[0].id}`);a.value('[name="module"]',module);a.value('[name="due"]','2027-03-01');a.submit('#curriculum-allocate');
+}
+test('База: 12 модулей с теорией, кейсом, заданием и критериями',()=>{
+ const a=app();a.role('admin');a.tab('library');const buttons=[...a.w.document.querySelectorAll('[data-curriculum-module]')].map(b=>b.dataset.curriculumModule);assert.equal(buttons.length,12);
+ for(const id of buttons){a.click(`[data-curriculum-module="${id}"]`);assert.match(a.$('#main').textContent,/Практическое задание/);assert.match(a.$('#main').textContent,/Критерии рассмотрения/);assert.ok(a.w.document.querySelectorAll('.lesson-body section').length>=3);a.click('[data-curriculum-back]');}
+ a.dom.window.close();
+});
+test('Реестр студентов: валидация, дубликаты, экранирование',()=>{
+ const a=app();curriculumStudent(a,'<img src=x>');assert.equal(a.$('#main img'),null);assert.equal(a.state().curriculum.students.length,1);
+ a.value('[name="name"]','<img src=x>');a.value('[name="cohort"]','SCM-01');a.submit('#curriculum-student');assert.equal(a.state().curriculum.students.length,1);a.dom.window.close();
+});
+test('Назначения: группа, целый маршрут, отсутствие дублей и снимок содержания',()=>{
+ const a=app();curriculumStudent(a);curriculumStudent(a,'Участник 02');curriculumAllocate(a,'track:intensive','group:SCM-01');const saved=a.state();assert.equal(saved.curriculum.allocations.length,6);assert.equal(saved.curriculum.allocations[0].snapshot.version,1);assert.ok(saved.curriculum.allocations[0].snapshot.task);
+ curriculumAllocate(a,'track:intensive','group:SCM-01');assert.equal(a.state().curriculum.allocations.length,6);a.dom.window.close();
+});
+test('Индивидуальное назначение не показывается другому локальному профилю',()=>{
+ const a=app();curriculumStudent(a);curriculumStudent(a,'Участник 02');curriculumAllocate(a);
+ a.role('learner');a.tab('studyplan');assert.equal(a.w.document.querySelectorAll('[data-curriculum-allocation]').length,1);
+ a.value('[name="student"]',a.state().curriculum.students[1].id);a.submit('#curriculum-profile');assert.equal(a.$('[data-curriculum-allocation]'),null);a.dom.window.close();
+});
+test('Назначение → решение → доработка → повторная отправка → проверка человеком',()=>{
+ const a=app();curriculumStudent(a);curriculumAllocate(a,'procurement');a.role('learner');a.tab('studyplan');a.click('[data-curriculum-allocation]');a.value('[name="answer"]','Коротко');a.submit('#curriculum-answer');assert.equal(a.state().curriculum.allocations[0].status,'assigned');
+ const answer='Сравниваю полную стоимость заказа и стоимость пригодной единицы. Отдельно указываю потери от брака и допущения расчёта.';
+ a.value('[name="answer"]',answer);a.submit('#curriculum-answer');assert.equal(a.state().curriculum.allocations[0].status,'submitted');
+ a.role('teacher');a.tab('responses');a.value('[name="feedback"]','Нужно добавить численный расчёт стоимости пригодной единицы.');a.$('[name="reviewed"]').checked=true;a.submit('.curriculum-review');assert.equal(a.state().curriculum.allocations[0].status,'revision');
+ a.role('learner');a.tab('studyplan');a.click('[data-curriculum-allocation]');assert.equal(a.$('[name="answer"]').value,answer);a.value('[name="answer"]',answer+' Стоимость пригодной единицы Б: 107000 / 980.');a.submit('#curriculum-answer');
+ a.role('admin');a.tab('responses');a.value('[name="decision"]','approved');a.value('[name="feedback"]','Расчёт и ограничения рассмотрены. Учебное решение принято локально.');a.submit('.curriculum-review');assert.equal(a.state().curriculum.allocations[0].status,'submitted');a.$('[name="reviewed"]').checked=true;a.submit('.curriculum-review');assert.equal(a.state().curriculum.allocations[0].status,'approved');
+ const b=app(a.state());b.role('learner');b.tab('studyplan');assert.match(b.$('#main').textContent,/Проверено локально/);b.dom.window.close();a.dom.window.close();
 });
