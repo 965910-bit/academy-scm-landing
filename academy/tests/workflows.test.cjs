@@ -510,3 +510,10 @@ test('Документы: изменение проверенного проек
  const a=app();a.role('learner');a.tab('documents');a.click('[data-document-draft="study-certificate"]');const stored=a.state();stored.documentDrafts[0].status='reviewed';stored.documentDrafts[0].reviewedAt='2026-11-19';delete stored.documentDrafts[0].content;delete stored.documentDrafts[0].revision;
  const b=app(stored);b.role('admin');b.tab('documents');b.click('[data-document-edit]');assert.match(b.$('#main').textContent,/снимет отметку/);b.value('[name="body"]','Изменённое содержание справки');b.submit('#document-editor');const r=b.state().documentDrafts[0];assert.equal(r.status,'draft');assert.equal(r.reviewedAt,undefined);assert.equal(r.revision,2);assert.equal(r.content.body,'Изменённое содержание справки');b.dom.window.close();a.dom.window.close();
 });
+
+test('Студенческий билет виден в меню и открывает заполнение, сохранённые карточки и печать',()=>{
+ const a=app();try{a.role('admin');assert.ok(a.$('.sidebar [data-tab="student-card"]'));a.tab('student-card');assert.match(a.$('#main').textContent,/Студенческий билет/);assert.equal(a.$('[data-document-draft="contract"]'),null);
+ a.click('[data-document-draft="student-card"]');assert.ok(a.$('#document-editor'));a.value('[name="recipient"]','Герасимов Дмитрий Сергеевич');a.submit('#document-editor');a.click('[data-document-back]');assert.match(a.$('#main').textContent,/Сохранённые студенческие билеты/);a.click('[data-document-edit]');assert.equal(a.$('[name="recipient"]').value,'Герасимов Дмитрий Сергеевич');assert.ok(a.$('[data-document-preview]'));assert.ok(a.$('[data-document-html]'));assert.ok(a.$('[data-document-print]'));
+ a.role('learner');assert.ok(a.$('.sidebar [data-tab="student-card"]'));
+ }finally{a.dom.window.close();}
+});
