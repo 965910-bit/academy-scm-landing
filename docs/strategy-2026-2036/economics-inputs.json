@@ -1,0 +1,30 @@
+{
+  "status": "HYPOTHESIS: illustrative assumptions, not Academy actuals or vendor prices",
+  "currency": "RUB",
+  "as_of": "2026-11-19",
+  "b2c": {
+    "price_per_month": 1800,
+    "non_ai_variable_cost_per_month": 600,
+    "queries_per_month": 100,
+    "input_tokens_per_query": 2000,
+    "output_tokens_per_query": 300,
+    "input_price_per_million": 600,
+    "output_price_per_million": 1800,
+    "retry_factor": 1.2,
+    "monthly_churn": 0.08,
+    "cac": 4500,
+    "free_active_cost_per_month": 20
+  },
+  "b2b": {
+    "annual_revenue": 1200000,
+    "annual_infra_ai": 180000,
+    "annual_content_delivery": 240000,
+    "annual_customer_support": 120000,
+    "annual_amortized_integration": 120000,
+    "cac": 450000,
+    "annual_logo_churn": 0.15,
+    "horizon_years": 5,
+    "fixed_opex_per_year": 18000000,
+    "pilot_accounts": 6
+  }
+}
