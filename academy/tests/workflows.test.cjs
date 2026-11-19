@@ -25,6 +25,7 @@ function app(storage) {
   w.eval(fs.readFileSync(path.join(root, "offline.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "learning.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "portal.js"), "utf8"));
+  w.eval(fs.readFileSync(path.join(root, "knowledge.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "curriculum.js"), "utf8"));
   w.TextEncoder = TextEncoder;
   w.eval(fs.readFileSync(path.join(root, "study-tools.js"), "utf8"));
@@ -457,4 +458,30 @@ test('Транспортная модель валидирует границы 
 test('Лимит разборов не удаляет старые записи автоматически',()=>{
  const a=app();a.role('learner');a.tab('decisionlab');a.submit('#decision-calculate');a.value('[name="reason"]','Учебное решение основано на сравнении затрат и ограничениях качества поставки.');a.submit('#decision-save');const old=a.state();old.decisionCases=Array.from({length:20},(_,i)=>({...old.decisionCases[0],id:`case-${i}`}));
  const b=app(old);b.role('learner');b.tab('decisionlab');b.submit('#decision-calculate');b.value('[name="reason"]','Ещё одно учебное решение с допущениями и проверкой границ модели поставки.');b.submit('#decision-save');assert.equal(b.state().decisionCases.length,20);assert.equal(b.state().decisionCases[0].id,'case-0');assert.match(b.$('#toast').textContent,/Лимит 20/);b.dom.window.close();a.dom.window.close();
+});
+
+test('База знаний: 10 уникальных первоисточников с датами и ограничениями',()=>{
+ const a=app();const sources=a.w.SCMKnowledge.sources;assert.equal(sources.length,10);assert.equal(new Set(sources.map(s=>s.id)).size,10);
+ for(const s of sources){assert.equal(new URL(s.url).protocol,'https:');assert.equal(s.checked,'2026-11-19');assert.ok(s.limits.length>30);assert.ok(s.task.length>40);}
+ a.role('learner');a.tab('knowledge');assert.equal(a.w.document.querySelectorAll('[data-knowledge-bookmark]').length,10);assert.match(a.$('#main').textContent,/внешние сайты требуют сети/);a.dom.window.close();
+});
+test('База знаний: поиск, закладки, пустая выборка и сохранение',()=>{
+ const a=app();a.role('learner');a.tab('knowledge');a.value('[name="query"]','EPCIS');a.submit('#knowledge-search');assert.equal(a.w.document.querySelectorAll('[data-knowledge-bookmark]').length,1);a.click('[data-knowledge-bookmark="epcis"]');assert.deepEqual(a.state().knowledgeBookmarks,['epcis']);
+ const b=app(a.state());b.role('teacher');b.tab('knowledge');b.$('[name="bookmarks"]').checked=true;b.submit('#knowledge-search');assert.equal(b.w.document.querySelectorAll('[data-knowledge-bookmark]').length,1);b.click('[data-knowledge-bookmark="epcis"]');assert.match(b.$('#main').textContent,/Ничего не найдено/);b.value('[name="query"]','<img src=x>');b.submit('#knowledge-search');assert.equal(b.$('#main img'),null);b.dom.window.close();a.dom.window.close();
+});
+test('Источник назначается группе как снимок, без повторных активных назначений',()=>{
+ const a=app();curriculumStudent(a);curriculumStudent(a,'Участник 02');a.tab('knowledge');
+ for(let i=0;i<2;i++){a.value('[name="source"]','epcis');a.value('[name="target"]','group:SCM-01');a.value('[name="due"]','2027-05-01');a.submit('#knowledge-assign');}
+ assert.equal(a.state().curriculum.allocations.length,2);const snap=a.state().curriculum.allocations[0].snapshot;assert.equal(snap.id,'reading:epcis');assert.match(snap.sections[1][1],/2026-11-19/);assert.match(snap.task,/часовой пояс/);
+ a.role('learner');a.tab('studyplan');a.click('[data-curriculum-allocation]');assert.equal(a.$('.knowledge-related a').href,'https://www.gs1.org/standards/epcis');a.value('[name="answer"]','В событии фиксирую объект, время с часовым поясом, место, операцию и источник. Для дубликатов определяю ключ события.');a.submit('#curriculum-answer');a.role('teacher');a.tab('responses');assert.ok(a.$('.curriculum-review'));assert.match(a.$('#main').textContent,/Работа с источником/);a.dom.window.close();
+});
+test('Существующий учебный модуль получил связанные источники без изменения теста',()=>{
+ const a=app();a.role('admin');a.tab('library');a.click('[data-curriculum-module="digital"]');assert.match(a.$('.knowledge-related').textContent,/EPCIS/);assert.match(a.$('#main').textContent,/Практическое задание/);a.dom.window.close();
+});
+test('В базе явно различаются будущая редакция, старый курс и опасные грузы',()=>{
+ const a=app(),sources=a.w.SCMKnowledge.sources;assert.match(sources.find(s=>s.id==='iata').limits,/ещё не наступила/);assert.match(sources.find(s=>s.id==='mitocw').edition,/2011/);assert.match(sources.find(s=>s.id==='imdg').limits,/недопустимы/);a.role('learner');a.tab('knowledge');assert.equal(a.$('#knowledge-assign'),null);a.dom.window.close();
+});
+
+test('Некорректная дата не создаёт назначение источника',()=>{
+ const a=app();curriculumStudent(a);a.tab('knowledge');a.value('[name="target"]','group:SCM-01');a.value('[name="due"]','');a.submit('#knowledge-assign');assert.equal(a.state().curriculum.allocations.length,0);assert.match(a.$('#toast').textContent,/корректную дату/);a.dom.window.close();
 });
