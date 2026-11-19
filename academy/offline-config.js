@@ -1,11 +1,11 @@
 /* Shared, versioned public-shell manifest. Never include private API responses here. */
 self.SCM_OFFLINE_CONFIG = {
-  cacheName: "scm-academy-shell-v17",
+  cacheName: "scm-academy-shell-v18",
   files: [
     "./", "index.html", "styles.css", "app.js", "identity.js", "portal.js", "curriculum.js", "knowledge.js", "study-tools.js", "decision-lab.js", "learning.js", "offline.js",
     "guides/", "guides/index.html", "guides/guides.css",
     "guides/scor/index.html", "guides/scor/", "guides/cscmp/index.html", "guides/cscmp/", "guides/incoterms/index.html", "guides/incoterms/", "guides/epcis/index.html", "guides/epcis/", "guides/safe/index.html", "guides/safe/", "guides/imdg/index.html", "guides/imdg/", "guides/iata/index.html", "guides/iata/", "guides/glec/index.html", "guides/glec/", "guides/mitocw/index.html", "guides/mitocw/", "guides/unctad/index.html", "guides/unctad/",
-    "vendor/qrcode.js", "student-card.js", "documents.js", "documents/catalog.js", "documents/", "documents/index.html",
+    "vendor/qrcode.js", "student-card.js", "manual-records.js", "documents.js", "documents/catalog.js", "documents/", "documents/index.html",
     "offline-config.js", "manifest.webmanifest", "assets/app-icon.svg", "assets/supply-network.svg", "assets/operations-cover.jpg"
   ]
 };
