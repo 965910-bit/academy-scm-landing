@@ -1840,3 +1840,40 @@ th {
  .portal-subnav { gap: 16px; font-size: 13px; }
  .portal-facts { padding: 24px; }
 }
+
+/* Shared mobile shell: navigation remains reachable on phones and tablets. */
+.mobile-menu-toggle { display: none; }
+@media (max-width: 960px) {
+  .header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+  .mobile-menu-toggle { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: white; color: var(--ink, #24183f); font: inherit; font-size: 14px; cursor: pointer; }
+  .header #account-button { grid-column: 1 / -1; width: 100%; min-height: 44px; }
+  .header #primary-navigation { display: none; grid-column: 1 / -1; padding: 12px; background: white; border: 1px solid var(--line); border-radius: 14px; }
+  .header #primary-navigation.is-open { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .header #primary-navigation a { display: flex; align-items: center; min-height: 44px; padding: 10px; border-radius: 8px; background: #f5f0fc; }
+  .workspace > section, .workspace > aside, .panel, fieldset { min-width: 0; }
+}
+@media (max-width: 650px) {
+  .workspace { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .sidebar { position: static; }
+  .sidebar button { min-height: 44px; }
+  .button, .chip, .portal-compare-toggle, button.link { min-height: 44px; }
+  input:not([type="checkbox"]):not([type="radio"]), select, textarea { font-size: 16px; min-width: 0; max-width: 100%; }
+  input[type="checkbox"], input[type="radio"] { flex-shrink: 0; }
+  .panel, .dashboard-head, .learning-review-form, .work-receipt { overflow-wrap: anywhere; }
+  fieldset { padding: 18px; margin-inline: 0; }
+  legend { max-width: 100%; overflow-wrap: anywhere; }
+  .table-scroll { max-width: 100%; }
+  .table-scroll table { min-width: 520px; }
+  .dashboard-head { flex-wrap: wrap; gap: 12px; }
+  .dashboard-head h1 { font-size: clamp(27px, 8vw, 36px); }
+  .result-line { flex-wrap: wrap; gap: 8px; }
+  .result-line strong { overflow-wrap: anywhere; }
+  .skill-row { min-width: 0; }
+  .skill-row > div { min-width: 0; }
+  dialog { width: calc(100% - 24px); max-height: calc(100dvh - 24px); overflow-y: auto; padding: 24px; box-sizing: border-box; }
+  #toast { bottom: max(16px, env(safe-area-inset-bottom)); overflow-wrap: anywhere; }
+}
+@media (max-width: 650px) {
+  .metrics { grid-template-columns: minmax(0, 1fr); }
+  .metric { min-width: 0; }
+}
