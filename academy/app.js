@@ -230,21 +230,7 @@
         state.settings[p.id].visible &&
         (filter === "all" || p.audience === filter),
     );
-    return `<div class="container"><section class="hero" id="home"><div><span class="eyebrow">ШКОЛА СИСТЕМНОГО УПРАВЛЕНИЯ</span><h1>Цепи поставок.<br>Системное мышление.<br><em>Новый масштаб.</em></h1><p class="lead">Академия для тех, кто проектирует, управляет и меняет цепи поставок. От конкретной задачи до стратегии предприятия.</p><div class="actions"><a class="button" href="#programs">Выбрать направление ↗</a><button class="button outline" data-action="login">Мой учебный маршрут</button></div><span class="micro">Для специалистов, руководителей и корпоративных команд</span></div><div class="visual" aria-label="Схема связей глобальной цепи поставок"><div class="visual-top"><span>SCM / CONNECTED THINKING</span><span>01 — 07</span></div><svg class="network" viewBox="0 0 520 400" fill="none" aria-hidden="true"><path d="M-40 280 130 205 285 285 460 180 560 225M130 205 130 88 285 165 460 65M285 285 285 165 130 88M460 180 460 65M-40 160 130 88 285 165 460 180M130 205 285 165M285 285 460 65" stroke="#a4c2a1" stroke-width="1.3"/><path d="m130 205 155 80 175-105" stroke="#d8f16c" stroke-width="3"/>${[
-      [130, 205],
-      [285, 285],
-      [460, 180],
-      [130, 88],
-      [285, 165],
-      [460, 65],
-    ]
-      .map(
-        ([x, y], i) =>
-          `<circle cx="${x}" cy="${y}" r="${i < 3 ? 8 : 5}" fill="${i < 3 ? "#d8f16c" : "#8aab92"}"/><circle cx="${x}" cy="${y}" r="18" stroke="#b2d3a6" opacity=".35"/>`,
-      )
-      .join(
-        "",
-      )}<text x="92" y="245" fill="#c5d8c3" font-size="10">SOURCE</text><text x="250" y="325" fill="#c5d8c3" font-size="10">TRANSFORM</text><text x="420" y="220" fill="#c5d8c3" font-size="10">DELIVER</text></svg><div class="float-card"><span class="micro">ЕДИНАЯ ЭКОСИСТЕМА</span><b>7 направлений</b><span class="micro">Один системный взгляд</span></div><span class="visual-label">ОТ ЛОКАЛЬНОГО РЕШЕНИЯ К ЦЕЛОЙ СИСТЕМЕ ↗</span></div></section><div class="stats"><div><b>07</b><span>траекторий в архитектуре</span></div><div><b>Практика</b><span>в основе учебного подхода</span></div><div><b>B2B + B2C</b><span>команды и специалисты</span></div><div><b>Одна среда</b><span>поступление и обучение</span></div></div><section class="section" id="programs"><span class="eyebrow">ОБРАЗОВАТЕЛЬНАЯ АРХИТЕКТУРА</span><div class="section-head"><h2>Ваша следующая<br>точка роста</h2><p>Выберите масштаб задачи. Планируемые направления отмечены отдельно: публикация не означает открытый набор.</p></div><div class="filters" aria-label="Фильтр направлений">${[
+    return `<div class="container"><section class="hero" id="home"><div><span class="eyebrow">ОБРАЗОВАНИЕ ДЛЯ НОВОЙ ЭКОНОМИКИ</span><h1>Соединяйте знания.<br>Управляйте <em>будущим.</em></h1><p class="lead">Цепи поставок — это целый мир. Научитесь видеть его целиком: от первого решения в закупках до стратегии глобальной сети.</p><div class="actions"><a class="button" href="#programs">Выбрать направление ↗</a><button class="button outline" data-action="login">Мой учебный маршрут</button></div><div class="hero-topics"><span>SCM & логистика</span><span>Лидерство</span><span>Технологии</span></div></div><div class="visual" aria-label="Иллюстрация единой экосистемы цепей поставок"><div class="visual-top"><span><i></i> SUPPLY CHAIN / NEXT LEVEL</span><span>SCM OS · 01</span></div><img class="supply-art" src="assets/supply-network.svg" alt="Объёмная схема цепи поставок: склад, грузовик, грузы и аналитика" width="640" height="540" fetchpriority="high"><div class="visual-caption"><span class="live-dot"></span> Всё связано. И всё начинается с вас.</div><span class="orbit-tag">Закупки</span><span class="orbit-tag second">Аналитика ↗</span></div></section><div class="stats"><div><b>07</b><span>траекторий в архитектуре</span></div><div><b>Практика</b><span>в основе учебного подхода</span></div><div><b>B2B + B2C</b><span>команды и специалисты</span></div><div><b>Одна среда</b><span>поступление и обучение</span></div></div><section class="section" id="programs"><span class="eyebrow">ОБРАЗОВАТЕЛЬНАЯ АРХИТЕКТУРА</span><div class="section-head"><h2>Ваша следующая<br>точка роста</h2><p>Выберите масштаб задачи. Планируемые направления отмечены отдельно: публикация не означает открытый набор.</p></div><div class="filters" aria-label="Фильтр направлений">${[
       ["all", "Все направления"],
       ["leaders", "Руководителям"],
       ["practice", "Практикам"],
@@ -257,7 +243,7 @@
       )
       .join(
         "",
-      )}</div><div class="grid">${shown.map((p) => `<article class="card"><span class="number">${p.code}</span><h3>${p.title}</h3><p>${p.text}</p><p class="micro">${p.document}</p><div class="card-meta"><span>${p.duration}</span><span class="badge ${open(p) ? "" : "planned"}">${open(p) ? "Демо-приём открыт" : "Подготовка к запуску"}</span></div><button class="button outline small" data-program="${p.id}">${open(p) ? "Подать демо-заявку ↗" : "Посмотреть условия ↗"}</button></article>`).join("") || '<p class="empty">В этой категории пока нет опубликованных направлений.</p>'}</div><p class="micro" style="margin-top:20px">Даты, стоимость и преподаватели будут опубликованы после утверждения программ. Дипломы государственного образца и международные партнёрства не заявляются.</p></section><section class="section" id="approach"><div class="dark"><div><span class="eyebrow">НЕ ПРОСТО НАБОР ЛЕКЦИЙ</span><h2>Учиться видеть<br>всю цепь.</h2><p>Закупки, производство, запасы, транспорт и клиентский сервис — не отдельные дисциплины, а части одного решения.</p><button class="button lime" data-action="login">Открыть личный кабинет ↗</button></div><div class="steps"><div class="step"><b>01</b><div><h3>Определить задачу</h3><p>Выбрать направление и пройти входную диагностику.</p></div></div><div class="step"><b>02</b><div><h3>Проверить на практике</h3><p>Работать с кейсами, данными и обратной связью преподавателя.</p></div></div><div class="step"><b>03</b><div><h3>Собрать решение</h3><p>Связать инструменты в проект изменений для своей цепи поставок.</p></div></div></div></div></section><section class="section" id="enterprise"><div class="enterprise"><div><span class="eyebrow">КОРПОРАТИВНАЯ АКАДЕМИЯ</span><h2>Одна команда.<br>Общий язык управления.</h2><p>От матрицы компетенций до проектной работы: создайте внутреннюю траекторию развития под процессы вашего предприятия.</p></div><button class="button" data-program="corporate">Обсудить формат ↗</button></div></section></div>`;
+      )}</div><div class="grid">${shown.map((p) => `<article class="card" data-direction="${p.id}"><span class="course-icon" aria-hidden="true">${{ higher: "◈", mba: "↗", intensive: "ϟ", retraining: "▦", international: "◎", corporate: "⬡", seminars: "✳" }[p.id]}</span><span class="number">${p.code}</span><h3>${p.title}</h3><p>${p.text}</p><p class="micro">${p.document}</p><div class="card-meta"><span>${p.duration}</span><span class="badge ${open(p) ? "" : "planned"}">${open(p) ? "Демо-приём открыт" : "Подготовка к запуску"}</span></div><button class="button outline small" data-program="${p.id}">${open(p) ? "Подать демо-заявку ↗" : "Посмотреть условия ↗"}</button></article>`).join("") || '<p class="empty">В этой категории пока нет опубликованных направлений.</p>'}</div><p class="micro" style="margin-top:20px">Даты, стоимость и преподаватели будут опубликованы после утверждения программ. Дипломы государственного образца и международные партнёрства не заявляются.</p></section><section class="section" id="approach"><div class="dark"><div class="approach-intro"><span class="eyebrow">НЕ ПРОСТО НАБОР ЛЕКЦИЙ</span><h2>Учиться видеть<br>всю цепь.</h2><p>Закупки, производство, запасы, транспорт и клиентский сервис — не отдельные дисциплины, а части одного решения.</p><button class="button lime" data-action="login">Открыть личный кабинет ↗</button></div><div class="steps"><div class="step"><b>01</b><div><h3>Определить задачу</h3><p>Выбрать направление и сформулировать задачу для развития.</p></div></div><div class="step"><b>02</b><div><h3>Проверить на практике</h3><p>Работать с кейсами, данными и обратной связью преподавателя.</p></div></div><div class="step"><b>03</b><div><h3>Собрать решение</h3><p>Связать инструменты в проект изменений для своей цепи поставок.</p></div></div></div></div></section><section class="section" id="platform"><span class="eyebrow">ВАША ТОЧКА ВХОДА</span><div class="section-head"><h2>Не просто учиться.<br>Быть частью системы.</h2><p>У каждого своя роль. У всех — общее пространство для развития.</p></div><div class="role-grid"><article class="role-card"><span class="role-symbol" aria-hidden="true">↗</span><span class="number">01 / ПОСТУПЛЕНИЕ</span><h3>Мой следующий уровень</h3><p>Выбор направления, заявка и её статус. Понятный маршрут от интереса к поступлению.</p><button class="button outline" data-role-entry="applicant">Я абитуриент ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">✳</span><span class="number">02 / ПРЕПОДАВАНИЕ</span><h3>Делиться опытом. Менять мышление.</h3><p>Учебные группы, задания и ведомость — инструменты преподавателя в одном кабинете.</p><button class="button outline" data-role-entry="teacher">Я преподаватель ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">◈</span><span class="number">03 / УПРАВЛЕНИЕ</span><h3>Вся академия под контролем</h3><p>Семь направлений, условия запуска и заявки. Раздельное управление публикацией и приёмом.</p><button class="button outline" data-role-entry="admin">Управление платформой ↗</button></article></div></section><section class="section" id="enterprise"><div class="enterprise"><div><span class="eyebrow">КОРПОРАТИВНАЯ АКАДЕМИЯ</span><h2>Одна команда.<br>Общий язык управления.</h2><p>От матрицы компетенций до проектной работы: создайте внутреннюю траекторию развития под процессы вашего предприятия.</p></div><button class="button" data-program="corporate">Обсудить формат ↗</button></div></section><section class="section faq" id="questions"><span class="eyebrow">ЕСТЬ ВОПРОСЫ?</span><div class="faq-layout"><h2>Всё важное.<br>Без мелкого шрифта.</h2><div><details><summary>Какие направления уже открыты?</summary><p>Текущий статус указан на карточке каждого направления. По умолчанию все программы планируются, приём закрыт. Администратор может открыть демо-приём после заполнения оснований проверки.</p></details><details><summary>Какой документ я получу?</summary><p>Это зависит от программы и подтверждённых правовых оснований. Условия выдачи документов будут опубликованы до реального набора. Международные сертификаты не выдаются автоматически за собственный курс академии.</p></details><details><summary>Можно ли обучить команду компании?</summary><p>Для этого предусмотрено направление «Внутренняя академия предприятия». Состав программы, формат и условия нужно согласовать отдельно. Пока раздел демонстрирует будущий сценарий.</p></details><details><summary>Это уже действующая учебная платформа?</summary><p>Сейчас это интерактивный прототип. Можно проверить роли, заявки и учебные инструменты. Данные сохраняются только в вашем браузере; реальные документы и персональные данные вводить нельзя.</p></details></div></div></section></div>`;
   }
   function dashboard() {
     if (tab === "messages") return messages();
@@ -390,6 +376,11 @@
   document.addEventListener("click", (e) => {
     const t = e.target.closest("button,a");
     if (!t) return;
+    if (t.dataset.roleEntry) {
+      document.querySelector("#login-form select").value = t.dataset.roleEntry;
+      login();
+      return;
+    }
     if (t.dataset.filter) {
       const top = window.scrollY;
       filter = t.dataset.filter;
@@ -577,26 +568,20 @@
     }
   });
   window.addEventListener("hashchange", () => {
-    if (
-      ["#home", "#programs", "#approach", "#enterprise"].includes(
-        location.hash,
-      ) &&
-      role
-    ) {
+    const sections = [
+      "#home",
+      "#programs",
+      "#approach",
+      "#enterprise",
+      "#platform",
+      "#questions",
+    ];
+    if (!sections.includes(location.hash)) return;
+    if (role) {
       role = null;
       render();
     }
-    document
-      .querySelector(
-        location.hash === "#programs"
-          ? "#programs"
-          : location.hash === "#approach"
-            ? "#approach"
-            : location.hash === "#enterprise"
-              ? "#enterprise"
-              : "#home",
-      )
-      ?.scrollIntoView();
+    document.querySelector(location.hash)?.scrollIntoView();
   });
   render();
 })();
