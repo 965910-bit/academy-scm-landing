@@ -36,6 +36,7 @@ function app(storage) {
   w.eval(fs.readFileSync(path.join(root, "decision-lab.js"), "utf8"));
   // Identity double for synchronous UI regression tests only. Real access is tested against HTTP.
   w.SCMIdentity={workspace:storage||null,user:null,login(name){this.user={id:name,name,role:name};return this.user;}};
+  w.eval(fs.readFileSync(path.join(root, "manual-records.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
   const $ = (s) => w.document.querySelector(s);
   const click = (s) => {
@@ -358,7 +359,7 @@ test('Все кабинеты используют новые подписи и 
   a.role(r);const tabs=[...a.w.document.querySelectorAll('.sidebar [data-tab]')].map(t=>t.dataset.tab);
   for(const tab of tabs){a.tab(tab);assert.doesNotMatch(a.$('#main').textContent,/демо|demo/i,`${r}/${tab}`);}
  }
- assert.match(a.$('#main').textContent,/не доказывает личность/);a.click('#account-button');assert.match(a.$('#login-dialog').textContent,/вход по ФИО без пароля/);a.dom.window.close();
+ a.tab('overview');assert.match(a.$('#main').textContent,/не доказывает личность/);a.click('#account-button');assert.match(a.$('#login-dialog').textContent,/вход по ФИО без пароля/);a.dom.window.close();
 });
 
 function curriculumStudent(a,name='Участник 01',cohort='SCM-01'){
@@ -517,4 +518,23 @@ test('Студенческий билет: ID-бейдж с QR и отдельн
  const a=app();try{a.role('admin');a.tab('student-card');assert.ok(a.$('.scm-id'));assert.ok(a.$('.scm-id-code svg'));assert.ok(a.$('#student-card-form'));assert.ok(a.$('[data-student-card-action="issue"]'));assert.ok(a.$('[data-student-card-action="print"]'));
  a.role('learner');assert.ok(a.$('.student-card-corner'));assert.ok(a.$('.sidebar [data-tab="student-card"]'));
  }finally{a.dom.window.close();}
+});
+
+test('Ручное внесение доступно во всех шести кабинетах',()=>{
+ const a=app();try{for(const role of ['admin','admissions','learner','teacher','applicant','employer']){a.role(role);assert.ok(a.$('.sidebar [data-tab="manual-records"]'));a.tab('manual-records');assert.ok(a.$('#manual-record-form'));a.value('#manual-record-form [name=title]','Запись '+role);a.value('#manual-record-form [name=person]','Ответственный Первый');a.submit('#manual-record-form');assert.ok(a.state().manualRecords.some(r=>r.title==='Запись '+role));}}finally{a.dom.window.close();}
+});
+test('Ручной журнал: комбинированные фильтры, редактирование, восстановление и удаление',()=>{
+ const a=app();try{a.role('admin');a.tab('manual-records');
+ for(const [title,type,status,date] of [['Склад','task','active','2026-11-01'],['Поставка','note','done','2026-11-15']]){a.value('#manual-record-form [name=title]',title);a.value('#manual-record-form [name=type]',type);a.value('#manual-record-form [name=status]',status);a.value('#manual-record-form [name=date]',date);a.submit('#manual-record-form');}
+ a.value('#manual-record-search [name=q]','склад');a.value('#manual-record-search [name=type]','task');a.value('#manual-record-search [name=status]','active');a.value('#manual-record-search [name=from]','2026-11-01');a.value('#manual-record-search [name=until]','2026-11-10');a.submit('#manual-record-search');assert.equal(a.w.document.querySelectorAll('[data-manual-edit]').length,1);
+ a.click('[data-manual-edit]');a.value('#manual-record-form [name=title]','Склад обновлён');a.submit('#manual-record-form');assert.equal(a.state().manualRecords[0].title,'Склад обновлён');a.click('[data-manual-reset]');assert.equal(a.w.document.querySelectorAll('[data-manual-edit]').length,2);
+ const b=app(a.state());try{b.role('admin');b.tab('manual-records');assert.equal(b.w.document.querySelectorAll('[data-manual-edit]').length,2);b.click('[data-manual-delete]');assert.equal(b.state().manualRecords.length,1);}finally{b.dom.window.close();}
+ }finally{a.dom.window.close();}
+});
+test('Поиск по списку раздела скрывает и возвращает карточки без удаления данных',()=>{
+ const a=app();try{a.role('admin');a.tab('documents');const search=a.$('.cabinet-search input');assert.ok(search);search.value='несуществующий-текст-123';search.dispatchEvent(new a.w.Event('input',{bubbles:true}));assert.equal(a.w.document.querySelectorAll('article.card:not([hidden])').length,0);search.value='';search.dispatchEvent(new a.w.Event('input',{bubbles:true}));assert.equal(a.w.document.querySelectorAll('article.card:not([hidden])').length,32);}finally{a.dom.window.close();}
+});
+
+test('Ручной журнал экранирует текст и отклоняет обратный диапазон дат',()=>{
+ const a=app();try{a.role('teacher');a.tab('manual-records');a.value('#manual-record-form [name=title]','<img src=x onerror=alert(1)>');a.value('#manual-record-form [name=body]','<script>alert(1)</script>');a.submit('#manual-record-form');assert.equal(a.$('.manual-record-list img'),null);assert.equal(a.$('.manual-record-list script'),null);a.value('#manual-record-search [name=from]','2026-12-31');a.value('#manual-record-search [name=until]','2026-01-01');a.submit('#manual-record-search');assert.match(a.$('#toast').textContent,/Дата/);assert.equal(a.state().manualRecords.length,1);}finally{a.dom.window.close();}
 });
