@@ -18,6 +18,6 @@ let html=layout(titles[s.id],s.summary.slice(0,240),url,body,{'@context':'https:
 // Pages are one directory deeper than the hub.
 html=html.replace('href="guides.css"','href="../guides.css"').replace('href="../assets/app-icon.svg"','href="../../assets/app-icon.svg"').replace('href="../">АКАДЕМИЯ','href="../../">АКАДЕМИЯ').replace('href="index.html">Знания','href="../index.html">Знания').replace('href="../#/catalog"','href="../../#/catalog"').replace('href="../">Учебная','href="../../">Учебная').replace('href="../">Вернуться','href="../../">Вернуться');
 fs.mkdirSync(path.join(out,s.id),{recursive:true});fs.writeFileSync(path.join(out,s.id,'index.html'),html);}
-const urls=['/','/academy/','/academy/guides/',...sources.map(s=>`/academy/guides/${s.id}/`),'/registry/registry.html'];
+const urls=['/','/academy/','/academy/documents/','/academy/guides/',...sources.map(s=>`/academy/guides/${s.id}/`)];
 fs.writeFileSync(path.join(root,'sitemap.xml'),'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+urls.map(u=>`  <url><loc>${origin}${u}</loc></url>`).join('\n')+'\n</urlset>\n');
 console.log(`Published ${sources.length} guides, hub and sitemap.`);

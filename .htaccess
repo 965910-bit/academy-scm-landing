@@ -10,6 +10,12 @@
     Allow from all
 </Files>
 
+# Публичная проверка документов: разрешён только этот HTML-маршрут
+<Files "registry.html">
+    Order Allow,Deny
+    Allow from all
+</Files>
+
 # Запретить просмотр содержимого директорий
 Options -Indexes
 
