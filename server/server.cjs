@@ -15,6 +15,16 @@ function createService({directory=process.env.DATA_DIR||path.resolve(__dirname,'
  const mayManage=(actor,targetRole)=>actor.role==='admin'||(actor.role==='admissions'&&['applicant','learner'].includes(targetRole));
  async function createUser(actor,{name,role}){name=cleanName(name);if(!roles.includes(role)||!mayManage(actor,role))throw Object.assign(Error('Недостаточно прав для назначения этой роли.'),{status:403});if(name.length<5||name.length>160||!/^\p{L}[\p{L}\p{M} .’'\-]+$/u.test(name)||name.split(' ').length<2)throw Error('Укажите ФИО: минимум два слова, только буквы, пробел, дефис и апостроф.');const id=crypto.randomUUID(),password=crypto.randomBytes(18).toString('base64url'),encoded=await hash(password);try{db.prepare('INSERT INTO users(id,name,login,role,password) VALUES(?,?,?,?,?)').run(id,name,normalize(name),role,encoded);}catch(err){if(err.code?.includes('SQLITE'))throw Error('Такое ФИО уже используется. Добавьте различимый и согласованный вариант ФИО.');throw err;}audit(actor.id,'user.created',id);return {user:{id,name,role,mustChange:true},password};}
  async function bootstrap(name){if(db.prepare("SELECT id FROM users WHERE role='admin'").get())throw Error('Администратор уже существует.');return createUser({id:'bootstrap',role:'admin'},{name,role:'admin'});}
+ async function provisionAdministrator(env=process.env){
+  if(!env.BOOTSTRAP_ADMIN_NAME&&!env.BOOTSTRAP_ADMIN_PASSWORD)return false;
+  if(!env.BOOTSTRAP_ADMIN_NAME||!env.BOOTSTRAP_ADMIN_PASSWORD)throw Error('Для создания администратора задайте BOOTSTRAP_ADMIN_NAME и BOOTSTRAP_ADMIN_PASSWORD.');
+  if(db.prepare("SELECT id FROM users WHERE role='admin'").get())return false;
+  const password=env.BOOTSTRAP_ADMIN_PASSWORD;
+  if(password.length<6||password.length>128)throw Error('Начальный пароль администратора: 6–128 символов.');
+  const result=await bootstrap(env.BOOTSTRAP_ADMIN_NAME);
+  db.prepare('UPDATE users SET password=?,must_change=? WHERE id=?').run(await hash(password),env.BOOTSTRAP_ADMIN_REQUIRE_CHANGE==='1'?1:0,result.user.id);
+  return true;
+ }
  let dummyHash;const attempts=new Map();
  const send=(res,status,data)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(JSON.stringify(data));};
  async function body(req){let result='';for await(const chunk of req){result+=chunk;if(Buffer.byteLength(result)>2*1024*1024)throw Object.assign(Error('Слишком большой запрос.'),{status:413});}try{return JSON.parse(result||'{}');}catch{throw Error('Некорректный JSON.');}}
@@ -74,7 +84,7 @@ function createService({directory=process.env.DATA_DIR||path.resolve(__dirname,'
  const ext=path.extname(file),mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.webmanifest':'application/manifest+json','.xml':'application/xml','.txt':'text/plain; charset=utf-8'}[ext];if(!mime){res.writeHead(404);return res.end();}
  fs.readFile(file,(err,data)=>{if(err){res.writeHead(404);return res.end();}res.writeHead(200,{'Content-Type':mime,'Cache-Control':'no-cache','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Content-Security-Policy':"frame-ancestors 'self' https://arena.ai https://*.arena.ai https://*.e2b.app"});res.end(req.method==='HEAD'?undefined:data);});
  }catch(err){send(res,err.status||400,{error:err.status===500?'Ошибка сервера.':err.message||'Запрос отклонён.'});}});
- return {server,db,bootstrap,close(){server.close();db.close();}};
+ return {server,db,bootstrap,provisionAdministrator,close(){server.close();db.close();}};
 }
-if(require.main===module){const service=createService();if(process.argv[2]==='bootstrap'){service.bootstrap(process.argv.slice(3).join(' ')).then(result=>{console.log('ФИО: '+result.user.name+'\nВременный пароль (показывается один раз): '+result.password);service.db.close();}).catch(err=>{console.error(err.message);service.db.close();process.exitCode=1;});}else service.server.listen(Number(process.env.PORT||4173),'0.0.0.0',()=>console.log('Academy server listening on '+(process.env.PORT||4173)));}
+if(require.main===module){const service=createService();if(process.argv[2]==='bootstrap'){service.bootstrap(process.argv.slice(3).join(' ')).then(result=>{console.log('ФИО: '+result.user.name+'\nВременный пароль (показывается один раз): '+result.password);service.db.close();}).catch(err=>{console.error(err.message);service.db.close();process.exitCode=1;});}else service.provisionAdministrator().then(()=>service.server.listen(Number(process.env.PORT||4173),'0.0.0.0',()=>console.log('Academy server listening on '+(process.env.PORT||4173)))).catch(()=>{console.error('Не удалось подготовить администратора. Проверьте переменные BOOTSTRAP_ADMIN_NAME и BOOTSTRAP_ADMIN_PASSWORD.');service.db.close();process.exitCode=1;});}
 module.exports={createService};
