@@ -96,6 +96,8 @@ const path = require('node:path');
     await p.goto(base + '#/program/mba');
     await p.locator('#portal-curriculum').waitFor();
     await role('learner');
+    await tab('knowledge');
+    assert.equal(await p.locator('[data-knowledge-bookmark]').count(),10);
     await context.setOffline(false);
     for (const width of [390, 320]) {
       await p.setViewportSize({ width, height: 844 });
@@ -158,6 +160,22 @@ const path = require('node:path');
     await p.locator('#decision-calculate button').click();
     await p.getByRole('rowheader',{name:'Непокрытый спрос, ед.'}).waitFor();
     await screenshot('decision-lab-transport');
+    await role('admin'); await tab('knowledge');
+    await p.locator('#knowledge-search [name="query"]').fill('EPCIS');
+    await p.locator('#knowledge-search button').click();
+    assert.equal(await p.locator('[data-knowledge-bookmark]').count(),1);
+    await p.locator('[data-knowledge-bookmark="epcis"]').click();
+    await p.locator('#knowledge-assign [name="source"]').selectOption('epcis');
+    await p.locator('#knowledge-assign [name="target"]').selectOption('group:SCM-01');
+    await p.locator('#knowledge-assign [name="due"]').fill('2027-05-01');
+    await p.locator('#knowledge-assign button').click();
+    await role('learner'); await tab('studyplan');
+    await p.locator('article.panel').filter({has:p.getByRole('heading',{name:'Работа с источником: GS1 · EPCIS и CBV',exact:true})}).locator('[data-curriculum-allocation]').click();
+    assert.equal(await p.locator('.knowledge-related a').getAttribute('href'),'https://www.gs1.org/standards/epcis');
+    await p.locator('[name="answer"]').fill('Для событий указываю объект, время с часовым поясом, место и операцию; документирую ключ для поиска дубликатов.');
+    await p.locator('#curriculum-answer button:not([data-save-draft])').click();
+    await role('teacher'); await tab('responses');
+    assert.equal(await p.locator('.curriculum-review').count(),1);
     // Every role and cabinet screen remains usable on phone and tablet widths.
     for (const width of [320, 390, 768]) {
       await p.setViewportSize({ width, height: 844 });
@@ -173,7 +191,7 @@ const path = require('node:path');
           }
           assert.equal(await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `${r}/${t} overflow at ${width}px`);
           assert.doesNotMatch(await p.locator('body').innerText(), /демо|demo/i, `${r}/${t} contains removed label`);
-          if (width === 390 && ['decisionlab', 'planner', 'monitoring', 'lab', 'directions', 'grading', 'library', 'allocations', 'studyplan', 'responses'].includes(t)) await screenshot(`mobile-${r}-${t}`);
+          if (width === 390 && ['knowledge', 'decisionlab', 'planner', 'monitoring', 'lab', 'directions', 'grading', 'library', 'allocations', 'studyplan', 'responses'].includes(t)) await screenshot(`mobile-${r}-${t}`);
         }
       }
       await p.locator('.mobile-menu-toggle').click();
