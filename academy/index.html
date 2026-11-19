@@ -8,7 +8,14 @@
       name="description"
       content="Семь направлений развития в SCM: от практических семинаров до корпоративной академии. Программы, поступление и личные кабинеты."
     />
+    <meta name="theme-color" content="#7140df" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="assets/app-icon.svg" />
     <link rel="stylesheet" href="styles.css" />
+    <script src="offline-config.js" defer></script>
+    <script src="offline.js" defer></script>
+    <script src="learning.js" defer></script>
+    <script src="portal.js" defer></script>
     <script src="app.js" defer></script>
   </head>
   <body>
@@ -24,7 +31,7 @@
         ></a
       >
       <nav aria-label="Основная навигация">
-        <a href="#programs">Программы</a><a href="#platform">Платформа</a
+        <a href="#/catalog">Каталог</a><a href="#/admission">Поступление</a><a href="#platform">Платформа</a
         ><a href="#approach">Подход</a><a href="#enterprise">Для компаний</a>
       </nav>
       <button class="button small" id="account-button">Личный кабинет ↗</button>
@@ -51,7 +58,7 @@
           <div>
             <b>Ваше пространство</b
             ><button data-role-entry="applicant">Абитуриенту ↗</button
-            ><button data-role-entry="teacher">Преподавателю ↗</button
+            ><button data-role-entry="learner">Слушателю ↗</button><button data-role-entry="teacher">Преподавателю ↗</button
             ><a href="#questions">Вопросы и ответы</a>
           </div>
         </div>
@@ -73,7 +80,9 @@
         <label
           >Роль<select name="role">
             <option value="applicant">Абитуриент</option>
+            <option value="learner">Слушатель · учебная лаборатория</option>
             <option value="teacher">Преподаватель</option>
+            <option value="employer">Работодатель · локальная проверка</option>
             <option value="admin">Администратор</option>
           </select></label
         ><button class="button" type="submit">Открыть кабинет ↗</button>

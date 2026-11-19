@@ -94,6 +94,7 @@
   ];
   const initial = () => ({
     version: 1,
+    learning: window.SCMLearning.defaults(),
     settings: Object.fromEntries(
       programs.map((p) => [
         p.id,
@@ -140,6 +141,7 @@
   } catch {
     storageOK = false;
   }
+  window.SCMLearning.ensure(state);
   let role = null,
     tab = "overview",
     filter = "all";
@@ -190,36 +192,25 @@
       return false;
     }
   }
+  const learning = window.SCMLearning.create({
+    state: () => state, esc, save, render, toast,
+    navigate: (nextRole, nextTab) => { role = nextRole; tab = nextTab; location.hash = 'cabinet'; render(); window.scrollTo(0,0); }
+  });
+  const portal = window.SCMPortal.create({
+    programs, settings: () => state.settings, isOpen: open, esc,
+    apply: p => { role = "applicant"; tab = "application"; location.hash = "cabinet"; render(); main.querySelector("[name=program]").value = p.id; window.scrollTo(0, 0); }
+  });
   function shell() {
-    return `<div class="container"><div class="workspace"><aside class="sidebar"><div class="profile"><div class="avatar">${role === "applicant" ? "АП" : role === "teacher" ? "ПР" : "АД"}</div><b>${role === "applicant" ? "Алексей · демо" : role === "teacher" ? "Преподаватель" : "Администратор"}</b><p>Демонстрационный кабинет</p></div>${(role ===
-    "applicant"
-      ? [
-          ["overview", "Мой маршрут"],
-          ["application", "Подать заявку"],
-          ["documents", "Документы"],
-          ["messages", "Сообщения"],
-        ]
-      : role === "teacher"
-        ? [
-            ["overview", "Учебные группы"],
-            ["grading", "Ведомость"],
-            ["assignments", "Задания"],
-            ["messages", "Сообщения"],
-          ]
-        : [
-            ["overview", "Обзор платформы"],
-            ["directions", "Направления и допуски"],
-            ["applications", "Заявки"],
-            ["messages", "Сообщения"],
-          ]
-    )
-      .map(
-        ([id, label]) =>
-          `<button data-tab="${id}" class="${tab === id ? "active" : ""}">${label}</button>`,
-      )
-      .join(
-        "",
-      )}<button data-action="logout">← На сайт</button></aside><section>${!storageOK ? '<div class="warning">Постоянное хранилище недоступно. Данные могут не сохраниться.</div>' : ""}${dashboard()}</section></div></div>`;
+    const roles = { applicant: ['АП','Абитуриент'], learner: ['СЛ','Демо-слушатель'], teacher: ['ПР','Преподаватель'], admin: ['АД','Администратор'], employer: ['РБ','Работодатель'] };
+    const menus = {
+      applicant: [['overview','Мой маршрут'],['application','Подать заявку'],['documents','Документы'],['messages','Сообщения']],
+      learner: [['overview','Мой учебный маршрут'],['courses','Учебные модули'],['lab','Лаборатория запасов'],['skills','Карта навыков'],['work','Практические задания'],['assistant','Предметный помощник'],['offline','Без сети'],['messages','Сообщения']],
+      teacher: [['overview','Учебные группы'],['reviews','Проверка работ'],['grading','Демо-ведомость'],['assignments','Создать задание'],['messages','Сообщения']],
+      admin: [['overview','Обзор платформы'],['directions','Направления и допуски'],['applications','Заявки'],['activity','Учебные события'],['messages','Сообщения']],
+      employer: [['overview','Проверка учебной записи']]
+    };
+    const [avatar,name] = roles[role] || roles.applicant;
+    return `<div class="container"><div class="workspace"><aside class="sidebar"><div class="profile"><div class="avatar">${avatar}</div><b>${name}</b><p>Демонстрационный кабинет</p></div>${(menus[role]||menus.applicant).map(([id,label])=>`<button data-tab="${id}" class="${tab===id?'active':''}">${label}</button>`).join('')}<button data-action="logout">← На главную платформы</button></aside><section>${!storageOK?'<div class="warning">Постоянное хранилище недоступно. Данные могут не сохраниться.</div>':''}${dashboard()}</section></div></div>`;
   }
   function heading(title, sub) {
     return `<div class="dashboard-head"><div><span class="eyebrow">${role === "admin" ? "УПРАВЛЕНИЕ АКАДЕМИЕЙ" : role === "teacher" ? "КАБИНЕТ ПРЕПОДАВАТЕЛЯ" : "КАБИНЕТ АБИТУРИЕНТА"}</span><h1>${title}</h1><p class="subtle">${sub}</p></div><span class="badge">ДЕМО</span></div>`;
@@ -230,7 +221,7 @@
         state.settings[p.id].visible &&
         (filter === "all" || p.audience === filter),
     );
-    return `<div class="container"><section class="hero" id="home"><div><span class="eyebrow">ОБРАЗОВАНИЕ ДЛЯ НОВОЙ ЭКОНОМИКИ</span><h1>Соединяйте знания.<br>Управляйте <em>будущим.</em></h1><p class="lead">Цепи поставок — это целый мир. Научитесь видеть его целиком: от первого решения в закупках до стратегии глобальной сети.</p><div class="actions"><a class="button" href="#programs">Выбрать направление ↗</a><button class="button outline" data-action="login">Мой учебный маршрут</button></div><div class="hero-topics"><span>SCM & логистика</span><span>Лидерство</span><span>Технологии</span></div></div><div class="visual" aria-label="Иллюстрация единой экосистемы цепей поставок"><div class="visual-top"><span><i></i> SUPPLY CHAIN / NEXT LEVEL</span><span>SCM OS · 01</span></div><img class="supply-art" src="assets/supply-network.svg" alt="Объёмная схема цепи поставок: склад, грузовик, грузы и аналитика" width="640" height="540" fetchpriority="high"><div class="visual-caption"><span class="live-dot"></span> Всё связано. И всё начинается с вас.</div><span class="orbit-tag">Закупки</span><span class="orbit-tag second">Аналитика ↗</span></div></section><div class="stats"><div><b>07</b><span>траекторий в архитектуре</span></div><div><b>Практика</b><span>в основе учебного подхода</span></div><div><b>B2B + B2C</b><span>команды и специалисты</span></div><div><b>Одна среда</b><span>поступление и обучение</span></div></div><section class="section" id="programs"><span class="eyebrow">ОБРАЗОВАТЕЛЬНАЯ АРХИТЕКТУРА</span><div class="section-head"><h2>Ваша следующая<br>точка роста</h2><p>Выберите масштаб задачи. Планируемые направления отмечены отдельно: публикация не означает открытый набор.</p></div><div class="filters" aria-label="Фильтр направлений">${[
+    return `<div class="container"><section class="hero" id="home"><div><span class="eyebrow">ОБРАЗОВАНИЕ ДЛЯ НОВОЙ ЭКОНОМИКИ</span><h1>Соединяйте знания.<br>Управляйте <em>будущим.</em></h1><p class="lead">Цепи поставок — это целый мир. Научитесь видеть его целиком: от первого решения в закупках до стратегии глобальной сети.</p><div class="actions"><a class="button" href="#programs">Выбрать направление ↗</a><button class="button outline" data-role-entry="learner">Попробовать учебную среду ↗</button></div><div class="hero-topics"><span>SCM & логистика</span><span>Лидерство</span><span>Технологии</span></div></div><div class="visual" aria-label="Иллюстрация единой экосистемы цепей поставок"><div class="visual-top"><span><i></i> SUPPLY CHAIN / NEXT LEVEL</span><span>SCM OS · 01</span></div><img class="supply-art" src="assets/supply-network.svg" alt="Объёмная схема цепи поставок: склад, грузовик, грузы и аналитика" width="640" height="540" fetchpriority="high"><div class="visual-caption"><span class="live-dot"></span> Всё связано. И всё начинается с вас.</div><span class="orbit-tag">Закупки</span><span class="orbit-tag second">Аналитика ↗</span></div></section><div class="stats"><div><b>07</b><span>траекторий в архитектуре</span></div><div><b>Практика</b><span>в основе учебного подхода</span></div><div><b>B2B + B2C</b><span>команды и специалисты</span></div><div><b>Одна среда</b><span>поступление и обучение</span></div></div><section class="product-strip" aria-label="Учебные инструменты"><div><span class="eyebrow">УЖЕ МОЖНО ПОПРОБОВАТЬ</span><h2>Меньше обещаний.<br>Больше практики.</h2></div><button data-role-entry="learner"><span>▦</span><b>SCM-лаборатория</b><small>Сценарии и прозрачные расчёты ↗</small></button><button data-role-entry="learner"><span>◎</span><b>Карта навыков</b><small>От теории к проверке результата ↗</small></button><button data-role-entry="teacher"><span>✳</span><b>Обратная связь</b><small>Решение остаётся за человеком ↗</small></button></section><section class="section" id="programs"><span class="eyebrow">ОБРАЗОВАТЕЛЬНАЯ АРХИТЕКТУРА</span><div class="section-head"><h2>Ваша следующая<br>точка роста</h2><p>Выберите масштаб задачи. Планируемые направления отмечены отдельно: публикация не означает открытый набор.</p></div><div class="actions"><a href="#/catalog" class="button">Открыть полный каталог ↗</a><a href="#/advisor" class="button outline">Подобрать обучение</a></div><div class="filters" aria-label="Фильтр направлений">${[
       ["all", "Все направления"],
       ["leaders", "Руководителям"],
       ["practice", "Практикам"],
@@ -243,9 +234,12 @@
       )
       .join(
         "",
-      )}</div><div class="grid">${shown.map((p) => `<article class="card" data-direction="${p.id}"><span class="course-icon" aria-hidden="true">${{ higher: "◈", mba: "↗", intensive: "ϟ", retraining: "▦", international: "◎", corporate: "⬡", seminars: "✳" }[p.id]}</span><span class="number">${p.code}</span><h3>${p.title}</h3><p>${p.text}</p><p class="micro">${p.document}</p><div class="card-meta"><span>${p.duration}</span><span class="badge ${open(p) ? "" : "planned"}">${open(p) ? "Демо-приём открыт" : "Подготовка к запуску"}</span></div><button class="button outline small" data-program="${p.id}">${open(p) ? "Подать демо-заявку ↗" : "Посмотреть условия ↗"}</button></article>`).join("") || '<p class="empty">В этой категории пока нет опубликованных направлений.</p>'}</div><p class="micro" style="margin-top:20px">Даты, стоимость и преподаватели будут опубликованы после утверждения программ. Дипломы государственного образца и международные партнёрства не заявляются.</p></section><section class="section" id="approach"><div class="dark"><div class="approach-intro"><span class="eyebrow">НЕ ПРОСТО НАБОР ЛЕКЦИЙ</span><h2>Учиться видеть<br>всю цепь.</h2><p>Закупки, производство, запасы, транспорт и клиентский сервис — не отдельные дисциплины, а части одного решения.</p><button class="button lime" data-action="login">Открыть личный кабинет ↗</button></div><div class="steps"><div class="step"><b>01</b><div><h3>Определить задачу</h3><p>Выбрать направление и сформулировать задачу для развития.</p></div></div><div class="step"><b>02</b><div><h3>Проверить на практике</h3><p>Работать с кейсами, данными и обратной связью преподавателя.</p></div></div><div class="step"><b>03</b><div><h3>Собрать решение</h3><p>Связать инструменты в проект изменений для своей цепи поставок.</p></div></div></div></div></section><section class="section" id="platform"><span class="eyebrow">ВАША ТОЧКА ВХОДА</span><div class="section-head"><h2>Не просто учиться.<br>Быть частью системы.</h2><p>У каждого своя роль. У всех — общее пространство для развития.</p></div><div class="role-grid"><article class="role-card"><span class="role-symbol" aria-hidden="true">↗</span><span class="number">01 / ПОСТУПЛЕНИЕ</span><h3>Мой следующий уровень</h3><p>Выбор направления, заявка и её статус. Понятный маршрут от интереса к поступлению.</p><button class="button outline" data-role-entry="applicant">Я абитуриент ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">✳</span><span class="number">02 / ПРЕПОДАВАНИЕ</span><h3>Делиться опытом. Менять мышление.</h3><p>Учебные группы, задания и ведомость — инструменты преподавателя в одном кабинете.</p><button class="button outline" data-role-entry="teacher">Я преподаватель ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">◈</span><span class="number">03 / УПРАВЛЕНИЕ</span><h3>Вся академия под контролем</h3><p>Семь направлений, условия запуска и заявки. Раздельное управление публикацией и приёмом.</p><button class="button outline" data-role-entry="admin">Управление платформой ↗</button></article></div></section><section class="section" id="enterprise"><div class="enterprise"><div><span class="eyebrow">КОРПОРАТИВНАЯ АКАДЕМИЯ</span><h2>Одна команда.<br>Общий язык управления.</h2><p>От матрицы компетенций до проектной работы: создайте внутреннюю траекторию развития под процессы вашего предприятия.</p></div><button class="button" data-program="corporate">Обсудить формат ↗</button></div></section><section class="section faq" id="questions"><span class="eyebrow">ЕСТЬ ВОПРОСЫ?</span><div class="faq-layout"><h2>Всё важное.<br>Без мелкого шрифта.</h2><div><details><summary>Какие направления уже открыты?</summary><p>Текущий статус указан на карточке каждого направления. По умолчанию все программы планируются, приём закрыт. Администратор может открыть демо-приём после заполнения оснований проверки.</p></details><details><summary>Какой документ я получу?</summary><p>Это зависит от программы и подтверждённых правовых оснований. Условия выдачи документов будут опубликованы до реального набора. Международные сертификаты не выдаются автоматически за собственный курс академии.</p></details><details><summary>Можно ли обучить команду компании?</summary><p>Для этого предусмотрено направление «Внутренняя академия предприятия». Состав программы, формат и условия нужно согласовать отдельно. Пока раздел демонстрирует будущий сценарий.</p></details><details><summary>Это уже действующая учебная платформа?</summary><p>Сейчас это интерактивный прототип. Можно проверить роли, заявки и учебные инструменты. Данные сохраняются только в вашем браузере; реальные документы и персональные данные вводить нельзя.</p></details></div></div></section></div>`;
+      )}</div><div class="grid">${shown.map((p) => `<article class="card" data-direction="${p.id}"><span class="course-icon" aria-hidden="true">${{ higher: "◈", mba: "↗", intensive: "ϟ", retraining: "▦", international: "◎", corporate: "⬡", seminars: "✳" }[p.id]}</span><span class="number">${p.code}</span><h3>${p.title}</h3><p>${p.text}</p><p class="micro">${p.document}</p><div class="card-meta"><span>${p.duration}</span><span class="badge ${open(p) ? "" : "planned"}">${open(p) ? "Демо-приём открыт" : "Подготовка к запуску"}</span></div><a class="portal-detail-link" href="#/program/${p.id}">Подробнее о программе →</a><button class="button outline small" data-program="${p.id}">${open(p) ? "Подать демо-заявку ↗" : "Посмотреть условия ↗"}</button></article>`).join("") || '<p class="empty">В этой категории пока нет опубликованных направлений.</p>'}</div><p class="micro" style="margin-top:20px">Даты, стоимость и преподаватели будут опубликованы после утверждения программ. Дипломы государственного образца и международные партнёрства не заявляются.</p></section><section class="section" id="approach"><div class="dark"><div class="approach-intro"><span class="eyebrow">НЕ ПРОСТО НАБОР ЛЕКЦИЙ</span><h2>Учиться видеть<br>всю цепь.</h2><p>Закупки, производство, запасы, транспорт и клиентский сервис — не отдельные дисциплины, а части одного решения.</p><button class="button lime" data-action="login">Открыть личный кабинет ↗</button></div><div class="steps"><div class="step"><b>01</b><div><h3>Определить задачу</h3><p>Выбрать направление и сформулировать задачу для развития.</p></div></div><div class="step"><b>02</b><div><h3>Проверить на практике</h3><p>Работать с кейсами, данными и обратной связью преподавателя.</p></div></div><div class="step"><b>03</b><div><h3>Собрать решение</h3><p>Связать инструменты в проект изменений для своей цепи поставок.</p></div></div></div></div></section><section class="section" id="platform"><span class="eyebrow">ВАША ТОЧКА ВХОДА</span><div class="section-head"><h2>Не просто учиться.<br>Быть частью системы.</h2><p>У каждого своя роль. У всех — общее пространство для развития.</p></div><div class="role-grid"><article class="role-card"><span class="role-symbol" aria-hidden="true">↗</span><span class="number">01 / ПОСТУПЛЕНИЕ</span><h3>Мой следующий уровень</h3><p>Выбор направления, заявка и её статус. Понятный маршрут от интереса к поступлению.</p><button class="button outline" data-role-entry="applicant">Я абитуриент ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">✳</span><span class="number">02 / ПРЕПОДАВАНИЕ</span><h3>Делиться опытом. Менять мышление.</h3><p>Учебные группы, задания и ведомость — инструменты преподавателя в одном кабинете.</p><button class="button outline" data-role-entry="teacher">Я преподаватель ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">◈</span><span class="number">03 / УПРАВЛЕНИЕ</span><h3>Вся академия под контролем</h3><p>Семь направлений, условия запуска и заявки. Раздельное управление публикацией и приёмом.</p><button class="button outline" data-role-entry="admin">Управление платформой ↗</button></article></div></section><section class="section" id="enterprise"><div class="enterprise"><div><span class="eyebrow">КОРПОРАТИВНАЯ АКАДЕМИЯ</span><h2>Одна команда.<br>Общий язык управления.</h2><p>От матрицы компетенций до проектной работы: создайте внутреннюю траекторию развития под процессы вашего предприятия.</p></div><button class="button" data-program="corporate">Обсудить формат ↗</button></div></section><section class="section faq" id="questions"><span class="eyebrow">ЕСТЬ ВОПРОСЫ?</span><div class="faq-layout"><h2>Всё важное.<br>Без мелкого шрифта.</h2><div><details><summary>Какие направления уже открыты?</summary><p>Текущий статус указан на карточке каждого направления. По умолчанию все программы планируются, приём закрыт. Администратор может открыть демо-приём после заполнения оснований проверки.</p></details><details><summary>Какой документ я получу?</summary><p>Это зависит от программы и подтверждённых правовых оснований. Условия выдачи документов будут опубликованы до реального набора. Международные сертификаты не выдаются автоматически за собственный курс академии.</p></details><details><summary>Можно ли обучить команду компании?</summary><p>Для этого предусмотрено направление «Внутренняя академия предприятия». Состав программы, формат и условия нужно согласовать отдельно. Пока раздел демонстрирует будущий сценарий.</p></details><details><summary>Это уже действующая учебная платформа?</summary><p>Сейчас это интерактивный прототип. Можно проверить роли, заявки и учебные инструменты. Данные сохраняются только в вашем браузере; реальные документы и персональные данные вводить нельзя.</p></details></div></div></section></div>`;
   }
   function dashboard() {
+    if (tab === "messages") return messages();
+    const learningScreen = learning.render(role, tab);
+    if (learningScreen !== null) return learningScreen;
     if (tab === "messages") return messages();
     if (role === "admin") return admin();
     if (role === "teacher") return teacher();
@@ -346,11 +340,13 @@
         "Сообщения",
         "Локальная демонстрационная переписка между ролями, без отправки email.",
       ) +
-      `<div class="panel">${state.messages.length ? state.messages.map((m) => `<article><span class="badge">${esc({ applicant: "Абитуриент", teacher: "Преподаватель", admin: "Администратор" }[m.role])} · ${date(m.created)}</span><p style="white-space:pre-wrap">${esc(m.body)}</p></article>`).join("") : "Сообщений пока нет."}</div><form id="message-form" class="panel"><label>Новое сообщение<textarea name="body" required maxlength="2000" placeholder="Только вымышленные сведения"></textarea></label><button class="button">Сохранить сообщение</button></form>`
+      `<div class="panel">${state.messages.length ? state.messages.map((m) => `<article><span class="badge">${esc({ applicant: "Абитуриент", learner: "Слушатель", teacher: "Преподаватель", admin: "Администратор", employer: "Работодатель" }[m.role])} · ${date(m.created)}</span><p style="white-space:pre-wrap">${esc(m.body)}</p></article>`).join("") : "Сообщений пока нет."}</div><form id="message-form" class="panel"><label>Новое сообщение<textarea name="body" required maxlength="2000" placeholder="Только вымышленные сведения"></textarea></label><button class="button">Сохранить сообщение</button></form>`
     );
   }
   function render() {
-    main.innerHTML = role ? shell() : landing();
+    main.innerHTML = role ? shell() : portal.active() ? portal.render() : landing();
+    const pageTitle = main.querySelector("h1")?.textContent.trim();
+    document.title = pageTitle ? `${pageTitle} — Академия SCM` : "Академия SCM";
     document.querySelector("#account-button").textContent = role
       ? "Сменить роль ↗"
       : "Личный кабинет ↗";
@@ -367,6 +363,7 @@
   document.querySelector("#login-form").addEventListener("submit", (e) => {
     e.preventDefault();
     role = new FormData(e.target).get("role");
+    learning.resetView();
     tab = "overview";
     document.querySelector("#login-dialog").close();
     location.hash = "cabinet";
@@ -376,6 +373,9 @@
   document.addEventListener("click", (e) => {
     const t = e.target.closest("button,a");
     if (!t) return;
+    const portalAction = portal.click(t);
+    if (portalAction) { if (typeof portalAction === "string") toast(portalAction); else if (!t.dataset.portalApply) render(); return; }
+    if (learning.click(t, role)) return;
     if (t.dataset.roleEntry) {
       document.querySelector("#login-form select").value = t.dataset.roleEntry;
       login();
@@ -430,6 +430,7 @@
       case "reset":
         if (confirm("Удалить все локальные данные демо-академии?")) {
           state = initial();
+          learning.resetView();
           for (const p of programs) state.settings[p.id].admissions = false;
           save();
           render();
@@ -471,6 +472,8 @@
     const form = e.target;
     if (form.id === "login-form") return;
     e.preventDefault();
+    if (portal.submit(form)) { render(); return; }
+    if (learning.submit(form, role)) return;
     const f = new FormData(form);
     const id = () =>
       crypto.randomUUID
@@ -568,6 +571,11 @@
     }
   });
   window.addEventListener("hashchange", () => {
+    if (portal.active()) {
+      role = null; render(); window.scrollTo(0, 0); portal.scrollSection();
+      main.querySelector("h1")?.focus({preventScroll:true});
+      return;
+    }
     const sections = [
       "#home",
       "#programs",
@@ -577,10 +585,8 @@
       "#questions",
     ];
     if (!sections.includes(location.hash)) return;
-    if (role) {
-      role = null;
-      render();
-    }
+    role = null;
+    render();
     document.querySelector(location.hash)?.scrollIntoView();
   });
   render();
