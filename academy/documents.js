@@ -92,6 +92,7 @@ window.SCMDocuments = (() => {
         const id = target.dataset['document' + action[0].toUpperCase() + action.slice(1)], type = typeBy(id);
         if (action === 'template' && type) { download(`${type.id}-draft.md`, markdown(type, {}), 'text/markdown'); return true; }
         if (action === 'draft' && type) {
+          if(id==='student-card' && ctx.openStudentCard){ctx.openStudentCard();return true;}
           if (records().length >= 50) { ctx.toast('Достигнут лимит 50 проектов. Удалите ненужные.'); return true; }
           const record = {id: crypto.randomUUID(), type: id, status: 'draft', created: new Date().toISOString(), revision: 1, content: content(type)};
           records().push(record); open(record); ctx.save(); ctx.render(); return true;

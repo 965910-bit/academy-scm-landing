@@ -210,7 +210,11 @@
     openAssignment: id => { curriculum.openAllocation(id); role = "learner"; tab = "studyplan"; render(); window.scrollTo(0,0); }
   });
   const decisionLab = window.SCMDecisionLab.create({state: () => state, esc, save, render, toast});
-  const documents = window.SCMDocuments.create({state: () => state, esc, save, render, toast});
+  const studentCard = window.SCMStudentCard.create({state:()=>state,save,render,toast,
+    name:()=> (identity?.target||identity?.user)?.name||state.profile?.name||'',
+    isAdmin:()=>identity?.user?.role==='admin'
+  });
+  const documents = window.SCMDocuments.create({state: () => state, esc, save, render, toast,openStudentCard:()=>{tab='student-card';render();}});
   const knowledge = window.SCMKnowledge.create({state: () => state, esc, save, render, toast});
   const portal = window.SCMPortal.create({
     programs, settings: () => state.settings, isOpen: open, esc,
@@ -227,7 +231,7 @@
       employer: [['overview','Проверка учебной записи']]
     };
     const [avatar,name] = roles[role] || roles.applicant;
-    return `<div class="container"><div class="workspace"><aside class="sidebar"><div class="profile"><div class="avatar">${avatar}</div><b>${esc((identity?.target||identity?.user)?.name||name)}</b><p>${name}</p></div>${(menus[role]||menus.applicant).map(([id,label])=>`<button data-tab="${id}" class="${tab===id?'active':''}">${label}</button>`).join('')}<button data-action="export">Экспорт рабочего пространства</button><button data-action="logout">Выйти из учётной записи</button></aside><section>${!storageOK?'<div class="warning">Постоянное хранилище недоступно. Данные могут не сохраниться.</div>':''}${identity?.banner?.()||''}${dashboard()}</section></div></div>`;
+    return `<div class="container"><div class="workspace"><aside class="sidebar"><div class="profile"><div class="avatar">${avatar}</div><b>${esc((identity?.target||identity?.user)?.name||name)}</b><p>${name}</p></div>${(menus[role]||menus.applicant).map(([id,label])=>`<button data-tab="${id}" class="${tab===id?'active':''}">${label}</button>`).join('')}<button data-action="export">Экспорт рабочего пространства</button><button data-action="logout">Выйти из учётной записи</button></aside><section>${!storageOK?'<div class="warning">Постоянное хранилище недоступно. Данные могут не сохраниться.</div>':''}${studentCard.corner(role)}${identity?.banner?.()||''}${dashboard()}</section></div></div>`;
   }
   function heading(title, sub) {
     return `<div class="dashboard-head"><div><span class="eyebrow">${role === "admin" ? "УПРАВЛЕНИЕ АКАДЕМИЕЙ" : role === "teacher" ? "КАБИНЕТ ПРЕПОДАВАТЕЛЯ" : "КАБИНЕТ АБИТУРИЕНТА"}</span><h1>${title}</h1><p class="subtle">${sub}</p></div><span class="badge">КАБИНЕТ</span></div>`;
@@ -257,6 +261,8 @@
     const accountScreen = identity?.render?.(role, tab);
     if (accountScreen != null) return accountScreen;
     if (role === "admissions") return "<p>Приёмная комиссия: управление учётными записями.</p>";
+    const studentCardScreen = studentCard.render(role, tab);
+    if (studentCardScreen !== null) return studentCardScreen;
     const documentScreen = documents.render(role, tab);
     if (documentScreen !== null) return documentScreen;
     const knowledgeScreen = knowledge.render(role, tab);
@@ -422,6 +428,7 @@
     const t = e.target.closest("button,a");
     if (!t) return;
     if (identity?.click?.(t, render)) return;
+    if (studentCard.click(t, role)) return;
     if (documents.click(t, role)) return;
     if (knowledge.click(t, role)) return;
     if (decisionLab.click(t, role)) return;
@@ -533,6 +540,7 @@
     if (form.id === "login-form") return;
     e.preventDefault();
     if (identity?.submit?.(form, render)) return;
+    if (studentCard.submit(form, role)) return;
     if (documents.submit(form, role)) return;
     if (knowledge.submit(form, role)) return;
     if (decisionLab.submit(form, role)) return;
