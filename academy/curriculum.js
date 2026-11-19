@@ -81,8 +81,17 @@ window.SCMCurriculum = (() => {
     const moduleBy=id=>all().find(m=>m.id===id);
     const head=(title,text)=>`<div class="dashboard-head"><div><span class="eyebrow">УЧЕБНО-МЕТОДИЧЕСКАЯ БАЗА</span><h1>${title}</h1><p>${text}</p></div><span class="badge">ЛОКАЛЬНЫЙ РЕЖИМ</span></div>`;
     const note='<div class="warning">Авторские вводные материалы, редакция 1. Нужны методическое рецензирование и утверждение. Это не полные программы семи образовательных линий и не подготовка, одобренная внешними правообладателями. Реальные персональные данные вводить нельзя.</div>';
+    function remember(a, entry) {
+      if (!Array.isArray(a.history)) a.history = [];
+      if (!a.history.length && a.answer) a.history.push({type:'legacy',at:a.submittedAt||a.created,answer:a.answer,feedback:a.feedback||'',status:a.status});
+      a.history.push({at:new Date().toISOString(),...entry});
+      a.history = a.history.slice(-10);
+    }
+    function history(a) {
+      return `<details class="panel"><summary>История отправок и решений (${a.history?.length||0})</summary><p class="micro">Последние 10 записей. Локальная редактируемая история, не защищённый аудит. До обновления полная история не велась.</p>${(a.history||[]).slice().reverse().map(h=>`<section><h3>${e(({submission:'Отправка решения',review:'Рассмотрение',legacy:'Ранее сохранённая версия'})[h.type]||'Запись')}</h3><p>${e(h.at)} · ${e(h.status)}</p>${h.answer?`<p style="white-space:pre-wrap">${e(h.answer)}</p>`:''}${h.feedback?`<p>${e(h.feedback)}</p>`:''}</section>`).join('')}</details>`;
+    }
     function lesson(m,assignment){
-      return `<button class="button outline small" data-curriculum-back>← К списку</button><article class="panel lesson-body"><span class="eyebrow">${e(m.category)} · РЕДАКЦИЯ ${m.version}</span><h2>${e(m.title)}</h2><p><b>Учебная цель:</b> ${e(m.skill)}</p>${m.sections.map(([t,b])=>`<section><h3>${e(t)}</h3><p>${e(b)}</p></section>`).join('')}<h3>Практическое задание</h3><p>${e(m.task)}</p><h3>Критерии рассмотрения преподавателем</h3><p>${e(m.rubric)}</p><p class="micro">Время на странице — ориентир для чтения, а не академические часы. Примеры синтетические; внешние материалы не скопированы. Расчёты не предназначены для применения без проверки предпосылок.</p></article>${assignment?`<form class="panel" id="curriculum-answer"><input type="hidden" name="allocation" value="${e(assignment.id)}"><h3>Решение по назначению</h3><label>Ваше решение и допущения<textarea name="answer" minlength="40" maxlength="8000" required>${e(assignment.answer||'')}</textarea></label><button class="button" ${assignment.status==='approved'?'disabled':''}>Отправить на проверку</button><p>${e(assignment.feedback||'Подтверждение выполняет человек. Отправка сохраняет решение только в этом браузере.')}</p></form>`:''}${note}`;
+      return `<button class="button outline small" data-curriculum-back>← К списку</button><article class="panel lesson-body"><span class="eyebrow">${e(m.category)} · РЕДАКЦИЯ ${m.version}</span><h2>${e(m.title)}</h2><p><b>Учебная цель:</b> ${e(m.skill)}</p>${m.sections.map(([t,b])=>`<section><h3>${e(t)}</h3><p>${e(b)}</p></section>`).join('')}<h3>Практическое задание</h3><p>${e(m.task)}</p><h3>Критерии рассмотрения преподавателем</h3><p>${e(m.rubric)}</p><p class="micro">Время на странице — ориентир для чтения, а не академические часы. Примеры синтетические; внешние материалы не скопированы. Расчёты не предназначены для применения без проверки предпосылок.</p></article>${assignment?`<form class="panel" id="curriculum-answer"><input type="hidden" name="allocation" value="${e(assignment.id)}"><h3>Решение по назначению</h3><label>Ваше решение и допущения<textarea name="answer" minlength="40" maxlength="8000" required>${e(assignment.draft ?? assignment.answer ?? '')}</textarea></label><div class="actions"><button class="button outline" type="submit" data-save-draft ${assignment.status==='approved'?'disabled':''} formnovalidate>Сохранить черновик</button><button class="button" ${assignment.status==='approved'?'disabled':''}>Отправить на проверку</button></div><p class="micro">${assignment.draftAt?`Черновик сохранён ${e(assignment.draftAt)}. `:''}Черновик не отправляется на проверку. Автосохранения нет.</p><p>${e(assignment.feedback||'Подтверждение выполняет человек. Отправка сохраняет решение только в этом браузере.')}</p></form>${history(assignment)}`:''}${note}`;
     }
     function library(){
       if(selected&&moduleBy(selected))return head('Материал модуля','Просмотрите содержание и критерии до назначения.')+lesson(moduleBy(selected));
@@ -97,7 +106,7 @@ window.SCMCurriculum = (() => {
       const c=get();return head('Назначение обучения','Назначьте один модуль студенту или всей группе. Можно назначить целый маршрут. Общий срок применяется ко всем его модулям; порядок прохождения рекомендательный. Повторные активные назначения пропускаются.')+`<form class="panel" id="curriculum-allocate"><label>Кому<select name="target" required><option value="">Выберите участника или группу</option>${[...new Set(c.students.map(s=>s.cohort))].map(g=>`<option value="group:${e(g)}">Группа: ${e(g)}</option>`).join('')}${c.students.map(s=>`<option value="student:${e(s.id)}">${e(s.name)} · ${e(s.cohort)}</option>`).join('')}</select></label><label>Модуль или учебный маршрут<select name="module"><optgroup label="Маршруты по образовательным линиям">${tracks.map(([key,title,ids])=>`<option value="track:${key}">${e(title)} · ${ids.length} модулей</option>`).join('')}</optgroup><optgroup label="Отдельные модули">${all().map(m=>`<option value="${m.id}">${e(m.title)}</option>`).join('')}</optgroup></select></label><label>Срок сдачи<input name="due" type="date" required></label><button class="button" ${c.students.length?'':'disabled'}>Назначить модуль</button></form><div class="panel"><h2>Назначения (${c.allocations.length})</h2>${c.allocations.slice().reverse().map(a=>`<p><b>${e(c.students.find(s=>s.id===a.student)?.name)}</b> · ${e(a.snapshot.title)} · до ${e(a.due)} <span class="badge">${status(a)}</span></p>`).join('')||'<p>Назначений пока нет.</p>'}</div>`;
     }
     function responses(){
-      const c=get();const items=c.allocations.filter(a=>a.answer);return head('Проверка назначенных работ','Рассмотрение решения по зафиксированной редакции задания. Не автоматическая аттестация.')+items.slice().reverse().map(a=>`<article class="panel"><h2>${e(a.snapshot.title)}</h2><p>${e(c.students.find(s=>s.id===a.student)?.name)} · ${status(a)} · редакция ${a.snapshot.version}</p><details><summary>Задание и критерии</summary><p>${e(a.snapshot.task)}</p><p>${e(a.snapshot.rubric)}</p></details><p style="white-space:pre-wrap">${e(a.answer)}</p>${a.status==='submitted'?`<form class="curriculum-review"><input type="hidden" name="allocation" value="${e(a.id)}"><label>Решение<select name="decision"><option value="revision">Вернуть на доработку</option><option value="approved">Подтвердить локально</option></select></label><label>Обратная связь<textarea name="feedback" required minlength="20" maxlength="3000"></textarea></label><label class="check"><input name="reviewed" type="checkbox" required>Я рассмотрел решение и критерии</label><button class="button">Сохранить решение</button></form>`:`<p>${e(a.feedback||'')}</p>`}</article>`).join('')+(items.length?'':'<div class="empty">Отправленные решения появятся здесь.</div>');
+      const c=get();const items=c.allocations.filter(a=>a.answer);return head('Проверка назначенных работ','Рассмотрение решения по зафиксированной редакции задания. Не автоматическая аттестация.')+items.slice().reverse().map(a=>`<article class="panel"><h2>${e(a.snapshot.title)}</h2><p>${e(c.students.find(s=>s.id===a.student)?.name)} · ${status(a)} · редакция ${a.snapshot.version}</p><details><summary>Задание и критерии</summary><p>${e(a.snapshot.task)}</p><p>${e(a.snapshot.rubric)}</p></details><p style="white-space:pre-wrap">${e(a.answer)}</p>${history(a)}${a.status==='submitted'?`<form class="curriculum-review"><input type="hidden" name="allocation" value="${e(a.id)}"><label>Решение<select name="decision"><option value="revision">Вернуть на доработку</option><option value="approved">Подтвердить локально</option></select></label><label>Обратная связь<textarea name="feedback" required minlength="20" maxlength="3000"></textarea></label><label class="check"><input name="reviewed" type="checkbox" required>Я рассмотрел решение и критерии</label><button class="button">Сохранить решение</button></form>`:`<p>${e(a.feedback||'')}</p>`}</article>`).join('')+(items.length?'':'<div class="empty">Отправленные решения появятся здесь.</div>');
     }
     function myPlan(){
       const c=get();if(!c.students.some(s=>s.id===c.activeStudent))c.activeStudent=c.students[0]?.id||'';
@@ -107,13 +116,14 @@ window.SCMCurriculum = (() => {
     }
     return {
       resetView(){selected=null;query='';},
+      openAllocation(id){selected=id;},
       render(role,tab){if(role==='admin')return ({library,students,allocations,responses})[tab]?.()??null;if(role==='teacher'&&tab==='responses')return responses();if(role==='learner'&&tab==='studyplan')return myPlan();return null;},
       click(t,role){
         if(t.hasAttribute('data-curriculum-back')){selected=null;ctx.render();return true;}
         if(t.dataset.curriculumModule&&role==='admin'){selected=t.dataset.curriculumModule;ctx.render();return true;}
         if(t.dataset.curriculumAllocation&&role==='learner'){selected=t.dataset.curriculumAllocation;ctx.render();return true;}return false;
       },
-      submit(form,role){
+      submit(form,role,submitter){
         if(!['curriculum-search','curriculum-student','curriculum-allocate','curriculum-profile','curriculum-answer'].includes(form.id)&&!form.classList.contains('curriculum-review'))return false;
         const c=get(),f=new FormData(form),v=k=>String(f.get(k)||'').trim();
         const fail=message=>{ctx.toast(message);return true;};
@@ -143,12 +153,19 @@ window.SCMCurriculum = (() => {
         if(form.id==='curriculum-answer'){
           if(role!=='learner')return true;const a=c.allocations.find(a=>a.id===v('allocation')&&a.student===c.activeStudent);
           if(!a||!['assigned','revision','submitted'].includes(a.status))return fail('Назначение недоступно для отправки.');
+          if(submitter?.hasAttribute('data-save-draft')) {
+            if(v('answer').length>8000)return fail('Черновик — до 8000 символов.');
+            a.draft=v('answer');a.draftAt=new Date().toISOString();const saved=ctx.save();ctx.render();if(saved!==false)ctx.toast('Черновик сохранён локально, без отправки.');return true;
+          }
           if(v('answer').length<40||v('answer').length>8000)return fail('Решение должно содержать от 40 до 8000 символов.');
+          remember(a,{type:'submission',answer:v('answer'),status:'submitted'});
+          delete a.draft;delete a.draftAt;
           a.answer=v('answer');a.status='submitted';a.submittedAt=new Date().toISOString();
         }
         if(form.classList.contains('curriculum-review')){
           if(!['admin','teacher'].includes(role))return true;const a=c.allocations.find(a=>a.id===v('allocation')&&a.status==='submitted');
           if(!a||!['approved','revision'].includes(v('decision'))||v('feedback').length<20||v('feedback').length>3000||!f.has('reviewed'))return fail('Нужны решение, отзыв от 20 символов и подтверждение рассмотрения.');
+          remember(a,{type:'review',feedback:v('feedback'),status:v('decision')});
           a.status=v('decision');a.feedback=v('feedback');a.reviewedAt=new Date().toISOString();
         }
         const saved=ctx.save();ctx.render();if(saved!==false)ctx.toast('Изменения сохранены в этом браузере.');return true;

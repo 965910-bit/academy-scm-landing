@@ -26,6 +26,8 @@ function app(storage) {
   w.eval(fs.readFileSync(path.join(root, "learning.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "portal.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "curriculum.js"), "utf8"));
+  w.TextEncoder = TextEncoder;
+  w.eval(fs.readFileSync(path.join(root, "study-tools.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
   const $ = (s) => w.document.querySelector(s);
   const click = (s) => {
@@ -380,4 +382,47 @@ test('Назначение → решение → доработка → пов�
  a.role('learner');a.tab('studyplan');a.click('[data-curriculum-allocation]');assert.equal(a.$('[name="answer"]').value,answer);a.value('[name="answer"]',answer+' Стоимость пригодной единицы Б: 107000 / 980.');a.submit('#curriculum-answer');
  a.role('admin');a.tab('responses');a.value('[name="decision"]','approved');a.value('[name="feedback"]','Расчёт и ограничения рассмотрены. Учебное решение принято локально.');a.submit('.curriculum-review');assert.equal(a.state().curriculum.allocations[0].status,'submitted');a.$('[name="reviewed"]').checked=true;a.submit('.curriculum-review');assert.equal(a.state().curriculum.allocations[0].status,'approved');
  const b=app(a.state());b.role('learner');b.tab('studyplan');assert.match(b.$('#main').textContent,/Проверено локально/);b.dom.window.close();a.dom.window.close();
+});
+
+test('Сроки: просрочка только у несданных, дата сдачи сегодня не просрочена',()=>{
+ const a=app(),tools=a.w.SCMStudyTools;
+ const items=['assigned','revision','submitted','approved'].map((status,i)=>({id:String(i),status,due:'2026-11-18'}));
+ const m=tools.metrics(items,'2026-11-19');assert.equal(m.overdue,2);assert.equal(m.submitted,1);assert.equal(m.approved,1);assert.equal(tools.overdue({status:'assigned',due:'2026-11-19'},'2026-11-19'),false);a.dom.window.close();
+});
+test('Календарь: события на весь день, CRLF, перенос по октетам, экранирование',()=>{
+ const a=app(),tools=a.w.SCMStudyTools;
+ const result=tools.calendar([{id:'a1',status:'assigned',due:'2026-12-31',snapshot:{title:'Русский заголовок '.repeat(12)+'; тест, строка\nEND:VEVENT'}},{id:'a2',status:'submitted',due:'2027-01-01'},{id:'a3',status:'assigned',due:'2026-02-31'}],new Date('2026-11-19T10:00:00Z'));
+ assert.equal((result.match(/BEGIN:VEVENT/g)||[]).length,1);assert.match(result,/DTEND;VALUE=DATE:20270101/);assert.match(result,/DTSTAMP:20261119T100000Z/);assert.match(result,/\\;/);assert.match(result,/\\,/);assert.match(result.replace(/\r\n /g,''),/\\nEND:VEVENT/);
+ for(const line of result.split('\r\n'))assert.ok(Buffer.byteLength(line,'utf8')<=75);
+ a.dom.window.close();
+});
+test('Черновик не отправляет работу, сохраняется после перезагрузки и не попадает в отзыв',()=>{
+ const a=app();curriculumStudent(a);curriculumAllocate(a);a.role('learner');a.tab('studyplan');a.click('[data-curriculum-allocation]');a.value('[name="answer"]','Мой незаконченный черновик');
+ a.$('[data-save-draft]').click();assert.equal(a.state().curriculum.allocations[0].status,'assigned');assert.equal(a.state().curriculum.allocations[0].answer,undefined);
+ const b=app(a.state());b.role('learner');b.tab('studyplan');b.click('[data-curriculum-allocation]');assert.equal(b.$('[name="answer"]').value,'Мой незаконченный черновик');
+ b.role('teacher');b.tab('responses');assert.doesNotMatch(b.$('#main').textContent,/Мой незаконченный черновик/);b.dom.window.close();a.dom.window.close();
+});
+test('Планировщик изолирует список профиля; мониторинг фильтрует группы',()=>{
+ const a=app();curriculumStudent(a,'Первый','A');curriculumStudent(a,'Второй','B');curriculumAllocate(a,'inventory',`student:${a.state().curriculum.students[0].id}`);
+ a.role('learner');a.tab('planner');assert.equal(a.w.document.querySelectorAll('[data-study-open]').length,1);a.value('[name="student"]',a.state().curriculum.students[1].id);a.submit('#study-profile');assert.equal(a.$('[data-study-open]'),null);
+ a.role('admin');a.tab('monitoring');a.value('[name="cohort"]','B');a.submit('#study-filter');assert.match(a.$('#main').textContent,/Показано: 0/);a.dom.window.close();
+});
+test('История хранит отправку и решение без автоматического подтверждения',()=>{
+ const a=app();curriculumStudent(a);curriculumAllocate(a);a.role('learner');a.tab('studyplan');a.click('[data-curriculum-allocation]');const answer='Собственное решение с формулой, единицами измерения, допущениями и проверкой ограничений модели.';a.value('[name="answer"]',answer);a.submit('#curriculum-answer');
+ assert.equal(a.state().curriculum.allocations[0].history[0].type,'submission');assert.equal(a.state().curriculum.allocations[0].status,'submitted');
+ a.role('teacher');a.tab('responses');a.value('[name="feedback"]','Нужно уточнить допущения и перепроверить исходные данные.');a.$('[name="reviewed"]').checked=true;a.submit('.curriculum-review');const history=a.state().curriculum.allocations[0].history;assert.equal(history.length,2);assert.equal(history[0].answer,answer);assert.equal(history[1].type,'review');assert.equal(history[1].status,'revision');a.dom.window.close();
+});
+
+test('История ограничена 10 записями при повторных доработках',()=>{
+ const a=app();curriculumStudent(a);curriculumAllocate(a);
+ for(let i=0;i<6;i++){
+  a.role('learner');a.tab('studyplan');a.click('[data-curriculum-allocation]');a.value('[name="answer"]',`Версия ${i}: решение с расчётом, допущениями, единицами измерения и ограничениями учебной модели.`);a.submit('#curriculum-answer');
+  a.role('teacher');a.tab('responses');a.value('[name="feedback"]',`Проверка ${i}: уточните ограничения и сопоставимость исходных данных.`);a.$('[name="reviewed"]').checked=true;a.submit('.curriculum-review');
+ }
+ const history=a.state().curriculum.allocations[0].history;assert.equal(history.length,10);assert.match(history[0].answer,/Версия 1/);assert.equal(history.at(-1).type,'review');a.dom.window.close();
+});
+test('Форма решения не показывается после переключения на профиль без назначения',()=>{
+ const a=app();curriculumStudent(a);curriculumStudent(a,'Другой','B');curriculumAllocate(a);a.role('learner');a.tab('studyplan');a.click('[data-curriculum-allocation]');
+ // The UI is not an authentication boundary; this checks accidental cross-profile writes.
+ const old=a.state();old.curriculum.activeStudent=old.curriculum.students[1].id;const b=app(old);b.role('learner');b.tab('studyplan');assert.equal(b.$('#curriculum-answer'),null);b.dom.window.close();a.dom.window.close();
 });
