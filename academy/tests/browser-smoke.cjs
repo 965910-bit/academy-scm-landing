@@ -10,7 +10,7 @@ const path = require('node:path');
   if (!process.env.CHROMIUM_PATH) throw new Error('Set CHROMIUM_PATH to an installed Chromium executable.');
   const browser = await chromium.launch({
     executablePath: process.env.CHROMIUM_PATH,
-    args: ['--no-sandbox', '--disable-dev-shm-usage', '--no-zygote', '--single-process', '--disable-gpu'],
+    args: ['--no-sandbox', '--disable-dev-shm-usage', '--no-zygote', '--disable-gpu'],
     headless: true
   });
   try {
@@ -32,6 +32,18 @@ const path = require('node:path');
     await p.goto(process.env.ACADEMY_BASE_URL || 'http://localhost:4173/academy/');
     await screenshot('desktop-home');
     const base = p.url().split('#')[0];
+    const publicContext = await browser.newContext({javaScriptEnabled:false});
+    const publicPage = await publicContext.newPage();
+    for (const width of [320,390,768]) {
+      await publicPage.setViewportSize({width,height:844});
+      for (const slug of ['', 'scor/', 'cscmp/', 'incoterms/', 'epcis/', 'safe/', 'imdg/', 'iata/', 'glec/', 'mitocw/', 'unctad/']) {
+        const response = await publicPage.goto(base + 'guides/' + slug);
+        assert.equal(response.status(),200);
+        assert.equal(await publicPage.locator('h1').count(),1);
+        assert.ok(await publicPage.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`Guide overflow ${slug} at ${width}`);
+      }
+    }
+    await publicContext.close();
     await p.goto(base + '#/catalog');
     await p.locator('#portal-search').waitFor();
     assert.equal(await p.locator('.portal-card').count(), 7);
@@ -98,6 +110,10 @@ const path = require('node:path');
     await role('learner');
     await tab('knowledge');
     assert.equal(await p.locator('[data-knowledge-bookmark]').count(),10);
+    await p.goto(base + 'guides/epcis/');
+    assert.equal(await p.locator('h1').textContent(),'EPCIS: какие данные нужны для прослеживаемости поставки');
+    await p.goto(base);
+    await role('learner');
     await context.setOffline(false);
     for (const width of [390, 320]) {
       await p.setViewportSize({ width, height: 844 });

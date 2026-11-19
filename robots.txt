@@ -1,18 +1,12 @@
-User-agent: Yandex
-Allow: /
-Disallow: /admin.html
-Disallow: /js/
-Disallow: /data/
-Disallow: /rss.xml
-Crawl-delay: 1
-Host: https://scm-news.online/
-Sitemap: https://scm-news.online/sitemap.xml
-
+# Crawl preferences are not access control. Never publish private records.
 User-agent: *
 Allow: /
+Disallow: /dashboard/
+Disallow: /login.html
+Disallow: /request-access.html
+Disallow: /reset-password.html
 Disallow: /admin.html
 Disallow: /js/
 Disallow: /data/
-Disallow: /rss.xml
 
 Sitemap: https://scm-news.online/sitemap.xml
