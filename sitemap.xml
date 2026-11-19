@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://scm-news.online/</loc></url>
   <url><loc>https://scm-news.online/academy/</loc></url>
+  <url><loc>https://scm-news.online/academy/documents/</loc></url>
   <url><loc>https://scm-news.online/academy/guides/</loc></url>
   <url><loc>https://scm-news.online/academy/guides/scor/</loc></url>
   <url><loc>https://scm-news.online/academy/guides/cscmp/</loc></url>
@@ -13,5 +14,4 @@
   <url><loc>https://scm-news.online/academy/guides/glec/</loc></url>
   <url><loc>https://scm-news.online/academy/guides/mitocw/</loc></url>
   <url><loc>https://scm-news.online/academy/guides/unctad/</loc></url>
-  <url><loc>https://scm-news.online/registry/registry.html</loc></url>
 </urlset>

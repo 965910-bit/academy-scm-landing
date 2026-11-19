@@ -43,7 +43,35 @@ const path = require('node:path');
         assert.ok(await publicPage.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`Guide overflow ${slug} at ${width}`);
       }
     }
+    for (const width of [320,390,768]) {
+      await publicPage.setViewportSize({width,height:844});
+      for (const url of [base+'documents/',new URL('../registry/registry.html',base).href]) {
+        assert.equal((await publicPage.goto(url)).status(),200);
+        assert.equal(await publicPage.locator('h1').count(),1);
+        assert.ok(await publicPage.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+      }
+    }
     await publicContext.close();
+    const verifyContext=await browser.newContext({viewport:{width:320,height:844}});
+    const verifyPage=await verifyContext.newPage();
+    const verifyURL=new URL('../registry/registry.html',base).href;
+    const checkCode='a'.repeat(32);
+    await verifyPage.goto(verifyURL);
+    await verifyPage.locator('[name="code"]').fill(checkCode);
+    await verifyPage.locator('#verify-form button').click();
+    await verifyPage.getByRole('heading',{name:/Запись не найдена|Реестр требует обновления/}).waitFor();
+    let verifyStatus='issued';
+    await verifyPage.route('**/registry/published.json',route=>route.fulfill({json:{schemaVersion:1,updatedAt:new Date().toISOString(),records:[{code:checkCode,number:'TEST-ONLY',type:'Синтетическая фикстура',title:'Тест алгоритма',issuer:'Тест',issuedAt:new Date().toISOString().slice(0,10),status:verifyStatus}]}}));
+    for (const [status,text] of [['issued','найдена запись о выдаче'],['revoked','отозванная'],['replaced','заменённая']]) {
+      verifyStatus=status;
+      await verifyPage.locator('#verify-form button').click();
+      await verifyPage.getByRole('heading',{name:new RegExp(text)}).waitFor();
+      assert.ok(await verifyPage.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+    }
+    await verifyContext.setOffline(true);
+    await verifyPage.locator('#verify-form button').click();
+    await verifyPage.getByRole('heading',{name:/Проверка недоступна/}).waitFor();
+    await verifyContext.close();
     await p.goto(base + '#/catalog');
     await p.locator('#portal-search').waitFor();
     assert.equal(await p.locator('.portal-card').count(), 7);
@@ -192,6 +220,14 @@ const path = require('node:path');
     await p.locator('#curriculum-answer button:not([data-save-draft])').click();
     await role('teacher'); await tab('responses');
     assert.equal(await p.locator('.curriculum-review').count(),1);
+    await role('learner'); await tab('documents');
+    const documentTemplateDownload=p.waitForEvent('download');
+    await p.locator('[data-document-template="student-card"]').click();
+    assert.equal((await documentTemplateDownload).suggestedFilename(),'student-card-draft.md');
+    await p.locator('[data-document-draft="student-card"]').click();
+    await role('admin'); await tab('documents');
+    await p.locator('[data-document-review]').click();
+    await p.getByText('Проверка подготовки отмечена локально',{exact:false}).waitFor();
     // Every role and cabinet screen remains usable on phone and tablet widths.
     for (const width of [320, 390, 768]) {
       await p.setViewportSize({ width, height: 844 });
@@ -207,7 +243,7 @@ const path = require('node:path');
           }
           assert.equal(await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `${r}/${t} overflow at ${width}px`);
           assert.doesNotMatch(await p.locator('body').innerText(), /демо|demo/i, `${r}/${t} contains removed label`);
-          if (width === 390 && ['knowledge', 'decisionlab', 'planner', 'monitoring', 'lab', 'directions', 'grading', 'library', 'allocations', 'studyplan', 'responses'].includes(t)) await screenshot(`mobile-${r}-${t}`);
+          if (width === 390 && ['documents', 'knowledge', 'decisionlab', 'planner', 'monitoring', 'lab', 'directions', 'grading', 'library', 'allocations', 'studyplan', 'responses'].includes(t)) await screenshot(`mobile-${r}-${t}`);
         }
       }
       await p.locator('.mobile-menu-toggle').click();

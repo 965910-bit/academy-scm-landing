@@ -25,6 +25,8 @@ function app(storage) {
   w.eval(fs.readFileSync(path.join(root, "offline.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "learning.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "portal.js"), "utf8"));
+  w.eval(fs.readFileSync(path.join(root, "documents/catalog.js"), "utf8"));
+  w.eval(fs.readFileSync(path.join(root, "documents.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "knowledge.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "curriculum.js"), "utf8"));
   w.TextEncoder = TextEncoder;
@@ -145,10 +147,10 @@ test("Преподаватель: оценка и создание задани�
   assert.match(a.$("#main").textContent, /Рассчитать точку заказа/);
   a.dom.window.close();
 });
-test("Демо-документы: добавление и удаление", () => {
+test("Записи документов для приёма: добавление и удаление", () => {
   const a = app();
   a.role("applicant");
-  a.tab("documents");
+  a.tab("intake-documents");
   a.submit("#document-form");
   assert.equal(a.state().documents.length, 1);
   a.click("[data-remove-doc]");
@@ -484,4 +486,10 @@ test('В базе явно различаются будущая редакци�
 
 test('Некорректная дата не создаёт назначение источника',()=>{
  const a=app();curriculumStudent(a);a.tab('knowledge');a.value('[name="target"]','group:SCM-01');a.value('[name="due"]','');a.submit('#knowledge-assign');assert.equal(a.state().curriculum.allocations.length,0);assert.match(a.$('#toast').textContent,/корректную дату/);a.dom.window.close();
+});
+
+test('Документы: поиск, локальный черновик, проверка подготовки и удаление без выдачи',()=>{
+ const a=app();a.role('learner');a.tab('documents');assert.equal(a.w.document.querySelectorAll('[data-document-draft]').length,32);assert.match(a.$('#main').textContent,/не присвоен/);
+ a.value('[name="query"]','переподготовке');a.submit('#document-search');assert.equal(a.w.document.querySelectorAll('[data-document-draft]').length,1);a.click('[data-document-draft="retraining"]');assert.equal(a.state().documentDrafts[0].status,'draft');assert.equal(a.$('[data-document-review]'),null);
+ const b=app(a.state());b.role('admin');b.tab('documents');b.click('[data-document-review]');assert.equal(b.state().documentDrafts[0].status,'reviewed');assert.ok(!b.$('[data-document-issue]'));b.click('[data-document-remove]');assert.equal(b.state().documentDrafts.length,0);b.dom.window.close();a.dom.window.close();
 });
