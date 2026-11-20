@@ -9,6 +9,8 @@ permissions:
   contents: write
 jobs:
   import:
+    # Import only on the session's tracked branch; never write to main on merge.
+    if: github.ref_name == 'arena/8939aafb-academy-scm-landing'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
