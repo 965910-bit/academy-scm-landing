@@ -1,0 +1,17 @@
+metric,value,unit,period,source_id,evidence_status
+employees_lower_bound,40000,человек,страница на дату просмотра,S01,primary_rounded_lower_bound
+hypermarkets_lower_bound,100,объектов,страница на дату просмотра,S01,primary_rounded_lower_bound
+darkstores,11,объектов,страница на дату просмотра,S01,primary_page
+distribution_centres,6,объектов,страница на дату просмотра,S01,primary_page
+hypermarkets_2025_case,112,объектов,2025-07-02,S05,vendor_statement
+employees_2025,40633,человек,2025,S06,secondary_unverified_report
+employees_2024,45471,человек,2024,S06,secondary_unverified_report
+training_hours_average_2025,25,часов на сотрудника,2025,S06,secondary_unverified_report
+assessment_participants_lower_bound,38000,человек,2025 case,S07,company_statement
+feedback_requests_lower_bound,100000,запросов в год,2025 case,S07,company_statement
+individual_plan_share,81,процентов,2025,S07,company_statement
+goals_share,91,процентов,2025,S07,company_statement
+soft_skills_tested_lower_bound,16000,человек,2025 case,S07,company_statement
+development_completion,95,процентов,2025 case,S07,company_statement
+accelerator_annual_approx,1000,участников в год,2025 case,S08,company_statement
+social_environmental_total,6800000000,рублей,2025,S09,not_training_budget
