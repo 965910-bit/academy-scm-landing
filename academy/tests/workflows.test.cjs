@@ -26,6 +26,7 @@ function app(storage) {
   w.eval(fs.readFileSync(path.join(root, "learning.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "portal.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "documents/catalog.js"), "utf8"));
+  for(const f of ["documents/folders.js","documents/directory.js"])w.eval(fs.readFileSync(path.join(root,f),"utf8"));
   w.eval(fs.readFileSync(path.join(root, "documents.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "vendor/qrcode.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "student-card.js"), "utf8"));
@@ -497,20 +498,20 @@ test('Некорректная дата не создаёт назначение
 });
 
 test('Документы: поиск, локальный черновик, проверка подготовки и удаление без выдачи',()=>{
- const a=app();a.role('learner');a.tab('documents');assert.equal(a.w.document.querySelectorAll('[data-document-draft]').length,54);assert.match(a.$('#main').textContent,/не присвоен/);
+ const a=app();a.role('learner');a.tab('documents');a.click('[data-document-folder=all]');assert.equal(a.w.document.querySelectorAll('[data-document-draft]').length,54);assert.match(a.$('#main').textContent,/проект/);
  a.value('[name="query"]','переподготовке');a.submit('#document-search');assert.equal(a.w.document.querySelectorAll('[data-document-draft]').length,2);a.click('[data-document-draft="retraining"]');assert.equal(a.state().documentDrafts[0].status,'draft');assert.equal(a.$('[data-document-review]'),null);
  const b=app(a.state());b.role('admin');b.tab('documents');b.click('[data-document-review]');assert.equal(b.state().documentDrafts[0].status,'reviewed');assert.ok(!b.$('[data-document-issue]'));b.click('[data-document-remove]');assert.equal(b.state().documentDrafts.length,0);b.dom.window.close();a.dom.window.close();
 });
 
 test('Документы: заполнение, сохранение, повторное открытие и несохранённый предпросмотр',()=>{
- const a=app();a.role('learner');a.tab('documents');a.click('[data-document-draft="contract"]');assert.ok(a.$('#document-editor'));
+ const a=app();a.role('learner');a.tab('documents');a.click('[data-document-folder=all]');a.click('[data-document-draft="contract"]');assert.ok(a.$('#document-editor'));
  a.value('[name="title"]','Проект договора обучения');a.value('[name="organization"]','Учебная организация');a.value('[name="recipient"]','Участник Первый');a.value('[name="date"]','2026-11-19');a.value('[name="field_0"]','Стороны проекта');a.value('[name="body"]','Первая строка\nВторая строка');a.submit('#document-editor');
  let r=a.state().documentDrafts[0];assert.equal(r.content.recipient,'Участник Первый');assert.equal(r.content.values[0],'Стороны проекта');assert.equal(r.revision,2);
  a.click('[data-document-back]');a.click('[data-document-edit]');assert.equal(a.$('[name="body"]').value,'Первая строка\nВторая строка');a.value('[name="body"]','Предпросмотр без сохранения');a.click('[data-document-preview]');assert.match(a.$('#document-print-frame').getAttribute('srcdoc'),/Предпросмотр без сохранения/);assert.equal(a.state().documentDrafts[0].content.body,'Первая строка\nВторая строка');
  a.w.confirm=()=>false;a.click('[data-document-back]');assert.ok(a.$('#document-editor'));a.w.confirm=()=>true;a.click('[data-document-back]');a.click('[data-document-edit]');assert.equal(a.$('[name="body"]').value,'Первая строка\nВторая строка');a.dom.window.close();
 });
 test('Документы: изменение проверенного проекта снимает отметку, старые записи открываются',()=>{
- const a=app();a.role('learner');a.tab('documents');a.click('[data-document-draft="study-certificate"]');const stored=a.state();stored.documentDrafts[0].status='reviewed';stored.documentDrafts[0].reviewedAt='2026-11-19';delete stored.documentDrafts[0].content;delete stored.documentDrafts[0].revision;
+ const a=app();a.role('learner');a.tab('documents');a.click('[data-document-folder=all]');a.click('[data-document-draft="study-certificate"]');const stored=a.state();stored.documentDrafts[0].status='reviewed';stored.documentDrafts[0].reviewedAt='2026-11-19';delete stored.documentDrafts[0].content;delete stored.documentDrafts[0].revision;
  const b=app(stored);b.role('admin');b.tab('documents');b.click('[data-document-edit]');assert.match(b.$('#main').textContent,/снимет отметку/);b.value('[name="body"]','Изменённое содержание справки');b.submit('#document-editor');const r=b.state().documentDrafts[0];assert.equal(r.status,'draft');assert.equal(r.reviewedAt,undefined);assert.equal(r.revision,2);assert.equal(r.content.body,'Изменённое содержание справки');b.dom.window.close();a.dom.window.close();
 });
 
@@ -531,8 +532,8 @@ test('Ручной журнал: комбинированные фильтры, 
  const b=app(a.state());try{b.role('admin');b.tab('manual-records');assert.equal(b.w.document.querySelectorAll('[data-manual-edit]').length,2);b.click('[data-manual-delete]');assert.equal(b.state().manualRecords.length,1);}finally{b.dom.window.close();}
  }finally{a.dom.window.close();}
 });
-test('Поиск по списку раздела скрывает и возвращает карточки без удаления данных',()=>{
- const a=app();try{a.role('admin');a.tab('documents');const search=a.$('.cabinet-search input');assert.ok(search);search.value='несуществующий-текст-123';search.dispatchEvent(new a.w.Event('input',{bubbles:true}));assert.equal(a.w.document.querySelectorAll('article.card:not([hidden])').length,0);search.value='';search.dispatchEvent(new a.w.Event('input',{bubbles:true}));assert.equal(a.w.document.querySelectorAll('article.card:not([hidden])').length,54);}finally{a.dom.window.close();}
+test('Поиск документов ищет во всех папках без удаления данных',()=>{
+ const a=app();try{a.role('admin');a.tab('documents');a.click('[data-document-folder=all]');a.value('#document-search [name=query]','несуществующий-текст-123');a.submit('#document-search');assert.equal(a.w.document.querySelectorAll('[data-document-draft]').length,0);a.value('#document-search [name=query]','');a.submit('#document-search');assert.equal(a.w.document.querySelectorAll('[data-document-draft]').length,54);}finally{a.dom.window.close();}
 });
 
 test('Ручной журнал экранирует текст и отклоняет обратный диапазон дат',()=>{

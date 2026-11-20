@@ -10,7 +10,8 @@
     "start": "node ../server/server.cjs",
     "bootstrap": "node ../server/server.cjs bootstrap",
     "test:reference:browser": "node tests/reference-browser.cjs",
-    "test:unified:browser": "node tests/unified-browser.cjs"
+    "test:unified:browser": "node tests/unified-browser.cjs",
+    "test:document-folders:browser": "node tests/document-folders-browser.cjs"
   },
   "devDependencies": {
     "jsdom": "^26.1.0",
