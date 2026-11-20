@@ -151,3 +151,34 @@
   │   ├── Акт приёма-передачи документов в архив [не добавлен]
   │   ├── Акт о выделении к уничтожению документов, не подлежащих хранению [не добавлен]
 
+ЗАГРУЖЕН: 01/ministry / Приказ № 266 от 24.03.2025 — порядок ДПО [normative] — /academy/documents/sources/01/ministry/dpo-266.pdf
+ЗАГРУЖЕН: 01/ministry / Приказ № 906 от 14.10.2022 — заполнение и выдача дипломов СПО [normative] — /academy/documents/sources/01/ministry/spo-906.pdf
+ЗАГРУЖЕН: 03/diplomas / Приказ № 645 от 22.07.2021 — образцы дипломов ВО [normative] — /academy/documents/sources/03/diplomas/vo-645.pdf
+ЗАГРУЖЕН: 01/government / Постановление № 1490 — копия без изменений 2026 года [historical] — /academy/documents/sources/01/government/licensing-copy.pdf
+ЗАГРУЖЕН: 01/government / Постановление № 825 — ФИС ФРДО, справочная копия [normative] — /academy/documents/sources/01/government/frdo-copy.pdf
+ЗАГРУЖЕН: 01/government / Постановление № 1678 — электронное обучение и ДОТ, справочная копия [normative] — /academy/documents/sources/01/government/distance-copy.pdf
+ЗАГРУЖЕН: 01/federal-laws / 273-ФЗ — редакция от 28.02.2025 (историческая копия) [historical] — /academy/documents/sources/01/federal-laws/education-273-copy.pdf
+ЗАГРУЖЕН: 01/federal-laws / 152-ФЗ «О персональных данных» — справочная копия, проверить редакцию [normative] — /academy/documents/sources/01/federal-laws/privacy-152-copy.pdf
+ЗАГРУЖЕН: 01/government / Постановление № 1441 — исходная редакция без продления 2026 года [historical] — /academy/documents/sources/01/government/paid-1441-copy.pdf
+ЗАГРУЖЕН: 01/ministry / Приказ № 670 от 27.07.2021 — заполнение и выдача дипломов ВО [normative] — /academy/documents/sources/01/ministry/vo-670.pdf
+ЗАГРУЖЕН: 01/ministry / Образцы аттестатов — приказ № 545 [normative] — /academy/documents/sources/01/ministry/school-545.pdf
+ЗАГРУЖЕН: 01/ministry / Выдача аттестатов — приказ № 546 [normative] — /academy/documents/sources/01/ministry/school-546.pdf
+ЗАГРУЖЕН: 01/ministry / Образцы дипломов СПО — приказ № 390 [normative] — /academy/documents/sources/01/ministry/spo-390.pdf
+ЗАГРУЖЕН: 01/local-acts / Порядок разработки локальных актов [example] — /academy/documents/sources/01/local-acts/local-procedure.pdf
+ЗАГРУЖЕН: 01/local-acts / Положение о педагогическом совете [example] — /academy/documents/sources/01/local-acts/pedagogical-council.pdf
+ЗАГРУЖЕН: 01/local-acts / Положение о структурном подразделении [example] — /academy/documents/sources/01/local-acts/departments.pdf
+ЗАГРУЖЕН: 01/local-acts / Положение об учебной части [example] — /academy/documents/sources/01/local-acts/academic-department.pdf
+ЗАГРУЖЕН: 01/local-acts / Порядок урегулирования споров [example] — /academy/documents/sources/01/local-acts/disputes.pdf
+ЗАГРУЖЕН: 01/local-acts / Положение о персональных данных [example] — /academy/documents/sources/01/local-acts/personal-data.pdf
+ЗАГРУЖЕН: 02/contracts / Положение о платных образовательных услугах [example] — /academy/documents/sources/02/contracts/paid-services.pdf
+ЗАГРУЖЕН: 04/orders / Порядок перевода, отчисления и восстановления [example] — /academy/documents/sources/04/orders/transfer-expulsion.pdf
+ЗАГРУЖЕН: 04/methods / Положение о практической подготовке [example] — /academy/documents/sources/04/methods/practical-training.pdf
+ЗАГРУЖЕН: 02/rules / Правила приёма (копия 2024 года) [example] — /academy/documents/sources/02/rules/admission-rules.pdf
+ЗАГРУЖЕН: 02/rules / Правила приёма по дополнительным образовательным программам [example] — /academy/documents/sources/02/rules/additional-admission.pdf
+ЗАГРУЖЕН: 01/local-acts / Порядок оформления образовательных отношений [example] — /academy/documents/sources/01/local-acts/education-relations.pdf
+ЗАГРУЖЕН: 04/programs / Проектирование и утверждение дополнительных общеобразовательных программ [example] — /academy/documents/sources/04/programs/additional-programs.pdf
+ЗАГРУЖЕН: 04/programs / Положение о профессиональном обучении и ДПО [example] — /academy/documents/sources/04/programs/dpo-delivery.pdf
+ЗАГРУЖЕН: 02/rules / Правила приёма на профессиональное обучение и ДПО [example] — /academy/documents/sources/02/rules/po-dpo-admission.pdf
+ЗАГРУЖЕН: 03/gia / Положение о промежуточной и итоговой аттестации [example] — /academy/documents/sources/03/gia/assessment.pdf
+ЗАГРУЖЕН: 03/commissions / Положение об экзаменационной комиссии [example] — /academy/documents/sources/03/commissions/exam-commission.pdf
+ЗАГРУЖЕН: 02/commission / Положение о приёмной комиссии [example] — /academy/documents/sources/02/commission/admission-commission.pdf
