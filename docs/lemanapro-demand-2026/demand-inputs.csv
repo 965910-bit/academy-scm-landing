@@ -1,0 +1,21 @@
+record_id,course_label,city,period,required_assignments,external_purchase_assignments,unit_price_rub,unit_delivery_cost_rub,source_id,forecast_status
+LP-TRAIN-001,Водитель погрузчика свыше 4 кВт,Сургут,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Водитель погрузчика свыше 4 кВт,Тюмень,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Водитель погрузчика свыше 4 кВт,Омск,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Водитель погрузчика свыше 4 кВт,Барнаул,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Водитель погрузчика до 4 кВт,Сургут,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Водитель погрузчика до 4 кВт,Тюмень,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Водитель погрузчика до 4 кВт,Омск,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Водитель погрузчика до 4 кВт,Барнаул,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Машинист вышки,Сургут,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Машинист вышки,Тюмень,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Машинист вышки,Омск,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Машинист вышки,Барнаул,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Высота без группы/1 группа,Сургут,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Высота без группы/1 группа,Тюмень,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Высота без группы/1 группа,Омск,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Высота без группы/1 группа,Барнаул,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Машинист ГПМ с пола/машинист крана,Сургут,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Машинист ГПМ с пола/машинист крана,Тюмень,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Машинист ГПМ с пола/машинист крана,Омск,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price
+LP-TRAIN-001,Машинист ГПМ с пола/машинист крана,Барнаул,not_disclosed,,,,,S02;S03,not_calculable_missing_quantity_and_price

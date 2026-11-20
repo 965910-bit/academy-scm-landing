@@ -1,0 +1,172 @@
+[
+  {
+    "id": "S01",
+    "title": "Официальный карьерный сайт",
+    "url": "https://rabota.lemanapro.ru/",
+    "kind": "primary",
+    "access": "fetched",
+    "observed": "40 000+ сотрудников; 100+ гипермаркетов; 11 дарксторов; 6 распределительных центров; корпоративное обучение",
+    "limitation": "Текущая страница без отчётного периода; округлённая численность не равна среднесписочной",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S02",
+    "title": "Тендер обучения, РосТендер 94503896",
+    "url": "https://rostender.info/region/hanty-mansijskij-avtonomnyj-okrug---yugra-avtonomnyj-okrug/surgut/94503896-tender-surgut-tyumen-omsk-barnaulobuchenie-v-oblasti-ohrany-truda-i-rabochih-specialnostej",
+    "kind": "aggregator",
+    "access": "fetched",
+    "observed": "21.08.2026; окончание 04.09.2026 18:00 МСК; четыре города; пять составных наименований обучения",
+    "limitation": "Заказчик скрыт в карточке; отнесён каталогом к Леруа Мерлен Восток; первичный ID B2B-Center не раскрыт",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S03",
+    "title": "Зеркало того же обучения, Комтендер 2498008102",
+    "url": "https://www.komtender.ru/tender/2498008102",
+    "kind": "aggregator",
+    "access": "fetched",
+    "observed": "Тот же предмет, даты, города, ссылка на B2B-Center",
+    "limitation": "Не вторая закупка и не независимое подтверждение исходной документации",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S04",
+    "title": "Каталог заказчика РосТендер",
+    "url": "https://rostender.info/category/tendery-lerua-merlen-vostok?page=3&scrollto=table-constructor",
+    "kind": "aggregator",
+    "access": "fetched",
+    "observed": "Каталог Леруа Мерлен Восток содержит 94503896; счётчик 752 тендера",
+    "limitation": "752 — все категории в выдаче без установленного периода, не число закупок обучения",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S05",
+    "title": "Кейс SRM AGORA",
+    "url": "https://www.agora.ru/blog/vnedrenie-srm-dlia-lemana-pro/",
+    "kind": "vendor_case",
+    "access": "fetched",
+    "observed": "02.07.2025: 112 гипермаркетов, более 2000 поставщиков, PTM на AGORA, полный цикл тендера",
+    "limitation": "Заявление внедренца; не публичный реестр всех закупок и не гарантия доступа к закрытым процедурам",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S06",
+    "title": "Профиль TAdviser",
+    "url": "https://www.tadviser.ru/index.php/Компания:Лемана_Про_(ранее_Леруа_Мерлен)?ptype=spec",
+    "kind": "secondary",
+    "access": "search_and_partial_fetch",
+    "observed": "Пересказ отчёта 2025: 40 633 сотрудника, 45 471 в 2024, 25 часов обучения на человека в 2025",
+    "limitation": "Цифры найдены в поисковом извлечении; полный отчёт не получен; выручка не бюджет обучения",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S07",
+    "title": "Кейс оценки и развития NeoHR",
+    "url": "https://neohr.ru/sistema-ocenki-i-razvitiya-personala-lemana-pro",
+    "kind": "company_authored_case",
+    "access": "fetched",
+    "observed": "21.12.2025: более 38 000 участников, более 100 000 запросов обратной связи, ИПР 81%, цели 91%, более 16 000 тестирований гибких навыков, 95% завершений назначенных программ развития",
+    "limitation": "Самоотчёт представителя; оценка и тестирование не равны оплачиваемым отдельным курсам",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S08",
+    "title": "Акселератор New Retail",
+    "url": "https://new-retail.ru/business/keysy/keys_kak_akselerator_lemana_pro_rastit_liderov_vnutri_kompanii/",
+    "kind": "company_authored_case",
+    "access": "fetched",
+    "observed": "На самой странице 12.09.2025: около 1000 участников ежегодно; длительность 4–7 или 6–7 месяцев",
+    "limitation": "Не прибавлять к штату; внутреннее развитие, не доказательство внешней закупки",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S09",
+    "title": "Отчёт устойчивого развития 2025, пересказ",
+    "url": "https://www.b-soc.ru/socotchet/lemana-pro-predstavila-otchet-ob-ustojchivom-razvitii-za-2025-god/",
+    "kind": "secondary",
+    "access": "fetched",
+    "observed": "6,8 млрд рублей социальных и экологических инициатив; eNPS 71%; 95% поставщиков российские, 64% из них МСП",
+    "limitation": "6,8 млрд не расходы на обучение; денежная доля обучения не выделена",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S10",
+    "title": "Официальная страница устойчивого развития",
+    "url": "https://lemanapro.ru/ustoychivoe-razvitie/",
+    "kind": "primary",
+    "access": "fetch_failed",
+    "observed": "Ссылка на полную версию отчёта найдена в S09",
+    "limitation": "Страница не получена, PDF не прочитан; не считать первичное подтверждение состоявшимся",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S11",
+    "title": "Внешнее обучение по расследованию происшествий SRG",
+    "url": "https://srgroup.ru/news/ekspert-srg-provel-dlya-spetsialistov-lerua-merlen-trening-po-opredeleniyu-korennykh-prichin-proissh/",
+    "kind": "provider_case",
+    "access": "search_excerpt",
+    "observed": "09.10.2018: цикл обучения 24–28 сентября, более 30 специалистов ОТ, внешний эксперт SRG",
+    "limitation": "Исторический кейс исполнителя; цена и факт оплаты не раскрыты",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S12",
+    "title": "Внешнее обучение Компас ВЭД",
+    "url": "https://deklarantonline.ru/korporativnoe-obuchenie-dlya-specialistov-lerua-merlen/",
+    "kind": "provider_case",
+    "access": "search_excerpt",
+    "observed": "15.12.2021: проведено обучение в ноябре 2021 по классификации товаров в таможенных целях",
+    "limitation": "Не обучение охране труда; размер группы и цена не раскрыты",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S13",
+    "title": "Открытие магазина Сургут, СургутИнформТВ",
+    "url": "https://sitv.ru/arhiv/news/klyuchevoj-igrok-chto-dast-surgutu-prixod-krupnogo-ritejlera-lerua-merlen/",
+    "kind": "local_media",
+    "access": "search_excerpt",
+    "observed": "20.07.2020: набор более 200 сотрудников, обязательное обучение в Тюмени и Омске",
+    "limitation": "План набора при открытии, не современный штат; не опровержение опыта пользователя про другой период/объект",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S15",
+    "title": "Историческое внедрение SAP",
+    "url": "https://cio.osp.ru/news/290120-Lerua-Merlen-razvivaet-talanty",
+    "kind": "media",
+    "access": "search_excerpt",
+    "observed": "29.01.2020: план охвата 34 тыс. сотрудников и 103 магазинов, включая офисы РФ, Казахстана и Беларуси",
+    "limitation": "Исторический план, другая география; не актуальная численность РФ",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S16",
+    "title": "Масштаб логистики 2024, ComNews",
+    "url": "https://www.comnews.ru/digital-economy/content/236212/2024-11-11/2024-w46/1012/lemana-pro-optimizirovala-rabotu-zonakh-planirovaniya-assortimenta",
+    "kind": "media",
+    "access": "search_excerpt",
+    "observed": "Ноябрь 2024: 112 магазинов, 11 дарксторов, 6 РЦ",
+    "limitation": "Исторический срез, объекты разных типов не равны",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S17",
+    "title": "Пожарно-тактическое учение МЧС",
+    "url": "https://48.mchs.gov.ru/deyatelnost/press-centr/novosti/4747547",
+    "kind": "regulator",
+    "access": "search_excerpt",
+    "observed": "17.05.2022, ТЦ Леруа Мерлен Липецк: учение и отработка действий персонала",
+    "limitation": "Не тендер на платный курс и не сведения о бюджетах",
+    "checked_at": "2026-11-19"
+  },
+  {
+    "id": "S19",
+    "title": "Тендер реконструкции пожарных систем",
+    "url": "https://www.komtender.ru/tender/2498401715",
+    "kind": "aggregator",
+    "access": "fetched",
+    "observed": "25.08.2026: АПС и СОУЭ пяти магазинов, СМР",
+    "limitation": "Исключён: монтаж/реконструкция, не обучение; ID был проверен и не перепутан с соседним лотом",
+    "checked_at": "2026-11-19"
+  }
+]

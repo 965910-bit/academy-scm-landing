@@ -1,0 +1,39 @@
+[
+  {
+    "record_id": "LP-TRAIN-001",
+    "subject": "СУРГУТ, ТЮМЕНЬ, ОМСК, БАРНАУЛ — Обучение в области охраны труда и рабочих специальностей",
+    "published": "2026-08-21",
+    "deadline_msk": "2026-09-04T18:00:00+03:00",
+    "status": "completed_on_aggregator_not_award_verified",
+    "cities": [
+      "Сургут",
+      "Тюмень",
+      "Омск",
+      "Барнаул"
+    ],
+    "source_ids": [
+      "S02",
+      "S03",
+      "S04"
+    ],
+    "aggregator_ids": [
+      "94503896",
+      "2498008102"
+    ],
+    "primary_platform": "B2B-Center",
+    "primary_id": null,
+    "buyer_identity_status": "assigned_by_aggregator_category_not_primary_verified",
+    "quantity": null,
+    "starting_price_rub": null,
+    "contract_price_rub": null,
+    "winner": null,
+    "payment_terms": null,
+    "program_labels": [
+      "Водитель погрузчика свыше 4 кВт",
+      "Водитель погрузчика до 4 кВт",
+      "Машинист вышки",
+      "Высота без группы/1 группа",
+      "Машинист ГПМ с пола/машинист крана"
+    ]
+  }
+]
