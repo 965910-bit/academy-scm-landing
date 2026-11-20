@@ -1,6 +1,6 @@
 /* Only the public application shell is cached. Private authenticated API responses are never cached. */
 "use strict";
-importScripts("./offline-config.js?v=documents-20261119-22");
+importScripts("./offline-config.js?v=reference-20261119-23");
 const { cacheName, files } = self.SCM_OFFLINE_CONFIG;
 const urls = new Set(files.map(file => new URL(file, self.registration.scope).href));
 self.addEventListener("install", event => {

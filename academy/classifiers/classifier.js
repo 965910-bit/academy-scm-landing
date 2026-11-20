@@ -1,0 +1,30 @@
+/* Offline, local-only classifier search. No third-party requests. */
+'use strict';
+(() => {
+ const form=document.querySelector('#filters'),body=document.querySelector('#results'),status=document.querySelector('#result-count');
+ let records=[],filtered=[],page=1;
+ const normalize=s=>String(s||'').toLocaleLowerCase('ru').replace(/ё/g,'е');
+ const fields=()=>Object.fromEntries(new FormData(form));
+ function option(select,value){const o=document.createElement('option');o.value=value;o.textContent=value;select.append(o);}
+ function matchesRange(value,grade,roman=false){if(!grade)return true;const romans={I:1,II:2,III:3,IV:4,V:5,VI:6,VII:7,VIII:8,IX:9};if(roman!==/[IVX]/.test(value))return false;return value.split(',').some(part=>{const ns=roman?(part.match(/[IVX]+/g)||[]).map(x=>romans[x]):(part.match(/\d+/g)||[]).map(Number);return ns.length===2&&/[-–—]/.test(part)?+grade>=ns[0]&&+grade<=ns[1]:ns.includes(+grade);});}
+
+ const columns=r=>[r.code,r.name,r.kind==='worker'?'Рабочие':'Служащие',r.etks||'—',r.category||'—',r.okz||'—',r.grades||'—'];
+ function row(r){const tr=document.createElement('tr');for(const v of columns(r)){const td=document.createElement('td');td.textContent=v;tr.append(td);}const td=document.createElement('td'),a=document.createElement('a');a.href=r.source;a.textContent='Первоисточник ↗';td.append(a);tr.append(td);return tr;}
+ function render(reset=true){if(reset)page=1;const f=fields(),terms=normalize(f.q).split(/\s+/).filter(Boolean);
+ filtered=records.filter(r=>terms.every(t=>r.search.includes(t))&&r.code.startsWith(f.code.trim())&&r.okz.startsWith(f.okz.trim())&&(!f.kind||r.kind===f.kind)&&(!f.etks||r.etks===f.etks)&&(!f.category||(f.category==='missing'?r.kind==='employee'&&!r.category:r.category===f.category))&&matchesRange(r.grades,f.grade)&&matchesRange(r.grades,f.group,true)&&(!f.letter||r.name[0].toLocaleUpperCase('ru')===f.letter));
+ const key=f.sort.startsWith('name')?'name':f.sort==='okz'?'okz':'code',direction=f.sort.endsWith('desc')?-1:1;
+ filtered.sort((a,b)=>direction*a[key].localeCompare(b[key],'ru',{numeric:true})||a.code.localeCompare(b.code));
+ const size=+f.size,pages=Math.max(1,Math.ceil(filtered.length/size));page=Math.min(page,pages);body.replaceChildren(...filtered.slice((page-1)*size,page*size).map(row));
+ if(!filtered.length){const tr=body.insertRow(),td=tr.insertCell();td.colSpan=8;td.textContent='Ничего не найдено. Измените или сбросьте фильтры.';}
+ status.textContent=`Найдено ${filtered.length.toLocaleString('ru')} из ${records.length.toLocaleString('ru')}`;document.querySelector('#page').textContent=`Страница ${page} из ${pages}`;
+ document.querySelector('#previous').disabled=page===1;document.querySelector('#next').disabled=page>=pages;document.querySelector('#export').disabled=!filtered.length;
+ const params=new URLSearchParams();for(const [k,v]of Object.entries(f))if(v)params.set(k,v);history.replaceState(null,'',`${location.pathname}?${params}`);
+ }
+ form.addEventListener('submit',e=>e.preventDefault());form.addEventListener('input',()=>render());form.addEventListener('reset',()=>setTimeout(()=>render(),0));
+ document.querySelector('#previous').onclick=()=>{page--;render(false);};document.querySelector('#next').onclick=()=>{page++;render(false);};
+ function csv(v){v=String(v);if(/^[=+@\-\t\r]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"';}
+ document.querySelector('#export').onclick=()=>{const lines=[['Код','Наименование','Раздел','ЕТКС','Категория','ОКЗ','Разряды','Источник'],...filtered.map(r=>[...columns(r),r.source])];const url=URL.createObjectURL(new Blob(['\ufeff'+lines.map(r=>r.map(csv).join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='okpdtr-2026-selection.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+ document.querySelector('#print').onclick=()=>{const w=window.open('','_blank');if(!w){status.textContent='Разрешите окно печати в браузере.';return;}w.document.title='ОКПДТР–2026 · выборка';const h=w.document.createElement('h1');h.textContent=`ОК 016-2025 · ${filtered.length} записей`;w.document.body.append(h);const note=w.document.createElement('p');note.textContent='Источник: bizlog.ru/okpdtr/. Исходный перечень, действует с 01.01.2026. Фильтры: '+JSON.stringify(fields());w.document.body.append(note);const table=document.querySelector('table').cloneNode(false),thead=document.querySelector('thead').cloneNode(true),tbody=w.document.createElement('tbody');for(const r of filtered)tbody.append(w.document.importNode(row(r),true));table.append(thead,tbody);w.document.body.append(table);const style=w.document.createElement('style');style.textContent='body{font:10pt sans-serif}table{width:100%;border-collapse:collapse}td,th{border:1px solid #aaa;padding:5px}thead{display:table-header-group}tr{break-inside:avoid}@page{size:A4 landscape}';w.document.head.append(style);w.print();};
+ document.querySelector('#copy-link').onclick=async()=>{try{await navigator.clipboard.writeText(location.href);status.textContent='Ссылка с фильтрами скопирована.';}catch{status.textContent='Скопируйте адрес страницы из адресной строки.';}};
+ fetch('okpdtr.json').then(r=>{if(!r.ok)throw Error(r.status);return r.json();}).then(data=>{if(data.count!==9935||data.records.length!==9935)throw Error('Неполный набор');records=data.records.map(r=>({...r,search:normalize(Object.values(r).join(' '))}));for(const v of [...new Set(records.map(r=>r.etks).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ru',{numeric:true})))option(form.elements.etks,v);for(let i=1;i<=9;i++)option(form.elements.grade,String(i));for(const v of [...new Set(records.map(r=>r.name[0].toLocaleUpperCase('ru')))].sort((a,b)=>a.localeCompare(b,'ru')))option(form.elements.letter,v);for(const [k,v]of new URLSearchParams(location.search)){if(form.elements[k]&&k!=='__proto__')form.elements[k].value=v;}render();}).catch(()=>{status.textContent='Не удалось загрузить полный классификатор. Проверьте соединение и обновите страницу. Частичный набор не показывается.';});
+})();
