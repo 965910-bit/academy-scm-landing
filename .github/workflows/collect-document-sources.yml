@@ -1,6 +1,10 @@
 name: Collect public document sources
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - scripts/collect-document-sources.py
+      - .github/workflows/collect-document-sources.yml
 permissions:
   contents: write
 jobs:
