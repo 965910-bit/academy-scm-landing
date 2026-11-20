@@ -1,5 +1,5 @@
 {
-  "version": "0.6.0",
+  "version": "0.7.0",
   "date": "2026-11-19",
   "author": "Герасимов Дмитрий Сергеевич",
   "note": "Редакционный журнал. Проверяющие не назначены; автоматические тесты не являются предметной или правовой экспертизой. Публичный файл не содержит личных результатов слушателей.",
@@ -185,6 +185,42 @@
       ]
     },
     {
+      "id": "D06-C01",
+      "subject_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "legal_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "answer_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "pilot": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "open_issues": "Вводный комплект: нужна полная программа, актуальная российская применимость, профильная проверка и практика. Кабинетные задания не заменяют допуск.",
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-11-19",
+          "author": "Герасимов Дмитрий Сергеевич",
+          "change": "Создан вводный комплект и разборы заданий; экспертиза и апробация не выполнены."
+        }
+      ]
+    },
+    {
       "id": "D07-C02",
       "subject_review": {
         "status": "pending",
@@ -329,6 +365,42 @@
       ]
     },
     {
+      "id": "D11-C05",
+      "subject_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "legal_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "answer_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "pilot": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "open_issues": "Вводный комплект: нужна полная программа, актуальная российская применимость, профильная проверка и практика. Кабинетные задания не заменяют допуск.",
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-11-19",
+          "author": "Герасимов Дмитрий Сергеевич",
+          "change": "Создан вводный комплект и разборы заданий; экспертиза и апробация не выполнены."
+        }
+      ]
+    },
+    {
       "id": "D19-C03",
       "subject_review": {
         "status": "pending",
@@ -433,6 +505,78 @@
           "date": "2026-11-19",
           "author": "Герасимов Дмитрий Сергеевич",
           "change": "Добавлены отдельные разборы заданий каждого урока; экспертиза и апробация не заявлены."
+        }
+      ]
+    },
+    {
+      "id": "D22-C03",
+      "subject_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "legal_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "answer_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "pilot": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "open_issues": "Вводный комплект: нужна полная программа, актуальная российская применимость, профильная проверка и практика. Кабинетные задания не заменяют допуск.",
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-11-19",
+          "author": "Герасимов Дмитрий Сергеевич",
+          "change": "Создан вводный комплект и разборы заданий; экспертиза и апробация не выполнены."
+        }
+      ]
+    },
+    {
+      "id": "D24-C01",
+      "subject_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "legal_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "answer_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "pilot": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "open_issues": "Вводный комплект: нужна полная программа, актуальная российская применимость, профильная проверка и практика. Кабинетные задания не заменяют допуск.",
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-11-19",
+          "author": "Герасимов Дмитрий Сергеевич",
+          "change": "Создан вводный комплект и разборы заданий; экспертиза и апробация не выполнены."
         }
       ]
     },
