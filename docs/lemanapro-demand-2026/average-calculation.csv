@@ -1,0 +1,8 @@
+course,external_appointments_per_employee_year,unit_price_rub,appointments_at_800,revenue_at_800,price_basis,volume_status
+Охрана труда: одно отдельное назначение,0.2,1250,160.0,200000.0,"Среднее двух ориентиров 1000 и 1500, Курсор",SCENARIO_ASSUMPTION_NOT_BUYER_STATISTICS
+Первая помощь,0.25,700,200.0,140000.0,Прайс Курсор,SCENARIO_ASSUMPTION_NOT_BUYER_STATISTICS
+СИЗ,0.2,1000,160.0,160000.0,"Расчётное допущение, не полученный прайс",SCENARIO_ASSUMPTION_NOT_BUYER_STATISTICS
+Работы на высоте,0.08,2500,64.0,160000.0,"Середина диапазона 2000–3000, Курсор",SCENARIO_ASSUMPTION_NOT_BUYER_STATISTICS
+Погрузчики: сводная категория,0.04,7500,32.0,240000.0,Среднее двух предложений 5000 и 10000; виды/категории требуют раздельного КП,SCENARIO_ASSUMPTION_NOT_BUYER_STATISTICS
+Машинист вышки,0.02,5000,16.0,80000.0,"Расчётный аналог, не прямая котировка",SCENARIO_ASSUMPTION_NOT_BUYER_STATISTICS
+ГПМ с пола / машинист крана,0.03,5000,24.0,120000.0,Расчётный аналог цены крана Курсор; не тождественные программы,SCENARIO_ASSUMPTION_NOT_BUYER_STATISTICS
