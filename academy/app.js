@@ -153,6 +153,7 @@
     tab = "overview",
     filter = "all";
   if (identity?.user) { role = (identity.target || identity.user).role; tab = ["admin","admissions","superadmin"].includes(role)?"accounts":"workflows"; }
+  if(identity?.user && sessionStorage.getItem("scm-open-assembly")==="1"){tab="assembly";sessionStorage.removeItem("scm-open-assembly");}
   const main = document.querySelector("#main");
   const esc = (s) =>
     String(s ?? "").replace(
@@ -404,6 +405,7 @@
     if (identity?.user) { role = (identity.target || identity.user).role; tab = ["admin","admissions","superadmin"].includes(role)?"accounts":"workflows"; render(); return; }
     document.querySelector("#login-dialog").showModal();
   }
+  document.querySelector("#assembly-entry")?.addEventListener("click",event=>{event.preventDefault();if(identity?.user){role=(identity.target||identity.user).role;tab="assembly";render();}else{sessionStorage.setItem("scm-open-assembly","1");login();}});
   const menuToggle = document.querySelector('.mobile-menu-toggle');
   const primaryNavigation = document.querySelector('#primary-navigation');
   const closeMenu = () => { menuToggle.setAttribute('aria-expanded', 'false'); primaryNavigation.classList.remove('is-open'); };

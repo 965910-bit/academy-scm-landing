@@ -24,3 +24,9 @@ test('Worker does not intercept private files, query URLs, writes or other origi
  }
  assert.equal(called,0);
 });
+
+test('Worker serves release-versioned JS offline but never arbitrary query parameters',async()=>{
+ const self={};vm.runInNewContext(fs.readFileSync(path.join(root,'offline-config.js'),'utf8'),{self});const release=self.SCM_OFFLINE_CONFIG.release;
+ const w=worker();let response;w.handlers.fetch({request:{method:'GET',url:'https://example.test/academy/assembly.js?v='+release},respondWith:p=>{response=p;}});assert.equal(await response,'cached-shell');assert.equal(w.matches[0],'https://example.test/academy/assembly.js');
+ let calls=0;for(const query of ['v=obsolete','v='+release+'&token=secret','token=secret'])w.handlers.fetch({request:{method:'GET',url:'https://example.test/academy/assembly.js?'+query},respondWith:()=>calls++});assert.equal(calls,0);
+});

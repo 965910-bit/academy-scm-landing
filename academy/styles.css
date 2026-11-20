@@ -1981,3 +1981,5 @@ h1,h2,h3 { overflow-wrap:anywhere; }
 .workflow-record form{margin:14px 0}.workflow-record .micro{overflow-wrap:anywhere}
 #workflow-create .two-col>*,#workflow-filter .two-col>*{min-width:0}
 .workflow-record input,.workflow-record select,.workflow-record textarea,#workflow-create input,#workflow-create select{max-width:100%;min-width:0}
+
+#assembly-record .two-col>*{min-width:0}#assembly-record input,#assembly-record select,#assembly-select select{min-width:0;max-width:100%}
