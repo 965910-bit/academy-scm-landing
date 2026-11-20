@@ -454,7 +454,7 @@
     const complete=user=>{learning.resetView();curriculum.resetView();studyTools.resetView();decisionLab.resetView();knowledge.resetView();documents.resetView();manualRecords.resetView(); if(identity?.remote||identity?.local){location.hash='cabinet';location.reload();return;} role=user.role;tab='overview';document.querySelector('#login-dialog').close();render(); };
     if(!identity){status.textContent='Сервис входа недоступен. Для кабинетов требуется сервер академии.';return;}
     const button=form.querySelector('button[type="submit"]');button.disabled=true;
-    try { const result=identity.login(data.get('name'),data.get('password'));
+    try { const result=identity.login(data.get('name'),data.get('password'),data.get('otp'));
       if(result?.then)result.then(complete).catch(err=>status.textContent=err.message).finally(()=>button.disabled=false);
       else {complete(result);button.disabled=false;}
     }catch(err){status.textContent=err.message;button.disabled=false;}
@@ -462,6 +462,7 @@
   document.addEventListener("click", (e) => {
     const t = e.target.closest("button,a");
     if (!t) return;
+    if(t.dataset.oidcProvider){e.preventDefault();const status=document.querySelector('#login-status');fetch('/api/oidc/providers',{credentials:'same-origin',cache:'no-store'}).then(async response=>{if(!response.headers.get('Content-Type')?.includes('application/json'))throw Error('SSO на этом размещении не настроен. Обычный вход остаётся доступен.');const value=await response.json();if(!response.ok||!value.providers?.some(p=>p.id===t.dataset.oidcProvider))throw Error('Этот SSO-провайдер не настроен на сервере. Обычный вход остаётся доступен.');location.href=t.href;}).catch(error=>{status.textContent=error.message;});return;}
     if(t.dataset.developmentOpen){development?.open(t.dataset.developmentOpen);tab='development';if(window.SCMUnifiedPages?.route()!=null)history.pushState(null,'',location.pathname+'#cabinet');render();return;}
     if (identity?.click?.(t, render)) return;
     if (assembly?.click(t)) return;

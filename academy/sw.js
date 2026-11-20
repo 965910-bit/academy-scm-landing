@@ -1,6 +1,6 @@
 /* Only the public application shell is cached. Private authenticated API responses are never cached. */
 "use strict";
-importScripts("./offline-config.js?v=lms-operations-20261119-30");
+importScripts("./offline-config.js?v=lms-studio-20261119-31");
 const { cacheName, files } = self.SCM_OFFLINE_CONFIG;
 const urls = new Set(files.map(file => new URL(file, self.registration.scope).href));
 self.addEventListener("install", event => {

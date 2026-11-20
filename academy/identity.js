@@ -24,7 +24,7 @@ window.SCMIdentity=(()=>{
  const value=await api('state'+(identity.target?'?user='+encodeURIComponent(identity.target.id):''));identity.workspace=value.state;identity.revision=value.revision;
  }
  identity.ready=load().catch(()=>{identity.user=null;identity.workspace=null;});
- identity.login=async(name,password)=>{if(normalName(name)===normalName(ownerName)&&!password){sessionStorage.setItem(sessionKey,'1');try{openLocal();}catch(err){sessionStorage.removeItem(sessionKey);throw err;}return identity.user;}await api('login','POST',{name,password});await load();return identity.user;};
+ identity.login=async(name,password,otp)=>{if(normalName(name)===normalName(ownerName)&&!password){sessionStorage.setItem(sessionKey,'1');try{openLocal();}catch(err){sessionStorage.removeItem(sessionKey);throw err;}return identity.user;}await api('login','POST',{name,password,otp});await load();return identity.user;};
  identity.logout=async()=>{if(identity.local){sessionStorage.removeItem(sessionKey);sessionStorage.removeItem(targetKey);identity.user=null;identity.workspace=null;location.href='/academy/';return;}await identity.queue;if(identity.error&&!confirm('Есть несохранённые изменения. Сначала рекомендуется экспорт. Выйти без сохранения?'))return;await api('logout','POST',{});sessionStorage.removeItem('scm-workspace-target');location.href='/academy/';};
  identity.save=state=>{
  if(identity.local){try{localStorage.setItem(workspaceKey(),JSON.stringify(state));identity.workspace=state;return true;}catch{throw Error('Не удалось сохранить в браузере. Сделайте экспорт рабочего пространства.');}}

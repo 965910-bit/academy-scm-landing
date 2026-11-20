@@ -3,6 +3,9 @@ const http=require('node:http'),fs=require('node:fs'),path=require('node:path'),
 const {promisify}=require('node:util'),{DatabaseSync}=require('node:sqlite');const scrypt=promisify(crypto.scrypt);
 const Workflow=require('../academy/workflow-engine.js');
 const Development=require('../academy/development-engine.js'),{askAssistant}=require('./development-services.cjs');
+const {createOIDC}=require('./oidc.cjs');
+const {createSecurity}=require('./tenant-security.cjs');
+const Integrations=require('./integration-services.cjs');
 const roles=Object.keys(Workflow.roles);
 const normalize=s=>String(s||'').normalize('NFKC').trim().replace(/\s+/g,' ').toLocaleLowerCase('ru');
 const cleanName=s=>String(s||'').normalize('NFKC').trim().replace(/\s+/g,' ');
@@ -15,6 +18,8 @@ function createService({directory=process.env.DATA_DIR||path.resolve(__dirname,'
  db.exec(`CREATE TABLE IF NOT EXISTS workflow_store(id INTEGER PRIMARY KEY CHECK(id=1),body TEXT NOT NULL);`);
  db.exec('CREATE TABLE IF NOT EXISTS development_store(user_id TEXT PRIMARY KEY,revision INTEGER NOT NULL,body TEXT NOT NULL);');
  const audit=(actor,action,target)=>db.prepare('INSERT INTO audit(at,actor,action,target) VALUES(?,?,?,?)').run(new Date().toISOString(),actor,action,target);
+ const security=createSecurity({db,directory,audit});
+ const oidc=createOIDC({db,audit,secure});
  const publicUser=u=>({id:u.id,name:u.name,role:u.role,mustChange:!!u.must_change,disabled:!!u.disabled});
  const mayManage=(actor,targetRole)=>['admin','superadmin'].includes(actor.role)||(actor.role==='admissions'&&['applicant','learner'].includes(targetRole));
  async function createUser(actor,{name,role}){name=cleanName(name);if(!roles.includes(role)||!mayManage(actor,role))throw Object.assign(Error('Недостаточно прав для назначения этой роли.'),{status:403});if(name.length<5||name.length>160||!/^\p{L}[\p{L}\p{M} .’'\-]+$/u.test(name)||name.split(' ').length<2)throw Error('Укажите ФИО: минимум два слова, только буквы, пробел, дефис и апостроф.');const id=crypto.randomUUID(),password=crypto.randomBytes(18).toString('base64url'),encoded=await hash(password);try{db.prepare('INSERT INTO users(id,name,login,role,password) VALUES(?,?,?,?,?)').run(id,name,normalize(name),role,encoded);}catch(err){if(err.code?.includes('SQLITE'))throw Error('Такое ФИО уже используется. Добавьте различимый и согласованный вариант ФИО.');throw err;}audit(actor.id,'user.created',id);return {user:{id,name,role,mustChange:true},password};}
@@ -48,8 +53,10 @@ function createService({directory=process.env.DATA_DIR||path.resolve(__dirname,'
    for(const k of [key,ip]){const v=attempts.get(k);if(v&&v.count>=10)return send(res,429,{error:'Слишком много попыток. Повторите через 15 минут.'});}
    const u=db.prepare('SELECT * FROM users WHERE login=?').get(login);dummyHash ||= await hash(token());const good=await verify(input.password,u?.password||dummyHash);
    if(!u||u.disabled||!good){for(const k of [key,ip]){const v=attempts.get(k)||{count:0,until:Date.now()+900000};v.count++;attempts.set(k,v);}return send(res,401,{error:'Неверное ФИО или пароль.'});}
+   try{security.checkLogin(u,input.otp);}catch(error){for(const k of [key,ip]){const v=attempts.get(k)||{count:0,until:Date.now()+900000};v.count++;attempts.set(k,v);}throw error;}
    attempts.delete(key);if(cookie)db.prepare('DELETE FROM sessions WHERE hash=?').run(digest(cookie));db.prepare('DELETE FROM sessions WHERE expires<=?').run(Date.now());const value=token();db.prepare('INSERT INTO sessions VALUES(?,?,?)').run(digest(value),u.id,Date.now()+8*3600000);res.setHeader('Set-Cookie',`scm_session=${value}; HttpOnly; SameSite=Strict; Path=/; Max-Age=28800${secure?'; Secure':''}`);audit(u.id,'session.login',u.id);return send(res,200,{user:publicUser(u)});
   }
+  if(url.pathname.startsWith('/api/oidc/')&&url.pathname!=='/api/oidc/link'){await oidc.handle({url,req,res,input,session,send});return;}
   if(!session)return send(res,401,{error:'Войдите по ФИО и паролю.'});
   if(url.pathname==='/api/me'&&req.method==='GET')return send(res,200,{user:publicUser(session)});
   if(url.pathname==='/api/logout'&&req.method==='POST'){db.prepare('DELETE FROM sessions WHERE hash=?').run(digest(cookie));res.setHeader('Set-Cookie',`scm_session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0${secure?'; Secure':''}`);return send(res,200,{ok:true});}
@@ -58,6 +65,10 @@ function createService({directory=process.env.DATA_DIR||path.resolve(__dirname,'
    if(!await verify(input.current,session.password))return send(res,403,{error:'Текущий пароль неверен.'});const encoded=await hash(input.password);db.prepare('UPDATE users SET password=?,must_change=0 WHERE id=?').run(encoded,session.id);db.prepare('DELETE FROM sessions WHERE user_id=? AND hash<>?').run(session.id,digest(cookie));audit(session.id,'password.changed',session.id);return send(res,200,{ok:true});
   }
   if(session.must_change)return send(res,403,{error:'Сначала замените выданный пароль.'});
+  if(url.pathname==='/api/oidc/link'){await oidc.handle({url,req,res,input,session,send});return;}
+  if(url.pathname==='/api/integrations/capabilities'&&req.method==='GET')return send(res,200,Integrations.capabilities());
+  if(url.pathname==='/api/integrations/send'&&req.method==='POST'){const receipt=await Integrations.deliver(input,session);audit(session.id,'integration.'+receipt.kind,receipt.id);return send(res,200,receipt);}
+  if(security.handle({url,method:req.method,input,session,send,res}))return;
   if(url.pathname==='/api/development/ai'&&req.method==='POST'){
    const result=await askAssistant(input);audit(session.id,'development.ai',result.model);return send(res,200,result);
   }

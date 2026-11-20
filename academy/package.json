@@ -16,10 +16,17 @@
     "test:document-sources:browser": "node tests/document-sources-browser.cjs",
     "test:market-research:browser": "node tests/market-research-browser.cjs",
     "test:development:browser": "node tests/development-browser.cjs",
-    "test:lms:browser": "node tests/lms-browser.cjs"
+    "test:lms:browser": "node tests/lms-browser.cjs",
+    "build:studio": "esbuild ../scripts/studio-packages-entry.js --bundle --minify --outfile=vendor/studio-packages.js --legal-comments=eof",
+    "test:studio:browser": "node tests/studio-browser.cjs"
   },
   "devDependencies": {
+    "dompurify": "^3.4.18",
+    "esbuild": "^0.28.2",
+    "fflate": "^0.8.3",
     "jsdom": "^26.1.0",
-    "playwright-core": "^1.65.1"
+    "playwright-core": "^1.65.1",
+    "read-excel-file": "^9.3.20",
+    "write-excel-file": "^4.1.1"
   }
 }
