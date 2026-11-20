@@ -43,6 +43,13 @@ for id,folder,title,n in [
  ('mond-admission','02/rules','Правила приёма',114),
 ]: ITEMS.append((id,folder,title,'ГОБУЗ «Мурманский областной наркологический диспансер» (публичный пример 2020 года)','https://mond51.ru/index.php?do=download&id='+str(n),'example'))
 RG=[('school-545','Образцы аттестатов — приказ № 545','https://rg.ru/documents/2020/12/29/minpros-prikaz545-site-dok.html'),('school-546','Выдача аттестатов — приказ № 546','https://rg.ru/2020/12/25/minpros-prikaz546-site-dok.html'),('spo-390','Образцы дипломов СПО — приказ № 390','https://rg.ru/documents/2022/08/15/minpros-prikaz390-site-dok.html')]
+ITEMS += [
+ ('licensing-copy','01/government','Постановление № 1490 — копия без изменений 2026 года','МБМ (справочная копия)','https://dp.mbm.ru/upload/iblock/732/%D0%9F%D0%9F%20%D0%A0%D0%A4%20%E2%84%961490%20%D0%BE%D1%82%2018.09.2020.pdf','historical'),
+ ('paid-copy','01/government','Постановление № 1441 — исходная редакция, без продления 2026 года','САО РАН (справочная копия)','https://www.sao.ru/educat/Docs/Postanovlenie_Prav_1441.pdf','historical'),
+ ('frdo-copy','01/government','Постановление № 825 — ФИС ФРДО, справочная копия','Хакасский институт развития образования','https://ipk19.ru/upload/iblock/e47/0byjmrm8o0qic9u69b7wngi9uf73nu0b/Postanovlenie-Pravitelstva-RF-_-825-ot-31.05.2021-O-federalnoi_-informatsionnoi_-sisteme-Federalnyi_-reestr-svedenii_-o-dokumentakh-ob-ob.pdf','normative'),
+ ('distance-copy','01/government','Постановление № 1678 — электронное обучение и ДОТ, справочная копия','РГУП','https://spec.rgup.ru/img/2026/docs/PRZ_1678.pdf','normative'),
+ ('personal-data-152','01/federal-laws','152-ФЗ «О персональных данных» — справочная копия, проверить редакцию','МЦКО (справочная копия)','https://rcoi.mcko.ru/resources/upload/RichFilemanager/documents/new/152_fz.pdf','normative'),
+]
 def read(url):
  import subprocess
  result=subprocess.run(['curl','--fail','--location','--max-time','25','--connect-timeout','8','--silent','--show-error','--max-filesize','31457280','--user-agent','Mozilla/5.0',url],capture_output=True,timeout=30)
@@ -80,6 +87,11 @@ def main():
  for record,error in results:
   if record: records.append(record)
   else: errors.append(error)
+ old_path=OUT/'manifest.json'
+ if old_path.exists():
+  old=json.loads(old_path.read_text())['records']
+  existing={r['id'] for r in records}
+  records += [r for r in old if r['id'] not in existing and (ROOT/'academy'/r['path']).exists()]
  manifest=dict(asOf=DATE,notice='Оригинальные общедоступные PDF. Чужие локальные акты — только примеры, не акты Академии. Исходная публикация закона не гарантирует действующую редакцию.',records=records,failures=errors)
  (OUT/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
  (OUT/'catalog.js').write_text('window.SCMDocumentSources = '+json.dumps(records,ensure_ascii=False,indent=2)+';\n')

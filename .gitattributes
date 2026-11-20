@@ -1,0 +1,3 @@
+
+# Preserve original downloaded PDF bytes as binary artifacts.
+*.pdf binary
