@@ -1,0 +1,117 @@
+﻿direction_id,direction,course_id,course,status,passport,syllabus,legal_basis,lessons,practice,assessment,answer_key,teacher_notes,sources,review
+D01,Управление и лидерство,D01-C01,Руководитель подразделения,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D01,Управление и лидерство,D01-C02,делегирование,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D01,Управление и лидерство,D01-C03,управление изменениями,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D01,Управление и лидерство,D01-C04,команды,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D02,Личная эффективность и коммуникации,D02-C01,Переговоры,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D02,Личная эффективность и коммуникации,D02-C02,стресс,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D02,Личная эффективность и коммуникации,D02-C03,обратная связь,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D02,Личная эффективность и коммуникации,D02-C04,работа в команде,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D03,Продажи и клиентский сервис,D03-C01,B2B-продажи,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D03,Продажи и клиентский сервис,D03-C02,сервис,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D03,Продажи и клиентский сервис,D03-C03,претензии,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D03,Продажи и клиентский сервис,D03-C04,call-центр,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D04,HR и кадровый учет,D04-C01,Подбор,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D04,HR и кадровый учет,D04-C02,кадровое делопроизводство,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D04,HR и кадровый учет,D04-C03,адаптация,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D04,HR и кадровый учет,D04-C04,кадровый резерв,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D05,Бухгалтерия и налоги,D05-C01,Бухучет,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D05,Бухгалтерия и налоги,D05-C02,отчетность,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D05,Бухгалтерия и налоги,D05-C03,зарплата,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D05,Бухгалтерия и налоги,D05-C04,изменения стандартов,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D06,1С и учетные системы,D06-C01,1С:Бухгалтерия,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D06,1С и учетные системы,D06-C02,ЗУП,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D06,1С и учетные системы,D06-C03,программирование 1С,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D07,Аналитика данных и SQL,D07-C01,Excel,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D07,Аналитика данных и SQL,D07-C02,SQL,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D07,Аналитика данных и SQL,D07-C03,визуализация,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D07,Аналитика данных и SQL,D07-C04,BI,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D07,Аналитика данных и SQL,D07-C05,бизнес-анализ,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D08,Прикладной искусственный интеллект,D08-C01,ИИ для HR,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D08,Прикладной искусственный интеллект,D08-C02,финансов,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D08,Прикладной искусственный интеллект,D08-C03,закупок,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D08,Прикладной искусственный интеллект,D08-C04,руководителя,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D08,Прикладной искусственный интеллект,D08-C05,проверка результатов,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D09,Российское ПО и цифровая грамотность,D09-C01,Миграция офисных инструментов,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D09,Российское ПО и цифровая грамотность,D09-C02,Linux,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D09,Российское ПО и цифровая грамотность,D09-C03,САПР,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D09,Российское ПО и цифровая грамотность,D09-C04,цифровая работа,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D10,Программирование и разработка,D10-C01,Python,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D10,Программирование и разработка,D10-C02,разработка,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D10,Программирование и разработка,D10-C03,базы данных,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D10,Программирование и разработка,D10-C04,тестирование,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D11,Охрана труда,D11-C01,А,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D11,Охрана труда,D11-C02,Б,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D11,Охрана труда,D11-C03,В по видам работ,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D11,Охрана труда,D11-C04,СИЗ,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D11,Охрана труда,D11-C05,управление рисками,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D12,Первая помощь,D12-C01,Практика помощи пострадавшему,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D12,Первая помощь,D12-C02,подготовка обучающих,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D13,Пожарная безопасность,D13-C01,Повышение квалификации ответственных,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D13,Пожарная безопасность,D13-C02,обучение по роли,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D14,Высота и опасные работы,D14-C01,Работы на высоте,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D14,Высота и опасные работы,D14-C02,организация безопасных работ,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D15,Промышленная безопасность,D15-C01,Подготовка по областям,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D15,Промышленная безопасность,D15-C02,эксплуатационные риски,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D16,Электротехника и энергетика,D16-C01,Электромонтер,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D16,Электротехника и энергетика,D16-C02,электроустановки,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D16,Электротехника и энергетика,D16-C03,обслуживание оборудования,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D17,Теплотехника и ЖКХ,D17-C01,Котельные,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D17,Теплотехника и ЖКХ,D17-C02,теплоснабжение,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D17,Теплотехника и ЖКХ,D17-C03,слесарные работы,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D18,Рабочие профессии и производство,D18-C01,Сварщик,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D18,Рабочие профессии и производство,D18-C02,слесарь,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D18,Рабочие профессии и производство,D18-C03,оператор линии,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D18,Рабочие профессии и производство,D18-C04,станки,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D18,Рабочие профессии и производство,D18-C05,ОТК,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D19,Склады и внутренняя логистика,D19-C01,Кладовщик,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D19,Склады и внутренняя логистика,D19-C02,комплектовщик,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D19,Склады и внутренняя логистика,D19-C03,складские операции,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D19,Склады и внутренняя логистика,D19-C04,WMS,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D20,Транспорт и БДД,D20-C01,Безопасность движения,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D20,Транспорт и БДД,D20-C02,организация перевозок,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D20,Транспорт и БДД,D20-C03,опасные грузы,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D21,"Закупки, договоры и SCM",D21-C01,Закупки,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D21,"Закупки, договоры и SCM",D21-C02,управление запасами,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D21,"Закупки, договоры и SCM",D21-C03,поставщики,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D21,"Закупки, договоры и SCM",D21-C04,договорная работа,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D22,Строительство и инженерия,D22-C01,Сметы,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D22,Строительство и инженерия,D22-C02,проектирование,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D22,Строительство и инженерия,D22-C03,САПР,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D22,Строительство и инженерия,D22-C04,строительный контроль,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D23,"Нефтегаз, добыча и геология",D23-C01,Эксплуатация,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D23,"Нефтегаз, добыча и геология",D23-C02,ремонт,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D23,"Нефтегаз, добыча и геология",D23-C03,отраслевые технологии,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D24,Экология и отходы,D24-C01,Экологическая безопасность,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D24,Экология и отходы,D24-C02,обращение с отходами,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D25,Педагогика и методика,D25-C01,Педагог,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D25,Педагогика и методика,D25-C02,методист,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D25,Педагогика и методика,D25-C03,цифровое преподавание,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D26,Медицина и фармация,D26-C01,Повышение квалификации по специальности,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D26,Медицина и фармация,D26-C02,организация работы,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D27,Психология и социальная работа,D27-C01,Организационная психология,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D27,Психология и социальная работа,D27-C02,консультирование,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D27,Психология и социальная работа,D27-C03,социальная помощь,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D28,Маркетинг и электронная торговля,D28-C01,Маркетплейсы,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D28,Маркетинг и электронная торговля,D28-C02,контент,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D28,Маркетинг и электронная торговля,D28-C03,аналитика продаж,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D28,Маркетинг и электронная торговля,D28-C04,интернет-маркетинг,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D29,Предпринимательство и финансы,D29-C01,Запуск бизнеса,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D29,Предпринимательство и финансы,D29-C02,бюджетирование,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D29,Предпринимательство и финансы,D29-C03,экономика подразделения,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D30,Дизайн и креативные профессии,D30-C01,Интерьер,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D30,Дизайн и креативные профессии,D30-C02,визуальные коммуникации,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D30,Дизайн и креативные профессии,D30-C03,дизайн,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D31,Общепит и гостеприимство,D31-C01,Повар,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D31,Общепит и гостеприимство,D31-C02,пекарь,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D31,Общепит и гостеприимство,D31-C03,сервис,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D31,Общепит и гостеприимство,D31-C04,управление заведением,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D32,"Сельское хозяйство, ветеринария, пищевое качество",D32-C01,Агротехнологии,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D32,"Сельское хозяйство, ветеринария, пищевое качество",D32-C02,ветеринарные направления,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D32,"Сельское хозяйство, ветеринария, пищевое качество",D32-C03,ХАССП,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D33,Юриспруденция и комплаенс,D33-C01,Договоры,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D33,Юриспруденция и комплаенс,D33-C02,персональные данные,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D33,Юриспруденция и комплаенс,D33-C03,трудовое право,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D34,Информационная безопасность,D34-C01,Кибергигиена,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D34,Информационная безопасность,D34-C02,защита данных,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D34,Информационная безопасность,D34-C03,безопасная работа,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
