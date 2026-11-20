@@ -4,7 +4,7 @@ window.SCMNavigation=(()=>{
  const groups=[
   {id:'workspace',title:'Рабочая область',icon:'▦',ids:['workflows','assembly','overview']},
   {id:'access',title:'Пользователи и доступ',icon:'♙',ids:['accounts','students','directions','applications','application','intake-documents']},
-  {id:'learning',title:'Учебный процесс',icon:'◇',ids:['allocations','responses','monitoring','activity','student-card','studyplan','planner','work','reviews','grading','assignments']},
+  {id:'learning',title:'Учебный процесс',icon:'◇',ids:['allocations','responses','monitoring','activity','student-card','studyplan','planner','work','reviews','grading','assignments','development']},
   {id:'knowledge',title:'Контент и знания',icon:'▤',ids:['library','decisionlab','knowledge','resources-guides','manual-records','courses','lab','skills','assistant','offline']},
   {id:'documents',title:'Документы и справочники',icon:'▱',ids:['documents','resources-regulations','resources-classifiers']},
   {id:'system',title:'Система и связь',icon:'⚙',ids:['messages','expert','export','logout']}

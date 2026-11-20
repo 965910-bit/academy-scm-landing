@@ -2,6 +2,7 @@
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const {promisify}=require('node:util'),{DatabaseSync}=require('node:sqlite');const scrypt=promisify(crypto.scrypt);
 const Workflow=require('../academy/workflow-engine.js');
+const Development=require('../academy/development-engine.js'),{askAssistant}=require('./development-services.cjs');
 const roles=Object.keys(Workflow.roles);
 const normalize=s=>String(s||'').normalize('NFKC').trim().replace(/\s+/g,' ').toLocaleLowerCase('ru');
 const cleanName=s=>String(s||'').normalize('NFKC').trim().replace(/\s+/g,' ');
@@ -12,6 +13,7 @@ function createService({directory=process.env.DATA_DIR||path.resolve(__dirname,'
  fs.mkdirSync(directory,{recursive:true,mode:0o700});const db=new DatabaseSync(path.join(directory,'academy.sqlite'));try{fs.chmodSync(path.join(directory,'academy.sqlite'),0o600);}catch{}
  db.exec(`PRAGMA journal_mode=WAL; CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY,name TEXT NOT NULL,login TEXT UNIQUE NOT NULL,role TEXT NOT NULL,password TEXT NOT NULL,must_change INTEGER NOT NULL DEFAULT 1,disabled INTEGER NOT NULL DEFAULT 0);CREATE TABLE IF NOT EXISTS sessions(hash TEXT PRIMARY KEY,user_id TEXT NOT NULL,expires INTEGER NOT NULL);CREATE TABLE IF NOT EXISTS workspaces(user_id TEXT PRIMARY KEY,body TEXT NOT NULL,revision INTEGER NOT NULL);CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY,at TEXT NOT NULL,actor TEXT,action TEXT,target TEXT);`);
  db.exec(`CREATE TABLE IF NOT EXISTS workflow_store(id INTEGER PRIMARY KEY CHECK(id=1),body TEXT NOT NULL);`);
+ db.exec('CREATE TABLE IF NOT EXISTS development_store(user_id TEXT PRIMARY KEY,revision INTEGER NOT NULL,body TEXT NOT NULL);');
  const audit=(actor,action,target)=>db.prepare('INSERT INTO audit(at,actor,action,target) VALUES(?,?,?,?)').run(new Date().toISOString(),actor,action,target);
  const publicUser=u=>({id:u.id,name:u.name,role:u.role,mustChange:!!u.must_change,disabled:!!u.disabled});
  const mayManage=(actor,targetRole)=>['admin','superadmin'].includes(actor.role)||(actor.role==='admissions'&&['applicant','learner'].includes(targetRole));
@@ -56,6 +58,19 @@ function createService({directory=process.env.DATA_DIR||path.resolve(__dirname,'
    if(!await verify(input.current,session.password))return send(res,403,{error:'Текущий пароль неверен.'});const encoded=await hash(input.password);db.prepare('UPDATE users SET password=?,must_change=0 WHERE id=?').run(encoded,session.id);db.prepare('DELETE FROM sessions WHERE user_id=? AND hash<>?').run(session.id,digest(cookie));audit(session.id,'password.changed',session.id);return send(res,200,{ok:true});
   }
   if(session.must_change)return send(res,403,{error:'Сначала замените выданный пароль.'});
+  if(url.pathname==='/api/development/ai'&&req.method==='POST'){
+   const result=await askAssistant(input);audit(session.id,'development.ai',result.model);return send(res,200,result);
+  }
+  if(url.pathname==='/api/development/state'&&['GET','PUT'].includes(req.method)){
+   const old=db.prepare('SELECT revision,body FROM development_store WHERE user_id=?').get(session.id);
+   if(req.method==='GET')return send(res,200,{revision:old?.revision||0,data:old?JSON.parse(old.body):null});
+   if(session.role==='auditor')return send(res,403,{error:'Аудитор не изменяет данные.'});
+   Development.validate(input.data);
+   db.exec('BEGIN IMMEDIATE');
+   try{const fresh=db.prepare('SELECT revision FROM development_store WHERE user_id=?').get(session.id);if(input.revision!==(fresh?.revision||0)){db.exec('ROLLBACK');return send(res,409,{error:'Серверная версия изменилась. Сначала получите пакет и разрешите конфликты.'});}
+    const revision=(fresh?.revision||0)+1;db.prepare('INSERT INTO development_store(user_id,revision,body) VALUES(?,?,?) ON CONFLICT(user_id) DO UPDATE SET revision=excluded.revision,body=excluded.body').run(session.id,revision,JSON.stringify(input.data));audit(session.id,'development.saved',String(revision));db.exec('COMMIT');return send(res,200,{revision});
+   }catch(error){if(db.isTransaction)db.exec('ROLLBACK');throw error;}
+  }
   if(url.pathname==='/api/workflows'&&['GET','POST'].includes(req.method)){
    const targetId=url.searchParams.get('user');let actor=session;
    if(targetId&&targetId!==session.id){

@@ -1,8 +1,9 @@
 /* Public files only; private API responses are never cached. */
 self.SCM_OFFLINE_CONFIG = {
-  "release": "market-research-20261119-28",
-  "cacheName": "scm-academy-shell-v28",
+  "release": "development-suite-20261119-29",
+  "cacheName": "scm-academy-shell-v29",
   "files": [
+    "development-engine.js", "development.js", "guides/growth/", "guides/growth/index.html",
     "guides/market-research/",
     "guides/market-research/index.html",
     "guides/market-research/files/01-market-and-evidence.txt",
