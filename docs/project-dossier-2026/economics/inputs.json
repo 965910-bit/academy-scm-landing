@@ -1,0 +1,31 @@
+{
+  "as_of": "2026-11-19",
+  "status": "HYPOTHESES_NOT_ACTUALS_OR_VENDOR_QUOTES",
+  "founder_and_developer": "Герасимов Дмитрий Сергеевич",
+  "currency": "RUB",
+  "model": "One-month delivery of a short course; no deferred revenue; B2B and subscriptions excluded to avoid double counting",
+  "acquiring_rate": 0.025,
+  "tax_reserve_rate": 0.06,
+  "tax_warning": "Illustrative revenue-based reserve, NOT confirmation of eligibility for any tax regime, VAT exemption or actual tax liability. No VAT modelled; recalculate after accountant review.",
+  "ai_cost_per_sale": 300,
+  "fixed_monthly": {
+    "infrastructure": 45000,
+    "webinars_and_tools": 25000,
+    "development_and_operations_loaded": 180000,
+    "methodology_and_editorial_loaded": 100000,
+    "support_and_admin_loaded": 70000,
+    "legal_accounting_security": 30000
+  },
+  "launch_costs": {
+    "server_migration_and_hardening": 900000,
+    "initial_content_and_rights": 450000,
+    "legal_and_security_assessment": 250000,
+    "launch_instrumentation": 100000
+  },
+  "scenarios": {
+    "downside": {"sales_month": 40, "price": 12000, "refund_rate": 0.1, "delivery_cost": 3500, "cac": 6500},
+    "base": {"sales_month": 120, "price": 15000, "refund_rate": 0.06, "delivery_cost": 3000, "cac": 4000},
+    "upside": {"sales_month": 240, "price": 16000, "refund_rate": 0.04, "delivery_cost": 2800, "cac": 3000}
+  },
+  "ramp_sales": [20,30,45,60,80,100,120,120,130,140,150,160,170,180,180,190,200,200,210,220,220,230,240,240]
+}

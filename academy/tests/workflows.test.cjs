@@ -204,8 +204,13 @@ test("Подвал остаётся внутри платформы и не со
   const a = app();
   assert.doesNotMatch(a.$("footer").textContent, /Основной сайт/);
   for (const link of a.w.document.querySelectorAll("footer a")) {
-    assert.ok(link.getAttribute("href").startsWith("#"));
-    assert.ok(a.$(link.getAttribute("href")));
+    const href = link.getAttribute("href");
+    if (href === "guides/project-dossier/") {
+      assert.ok(fs.existsSync(path.join(__dirname, "../guides/project-dossier/index.html")));
+    } else {
+      assert.ok(href.startsWith("#"));
+      assert.ok(a.$(href));
+    }
   }
   a.dom.window.close();
 });
