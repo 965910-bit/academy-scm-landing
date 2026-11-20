@@ -396,7 +396,7 @@
     const resourceRoute=window.SCMUnifiedPages?.route();
     main.innerHTML = role ? shell() : resourceRoute!=null ? '<div class="container resource-public">'+window.SCMUnifiedPages.placeholder()+'</div>' : portal.active() ? portal.render() : landing();
     if(resourceRoute!=null)window.SCMUnifiedPages.mount();
-    if(role && resourceRoute==null)window.SCMManualRecords.mountSearch(main.querySelector(".workspace>section"));
+    if(role && resourceRoute==null && tab!=='documents')window.SCMManualRecords.mountSearch(main.querySelector(".workspace>section"));
     const pageTitle = main.querySelector("h1")?.textContent.trim();
     document.title = pageTitle ? `${pageTitle} — Академия SCM` : "Академия SCM";
     document.querySelector("#account-button").textContent = role
