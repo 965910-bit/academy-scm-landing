@@ -1,0 +1,2 @@
+﻿task_id,result,owner_role,acceptor_role,deadline,acceptance_rule,available_minutes,needed_minutes,checkpoint,escalation,decision
+T01,Сводка по заявкам,Исполнитель,Руководитель,Согласовать,У каждой записи источник или отметка о споре,1080,1380,Первые пять записей,Дефицит 300 минут,Согласовать объем/срок

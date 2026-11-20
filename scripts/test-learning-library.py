@@ -12,7 +12,11 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  for c in courses:self.assertEqual(set(c['sections'].values()),{'missing'});self.assertEqual(c['status'],'planned')
+  self.assertEqual(sum(c['status']=='planned' for c in courses),113)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),3)
+  for c in courses:
+   if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
+   else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
  def test_arithmetic_and_anomalies(self):
   rows=list(csv.DictReader((O/'practice.csv').read_text().splitlines()));self.assertEqual(len(rows),6)
   self.assertEqual(len({r['record_id'] for r in rows}),5)
@@ -31,4 +35,45 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(len(c['lessons']),3);self.assertEqual(len(c['assessment']),8)
   self.assertEqual(sum(q['points'] for q in c['assessment'])+sum(q['points'] for q in c['practice']['rubric']),28)
   self.assertEqual(c['review']['subject_expert'],'pending')
+ def test_pack_outcome_coverage(self):
+  packs=json.loads((D/'course-packs.json').read_text())
+  self.assertEqual(len(packs['courses']),3)
+  for c in packs['courses']:
+   self.assertEqual(len(c['lessons']),4)
+   self.assertEqual(len(c['questions']),6)
+   self.assertEqual(sum(x['points'] for x in c['practice']['criteria']),12)
+   check_ids={q['id'] for q in c['questions']}|{x['id'] for x in c['practice']['criteria']}
+   for outcome in c['outcomes']:
+    self.assertTrue(set(outcome['checks'])<=check_ids)
+    self.assertIn(outcome['lesson'],range(1,5))
+   for q in c['questions']:
+    self.assertTrue(q['answer']);self.assertTrue(q['reason'])
+   for source in c['sources']:
+    for key in ['author','url','published','version','checked','license','access','use']:self.assertTrue(source[key])
+   with (O/c['template']['filename']).open(encoding='utf-8-sig') as f:
+    rows=list(csv.reader(f))
+   self.assertEqual(len(rows[0]),len(rows[1]))
+ def test_management_case(self):
+  available=3*6*60;needed=90*12+10*30
+  self.assertEqual((available,needed,needed-available),(1080,1380,300))
+  self.assertEqual((available-10*30)//12,65)
+ def test_sales_case(self):
+  import math
+  initial=10*12000-10*6000-20000
+  discounted=10*10800-10*6000-20000
+  self.assertEqual((initial,discounted),(40000,28000))
+  self.assertAlmostEqual((initial-discounted)/initial,0.3)
+  self.assertEqual(math.ceil(20000/(10800-6000)),5)
+  self.assertEqual(4*(10800-6000)-20000,-800)
+ def test_warehouse_case(self):
+  physical=40+96-70;blocked=4;reserved=10
+  self.assertEqual((physical,physical-blocked,physical-blocked-reserved),(66,62,52))
+  self.assertEqual(65-physical,-1)
+  self.assertEqual(18/20,0.9)
+ def test_download_archive(self):
+  import zipfile
+  with zipfile.ZipFile(O/'learning-library.zip') as z:
+   self.assertIsNone(z.testzip())
+   for name in ['index.html','catalog.json','coverage.csv','team-management.html','b2b-sales.html','warehouse-operations.html']:
+    self.assertIn(name,z.namelist())
 if __name__=='__main__':unittest.main()
