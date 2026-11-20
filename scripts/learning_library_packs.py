@@ -30,6 +30,9 @@ def validate_packs(data, catalog_ids):
         for question in course['questions']:
             if not question.get('answer') or not question.get('reason'):raise ValueError(cid + ': missing answer explanation')
             if not 1 <= question['lesson'] <= len(course['lessons']):raise ValueError(cid + ': invalid answer reference')
+            if 'scoring' in question or 'acceptable_alternatives' in question:
+                if set(question.get('scoring',{}))!={'0','1','2'} or not all(question['scoring'].values()) or not question.get('acceptable_alternatives'):
+                    raise ValueError(cid + ': incomplete question rubric')
         for lesson in course['lessons']:
             if not lesson.get('paragraphs') or not lesson.get('exercise') or not lesson.get('exercise_answer'):raise ValueError(cid + ': empty lesson')
         for key in ['scenario','deliverables','model','critical_errors']:
@@ -69,6 +72,8 @@ def markdown_pack(data, course):
     for q in course['questions']:
         lines.extend(['### '+q['id']+'. '+q['question'],'',q['answer'],'',q['reason'],
                       'Основание: урок '+str(q['lesson'])+' и вымышленный кейс данной версии.',''])
+        if q.get('scoring'):
+            lines.extend(['Допустимые варианты: '+'; '.join(q['acceptable_alternatives'])]+[score+' балл(а): '+q['scoring'][score] for score in ['2','1','0']]+[''])
     lines.extend(['Шкала: до 2 баллов за вопрос (2 — верно с обоснованием, 1 — частично, 0 — неверно). Практика до 12 баллов (0–3 по каждому критерию). Всего 24; учебный ориентир 18 без критических ошибок, не квалификационная аттестация.','','## Преподавателю',''])
     lines.extend('- '+x for x in course['teacher_notes'])
     lines.extend(['','## Источники дополнительного чтения',''])
@@ -114,6 +119,8 @@ def render_packs(data, output, page):
         body += '<section id="answers"><h2>Открытая база ответов для самопроверки</h2><p>Это не закрытый экзамен. Каждый ответ: 2 балла за верное решение с обоснованием; 1 — частично верное без существенного противоречия; 0 — неверное. Расчетный ответ допустим в эквивалентной форме, проценты округляются до 0,01 процентного пункта.</p>'
         for q in course['questions']:
             body += '<h3>' + e(q['id'] + '. ' + q['question']) + '</h3><details><summary>Ответ, основание и объяснение</summary><p>' + e(q['answer']) + '</p><p>' + e(q['reason']) + '</p><p>Основание: собственный учебный кейс и <a href="#lesson-' + str(q['lesson']) + '">урок ' + str(q['lesson']) + '</a>, версия ' + e(data['version']) + '.</p></details>'
+            if q.get('scoring'):
+                body += '<p>Допустимые варианты: '+e('; '.join(q['acceptable_alternatives']))+'</p><ul>'+''.join('<li>'+score+' балл(а): '+e(q['scoring'][score])+'</li>' for score in ['2','1','0'])+'</ul>'
         body += '<p>Максимум: 24 балла (12 вопросы + 12 практика). Учебный ориентир: от 18 баллов без критических ошибок. Это внутреннее правило самопроверки, не квалификационная аттестация. Исправления после обратной связи фиксируются отдельно.</p></section>'
         body += '<section><h2>Преподавателю</h2><ul>' + ''.join('<li>' + e(x) + '</li>' for x in course['teacher_notes']) + '</ul><p>Одна допустимая структура занятия: 5 минут — входной вопрос; 15 — объяснение; 10 — разбор примера; 10 — самостоятельное задание; 5 — обратная связь. При затруднениях повторить пример на меньшем объеме; не считать чтение доказательством освоения.</p></section>'
         body += '<section id="sources"><h2>Реестр источников</h2><p>Арифметика, примеры и ответы получены из вымышленных условий данного комплекта. Внешние ссылки — дополнительное чтение с указанным объемом проверки, не подтверждение всего содержания.</p>'
