@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),79)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),37)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),78)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),38)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,10 +45,10 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),37)
+  self.assertEqual(len(packs['courses']),38)
   for c in packs['courses']:
-   self.assertEqual(len(c['lessons']),8 if c['id']=='D07-C01' else 4)
-   self.assertEqual(len(c['questions']),12 if c['id']=='D07-C01' else 6)
+   self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02'} else 4)
+   self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 6)
    self.assertEqual(sum(x['points'] for x in c['practice']['criteria']),12)
    check_ids={q['id'] for q in c['questions']}|{x['id'] for x in c['practice']['criteria']}
    for outcome in c['outcomes']:
@@ -86,14 +86,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],155)
-  self.assertEqual(progress['open_answers'],236)
-  self.assertEqual(progress['materials'],38)
-  self.assertEqual(progress['planned'],79)
+  self.assertEqual(progress['lessons'],163)
+  self.assertEqual(progress['open_answers'],248)
+  self.assertEqual(progress['materials'],39)
+  self.assertEqual(progress['planned'],78)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['155 уроков','236 ответов на контрольные вопросы','79 курсов','155 разборов заданий']:self.assertIn(text,hub)
+  for text in ['163 уроков','248 ответов на контрольные вопросы','78 курсов','163 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -182,14 +182,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),38)
+  self.assertEqual(len(ledger['materials']),39)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),152)
+  self.assertEqual(len(rows),156)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -213,12 +213,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,155)
+  self.assertEqual(count,163)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=236,exercise=155,practice=38))
-  self.assertEqual(len({r['id'] for r in data['entries']}),429)
+  self.assertEqual(data['counts'],dict(question=248,exercise=163,practice=39))
+  self.assertEqual(len({r['id'] for r in data['entries']}),450)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
@@ -417,6 +417,88 @@ class LibraryTests(unittest.TestCase):
   self.assertIn('8 уроков, практика, 12 ответов',(O/'index.html').read_text())
   course['resources'][0]['filename']='../escape.xlsx'
   with self.assertRaises(ValueError):validate_packs(excel,{'D07-C01'})
+ def linux_lab(self):
+  import runpy
+  return runpy.run_path(str(D/'labs/linux-lab.py'))
+ def linux_reference(self,root):
+  result=subprocess.run(['bash','--noprofile','--norc',str(D/'labs/linux-reference.sh')],cwd=root,capture_output=True,text=True,timeout=10)
+  self.assertEqual(result.returncode,0,result.stderr)
+ def test_linux_commands_and_artifacts(self):
+  import tempfile
+  lab=self.linux_lab()
+  with tempfile.TemporaryDirectory() as folder:
+   root=lab['initialize'](Path(folder)/'lab with spaces')
+   self.linux_reference(root)
+   result=lab['check'](root)
+   self.linux_reference(root)
+   self.assertEqual(lab['check'](root),result)
+   self.assertEqual((result['input_lines'],result['error_lines']),(8,3))
+   self.assertEqual(result['error_types'],{'duplicate_id':1,'missing_price':2})
+   self.assertTrue(result['permission_checked'])
+   run=subprocess.run([sys.executable,str(O/'linux-lab.py'),'--check',str(root)],capture_output=True,text=True)
+   self.assertEqual(run.returncode,0,run.stderr);self.assertIn('PASS',run.stdout)
+ def test_linux_init_no_overwrite_and_wrong_directory(self):
+  import tempfile
+  lab=self.linux_lab()
+  with tempfile.TemporaryDirectory() as folder:
+   root=lab['initialize'](Path(folder)/'lab')
+   original=(root/'input/events.log').read_bytes()
+   with self.assertRaises(ValueError):lab['initialize'](root)
+   self.assertEqual((root/'input/events.log').read_bytes(),original)
+   run=subprocess.run(['bash',str(D/'labs/linux-reference.sh')],cwd=folder,capture_output=True,text=True)
+   self.assertEqual(run.returncode,2)
+   self.assertFalse((Path(folder)/'reports').exists())
+ def test_linux_reject_changed_outputs(self):
+  import tempfile
+  lab=self.linux_lab()
+  changes={'input/events.log':'changed\n','work/events-copy.log':'changed\n','reports/errors.log':'ERROR wrong\n','reports/error-counts.txt':'3 missing_price\n','reports/error-total.txt':'4\n','reports/fatal.log':'FATAL invented\n','reports/fatal-status.txt':'2\n','reports/note.txt':''}
+  with tempfile.TemporaryDirectory() as folder:
+   root=lab['initialize'](Path(folder)/'lab');self.linux_reference(root)
+   for relative,value in changes.items():
+    path=root/relative;original=path.read_text();path.write_text(value)
+    with self.subTest(relative=relative):
+     with self.assertRaises(ValueError):lab['check'](root)
+    path.write_text(original)
+   input_path=root/'input/events.log';original_bytes=input_path.read_bytes();input_path.write_bytes(original_bytes.replace(b'\n',b'\r\n'))
+   with self.assertRaises(ValueError):lab['check'](root)
+   input_path.write_bytes(original_bytes)
+   (root/'reports/note.txt').chmod(0o644)
+   with self.assertRaises(ValueError):lab['check'](root)
+ def test_linux_reject_symlinks_special_and_large_files(self):
+  import tempfile,os
+  lab=self.linux_lab()
+  with tempfile.TemporaryDirectory() as folder:
+   root=lab['initialize'](Path(folder)/'lab');self.linux_reference(root)
+   note=root/'reports/note.txt';original=note.read_text();note.unlink()
+   outside=Path(folder)/'outside';outside.write_text(original);note.symlink_to(outside)
+   with self.assertRaises(ValueError):lab['check'](root)
+   note.unlink();os.mkfifo(note)
+   with self.assertRaises(ValueError):lab['check'](root)
+   note.unlink();note.write_text('x'*(1024*1024+1));note.chmod(0o600)
+   with self.assertRaises(ValueError):lab['check'](root)
+ def test_linux_status_semantics(self):
+  import tempfile
+  lab=self.linux_lab()
+  with tempfile.TemporaryDirectory() as folder:
+   root=lab['initialize'](Path(folder)/'lab')
+   for command,code in [("grep '^FATAL ' input/events.log",1),("grep '^ERROR ' missing.log | wc -l",0),("set -o pipefail; grep '^ERROR ' missing.log | wc -l",2)]:
+    run=subprocess.run(['bash','--noprofile','--norc','-c',command],cwd=root,capture_output=True,text=True)
+    self.assertEqual(run.returncode,code,run.stderr)
+ def test_linux_exports_and_specific_rubrics(self):
+  import zipfile
+  c=json.loads((D/'linux-packs.json').read_text())['courses'][0]
+  bank={e['id']:e for e in json.loads((O/'answer-bank.json').read_text())['entries']}
+  self.assertEqual(len(c['lessons']),8);self.assertEqual(len(c['questions']),12)
+  self.assertEqual(len({r['text'] for r in c['outcomes']}),8)
+  for q in c['questions']:
+   for text in [*q['acceptable_alternatives'],*q['scoring'].values()]:
+    self.assertIn(text,bank[c['id']+'-'+q['id']]['explanation'])
+  self.assertIn('Всего 36; учебный ориентир 27',(O/'linux-files-practice.md').read_text())
+  with zipfile.ZipFile(O/'learning-library.zip') as archive:
+   for name in ['linux-lab.py','linux-reference.sh','linux-lab-guide.md','linux-command-journal.csv','linux-files-practice.html']:
+    self.assertIn(name,archive.namelist())
+  for name in ['linux-lab.py','linux-reference.sh','linux-lab-guide.md']:
+   self.assertEqual((D/'labs'/name).read_bytes(),(O/name).read_bytes())
  def test_missing_lesson_solution_rejected(self):
   data=all_packs(); ids={c['id'] for c in data['courses']}
   data['courses'][0]['lessons'][0]['exercise_answer']=''
