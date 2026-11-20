@@ -411,6 +411,7 @@ class LibraryTests(unittest.TestCase):
   excel=json.loads((D/'spreadsheet-packs.json').read_text())
   course=excel['courses'][0]
   self.assertEqual(sum(len(l['paragraphs']) for l in course['lessons']),24)
+  self.assertEqual([o['checks'][0] for o in course['outcomes']],['P1','P1','P1','P2','P2','P3','P4','P4'])
   self.assertIn('Максимум: 36 балла (24 вопросы + 12 практика)',(O/'excel-data-practice.html').read_text())
   self.assertIn('Всего 36; учебный ориентир 27',(O/'excel-data-practice.md').read_text())
   self.assertIn('8 уроков, практика, 12 ответов',(O/'index.html').read_text())
