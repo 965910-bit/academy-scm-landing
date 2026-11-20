@@ -5,12 +5,88 @@ import io
 import json
 import zipfile
 
+def validate_packs(data, catalog_ids):
+    """Structural completeness only; never substitute this for expert review."""
+    seen_ids, seen_slugs, seen_files = set(), set(), set()
+    for course in data['courses']:
+        cid = course['id']
+        if cid not in catalog_ids or cid in seen_ids:
+            raise ValueError('Unknown or duplicate course: ' + cid)
+        seen_ids.add(cid)
+        slug = course['slug']
+        if slug in seen_slugs or any(ch not in 'abcdefghijklmnopqrstuvwxyz0123456789-' for ch in slug) or not slug:
+            raise ValueError('Unsafe or duplicate slug: ' + slug)
+        seen_slugs.add(slug)
+        for key in ['title','audience','prerequisites','duration','equipment','scope','legal_basis','teacher_notes','glossary']:
+            if not course.get(key):raise ValueError(cid + ': missing ' + key)
+        qids = [q['id'] for q in course['questions']]
+        pids = [p['id'] for p in course['practice']['criteria']]
+        if len(set(qids+pids)) != len(qids+pids):raise ValueError(cid + ': duplicate check ID')
+        if len(qids)!=6 or sum(p['points'] for p in course['practice']['criteria'])!=12:
+            raise ValueError(cid + ': scoring layout expects 6 questions and 12 practice points')
+        for result in course['outcomes']:
+            if not result['checks'] or not set(result['checks']) <= set(qids+pids):raise ValueError(cid + ': broken outcome coverage')
+            if not 1 <= result['lesson'] <= len(course['lessons']):raise ValueError(cid + ': invalid lesson reference')
+        for question in course['questions']:
+            if not question.get('answer') or not question.get('reason'):raise ValueError(cid + ': missing answer explanation')
+            if not 1 <= question['lesson'] <= len(course['lessons']):raise ValueError(cid + ': invalid answer reference')
+        for lesson in course['lessons']:
+            if not lesson.get('paragraphs') or not lesson.get('exercise'):raise ValueError(cid + ': empty lesson')
+        for key in ['scenario','deliverables','model','critical_errors']:
+            if not course['practice'].get(key):raise ValueError(cid + ': missing practice ' + key)
+        if not course.get('sources'):raise ValueError(cid + ': no source register')
+        for source in course['sources']:
+            for key in ['id','title','author','url','published','version','checked','access','license','use']:
+                if not source.get(key):raise ValueError(cid + ': missing source ' + key)
+            if not source['url'].startswith('https://'):raise ValueError(cid + ': unsafe source URL')
+        template = course['template']
+        filename = template['filename']
+        if '/' in filename or '\\' in filename or not filename.endswith('.csv') or filename in seen_files:
+            raise ValueError(cid + ': unsafe or duplicate template')
+        seen_files.add(filename)
+        if len(template['columns'])!=len(template['example']):raise ValueError(cid + ': template shape mismatch')
+
+
+def markdown_pack(data, course):
+    """Portable original text including OPEN answers; not a secure exam export."""
+    lines = ['# '+course['title'], '', 'Автор: '+data['author'], 'Версия: '+data['version']+'; дата: '+data['date'],
+             'Статус: вводный материал; экспертиза и апробация не пройдены. Ответы открыты для самопроверки.', '', data['rights'], '']
+    for key, title in [('audience','Аудитория'),('prerequisites','Входные знания'),('duration','Маршрут'),('equipment','Оснащение'),('scope','Границы'),('legal_basis','Нормативная область')]:
+        lines.extend(['## '+title, '', course[key], ''])
+    lines.extend(['## Результаты обучения', ''])
+    for result in course['outcomes']:lines.append('- '+result['id']+': '+result['text']+'; урок '+str(result['lesson'])+'; проверки '+', '.join(result['checks']))
+    for n, lesson in enumerate(course['lessons'],1):
+        lines.extend(['', '## '+str(n)+'. '+lesson['title'], ''])
+        for paragraph in lesson['paragraphs']:lines.extend([paragraph,''])
+        lines.extend(['### Задание', lesson['exercise'], ''])
+    lines.extend(['## Словарь',''])
+    for term, definition in course['glossary'].items():lines.extend([term+': '+definition,''])
+    p=course['practice'];lines.extend(['## Практика','',p['scenario'],'',p['deliverables'],''])
+    for criterion in p['criteria']:lines.append('- '+criterion['id']+': '+criterion['text']+' — до '+str(criterion['points'])+' баллов')
+    lines.extend(['','### Открытый эталон практики',p['model'],'','Критические ошибки:'])
+    lines.extend('- '+x for x in p['critical_errors'])
+    lines.extend(['','## Вопросы и открытые ответы',''])
+    for q in course['questions']:
+        lines.extend(['### '+q['id']+'. '+q['question'],'',q['answer'],'',q['reason'],
+                      'Основание: урок '+str(q['lesson'])+' и вымышленный кейс данной версии.',''])
+    lines.extend(['Шкала: до 2 баллов за вопрос (2 — верно с обоснованием, 1 — частично, 0 — неверно). Практика до 12 баллов (0–3 по каждому критерию). Всего 24; учебный ориентир 18 без критических ошибок, не квалификационная аттестация.','','## Преподавателю',''])
+    lines.extend('- '+x for x in course['teacher_notes'])
+    lines.extend(['','## Источники дополнительного чтения',''])
+    for source in course['sources']:
+        lines.extend([source['title']+' — '+source['url']])
+        for key in ['author','published','version','checked','access','license','use']:lines.append(key+': '+source[key])
+        lines.append('')
+    lines.extend(['## Проверка и обновление','','Проверяющий специалист не назначен; апробация не выполнена. Проверить до организованного обучения и после изменений источников, правил, процессов или условий задания.'])
+    return '\n'.join(lines)+'\n'
+
+
 def render_packs(data, output, page):
     e = html.escape
     for course in data['courses']:
         cid = course['id']
+        (output/(course['slug']+'.md')).write_text(markdown_pack(data,course))
         body = '<p>Вводный комплект написан. Профильная экспертиза, правовая проверка и апробация не пройдены. Версия ' + e(data['version']) + '.</p>'
-        body += '<p><a href="' + course['id'] + '.json" download>Скачать исходный комплект JSON</a> · <a href="' + course['template']['filename'] + '" download>Рабочий шаблон CSV</a></p>'
+        body += '<p><a href="' + course['id'] + '.json" download>Скачать исходный комплект JSON</a> · <a href="' + course['slug'] + '.md" download>Полный текст Markdown</a> · <a href="' + course['template']['filename'] + '" download>Рабочий шаблон CSV</a></p>'
         if course.get('downloads'):
             body += '<section><h2>Лабораторные файлы</h2><p>Скачайте все три файла в одну папку. Прочитайте исходники и запустите python3 run-digital-labs.py. Работа локальная, без сети и производственных данных.</p><ul>'
             for name, label in [('sql-lab.json','Вымышленная схема SQL, запросы и эталоны'),('python-lab.py','Открытая реализация Python'),('run-digital-labs.py','Проверка обеих лабораторий')]:
@@ -51,7 +127,14 @@ def render_packs(data, output, page):
         (output/(cid+'.json')).write_text(json.dumps({**{k: v for k,v in data.items() if k!='courses'}, 'course': course}, ensure_ascii=False, indent=2)+'\n')
         s=io.StringIO(); writer=csv.writer(s,lineterminator='\n'); writer.writerow(course['template']['columns']);writer.writerow(course['template']['example'])
         (output/course['template']['filename']).write_text('\ufeff'+s.getvalue())
+    sources=[]
+    for course in data['courses']:
+        sources.extend({'course_id':course['id'],**source} for source in course['sources'])
+    buffer=io.StringIO()
+    writer=csv.DictWriter(buffer,fieldnames=list(sources[0]),lineterminator='\n')
+    writer.writeheader();writer.writerows(sources)
+    (output/'learning-sources.csv').write_text('\ufeff'+buffer.getvalue())
     # Portable package of the generated library. Exam secrecy is explicitly not promised.
     with zipfile.ZipFile(output/'learning-library.zip','w',zipfile.ZIP_DEFLATED) as z:
         for path in sorted(output.iterdir()):
-            if path.is_file() and path.suffix in {'.html','.json','.csv','.py'}:z.write(path,path.name)
+            if path.is_file() and path.suffix in {'.html','.json','.csv','.py','.md'}:z.write(path,path.name)
