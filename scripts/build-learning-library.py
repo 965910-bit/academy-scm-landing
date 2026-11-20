@@ -5,6 +5,8 @@ R=Path(__file__).resolve().parents[1]
 D=R/'docs/learning-library'; O=R/'academy/guides/learning-library'
 D.mkdir(exist_ok=True,parents=True); O.mkdir(exist_ok=True,parents=True)
 author='Герасимов Дмитрий Сергеевич'; date='2026-11-19'
+packs=json.loads((D/'course-packs.json').read_text())
+pack_by_id={c['id']:c for c in packs['courses']}
 directions=json.loads((R/'docs/education-demand-2021-2025/directions.json').read_text())
 # These are proposed course titles, not approved regulated programs or filled courses.
 catalog=[]
@@ -16,6 +18,15 @@ for d in directions:
    'sections':{k:'missing' for k in ['passport','syllabus','legal_basis','lessons','practice','assessment','answer_key','teacher_notes','sources','review']},
    'note':'Рабочее название. Содержание, трудоемкость и требования допуска не утверждены.'})
  catalog.append({'id':d['id'],'title':d['direction'],'courses':courses})
+# Link introductory packs without pretending the whole role is covered.
+for direction in catalog:
+ for entry in direction['courses']:
+  if entry['id'] in pack_by_id:
+   pack=pack_by_id[entry['id']]
+   entry['status']='introductory_written_unreviewed'
+   entry['url']=pack['slug']+'.html'
+   entry['sections']={k:('pending' if k=='review' else 'draft') for k in entry['sections']}
+   entry['note']='Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.'
 # One actual course, distinct from the planned placeholders.
 course={
  'id':'FOUNDATION-DATA-01','title':'Проверка качества таблицы и расчет показателей',
@@ -66,14 +77,14 @@ course={
  'answer_provenance':'Ответы получены арифметически из вымышленного набора. Открыты для самопроверки; не использовать как закрытый экзамен.',
  'review':{'subject_expert':'pending','legal':'pending','pilot':'pending','next_review':'Перед использованием в организованном обучении и после любого изменения набора данных или правил'}
 }
-(D/'catalog.json').write_text(json.dumps({'author':author,'date':date,'version':'0.1.0','directions':catalog},ensure_ascii=False,indent=2)+'\n')
+(D/'catalog.json').write_text(json.dumps({'author':author,'date':date,'version':'0.2.0','directions':catalog},ensure_ascii=False,indent=2)+'\n')
 (D/'foundation-data.json').write_text(json.dumps(course,ensure_ascii=False,indent=2)+'\n')
 sample='record_id,units,unit_price_rub,defective_units\nA001,10,100,1\nA002,20,130,0\nA003,5,80,1\nA003,5,80,1\nA004,8,,0\nA005,-2,100,0\n'
 (O/'practice.csv').write_text(sample)
 (D/'practice.csv').write_text(sample)
 esc=html.escape
 style='<style>body{font:17px/1.65 system-ui;color:#17283a;background:#f6f8fa;margin:0}header,main,footer{max-width:1050px;margin:auto;padding:24px}a{color:#075c9e}article,section{background:white;padding:24px;margin:20px 0;border:1px solid #d8e0e6;border-radius:12px}h1,h2,h3{line-height:1.25}p,li{overflow-wrap:anywhere}.tag{color:#765000}summary{cursor:pointer;font-weight:600}nav{display:flex;flex-wrap:wrap;gap:16px}a:focus-visible,summary:focus-visible{outline:3px solid #d48806}pre{overflow:auto}</style>'
-def page(title,body):return '<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+' — Академия SCM</title>'+style+'<body><header><nav><a href="/academy/">Академия SCM</a><a href="/academy/guides/">База знаний</a><a href="/academy/guides/learning-library/">Учебная библиотека</a></nav></header><main><h1>'+esc(title)+'</h1>'+body+'</main><footer>Автор собственных материалов: '+author+' · 19.11.2026 · версия 0.1.0</footer></body></html>'
+def page(title,body):return '<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+' — Академия SCM</title>'+style+'<body><header><nav><a href="/academy/">Академия SCM</a><a href="/academy/guides/">База знаний</a><a href="/academy/guides/learning-library/">Учебная библиотека</a></nav></header><main><h1>'+esc(title)+'</h1>'+body+'</main><footer>Автор собственных материалов: '+author+' · 19.11.2026 · версия библиотеки 0.2.0 · версия материала указана в тексте</footer></body></html>'
 body='<p class="tag">Написан вводный материал · профильная проверка и апробация не пройдены</p>'
 for k,label in [('audience','Аудитория'),('prerequisites','Входные знания'),('scope','Границы'),('duration','Маршрут'),('equipment','Оснащение'),('rights','Условия использования'),('regulations','Нормативная область')]:body+=f'<p><strong>{label}.</strong> {esc(course[k])}</p>'
 body+='<h2>Результаты обучения</h2><ul>'+''.join('<li>'+esc(t)+'</li>' for t in course['outcomes'])+'</ul>'
@@ -84,12 +95,17 @@ body+='<h2>Преподавателю</h2><ul>'+''.join('<li>'+esc(x)+'</li>' fo
 for s in course['sources']:body+='<p><a href="'+s['url']+'">'+esc(s['title'])+'</a> · '+esc(s['author'])+'. '+esc(s['use'])+'. '+esc(s['verification'])+'. '+esc(s['license'])+'. Дата включения: '+date+'.</p>'
 body+='<p>Проверяющий специалист: не назначен. Апробация: не выполнена. Следующая проверка: '+esc(course['review']['next_review'])+'.</p>'
 (O/'foundation-data.html').write_text(page(course['title'],body))
-index='<p>Все 34 направления включены в реестр. Это начало разработки, а не готовая полная база. Автор собственных материалов: '+author+'.</p><section><h2>Уже написано</h2><p><a href="foundation-data.html">Проверка качества таблицы и расчет показателей</a>: 3 урока, набор данных, практика, 8 вопросов с обоснованными ответами, критерии и заметки преподавателя. Требуется профильная проверка.</p></section><section><h2>Точное покрытие</h2><p>34 направления; '+str(sum(len(d['courses']) for d in catalog))+' предварительных названий курсов. По этим названиям комплекты пока не разработаны. Отдельно написан один межотраслевой вводный материал. Одобрено специалистом: 0. Готовых регулируемых программ: 0.</p><p><a href="catalog.json" download>Реестр курсов и статусов JSON</a> · <a href="coverage.csv" download>Матрица покрытия CSV</a></p></section>'
+pack_links=''.join('<li><a href="'+c['slug']+'.html">'+esc(c['title'])+'</a>: 4 урока, практика, 6 ответов, рабочий шаблон.</li>' for c in packs['courses'])
+index='<p>Все 34 направления включены в реестр. Это начало разработки, а не готовая полная база. Автор собственных материалов: '+author+'.</p><section><h2>Уже написано</h2><ul>'+pack_links+'</ul><p><a href="foundation-data.html">Проверка качества таблицы и расчет показателей</a>: 3 урока, набор данных, практика, 8 вопросов с обоснованными ответами, критерии и заметки преподавателя. Требуется профильная проверка.</p></section><section><h2>Точное покрытие</h2><p>34 направления; '+str(sum(len(d['courses']) for d in catalog))+' предварительных названий курсов. Для трех курсов написаны вводные комплекты; 113 курсов пока запланированы. Отдельно написан один межотраслевой вводный материал. Итого: 4 материала, 15 уроков, 26 вопросов с открытыми ответами. Это не полное покрытие профессий. Одобрено специалистом: 0. Готовых регулируемых программ: 0.</p><p><a href="learning-library.zip" download>Скачать библиотеку ZIP</a> · <a href="catalog.json" download>Реестр курсов и статусов JSON</a> · <a href="coverage.csv" download>Матрица покрытия CSV</a></p></section>'
 for d in catalog:
  name=d['id'].lower()+'.html'
- index+='<article><h2><a href="'+name+'">'+esc(d['title'])+'</a></h2><p>'+str(len(d['courses']))+' предварительных курсов · содержание предстоит разработать</p></article>'
+ index+='<article><h2><a href="'+name+'">'+esc(d['title'])+'</a></h2><p>'+str(len(d['courses']))+' предварительных курсов · вводных комплектов: '+str(sum(c['id'] in pack_by_id for c in d['courses']))+'</p></article>'
  b='<p>Рабочая декомпозиция. Перечень не является исчерпывающим перечнем профессий или утвержденной образовательной программой.</p>'
- for c in d['courses']:b+='<section><h2>'+esc(c['id']+' · '+c['title'])+'</h2><p>Аудитория: '+esc(c['audience'])+'</p><p>Статус: запланировано. Паспорт, программа, уроки, практика, банк заданий и ответов, источники и проверка специалистом — не выполнены.</p></section>'
+ for c in d['courses']:
+  b+='<section><h2>'+esc(c['id']+' · '+c['title'])+'</h2><p>Аудитория: '+esc(c['audience'])+'</p>'
+  if c['id'] in pack_by_id:b+='<p><a href="'+c['url']+'">Читать вводный комплект: уроки, практика и ответы</a></p><p>'+esc(c['note'])+'</p>'
+  else:b+='<p>Статус: запланировано. Паспорт, программа, уроки, практика, банк заданий и ответов, источники и проверка специалистом — не выполнены.</p>'
+  b+='</section>'
  b+='<h2>Условие готовности</h2><p>Для каждого результата обучения: объяснение → пример → самостоятельная практика → проверка → обоснованный ответ или рубрика. Источники проверяются по дате, редакции и правам использования. Требования к практике, преподавателям и допуску определяются отдельно для каждой программы. Пробелы нельзя закрывать копированием одного общего текста.</p>'
  (O/name).write_text(page(d['title'],b))
 (O/'index.html').write_text(page('Учебная база по 34 направлениям',index))
@@ -98,5 +114,9 @@ buf=io.StringIO();w=csv.writer(buf,lineterminator='\n');w.writerow(['direction_i
 for d in catalog:
  for c in d['courses']:w.writerow([d['id'],d['title'],c['id'],c['title'],c['status'],*c['sections'].values()])
 for folder in [D,O]:(folder/'coverage.csv').write_text('\ufeff'+buf.getvalue())
-(D/'README.md').write_text('# Учебная база: начало разработки\n\nАвтор собственных материалов: '+author+'. Версия 0.1.0 от '+date+'.\n\n34 направления разложены на предварительные курсы; это не готовые программы. catalog.json и coverage.csv показывают незакрытые разделы. foundation-data.json содержит один написанный межотраслевой курс с практикой и открытыми ответами. Статус — без профильной проверки.\n\nСборка: python3 scripts/build-learning-library.py\n\nПубликуемые ответы предназначены для самопроверки. Нельзя использовать их как секретный экзаменационный банк. Закрытая аттестация требует серверного хранения, разграничения прав и отдельного набора заданий; в этом изменении не реализована.\n\nВнешние ссылки не означают проверки текущей редакции или разрешения копирования. Дальнейшая работа: полная декомпозиция профессий и ролей; проверка источников; написание каждого курса; профильная экспертиза; апробация.\n')
+(D/'README.md').write_text('# Учебная база: начало разработки\n\nАвтор собственных материалов: '+author+'. Версия библиотеки 0.2.0 от '+date+'.\n\n34 направления разложены на предварительные курсы; это не готовые программы. catalog.json и coverage.csv показывают незакрытые разделы. foundation-data.json содержит межотраслевой вводный материал. course-packs.json содержит три предметных вводных комплекта, связанных с D01-C01, D03-C01 и D19-C03: 12 уроков и 18 дополнительных открытых ответов. Всего 15 уроков и 26 ответов. Это частичное, не полное покрытие соответствующих курсов. Статус — без профильной проверки.\n\nСборка: python3 scripts/build-learning-library.py\n\nПубликуемые ответы предназначены для самопроверки. Нельзя использовать их как секретный экзаменационный банк. Закрытая аттестация требует серверного хранения, разграничения прав и отдельного набора заданий; в этом изменении не реализована.\n\nВнешние ссылки не означают проверки текущей редакции или разрешения копирования. Дальнейшая работа: полная декомпозиция профессий и ролей; проверка источников; написание каждого курса; профильная экспертиза; апробация.\n')
 print('Built 34 directions,',sum(len(d['courses']) for d in catalog),'planned course titles; 1 written introductory course, 8 self-check answers.')
+
+from learning_library_packs import render_packs
+render_packs(packs,O,page)
+print("Added 3 introductory packs: 12 lessons, 18 answers, 3 templates; no expert approvals.")

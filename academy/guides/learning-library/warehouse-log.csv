@@ -1,0 +1,2 @@
+﻿event_id,item,unit,event,physical_in,physical_out,blocked_change,reserve_change,document,address,time_cutoff,comment
+W01,A,шт,Фактическая приемка,96,0,4,0,Ожидалось 100,Учебный адрес,Указать,Поврежденные 4 входят в 96
