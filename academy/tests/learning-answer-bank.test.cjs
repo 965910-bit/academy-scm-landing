@@ -15,8 +15,8 @@ test('answer bank starts with every public answer and offline links', () => {
   try {
     const data = JSON.parse(fs.readFileSync(path.join(root, 'answer-bank.json'), 'utf8'));
     assert.equal(visible(dom).length, data.entries.length);
-    assert.equal(data.entries.length, 254);
-    assert.match(dom.window.document.getElementById('answer-count').textContent, /254 из 254/);
+    assert.equal(data.entries.length, 298);
+    assert.match(dom.window.document.getElementById('answer-count').textContent, /298 из 298/);
     assert.match(dom.window.document.querySelector('noscript').textContent, /все записи доступны/);
   } finally { dom.window.close(); }
 });
@@ -26,7 +26,7 @@ test('kind filtering and multiple-word search include answer text', () => {
     const d = dom.window.document;
     d.getElementById('answer-kind').value = 'question';
     d.getElementById('answer-kind').dispatchEvent(new dom.window.Event('change'));
-    assert.equal(visible(dom).length, 140);
+    assert.equal(visible(dom).length, 164);
     d.getElementById('answer-query').value = 'поставки 24000';
     d.getElementById('answer-query').dispatchEvent(new dom.window.Event('input'));
     assert.ok(visible(dom).length > 0);
@@ -42,7 +42,7 @@ test('zero results and reset are accessible and restore defaults', () => {
     assert.equal(visible(dom).length, 0);
     assert.equal(d.getElementById('answer-empty').hidden, false);
     d.getElementById('answer-search').reset();
-    assert.equal(visible(dom).length, 254);
+    assert.equal(visible(dom).length, 298);
     assert.equal(d.getElementById('answer-empty').hidden, true);
     assert.equal(d.getElementById('answer-count').getAttribute('aria-live'), 'polite');
   } finally { dom.window.close(); }

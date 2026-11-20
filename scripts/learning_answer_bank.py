@@ -18,7 +18,7 @@ def build_answer_bank(packs, foundation, output, page):
         url=c['slug']+'.html'
         for q in c['questions']:
             add(c['id'],c['title'],'question',q['id'],q['question'],q['answer'],
-                q['reason']+' Основание: урок '+str(q['lesson'])+' и собственный вымышленный кейс.',url+'#lesson-'+str(q['lesson']))
+                q['reason']+(' Допустимые варианты: '+'; '.join(q['acceptable_alternatives'])+'. Критерии: '+'; '.join(score+' балл(а): '+q['scoring'][score] for score in ['2','1','0']) if q.get('scoring') else '')+' Основание: урок '+str(q['lesson'])+' и собственный вымышленный кейс.',url+'#lesson-'+str(q['lesson']))
         for n,l in enumerate(c['lessons'],1):
             add(c['id'],c['title'],'exercise',f'L{n:02}',l['exercise'],l['exercise_answer'],
                 'Самопроверка по условиям урока; допустимы эквивалентные обоснованные решения.',url+'#lesson-'+str(n))
