@@ -1,0 +1,2 @@
+﻿step,command,expected,observed,exit_status,explanation
+1,pwd,Новая учебная папка,,,
