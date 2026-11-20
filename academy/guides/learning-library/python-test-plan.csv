@@ -1,0 +1,2 @@
+﻿case,input_description,expected,actual,explanation
+P01,Строка с пробелами: ' 12 ',12,Заполнить,Краевые пробелы допустимы

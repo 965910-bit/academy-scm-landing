@@ -11,6 +11,11 @@ def render_packs(data, output, page):
         cid = course['id']
         body = '<p>Вводный комплект написан. Профильная экспертиза, правовая проверка и апробация не пройдены. Версия ' + e(data['version']) + '.</p>'
         body += '<p><a href="' + course['id'] + '.json" download>Скачать исходный комплект JSON</a> · <a href="' + course['template']['filename'] + '" download>Рабочий шаблон CSV</a></p>'
+        if course.get('downloads'):
+            body += '<section><h2>Лабораторные файлы</h2><p>Скачайте все три файла в одну папку. Прочитайте исходники и запустите python3 run-digital-labs.py. Работа локальная, без сети и производственных данных.</p><ul>'
+            for name, label in [('sql-lab.json','Вымышленная схема SQL, запросы и эталоны'),('python-lab.py','Открытая реализация Python'),('run-digital-labs.py','Проверка обеих лабораторий')]:
+                body += '<li><a href="' + name + '" download>' + label + '</a></li>'
+            body += '</ul></section>'
         body += '<nav aria-label="Разделы курса"><a href="#passport">Паспорт</a><a href="#lessons">Уроки</a><a href="#practice">Практика</a><a href="#answers">Ответы</a><a href="#sources">Источники</a></nav>'
         body += '<section id="passport"><h2>Паспорт и границы</h2>'
         for key, title in [('audience','Аудитория'),('prerequisites','Входные знания'),('duration','Маршрут'),('equipment','Оснащение'),('scope','Что не закрыто'),('legal_basis','Нормативная область')]:
@@ -49,4 +54,4 @@ def render_packs(data, output, page):
     # Portable package of the generated library. Exam secrecy is explicitly not promised.
     with zipfile.ZipFile(output/'learning-library.zip','w',zipfile.ZIP_DEFLATED) as z:
         for path in sorted(output.iterdir()):
-            if path.is_file() and path.suffix in {'.html','.json','.csv'}:z.write(path,path.name)
+            if path.is_file() and path.suffix in {'.html','.json','.csv','.py'}:z.write(path,path.name)
