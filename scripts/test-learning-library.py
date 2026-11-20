@@ -328,6 +328,7 @@ class LibraryTests(unittest.TestCase):
  def test_safety_pack_rubrics_and_archive(self):
   import zipfile
   data=json.loads((D/'safety-packs.json').read_text())
+  self.assertIn('№ 220н',data['courses'][0]['legal_basis'])
   self.assertEqual({c['id'] for c in data['courses']},{'D12-C02','D13-C02','D14-C02','D15-C02','D16-C03','D17-C02'})
   bank={e['id']:e for e in json.loads((O/'answer-bank.json').read_text())['entries']}
   with zipfile.ZipFile(O/'learning-library.zip') as archive:
