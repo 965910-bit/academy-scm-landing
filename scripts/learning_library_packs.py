@@ -31,7 +31,7 @@ def validate_packs(data, catalog_ids):
             if not question.get('answer') or not question.get('reason'):raise ValueError(cid + ': missing answer explanation')
             if not 1 <= question['lesson'] <= len(course['lessons']):raise ValueError(cid + ': invalid answer reference')
         for lesson in course['lessons']:
-            if not lesson.get('paragraphs') or not lesson.get('exercise'):raise ValueError(cid + ': empty lesson')
+            if not lesson.get('paragraphs') or not lesson.get('exercise') or not lesson.get('exercise_answer'):raise ValueError(cid + ': empty lesson')
         for key in ['scenario','deliverables','model','critical_errors']:
             if not course['practice'].get(key):raise ValueError(cid + ': missing practice ' + key)
         if not course.get('sources'):raise ValueError(cid + ': no source register')
@@ -58,7 +58,7 @@ def markdown_pack(data, course):
     for n, lesson in enumerate(course['lessons'],1):
         lines.extend(['', '## '+str(n)+'. '+lesson['title'], ''])
         for paragraph in lesson['paragraphs']:lines.extend([paragraph,''])
-        lines.extend(['### Задание', lesson['exercise'], ''])
+        lines.extend(['### Задание', lesson['exercise'], '', '### Разбор задания', lesson['exercise_answer'], ''])
     lines.extend(['## Словарь',''])
     for term, definition in course['glossary'].items():lines.extend([term+': '+definition,''])
     p=course['practice'];lines.extend(['## Практика','',p['scenario'],'',p['deliverables'],''])
@@ -104,7 +104,7 @@ def render_packs(data, output, page):
         for n, lesson in enumerate(course['lessons'], 1):
             body += '<section id="lesson-' + str(n) + '"><h2>' + str(n) + '. ' + e(lesson['title']) + '</h2>'
             body += ''.join('<p>' + e(p) + '</p>' for p in lesson['paragraphs'])
-            body += '<h3>Самостоятельное задание</h3><p>' + e(lesson['exercise']) + '</p><p>Разбор: вопросы ниже и эталон практической работы; возможны другие обоснованные формулировки.</p></section>'
+            body += '<h3>Самостоятельное задание</h3><p>' + e(lesson['exercise']) + '</p><details><summary>Разбор задания урока</summary><p>' + e(lesson['exercise_answer']) + '</p><p>Допустимы эквивалентные обоснованные решения в пределах условий. Открытая самопроверка, не закрытый экзамен.</p></details></section>'
         body += '</div><section><h2>Словарь</h2><dl>'
         body += ''.join('<dt><strong>' + e(k) + '</strong></dt><dd>' + e(v) + '</dd>' for k, v in course['glossary'].items())
         p = course['practice']
@@ -159,7 +159,10 @@ def render_review_ledger(ledger, expected_ids, output, page):
             status={'pending':'не выполнено','changes_requested':'нужны исправления','passed':'проверено по указанному основанию'}[entry['status']]
             body+='<li>'+label+': '+status+'. Проверяющий: '+html.escape(entry['reviewer'] or 'не назначен')+'.</li>'
             rows.append(dict(material_id=material['id'],stage=stage,**entry,open_issues=material['open_issues']))
-        body+='</ul><p>'+html.escape(material['open_issues'])+'</p><p>Записей изменений: '+str(len(material['changes']))+'. Прохождение редакционных этапов не заменяет утверждение программы и применимые разрешения.</p></section>'
+        body+='</ul><p>'+html.escape(material['open_issues'])+'</p><p>Записей изменений: '+str(len(material['changes']))+'. Прохождение редакционных этапов не заменяет утверждение программы и применимые разрешения.</p>'
+        for change in material['changes']:
+            body+='<p>'+html.escape(change['date']+' · '+change['version']+' · '+change['author']+': '+change['change'])+'</p>'
+        body+='</section>'
     (output/'review-ledger.html').write_text(page('Проверка материалов и незакрытые этапы',body))
     (output/'review-ledger.json').write_text(json.dumps(ledger,ensure_ascii=False,indent=2)+'\n')
     buffer=io.StringIO();writer=csv.DictWriter(buffer,fieldnames=list(rows[0]),lineterminator='\n');writer.writeheader();writer.writerows(rows)

@@ -1,11 +1,12 @@
 {
   "directions": 34,
   "catalog_courses": 116,
-  "introductory_packs": 14,
-  "materials": 15,
-  "lessons": 59,
-  "open_answers": 92,
-  "planned": 102,
+  "introductory_packs": 18,
+  "materials": 19,
+  "lessons": 75,
+  "open_answers": 116,
+  "lesson_solutions": 75,
+  "planned": 98,
   "expert_approved": 0,
   "regulated_ready": 0
 }
