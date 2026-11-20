@@ -1,7 +1,7 @@
 {
   "author": "Герасимов Дмитрий Сергеевич",
   "date": "2026-11-19",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "directions": [
     {
       "id": "D01",
@@ -195,21 +195,22 @@
         {
           "id": "D03-C02",
           "title": "сервис",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "Торговля; услуги; производители",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "customer-service.html"
         },
         {
           "id": "D03-C03",
@@ -690,21 +691,22 @@
         {
           "id": "D09-C01",
           "title": "Миграция офисных инструментов",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "ИТ; инженеры; офисные службы",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "office-migration.html"
         },
         {
           "id": "D09-C02",
@@ -1525,21 +1527,22 @@
         {
           "id": "D21-C02",
           "title": "управление запасами",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "Закупщики; логисты; юристы",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "inventory-planning.html"
         },
         {
           "id": "D21-C03",
@@ -2365,21 +2368,22 @@
         {
           "id": "D34-C01",
           "title": "Кибергигиена",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "Все работодатели; ИТ-службы",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "cyber-hygiene.html"
         },
         {
           "id": "D34-C02",

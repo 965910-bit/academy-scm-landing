@@ -1,0 +1,2 @@
+﻿sku,daily_demand,lead_days,safety_units,on_hand,confirmed_inbound,commitments,position,reorder_point,target,pack_size,proposed_order,limitations
+A,10,4,15,40,20,10,Рассчитать,Рассчитать,100,12,Рассчитать,Учебные допущения; требуется решение

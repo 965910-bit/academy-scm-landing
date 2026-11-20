@@ -1,7 +1,7 @@
 """Validate content coverage, arithmetic, generated local links and scoring."""
 import csv, json, unittest, subprocess, sys
 import copy
-from learning_library_packs import validate_packs
+from learning_library_packs import validate_packs, render_review_ledger
 from pathlib import Path
 from html.parser import HTMLParser
 R=Path(__file__).resolve().parents[1]; D=R/'docs/learning-library'; O=R/'academy/guides/learning-library'
@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),106)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),10)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),102)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),14)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -44,7 +44,7 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),10)
+  self.assertEqual(len(packs['courses']),14)
   for c in packs['courses']:
    self.assertEqual(len(c['lessons']),4)
    self.assertEqual(len(c['questions']),6)
@@ -85,14 +85,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],43)
-  self.assertEqual(progress['open_answers'],68)
-  self.assertEqual(progress['materials'],11)
-  self.assertEqual(progress['planned'],106)
+  self.assertEqual(progress['lessons'],59)
+  self.assertEqual(progress['open_answers'],92)
+  self.assertEqual(progress['materials'],15)
+  self.assertEqual(progress['planned'],102)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['43 уроков','68 открытых ответов','106 курсов']:self.assertIn(text,hub)
+  for text in ['59 уроков','92 открытых ответов','102 курсов']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -162,4 +162,44 @@ class LibraryTests(unittest.TestCase):
    elif mutation=='filename':c['template']['filename']='../unsafe.csv'
    with self.subTest(mutation=mutation):
     with self.assertRaises(ValueError):validate_packs(bad,ids)
+ def test_inventory_policy(self):
+  import math
+  physical,inbound,commitments,daily,lead,safety,target,pack=40,20,10,10,4,15,100,12
+  position=physical+inbound-commitments
+  point=daily*lead+safety
+  quantity=math.ceil((target-position)/pack)*pack
+  self.assertEqual((physical,physical-commitments,position),(40,30,50))
+  self.assertEqual((point,quantity,position+quantity),(55,60,110))
+  self.assertLessEqual(position,point)
+  self.assertEqual(daily*6+safety,75)
+ def test_service_and_security_metrics(self):
+  self.assertEqual((15/20,12/20,8/10),(.75,.6,.8))
+  self.assertEqual((15/20,10/20),(.75,.5))
+  self.assertAlmostEqual(10/15*100,66.6666666667)
+  self.assertEqual((10*100+5*200,9/10),(2000,.9))
+ def test_editorial_ledger(self):
+  ledger=json.loads((D/'review-ledger.json').read_text())
+  expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
+  self.assertEqual({m['id'] for m in ledger['materials']},expected)
+  self.assertEqual(len(ledger['materials']),15)
+  self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
+  for m in ledger['materials']:
+   for stage in ['subject_review','legal_review','answer_review','pilot']:
+    self.assertEqual(m[stage]['status'],'pending')
+    self.assertIsNone(m[stage]['reviewer'])
+  rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
+  self.assertEqual(len(rows),60)
+  self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
+ def test_false_review_rejected(self):
+  import tempfile
+  ledger=json.loads((D/'review-ledger.json').read_text())
+  expected={m['id'] for m in ledger['materials']}
+  ledger['materials'][0]['answer_review']['status']='passed'
+  with tempfile.TemporaryDirectory() as folder:
+   with self.assertRaises(ValueError):render_review_ledger(ledger,expected,Path(folder),lambda t,b:b)
+ def test_new_files_in_archive(self):
+  import zipfile
+  with zipfile.ZipFile(O/'learning-library.zip') as z:
+   for name in ['cyber-hygiene.html','office-migration.html','customer-service.html','inventory-planning.html','review-ledger.html','review-ledger.json','review-checklist.md','review-ledger.csv']:
+    self.assertIn(name,z.namelist())
 if __name__=='__main__':unittest.main()
