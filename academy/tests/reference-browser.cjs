@@ -9,7 +9,7 @@ const {createService}=require('../../server/server.cjs');
  await p.locator('button[type=reset]').click();await p.locator('[name=grade]').selectOption('9');assert.ok((await p.locator('#results').innerText()).includes('5 - 9'));
  await p.locator('button[type=reset]').click();await p.locator('[name=group]').selectOption('7');assert.match(await p.locator('#results').innerText(),/VII/);
  await p.locator('button[type=reset]').click();await p.locator('[name=q]').fill('ЛОГИСТ');await p.locator('[name=kind]').selectOption('employee');assert.match(await p.locator('#results').innerText(),/Логист/);assert.ok(!(await p.locator('#results').innerText()).includes('Рабочие'));
- const url=p.url();await p.reload();assert.equal(await p.locator('[name=q]').inputValue(),'ЛОГИСТ');await p.waitForFunction(()=>document.querySelector('#result-count').textContent.includes('из'));
+ const url=p.url();await p.reload();await p.waitForFunction(()=>document.querySelector('#result-count')?.textContent.includes('из'));assert.equal(await p.locator('[name=q]').inputValue(),'ЛОГИСТ');
  const download=await Promise.all([p.waitForEvent('download'),p.locator('#export').click()]);const csv=fs.readFileSync(await download[0].path(),'utf8');assert.match(csv,/Логист/);assert.match(csv,/Источник/);
  await p.locator('[name=q]').fill('<img src=x onerror=alert(1)>');assert.equal(await p.locator('#results img').count(),0);await p.goto(url);await p.waitForFunction(()=>document.querySelector('#result-count').textContent.includes('из'));
  for(const width of [320,390,768,1440]){await p.setViewportSize({width,height:900});assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'classifier mobile '+width);}

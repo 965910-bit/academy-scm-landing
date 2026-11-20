@@ -239,7 +239,7 @@
       superadmin:[['accounts','Пользователи и права'],['workflows','Платформа и процессы'],['documents','Документы']]
     };
     const [avatar,name] = roles[role] || roles.applicant;
-    return `<div class="container"><div class="workspace"><aside class="sidebar"><div class="profile"><div class="avatar">${avatar}</div><b>${esc((identity?.target||identity?.user)?.name||name)}</b><p>${name}</p></div>${[...(assembly?[['assembly','Сборка · все разделы']]:[]),...(workflows?[['workflows','Рабочий центр']]:[]),...(menus[role]||menus.applicant).filter(([id])=>id!=='workflows'),...(role==='auditor'?[]:[['manual-records','Ручные записи']])].map(([id,label])=>`<button data-tab="${id}" class="${tab===id?'active':''}">${label}</button>`).join('')}<button data-action="export">Экспорт рабочего пространства</button><button data-action="logout">Выйти из учётной записи</button></aside><section>${!storageOK?'<div class="warning">Постоянное хранилище недоступно. Данные могут не сохраниться.</div>':''}${studentCard.corner(role)}${identity?.banner?.()||''}${dashboard()}</section></div></div>`;
+    return `<div class="container"><div class="workspace"><aside class="sidebar"><div class="profile"><div class="avatar">${avatar}</div><b>${esc((identity?.target||identity?.user)?.name||name)}</b><p>${name}</p></div>${[...(assembly?[['assembly','Все инструменты']]:[]),...(workflows?[['workflows','Рабочий центр']]:[]),...(menus[role]||menus.applicant).filter(([id])=>id!=='workflows'),...([['resources-regulations','Нормативная база'],['resources-classifiers','ОКПДТР–2026'],['resources-guides','Библиотека знаний']]),...(role==='auditor'?[]:[['manual-records','Ручные записи']])].map(([id,label])=>`<button data-tab="${id}" class="${window.SCMUnifiedPages?.route()!=null ? (id==='resources-'+window.SCMUnifiedPages.route().split('/')[0]?'active':'') : tab===id?'active':''}">${label}</button>`).join('')}<button data-action="export">Экспорт рабочего пространства</button><button data-action="logout">Выйти из учётной записи</button></aside><section>${!storageOK?'<div class="warning">Постоянное хранилище недоступно. Данные могут не сохраниться.</div>':''}${studentCard.corner(role)}${identity?.banner?.()||''}${dashboard()}</section></div></div>`;
   }
   function heading(title, sub) {
     return `<div class="dashboard-head"><div><span class="eyebrow">${role === "admin" ? "УПРАВЛЕНИЕ АКАДЕМИЕЙ" : role === "teacher" ? "КАБИНЕТ ПРЕПОДАВАТЕЛЯ" : "КАБИНЕТ АБИТУРИЕНТА"}</span><h1>${title}</h1><p class="subtle">${sub}</p></div><span class="badge">КАБИНЕТ</span></div>`;
@@ -266,6 +266,7 @@
       )}</div><div class="grid">${shown.map((p) => `<article class="card" data-direction="${p.id}"><span class="course-icon" aria-hidden="true">${{ higher: "◈", mba: "↗", intensive: "ϟ", retraining: "▦", international: "◎", corporate: "⬡", seminars: "✳" }[p.id]}</span><span class="number">${p.code}</span><h3>${p.title}</h3><p>${p.text}</p><p class="micro">${p.document}</p><div class="card-meta"><span>${p.duration}</span><span class="badge ${open(p) ? "" : "planned"}">${open(p) ? "Приём открыт" : "Подготовка к запуску"}</span></div><a class="portal-detail-link" href="#/program/${p.id}">Подробнее о программе →</a><button class="button outline small" data-program="${p.id}">${open(p) ? "Подать заявку ↗" : "Посмотреть условия ↗"}</button></article>`).join("") || '<p class="empty">В этой категории пока нет опубликованных направлений.</p>'}</div><p class="micro" style="margin-top:20px">Даты, стоимость и преподаватели будут опубликованы после утверждения программ. Дипломы государственного образца и международные партнёрства не заявляются.</p></section><section class="section" id="approach"><div class="dark"><div class="approach-intro"><span class="eyebrow">НЕ ПРОСТО НАБОР ЛЕКЦИЙ</span><h2>Учиться видеть<br>всю цепь.</h2><p>Закупки, производство, запасы, транспорт и клиентский сервис — не отдельные дисциплины, а части одного решения.</p><button class="button lime" data-action="login">Открыть личный кабинет ↗</button></div><div class="steps"><div class="step"><b>01</b><div><h3>Определить задачу</h3><p>Выбрать направление и сформулировать задачу для развития.</p></div></div><div class="step"><b>02</b><div><h3>Проверить на практике</h3><p>Работать с кейсами, данными и обратной связью преподавателя.</p></div></div><div class="step"><b>03</b><div><h3>Собрать решение</h3><p>Связать инструменты в проект изменений для своей цепи поставок.</p></div></div></div></div></section><section class="section" id="platform"><span class="eyebrow">ВАША ТОЧКА ВХОДА</span><div class="section-head"><h2>Не просто учиться.<br>Быть частью системы.</h2><p>У каждого своя роль. У всех — общее пространство для развития.</p></div><div class="role-grid"><article class="role-card"><span class="role-symbol" aria-hidden="true">↗</span><span class="number">01 / ПОСТУПЛЕНИЕ</span><h3>Мой следующий уровень</h3><p>Выбор направления, заявка и её статус. Понятный маршрут от интереса к поступлению.</p><button class="button outline" data-role-entry="applicant">Я абитуриент ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">✳</span><span class="number">02 / ПРЕПОДАВАНИЕ</span><h3>Делиться опытом. Менять мышление.</h3><p>Учебные группы, задания и ведомость — инструменты преподавателя в одном кабинете.</p><button class="button outline" data-role-entry="teacher">Я преподаватель ↗</button></article><article class="role-card"><span class="role-symbol" aria-hidden="true">◈</span><span class="number">03 / УПРАВЛЕНИЕ</span><h3>Вся академия под контролем</h3><p>Семь направлений, условия запуска и заявки. Раздельное управление публикацией и приёмом.</p><button class="button outline" data-role-entry="admin">Управление платформой ↗</button></article></div></section><section class="section" id="enterprise"><div class="enterprise"><div><span class="eyebrow">КОРПОРАТИВНАЯ АКАДЕМИЯ</span><h2>Одна команда.<br>Общий язык управления.</h2><p>От матрицы компетенций до проектной работы: создайте внутреннюю траекторию развития под процессы вашего предприятия.</p></div><button class="button" data-program="corporate">Обсудить формат ↗</button></div></section><section class="section faq" id="questions"><span class="eyebrow">ЕСТЬ ВОПРОСЫ?</span><div class="faq-layout"><h2>Всё важное.<br>Без мелкого шрифта.</h2><div><details><summary>Какие направления уже открыты?</summary><p>Текущий статус указан на карточке каждого направления. По умолчанию все программы планируются, приём закрыт. Администратор может открыть локальный приём после заполнения оснований проверки.</p></details><details><summary>Какой документ я получу?</summary><p>Это зависит от программы и подтверждённых правовых оснований. Условия выдачи документов будут опубликованы до реального набора. Международные сертификаты не выдаются автоматически за собственный курс академии.</p></details><details><summary>Можно ли обучить команду компании?</summary><p>Для этого предусмотрено направление «Внутренняя академия предприятия». Состав программы, формат и условия нужно согласовать отдельно. Пока раздел описывает будущий сценарий.</p></details><details><summary>Как получить доступ к учебной платформе?</summary><p>Сейчас это учебная платформа. Для доступа нужна учётная запись, которую создаёт администратор или приёмная комиссия. Права определяются назначенной ролью.</p></details></div></div></section></div>`;
   }
   function dashboard() {
+    if(window.SCMUnifiedPages?.route()!==null && window.SCMUnifiedPages?.route()!==undefined)return window.SCMUnifiedPages.placeholder();
     const assemblyScreen=assembly?.render(role,tab);if(assemblyScreen!=null)return assemblyScreen;
     const workflowScreen=workflows?.render(role,tab);
     if(workflowScreen!=null)return workflowScreen;
@@ -392,8 +393,10 @@
     );
   }
   function render() {
-    main.innerHTML = role ? shell() : portal.active() ? portal.render() : landing();
-    if(role)window.SCMManualRecords.mountSearch(main.querySelector(".workspace>section"));
+    const resourceRoute=window.SCMUnifiedPages?.route();
+    main.innerHTML = role ? shell() : resourceRoute!=null ? '<div class="container resource-public">'+window.SCMUnifiedPages.placeholder()+'</div>' : portal.active() ? portal.render() : landing();
+    if(resourceRoute!=null)window.SCMUnifiedPages.mount();
+    if(role && resourceRoute==null)window.SCMManualRecords.mountSearch(main.querySelector(".workspace>section"));
     const pageTitle = main.querySelector("h1")?.textContent.trim();
     document.title = pageTitle ? `${pageTitle} — Академия SCM` : "Академия SCM";
     document.querySelector("#account-button").textContent = role
@@ -401,10 +404,11 @@
       : "Личный кабинет ↗";
   }
   function login() {
+    if(window.SCMUnifiedPages?.route()!=null)history.pushState(null,'',location.pathname+'#cabinet');
     if (identity?.user) { role = (identity.target || identity.user).role; tab = ["admin","admissions","superadmin"].includes(role)?"accounts":"workflows"; render(); return; }
     document.querySelector("#login-dialog").showModal();
   }
-  document.querySelector("#assembly-entry")?.addEventListener("click",event=>{event.preventDefault();if(identity?.user){role=(identity.target||identity.user).role;tab="assembly";render();}else{sessionStorage.setItem("scm-open-assembly","1");login();}});
+  document.querySelector("#assembly-entry")?.addEventListener("click",event=>{event.preventDefault();if(window.SCMUnifiedPages?.route()!=null)history.pushState(null,'',location.pathname+'#cabinet');if(identity?.user){role=(identity.target||identity.user).role;tab="assembly";render();}else{sessionStorage.setItem("scm-open-assembly","1");login();}});
   const menuToggle = document.querySelector('.mobile-menu-toggle');
   const primaryNavigation = document.querySelector('#primary-navigation');
   const closeMenu = () => { menuToggle.setAttribute('aria-expanded', 'false'); primaryNavigation.classList.remove('is-open'); };
@@ -466,6 +470,8 @@
       return;
     }
     if (t.dataset.tab) {
+      if(t.dataset.tab.startsWith('resources-')){window.SCMUnifiedPages.go(t.dataset.tab.slice(10)+'/');return;}
+      if(window.SCMUnifiedPages?.route()!=null)history.pushState(null,'',location.pathname+'#cabinet');
       tab = t.dataset.tab;
       render();
       return;
@@ -664,7 +670,10 @@
       toast("Задание добавлено");
     }
   });
+  window.addEventListener('popstate',()=>{if(window.SCMUnifiedPages?.route()!=null || location.hash==='#cabinet')render();});
   window.addEventListener("hashchange", () => {
+    if(window.SCMUnifiedPages?.route()!=null){render();window.scrollTo(0,0);return;}
+    if(location.hash==='#cabinet' && identity?.user){role=(identity.target||identity.user).role;render();return;}
     if (portal.active()) {
       role = null; render(); window.scrollTo(0, 0); portal.scrollSection();
       main.querySelector("h1")?.focus({preventScroll:true});

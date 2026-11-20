@@ -1,0 +1,23 @@
+'use strict';
+const {chromium}=require('playwright-core'),assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
+const {createService}=require('../../server/server.cjs');
+(async()=>{const directory=fs.mkdtempSync(path.join(os.tmpdir(),'scm-unified-')),service=createService({directory,secure:false});let browser;try{
+ await new Promise(r=>service.server.listen(0,'127.0.0.1',r));const base='http://127.0.0.1:'+service.server.address().port;
+ browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH,headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});const context=await browser.newContext(),p=await context.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
+ await p.goto(base+'/academy/');assert.equal(await p.locator('.notice').count(),0);assert.equal(await p.locator('#primary-navigation>a').count(),5);assert.equal(await p.locator('.system-tools').getAttribute('open'),null);
+ await p.locator('#account-button').click();await p.locator('#login-form [name=name]').fill('Герасимов Дмитрий Сергеевич');await p.locator('#login-form button[type=submit]').click();await p.locator('#local-account-create').waitFor();
+ await p.evaluate(()=>window.__shellSentinel=42);let navigations=0;p.on('framenavigated',frame=>{if(frame===p.mainFrame())navigations++;});
+ await p.locator('.sidebar [data-tab=resources-classifiers]').click();await p.waitForFunction(()=>document.querySelector('#result-count')?.textContent.includes('9 935'));assert.equal(await p.locator('.sidebar').count(),1);assert.equal(await p.locator('header.header').count(),1);assert.equal(await p.locator('#unified-page iframe').count(),0);
+ await p.locator('[name=code]').fill('105085');assert.match(await p.locator('#results').innerText(),/Токарь/);
+ await p.locator('.resource-tabs a').filter({hasText:'Нормативная база'}).click();await p.waitForFunction(()=>document.querySelector('#result-count')?.textContent.includes('39'));assert.equal(await p.evaluate(()=>window.__shellSentinel),42);assert.match(await p.locator('.sidebar .profile').innerText(),/Герасимов/);
+ await p.goBack();await p.waitForFunction(()=>document.querySelector('#results')?.textContent.includes('Токарь'));assert.equal(await p.locator('[name=code]').inputValue(),'105085');
+ await p.locator('.resource-tabs a').filter({hasText:'Знания'}).click();await p.locator('#unified-page h1').waitFor();await p.locator('#unified-page a[href$="/scor/"]').first().click();await p.waitForURL('**/#resources/guides/scor/');await p.locator('#unified-page h1').waitFor();assert.equal(await p.locator('.sidebar').count(),1);
+ await p.locator('.resource-tabs a').filter({hasText:'Формы документов'}).click();await p.locator('#awards').waitFor();assert.equal(await p.locator('#unified-page article').count(),54);
+ await p.locator('.sidebar [data-tab=documents]').click();await p.locator('[data-document-quick=diploma-bachelor]').click();await p.locator('#document-editor [name=recipient]').fill('Сохранённый Выпускник');await p.locator('#document-editor button[type=submit]').click();await p.locator('.sidebar [data-tab=resources-regulations]').click();await p.waitForFunction(()=>document.querySelector('#result-count')?.textContent.includes('39'));await p.locator('.sidebar [data-tab=documents]').click();assert.equal(await p.locator('#document-editor [name=recipient]').inputValue(),'Сохранённый Выпускник');
+ assert.equal(await p.evaluate(()=>window.__shellSentinel),42);
+ // Hash navigation is expected; the document/global sentinel is not replaced.
+ await p.locator('.sidebar [data-tab=resources-classifiers]').click();await p.waitForFunction(()=>document.querySelector('#result-count')?.textContent.includes('9 935'));
+ for(const width of [320,390,768,1440]){await p.setViewportSize({width,height:900});assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'workspace mobile '+width);}
+ await p.evaluate(()=>window.scrollTo(0,0));if(process.env.SCM_SCREENSHOT)await p.screenshot({path:process.env.SCM_SCREENSHOT,fullPage:false});
+ await p.goto(base+'/academy/guides/scor/');await p.waitForURL('**/#resources/guides/scor/');await p.locator('#unified-page h1').waitFor();assert.equal(await p.locator('.sidebar').count(),1);assert.deepEqual(errors,[]);console.log('PASS unified shell: owner, resources without document replacement/iframe, browser Back, deep guide links, old URLs, all 54 forms, saved draft, mobile, collapsed service details.');
+ }finally{await browser?.close();await new Promise(r=>service.server.close(r));service.db.close();fs.rmSync(directory,{recursive:true,force:true});}})().catch(e=>{console.error(e);process.exitCode=1;});
