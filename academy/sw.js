@@ -1,6 +1,6 @@
 /* Only the public application shell is cached. Private authenticated API responses are never cached. */
 "use strict";
-importScripts("./offline-config.js?v=development-suite-20261119-29");
+importScripts("./offline-config.js?v=lms-operations-20261119-30");
 const { cacheName, files } = self.SCM_OFFLINE_CONFIG;
 const urls = new Set(files.map(file => new URL(file, self.registration.scope).href));
 self.addEventListener("install", event => {
@@ -17,7 +17,7 @@ self.addEventListener("fetch", event => {
   if(resource.searchParams.size===1 && resource.searchParams.get("v")===self.SCM_OFFLINE_CONFIG.release && /\.(js|css)$/.test(resource.pathname)) resource.search="";
   // Public resource filters select client-side content, never private API responses.
   const shellPaths=[new URL('./',self.registration.scope).pathname,new URL('index.html',self.registration.scope).pathname];
-  const publicFilters=new Set(['utm_source','utm_campaign','development','folder','dq','q','code','sort','size','kind','etks','category','grade','group','letter','okz','topic','program','level','checked','status']);
+  const publicFilters=new Set(['utm_source','utm_campaign','lms','development','folder','dq','q','code','sort','size','kind','etks','category','grade','group','letter','okz','topic','program','level','checked','status']);
   if(resource.origin===new URL(self.registration.scope).origin && shellPaths.includes(resource.pathname) && resource.searchParams.size && [...resource.searchParams.keys()].every(key=>publicFilters.has(key)))resource.search='';
   // Exact public-file allowlist: no private documents, API responses or other origins.
   if (event.request.method !== "GET" || !urls.has(resource.href)) return;

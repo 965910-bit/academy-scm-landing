@@ -2,7 +2,7 @@
 /* Workspace navigation groups; routes and permissions remain owned by their modules. */
 window.SCMNavigation=(()=>{
  const groups=[
-  {id:'workspace',title:'Рабочая область',icon:'▦',ids:['workflows','assembly','overview']},
+  {id:'workspace',title:'Рабочая область',icon:'▦',ids:['workflows','assembly','overview','lms-operations']},
   {id:'access',title:'Пользователи и доступ',icon:'♙',ids:['accounts','students','directions','applications','application','intake-documents']},
   {id:'learning',title:'Учебный процесс',icon:'◇',ids:['allocations','responses','monitoring','activity','student-card','studyplan','planner','work','reviews','grading','assignments','development']},
   {id:'knowledge',title:'Контент и знания',icon:'▤',ids:['library','decisionlab','knowledge','resources-guides','manual-records','courses','lab','skills','assistant','offline']},
