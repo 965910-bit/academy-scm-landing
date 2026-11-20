@@ -1,0 +1,186 @@
+[
+  {
+    "id": "S01",
+    "title": "ГидМаркет: рынок ДПО",
+    "evidence_period": "2021–2025",
+    "access": "page",
+    "url": "https://gidmark.ru/news/otrasl-dopolnitelnogo-professionalnogo-obrazovaniya-v-rossii-vyirosla-do-178-mlrd-rub",
+    "finding": "Оценка рынка: 110,7; 114,0; 145,7; 168,1; 178,3 млрд руб. Методика полного платного отчета не проверена."
+  },
+  {
+    "id": "S02",
+    "title": "BusinesStat / РБК: учащиеся ДПО",
+    "evidence_period": "2020–2024",
+    "access": "search",
+    "url": "https://marketing.rbc.ru/articles/15612/",
+    "finding": "8,5 млн учащихся в 2024; рост 28% с 2020. Не число оплаченных курсов нашей академии."
+  },
+  {
+    "id": "S03",
+    "title": "Smart Ranking: онлайн-ДПО",
+    "evidence_period": "2025",
+    "access": "page",
+    "url": "https://smartranking.ru/ru/analytics/edtechs/",
+    "finding": "52,5 млрд руб., +6%. Пересекается с общим рынком; не складывать."
+  },
+  {
+    "id": "S04",
+    "title": "СКОЛКОВО: приоритеты корпоративного обучения на 2021",
+    "evidence_period": "2021",
+    "access": "page",
+    "url": "https://www.skolkovo.ru/researches/chemu-korporacii-budut-uchit-svoih-rukovoditelej-v-2021-godu/",
+    "finding": "125 участников, компании >1000 сотрудников; опрос конца 2020 о планах 2021, не фактические продажи. Команды, изменения, цифровая грамотность."
+  },
+  {
+    "id": "S05",
+    "title": "Skillbox Media: исследование корпоративного обучения 2021–2022",
+    "evidence_period": "2021–2022",
+    "access": "search",
+    "url": "https://skillbox.ru/media/corptrain/issledovanie-kak-izmenilos-korporativnoe-obuchenie-i-chto-ego-zhdyet-dalshe/",
+    "finding": "Пересказ исследования: профессиональные компетенции 72%, продукты 60%, ОТ/промбез 46% опрошенных; не доли российского денежного рынка."
+  },
+  {
+    "id": "S06",
+    "title": "Digital Learning: результаты исследования 2022",
+    "evidence_period": "2022",
+    "access": "search",
+    "url": "https://i-elearning.ru/samye-nelogichnye-trendy-korporativnogo-obucheniya-2022-goda/",
+    "finding": "Авторский обзор исследования: 92% смешанный формат; 90% разрабатывают контент сами; 26% иногда привлекают внешних разработчиков. Не оценка числа слушателей."
+  },
+  {
+    "id": "S07",
+    "title": "ComNews: обучение при импортозамещении",
+    "evidence_period": "2022–2023",
+    "access": "search",
+    "url": "https://www.comnews.ru/content/226174/2023-05-22/2023-w21/obuchenie-neotdelimo-importozamescheniya",
+    "finding": "Интервью поставщиков; АСКОН сообщает запрос обучения примерно у 25% заказчиков внедрения инженерного ПО, не у всех предприятий РФ."
+  },
+  {
+    "id": "S08",
+    "title": "РИА Томск: итоги проекта ТГУ",
+    "evidence_period": "2023",
+    "access": "search",
+    "url": "https://www.riatomsk.ru/article/20240109/tgu-obuchil-bolee-86-tis-chel-po-proektu-sodejstvie-zanyatosti-v-2023g/",
+    "finding": "ТГУ с партнерской сетью >86 тыс. обученных: делопроизводство, аналитик данных, бухучет, SQL, 1С, предпринимательство. Не один кампус и не только коммерческие продажи."
+  },
+  {
+    "id": "S09",
+    "title": "РАНХиГС: программы Содействия занятости",
+    "evidence_period": "2022",
+    "access": "search",
+    "url": "https://www.ranepa.ru/sveden/education/sodeystvie-zanyatosti/",
+    "finding": "Архив предложений 2022: HR, кадры, бухучет, 1С; подтверждает предложение, не итоговую численность."
+  },
+  {
+    "id": "S10",
+    "title": "СберУниверситет / РАНХиГС: рынок бизнес-образования",
+    "evidence_period": "2024",
+    "access": "page",
+    "url": "https://events.sberuniversity.ru/research-report-2024",
+    "finding": "30 образовательных организаций, 75+ работодателей, 475+ слушателей/выпускников. HR, стратегия, финансы, гибкие навыки, аналитика; работодатели предпочитают короткие программы до 3 месяцев."
+  },
+  {
+    "id": "S11",
+    "title": "Б1 / Эксперт РА / Штат / hh: корпоративное обучение",
+    "evidence_period": "2024–2025",
+    "access": "page",
+    "url": "https://b1.ru/analytics/b1-academy-of-business-expert-ra-corporate-learning-research-july-2025/",
+    "finding": "Более 200 компаний. Темы 2024: личная эффективность 36%, продажи/переговоры 27%, ИИ 27%; 51% — ожидание по ИИ на 2025, не измеренный итог 2025."
+  },
+  {
+    "id": "S12",
+    "title": "Роструд через Первый канал: итоги переобучения",
+    "evidence_period": "2024",
+    "access": "search",
+    "url": "https://www.1tv.ru/publikacii/obzor-smi/v-2024-godu-besplatnoe-pereobuchenie-proshli-bolee-118-tys-chelovek",
+    "finding": ">118 тыс. прошли бесплатное переобучение; популярны HR, педагог, бухгалтер, информационные ресурсы, программирование, рабочие специальности."
+  },
+  {
+    "id": "S13",
+    "title": "hh через CNews: итоги рынка труда 2025",
+    "evidence_period": "2025",
+    "access": "search",
+    "url": "https://www.cnews.ru/news/line/2025-12-22_itogi_rossijskogo_rynka",
+    "finding": "Продавцы >650 тыс. вакансий, продажи >646 тыс., водители >430 тыс.; это вакансии, не платные слушатели и не уникальные рабочие места."
+  },
+  {
+    "id": "S14",
+    "title": "РБК: инженерные и рабочие профессии",
+    "evidence_period": "2024–2025",
+    "access": "search",
+    "url": "https://www.rbc.ru/life/news/6818550b9a79472423c9c91d",
+    "finding": "Кадровый спрос: энергетика, геология, добыча, нефтегаз, электромонтаж. Косвенный сигнал потребности обучения, не объем закупок."
+  },
+  {
+    "id": "S15",
+    "title": "УЦ Профессионал, Сургут",
+    "evidence_period": "текущая страница, год не указан",
+    "access": "page",
+    "url": "https://prof86.ru/",
+    "finding": "Заявлено >10 тыс. человек/год, >100 предприятий/год; 130 направлений, 197 курсов; 250 тыс. за все время. Отзыв Сургутского ЗСК о безопасности, экологии, БДД, рабочих профессиях. Самоотчет, не пятилетний ряд."
+  },
+  {
+    "id": "S16",
+    "title": "Высшая школа Главбух",
+    "evidence_period": "текущая страница, год не указан",
+    "access": "search",
+    "url": "https://about.school.glavbukh.ru/",
+    "finding": "Заявлено >20 420 выпускников ежегодно и 60% повторных обращений. Самоотчет поставщика, не аудит."
+  },
+  {
+    "id": "S17",
+    "title": "ВШЭ: итоги ДПО 2025",
+    "evidence_period": "2025",
+    "access": "search",
+    "url": "https://www.hse.ru/mirror/pubs/share/1126802821.pdf",
+    "finding": "68 010 слушателей, 59 697 выпускников, доходы +16%; PDF найден по поисковому извлечению, полный файл не разобран."
+  },
+  {
+    "id": "S18",
+    "title": "Государственный доклад Минобрнауки",
+    "evidence_period": "2023",
+    "access": "search",
+    "url": "http://static.government.ru/media/files/9FSaRZ2GJ7GRZc1hTICXDQAV9orIaXtI.pdf",
+    "finding": "8,38 млн слушателей: 7,51 млн повышение квалификации, 0,87 млн переподготовка; работники предприятий 51,58%, образовательных организаций 32,20%. Полный PDF не разобран."
+  },
+  {
+    "id": "S19",
+    "title": "ВШЭ: программы дизайна",
+    "evidence_period": "2025",
+    "access": "search",
+    "url": "https://design.hse.ru/dop",
+    "finding": "1100 записавшихся на курсы в 2025; не число выпускников или оплаченных договоров."
+  },
+  {
+    "id": "S20",
+    "title": "ФНПК: сообщение Роструда",
+    "evidence_period": "2023",
+    "access": "search",
+    "url": "https://fnpk82new.ru/samye-populyarnye-programmy-obucheniya-u-zhenshhin-s-detmi-v-ramkah-naczproekta-demografiya/",
+    "finding": "29 тыс. женщин с детьми начали обучение; популярны маркетплейсы, бухгалтерия, HR, кадры. Узкая аудитория, не весь рынок."
+  },
+  {
+    "id": "S21",
+    "title": "Монетка: пожарная безопасность, TenderGuru 76327600",
+    "evidence_period": "2024",
+    "access": "page",
+    "url": "https://www.tenderguru.ru/tender/76327600",
+    "finding": "20.02.2024, ООО Элемент Трейд; Bidzaar; цена и численность не раскрыты. Историческая закупка."
+  },
+  {
+    "id": "S22",
+    "title": "Детский мир: Bidzaar 093-628",
+    "evidence_period": "2024",
+    "access": "page",
+    "url": "https://bidzaar.com/app/process/light/2309594d-9a43-47ac-9995-e8c4dec6d4db",
+    "finding": "Обучение работников РЦ Бекасово и Бекасово-2; завершено; постоплата 30 рабочих дней; нет открытой суммы. Состав программ в файле ТЗ здесь не разобран."
+  },
+  {
+    "id": "S23",
+    "title": "Б1: файл исследования 2025",
+    "evidence_period": "2024–2025",
+    "access": "search",
+    "url": "https://b1.ru/upload/sprint.editor/a9a/a61ehxrhuxrbpsw71gfo2xilezt8uq0n/b1-academy-of-business-expert-ra-corporate-learning-research-july-2025.pdf",
+    "finding": "Ссылка из первичной страницы S11; отдельным исследованием не считать; полный PDF не разобран."
+  }
+]
