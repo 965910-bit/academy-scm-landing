@@ -1,0 +1,2 @@
+﻿flow_id,period,unit,opening,generated,documented_out,expected_end,observed_end,difference,classification_status,next_check
+E01,Учебный месяц,кг,100,40,90,50,54,4,Не установлено,Сверка измерений и среза

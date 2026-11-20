@@ -137,7 +137,7 @@ def render_packs(data, output, page):
     # Portable package of the generated library. Exam secrecy is explicitly not promised.
     with zipfile.ZipFile(output/'learning-library.zip','w',zipfile.ZIP_DEFLATED) as z:
         for path in sorted(output.iterdir()):
-            if path.is_file() and path.suffix in {'.html','.json','.csv','.py','.md'}:z.write(path,path.name)
+            if path.is_file() and path.suffix in {'.html','.json','.csv','.py','.md','.js'}:z.write(path,path.name)
 
 
 def render_review_ledger(ledger, expected_ids, output, page):

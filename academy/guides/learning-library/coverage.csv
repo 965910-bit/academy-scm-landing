@@ -19,7 +19,7 @@ D05,Бухгалтерия и налоги,D05-C01,Бухучет,introductory_w
 D05,Бухгалтерия и налоги,D05-C02,отчетность,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D05,Бухгалтерия и налоги,D05-C03,зарплата,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D05,Бухгалтерия и налоги,D05-C04,изменения стандартов,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D06,1С и учетные системы,D06-C01,1С:Бухгалтерия,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D06,1С и учетные системы,D06-C01,1С:Бухгалтерия,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D06,1С и учетные системы,D06-C02,ЗУП,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D06,1С и учетные системы,D06-C03,программирование 1С,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D07,Аналитика данных и SQL,D07-C01,Excel,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
@@ -44,7 +44,7 @@ D11,Охрана труда,D11-C01,А,planned,missing,missing,missing,missing,m
 D11,Охрана труда,D11-C02,Б,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D11,Охрана труда,D11-C03,В по видам работ,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D11,Охрана труда,D11-C04,СИЗ,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D11,Охрана труда,D11-C05,управление рисками,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D11,Охрана труда,D11-C05,управление рисками,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D12,Первая помощь,D12-C01,Практика помощи пострадавшему,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D12,Первая помощь,D12-C02,подготовка обучающих,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D13,Пожарная безопасность,D13-C01,Повышение квалификации ответственных,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
@@ -77,12 +77,12 @@ D21,"Закупки, договоры и SCM",D21-C03,поставщики,plann
 D21,"Закупки, договоры и SCM",D21-C04,договорная работа,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D22,Строительство и инженерия,D22-C01,Сметы,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D22,Строительство и инженерия,D22-C02,проектирование,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D22,Строительство и инженерия,D22-C03,САПР,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D22,Строительство и инженерия,D22-C03,САПР,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D22,Строительство и инженерия,D22-C04,строительный контроль,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D23,"Нефтегаз, добыча и геология",D23-C01,Эксплуатация,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D23,"Нефтегаз, добыча и геология",D23-C02,ремонт,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D23,"Нефтегаз, добыча и геология",D23-C03,отраслевые технологии,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D24,Экология и отходы,D24-C01,Экологическая безопасность,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D24,Экология и отходы,D24-C01,Экологическая безопасность,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D24,Экология и отходы,D24-C02,обращение с отходами,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D25,Педагогика и методика,D25-C01,Педагог,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D25,Педагогика и методика,D25-C02,методист,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
