@@ -1,13 +1,15 @@
 {
   "directions": 34,
+  "directions_with_intro": 34,
+  "directions_without_intro": 0,
   "catalog_courses": 116,
-  "introductory_packs": 30,
-  "materials": 31,
-  "lessons": 123,
-  "open_answers": 188,
-  "lesson_solutions": 123,
-  "planned": 86,
-  "practice_solutions": 31,
+  "introductory_packs": 36,
+  "materials": 37,
+  "lessons": 147,
+  "open_answers": 224,
+  "lesson_solutions": 147,
+  "planned": 80,
+  "practice_solutions": 37,
   "expert_approved": 0,
   "regulated_ready": 0
 }

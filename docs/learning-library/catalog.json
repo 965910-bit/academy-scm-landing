@@ -1,7 +1,7 @@
 {
   "author": "Герасимов Дмитрий Сергеевич",
   "date": "2026-11-19",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "directions": [
     {
       "id": "D01",
@@ -981,21 +981,22 @@
         {
           "id": "D12-C02",
           "title": "подготовка обучающих",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "Работодатели; ответственные лица",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "first-aid-teaching-preparation.html"
         }
       ]
     },
@@ -1025,21 +1026,22 @@
         {
           "id": "D13-C02",
           "title": "обучение по роли",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "Торговля; производство; учреждения",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "fire-role-training.html"
         }
       ]
     },
@@ -1069,21 +1071,22 @@
         {
           "id": "D14-C02",
           "title": "организация безопасных работ",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "Стройка; эксплуатация; промышленность",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "height-work-planning.html"
         }
       ]
     },
@@ -1113,21 +1116,22 @@
         {
           "id": "D15-C02",
           "title": "эксплуатационные риски",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "Промышленность; ТЭК; подрядчики",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "industrial-change-records.html"
         }
       ]
     },
@@ -1176,21 +1180,22 @@
         {
           "id": "D16-C03",
           "title": "обслуживание оборудования",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "Энергетика; ЖКХ; производство",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "electrical-maintenance-records.html"
         }
       ]
     },
@@ -1220,21 +1225,22 @@
         {
           "id": "D17-C02",
           "title": "теплоснабжение",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "ЖКХ; эксплуатация; энергетика",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "heat-supply-records.html"
         },
         {
           "id": "D17-C03",

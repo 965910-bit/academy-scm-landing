@@ -9,7 +9,7 @@ packs=json.loads((D/'course-packs.json').read_text())
 for extra in sorted(D.glob('*-packs.json')):
  if extra.name != 'course-packs.json':
   packs['courses'].extend(json.loads(extra.read_text())['courses'])
-packs['version']='0.9.0'
+packs['version']='0.10.0'
 assert len({c['id'] for c in packs['courses']})==len(packs['courses']), 'Duplicate course IDs'
 for lab_file in (D/'labs').iterdir():
  if lab_file.is_file(): (O/lab_file.name).write_bytes(lab_file.read_bytes())
@@ -111,7 +111,9 @@ body+='<h2>Преподавателю</h2><ul>'+''.join('<li>'+esc(x)+'</li>' fo
 for s in course['sources']:body+='<p><a href="'+s['url']+'">'+esc(s['title'])+'</a> · '+esc(s['author'])+'. '+esc(s['use'])+'. '+esc(s['verification'])+'. '+esc(s['license'])+'. Дата включения: '+date+'.</p>'
 body+='<p>Проверяющий специалист: не назначен. Апробация: не выполнена. Следующая проверка: '+esc(course['review']['next_review'])+'.</p>'
 (O/'foundation-data.html').write_text(page(course['title'],body))
-stats={'directions':len(catalog),'catalog_courses':sum(len(d['courses']) for d in catalog),
+stats={'directions':len(catalog),
+ 'directions_with_intro':sum(any(c['id'] in pack_by_id for c in d['courses']) for d in catalog),
+ 'directions_without_intro':sum(not any(c['id'] in pack_by_id for c in d['courses']) for d in catalog),'catalog_courses':sum(len(d['courses']) for d in catalog),
  'introductory_packs':len(packs['courses']), 'materials':len(packs['courses'])+1,
  'lessons':sum(len(c['lessons']) for c in packs['courses'])+len(course['lessons']),
  'open_answers':sum(len(c['questions']) for c in packs['courses'])+len(course['assessment']),
@@ -121,6 +123,7 @@ stats={'directions':len(catalog),'catalog_courses':sum(len(d['courses']) for d i
  'expert_approved':0, 'regulated_ready':0}
 for folder in (D,O): (folder/'progress.json').write_text(json.dumps(stats,ensure_ascii=False,indent=2)+'\n')
 coverage_text=(f"{stats['directions']} направления; {stats['catalog_courses']} предварительных курсов. "
+ f"Направлений хотя бы с одним вводным комплектом: {stats['directions_with_intro']} из {stats['directions']}; это не полные программы направлений. "
  f"Для {stats['introductory_packs']} курсов написаны вводные комплекты; {stats['planned']} курсов пока запланированы. "
  f"Отдельно написан межотраслевой материал. Итого: {stats['materials']} материалов, {stats['lessons']} уроков, "
  f"{stats['open_answers']} ответов на контрольные вопросы и {stats['lesson_solutions']} разборов заданий уроков. Полное покрытие профессий не достигнуто. "
@@ -144,7 +147,7 @@ buf=io.StringIO();w=csv.writer(buf,lineterminator='\n');w.writerow(['direction_i
 for d in catalog:
  for c in d['courses']:w.writerow([d['id'],d['title'],c['id'],c['title'],c['status'],*c['sections'].values()])
 for folder in [D,O]:(folder/'coverage.csv').write_text('\ufeff'+buf.getvalue())
-(D/'README.md').write_text('# Учебная база\n\nАвтор собственных материалов: '+author+'. Версия библиотеки '+packs['version']+' от '+date+'.\n\n'+coverage_text+'\n\nИсходники: course-packs.json, digital-packs.json, business-packs.json, operations-packs.json, sector-packs.json, technical-packs.json, professional-packs.json, organization-packs.json, foundation-data.json; лаборатории — labs/. Матрица — coverage.csv; точные счетчики — progress.json. Для каждого предметного комплекта доступен полный текст Markdown с открытыми ответами. Общий реестр дополнительных источников — learning-sources.csv (объем проверки указан отдельно). review-ledger.json сохраняет редакционные этапы и историю изменений; все экспертизы пока pending. answer-bank.html/json/csv — сводная публичная самопроверка с локальным поиском без отправки данных; не секретный экзамен.\n\nСборка: python3 scripts/build-learning-library.py\nПроверки: python3 scripts/test-learning-library.py и python3 docs/learning-library/labs/run-digital-labs.py; python3 docs/learning-library/labs/run-organization-labs.py\n\nПубликуемые ответы предназначены для самопроверки, не секретного экзамена. Закрытая аттестация требует серверного хранения и отдельного набора заданий; не реализована. Все материалы требуют предметной экспертизы и апробации. Внешние источники сохраняют авторство и ограничения. В цифровом блоке проверены только указанные фрагменты страниц, не полные документы.\n')
+(D/'README.md').write_text('# Учебная база\n\nАвтор собственных материалов: '+author+'. Версия библиотеки '+packs['version']+' от '+date+'.\n\n'+coverage_text+'\n\nИсходники: course-packs.json, digital-packs.json, business-packs.json, operations-packs.json, sector-packs.json, technical-packs.json, professional-packs.json, organization-packs.json, safety-packs.json, foundation-data.json; лаборатории — labs/. Матрица — coverage.csv; точные счетчики — progress.json. Для каждого предметного комплекта доступен полный текст Markdown с открытыми ответами. Общий реестр дополнительных источников — learning-sources.csv (объем проверки указан отдельно). review-ledger.json сохраняет редакционные этапы и историю изменений; все экспертизы пока pending. answer-bank.html/json/csv — сводная публичная самопроверка с локальным поиском без отправки данных; не секретный экзамен.\n\nСборка: python3 scripts/build-learning-library.py\nПроверки: python3 scripts/test-learning-library.py и python3 docs/learning-library/labs/run-digital-labs.py; python3 docs/learning-library/labs/run-organization-labs.py\n\nПубликуемые ответы предназначены для самопроверки, не секретного экзамена. Закрытая аттестация требует серверного хранения и отдельного набора заданий; не реализована. Все материалы требуют предметной экспертизы и апробации. Внешние источники сохраняют авторство и ограничения. В цифровом блоке проверены только указанные фрагменты страниц, не полные документы.\n')
 print(coverage_text)
 
 from learning_library_packs import render_packs, render_review_ledger
