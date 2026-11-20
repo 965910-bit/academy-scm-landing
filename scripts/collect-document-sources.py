@@ -33,6 +33,16 @@ for id,folder,title,url in [
 ]:
  ITEMS.append((id,folder,title,COLLEGE,'https://detak.ru/images/'+url,'example'))
 GOV = [('licensing-1490','Лицензирование образовательной деятельности — постановление № 1490','https://government.ru/docs/all/130013/'),('paid-1441','Правила платных образовательных услуг — постановление № 1441','https://government.ru/docs/all/129897/'),('frdo-825','ФИС ФРДО — постановление № 825','https://government.ru/docs/all/134483/'),('distance-1678','Электронное обучение и ДОТ — постановление № 1678','https://government.ru/docs/all/149993/')]
+for id,folder,title,n in [
+ ('mond-issue','03/issued-register','Инструкция о заполнении и выдаче документов',108),
+ ('mond-process','04/programs','Положение об организации учебного процесса',110),
+ ('mond-final','03/gia','Положение об итоговой аттестации',112),
+ ('mond-rules','01/local-acts','Правила внутреннего распорядка',113),
+ ('mond-safety','01/local-acts','Инструкция по охране труда',109),
+ ('mond-dpo','01/local-acts','Положение об отделе ДПО',111),
+ ('mond-admission','02/rules','Правила приёма',114),
+]: ITEMS.append((id,folder,title,'ГОБУЗ «Мурманский областной наркологический диспансер» (публичный пример 2020 года)','https://mond51.ru/index.php?do=download&id='+str(n),'example'))
+RG=[('school-545','Образцы аттестатов — приказ № 545','https://rg.ru/documents/2020/12/29/minpros-prikaz545-site-dok.html'),('school-546','Выдача аттестатов — приказ № 546','https://rg.ru/2020/12/25/minpros-prikaz546-site-dok.html'),('spo-390','Образцы дипломов СПО — приказ № 390','https://rg.ru/documents/2022/08/15/minpros-prikaz390-site-dok.html')]
 def read(url):
  import subprocess
  result=subprocess.run(['curl','--fail','--location','--max-time','25','--connect-timeout','8','--silent','--show-error','--max-filesize','31457280','--user-agent','Mozilla/5.0',url],capture_output=True,timeout=30)
@@ -57,6 +67,13 @@ def main():
    if not links: raise ValueError('PDF link not found')
    from urllib.parse import urljoin
    ITEMS.append((id,'01/government',title,'Правительство России (исходная публикация, не консолидированная редакция)',urljoin(url,links[0]),'normative'))
+  except Exception as e: errors.append(dict(id=id,source=url,error=str(e)))
+ for id,title,url in RG:
+  try:
+   html,_=read(url)
+   links=re.findall(r'https://cdnstatic\.rg\.ru/[^\s\"<>]+\.pdf',html.decode('utf-8'))
+   if not links: raise ValueError('PDF link not found')
+   ITEMS.append((id,'01/ministry',title,'Российская газета (исходная публикация)',links[0],'normative'))
   except Exception as e: errors.append(dict(id=id,source=url,error=str(e)))
  with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool: results=list(pool.map(collect,ITEMS))
  records=[]
