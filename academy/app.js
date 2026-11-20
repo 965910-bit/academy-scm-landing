@@ -224,6 +224,7 @@
     programs, settings: () => state.settings, isOpen: open, esc,
     apply: p => { if (!identity?.user || identity.user.role !== "applicant") {login();return;} role = "applicant"; tab = "application"; location.hash = "cabinet"; render(); main.querySelector("[name=program]").value = p.id; window.scrollTo(0, 0); }
   });
+  let navigationItems=[];
   function shell() {
     const roles = { applicant: ['АП','Абитуриент'], learner: ['СЛ','Слушатель'], teacher: ['ПР','Преподаватель'], admin: ['АД','Администратор'], employer: ['РБ','Работодатель'], curator:['КР','Куратор / методист'], alumni:['ВП','Выпускник'], auditor:['АУ','Аудитор'], superadmin:['СА','Суперадминистратор'], admissions: ['ПК','Приёмная комиссия'] };
     const menus = {
@@ -239,7 +240,9 @@
       superadmin:[['accounts','Пользователи и права'],['workflows','Платформа и процессы'],['documents','Документы']]
     };
     const [avatar,name] = roles[role] || roles.applicant;
-    return `<div class="container"><div class="workspace"><aside class="sidebar"><div class="profile"><div class="avatar">${avatar}</div><b>${esc((identity?.target||identity?.user)?.name||name)}</b><p>${name}</p></div>${[...(assembly?[['assembly','Все инструменты']]:[]),...(workflows?[['workflows','Рабочий центр']]:[]),...(menus[role]||menus.applicant).filter(([id])=>id!=='workflows'),...([['resources-regulations','Нормативная база'],['resources-classifiers','ОКПДТР–2026'],['resources-guides','Библиотека знаний']]),...(role==='auditor'?[]:[['manual-records','Ручные записи']])].map(([id,label])=>`<button data-tab="${id}" class="${window.SCMUnifiedPages?.route()!=null ? (id==='resources-'+window.SCMUnifiedPages.route().split('/')[0]?'active':'') : tab===id?'active':''}">${label}</button>`).join('')}<button data-action="export">Экспорт рабочего пространства</button><button data-action="logout">Выйти из учётной записи</button></aside><section>${!storageOK?'<div class="warning">Постоянное хранилище недоступно. Данные могут не сохраниться.</div>':''}${studentCard.corner(role)}${identity?.banner?.()||''}${dashboard()}</section></div></div>`;
+    navigationItems=[...(assembly?[['assembly','Все инструменты']]:[]),...(workflows?[['workflows','Рабочий центр']]:[]),...(menus[role]||menus.applicant).filter(([id])=>id!=='workflows'),...([['resources-regulations','Нормативная база'],['resources-classifiers','ОКПДТР–2026'],['resources-guides','Библиотека знаний']]),...(role==='auditor'?[]:[['manual-records','Ручные записи']])].map(([id,label])=>({id,label}));
+    navigationItems.push({id:'expert',label:'Эксперт рабочего пространства'},{id:'export',label:'Экспорт рабочего пространства',action:true},{id:'logout',label:'Выйти из учётной записи',action:true});
+    return `<div class="container"><div class="workspace"><aside class="sidebar"><div class="profile"><div class="avatar">${avatar}</div><b>${esc((identity?.target||identity?.user)?.name||name)}</b><p>${name}</p></div>${window.SCMNavigation.render({items:navigationItems,active:window.SCMUnifiedPages?.route()!=null?'resources-'+window.SCMUnifiedPages.route().split('/')[0]:tab,role})}</aside><section>${!storageOK?'<div class="warning">Постоянное хранилище недоступно. Данные могут не сохраниться.</div>':''}${studentCard.corner(role)}${identity?.banner?.()||''}${dashboard()}</section></div></div>`;
   }
   function heading(title, sub) {
     return `<div class="dashboard-head"><div><span class="eyebrow">${role === "admin" ? "УПРАВЛЕНИЕ АКАДЕМИЕЙ" : role === "teacher" ? "КАБИНЕТ ПРЕПОДАВАТЕЛЯ" : "КАБИНЕТ АБИТУРИЕНТА"}</span><h1>${title}</h1><p class="subtle">${sub}</p></div><span class="badge">КАБИНЕТ</span></div>`;
@@ -267,6 +270,7 @@
   }
   function dashboard() {
     if(window.SCMUnifiedPages?.route()!==null && window.SCMUnifiedPages?.route()!==undefined)return window.SCMUnifiedPages.placeholder();
+    if(tab==='expert')return window.SCMNavigation.expert(navigationItems);
     const assemblyScreen=assembly?.render(role,tab);if(assemblyScreen!=null)return assemblyScreen;
     const workflowScreen=workflows?.render(role,tab);
     if(workflowScreen!=null)return workflowScreen;
@@ -395,6 +399,7 @@
   function render() {
     const resourceRoute=window.SCMUnifiedPages?.route();
     main.innerHTML = role ? shell() : resourceRoute!=null ? '<div class="container resource-public">'+window.SCMUnifiedPages.placeholder()+'</div>' : portal.active() ? portal.render() : landing();
+    if(role)window.SCMNavigation.mount(main.querySelector('.sidebar'),role);
     if(resourceRoute!=null)window.SCMUnifiedPages.mount();
     if(role && resourceRoute==null && tab!=='documents')window.SCMManualRecords.mountSearch(main.querySelector(".workspace>section"));
     const pageTitle = main.querySelector("h1")?.textContent.trim();

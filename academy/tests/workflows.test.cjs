@@ -38,6 +38,7 @@ function app(storage) {
   // Identity double for synchronous UI regression tests only. Real access is tested against HTTP.
   w.SCMIdentity={workspace:storage||null,user:null,login(name){this.user={id:name,name,role:name};return this.user;}};
   w.eval(fs.readFileSync(path.join(root, "manual-records.js"), "utf8"));
+  w.eval(fs.readFileSync(path.join(root, "navigation.js"), "utf8"));
   w.eval(fs.readFileSync(path.join(root, "app.js"), "utf8"));
   const $ = (s) => w.document.querySelector(s);
   const click = (s) => {
