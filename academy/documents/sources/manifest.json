@@ -297,6 +297,48 @@
       "verification": "Формат PDF и SHA-256 проверены. Полнота и актуальная редакция юридически не удостоверены. Перед применением сверить первоисточник."
     },
     {
+      "id": "licensing-copy",
+      "folder": "01/government",
+      "title": "Постановление № 1490 — копия без изменений 2026 года",
+      "publisher": "МБМ (справочная копия)",
+      "source": "https://dp.mbm.ru/upload/iblock/732/%D0%9F%D0%9F%20%D0%A0%D0%A4%20%E2%84%961490%20%D0%BE%D1%82%2018.09.2020.pdf",
+      "resolvedSource": "https://dp.mbm.ru/upload/iblock/732/%D0%9F%D0%9F%20%D0%A0%D0%A4%20%E2%84%961490%20%D0%BE%D1%82%2018.09.2020.pdf",
+      "kind": "historical",
+      "path": "documents/sources/01/government/licensing-copy.pdf",
+      "downloadedAt": "2026-11-19",
+      "bytes": 165805,
+      "sha256": "9817d0f402be5b0b6d634b93bd2682c10e157ea4a40f9fa7708850f798661d5a",
+      "verification": "Формат PDF и SHA-256 проверены. Полнота и актуальная редакция юридически не удостоверены. Перед применением сверить первоисточник."
+    },
+    {
+      "id": "frdo-copy",
+      "folder": "01/government",
+      "title": "Постановление № 825 — ФИС ФРДО, справочная копия",
+      "publisher": "Хакасский институт развития образования",
+      "source": "https://ipk19.ru/upload/iblock/e47/0byjmrm8o0qic9u69b7wngi9uf73nu0b/Postanovlenie-Pravitelstva-RF-_-825-ot-31.05.2021-O-federalnoi_-informatsionnoi_-sisteme-Federalnyi_-reestr-svedenii_-o-dokumentakh-ob-ob.pdf",
+      "resolvedSource": "https://ipk19.ru/upload/iblock/e47/0byjmrm8o0qic9u69b7wngi9uf73nu0b/Postanovlenie-Pravitelstva-RF-_-825-ot-31.05.2021-O-federalnoi_-informatsionnoi_-sisteme-Federalnyi_-reestr-svedenii_-o-dokumentakh-ob-ob.pdf",
+      "kind": "normative",
+      "path": "documents/sources/01/government/frdo-copy.pdf",
+      "downloadedAt": "2026-11-19",
+      "bytes": 223897,
+      "sha256": "be7dbef7701a70fa727eae26d7bdc105c95f2d2f34c1cd64b5418a6970cac672",
+      "verification": "Формат PDF и SHA-256 проверены. Полнота и актуальная редакция юридически не удостоверены. Перед применением сверить первоисточник."
+    },
+    {
+      "id": "distance-copy",
+      "folder": "01/government",
+      "title": "Постановление № 1678 — электронное обучение и ДОТ, справочная копия",
+      "publisher": "РГУП",
+      "source": "https://spec.rgup.ru/img/2026/docs/PRZ_1678.pdf",
+      "resolvedSource": "https://spec.rgup.ru/img/2026/docs/PRZ_1678.pdf",
+      "kind": "normative",
+      "path": "documents/sources/01/government/distance-copy.pdf",
+      "downloadedAt": "2026-11-19",
+      "bytes": 99860,
+      "sha256": "94c1bd636f4679ee04f58770750e309be24b01fb82abe7ca5f45ad12237598b6",
+      "verification": "Формат PDF и SHA-256 проверены. Полнота и актуальная редакция юридически не удостоверены. Перед применением сверить первоисточник."
+    },
+    {
       "id": "school-545",
       "folder": "01/ministry",
       "title": "Образцы аттестатов — приказ № 545",
@@ -343,7 +385,7 @@
     {
       "id": "licensing-1490",
       "source": "https://government.ru/docs/all/130013/",
-      "error": "curl: (28) Connection timed out after 8002 milliseconds\n"
+      "error": "curl: (28) Connection timed out after 8000 milliseconds\n"
     },
     {
       "id": "paid-1441",
@@ -353,7 +395,7 @@
     {
       "id": "frdo-825",
       "source": "https://government.ru/docs/all/134483/",
-      "error": "curl: (28) Connection timed out after 8002 milliseconds\n"
+      "error": "curl: (28) Connection timed out after 8000 milliseconds\n"
     },
     {
       "id": "distance-1678",
@@ -399,6 +441,16 @@
       "id": "mond-admission",
       "source": "https://mond51.ru/index.php?do=download&id=114",
       "error": "Response is not PDF"
+    },
+    {
+      "id": "paid-copy",
+      "source": "https://www.sao.ru/educat/Docs/Postanovlenie_Prav_1441.pdf",
+      "error": "to get local issuer certificate (20)\nMore details here: https://curl.se/docs/sslcerts.html\n\ncurl failed to verify the legitimacy of the server and therefore could not\nestablish a secure connection to it. To learn more about this situation and\nhow to fix it, please visit the webpage mentioned above.\n"
+    },
+    {
+      "id": "personal-data-152",
+      "source": "https://rcoi.mcko.ru/resources/upload/RichFilemanager/documents/new/152_fz.pdf",
+      "error": "curl: (28) Connection timed out after 8002 milliseconds\n"
     }
   ]
 }
