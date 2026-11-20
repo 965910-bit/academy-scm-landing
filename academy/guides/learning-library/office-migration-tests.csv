@@ -1,0 +1,2 @@
+﻿file_id,owner_role,format,dependency,scenario,expected,actual,editor_version,decision
+F01,Владелец расчета,Книга,Внешняя ссылка,Проверка итога,2000 ₽ и ключ 00123,Не проверено,Записать при запуске,Критичный сценарий открыт

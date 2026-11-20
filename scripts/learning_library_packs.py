@@ -138,3 +138,29 @@ def render_packs(data, output, page):
     with zipfile.ZipFile(output/'learning-library.zip','w',zipfile.ZIP_DEFLATED) as z:
         for path in sorted(output.iterdir()):
             if path.is_file() and path.suffix in {'.html','.json','.csv','.py','.md'}:z.write(path,path.name)
+
+
+def render_review_ledger(ledger, expected_ids, output, page):
+    """Publish editorial gaps without inventing reviewers or completed reviews."""
+    materials=ledger['materials']
+    if {m['id'] for m in materials}!=expected_ids or len(materials)!=len(expected_ids):
+        raise ValueError('Review ledger IDs do not match material inventory')
+    stages=['subject_review','legal_review','answer_review','pilot']
+    labels=['Предметная проверка','Правовая применимость','Независимая проверка ответов','Апробация']
+    rows=[]
+    body='<p>'+html.escape(ledger['note'])+'</p><p><a href="review-ledger.json" download>Журнал JSON</a> · <a href="review-ledger.csv" download>Журнал CSV</a> · <a href="review-checklist.md" download>Чек-лист эксперта</a></p>'
+    for material in materials:
+        body+='<section><h2>'+html.escape(material['id'])+'</h2><ul>'
+        for stage,label in zip(stages,labels):
+            entry=material[stage]
+            if entry['status'] not in {'pending','changes_requested','passed'}:raise ValueError('Invalid review status')
+            if entry['status']=='passed' and not all(entry.get(k) for k in ['reviewer','date','evidence']):
+                raise ValueError('Passed review lacks reviewer, date or evidence')
+            status={'pending':'не выполнено','changes_requested':'нужны исправления','passed':'проверено по указанному основанию'}[entry['status']]
+            body+='<li>'+label+': '+status+'. Проверяющий: '+html.escape(entry['reviewer'] or 'не назначен')+'.</li>'
+            rows.append(dict(material_id=material['id'],stage=stage,**entry,open_issues=material['open_issues']))
+        body+='</ul><p>'+html.escape(material['open_issues'])+'</p><p>Записей изменений: '+str(len(material['changes']))+'. Прохождение редакционных этапов не заменяет утверждение программы и применимые разрешения.</p></section>'
+    (output/'review-ledger.html').write_text(page('Проверка материалов и незакрытые этапы',body))
+    (output/'review-ledger.json').write_text(json.dumps(ledger,ensure_ascii=False,indent=2)+'\n')
+    buffer=io.StringIO();writer=csv.DictWriter(buffer,fieldnames=list(rows[0]),lineterminator='\n');writer.writeheader();writer.writerows(rows)
+    (output/'review-ledger.csv').write_text('\ufeff'+buffer.getvalue())
