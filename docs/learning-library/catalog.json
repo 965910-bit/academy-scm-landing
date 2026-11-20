@@ -1,7 +1,7 @@
 {
   "author": "Герасимов Дмитрий Сергеевич",
   "date": "2026-11-19",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "directions": [
     {
       "id": "D01",
@@ -1468,21 +1468,22 @@
         {
           "id": "D20-C02",
           "title": "организация перевозок",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "Перевозчики; собственные автопарки",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "transport-coordination.html"
         },
         {
           "id": "D20-C03",
@@ -1698,21 +1699,22 @@
         {
           "id": "D23-C02",
           "title": "ремонт",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "ТЭК; сервисные подрядчики",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "maintenance-coordination.html"
         },
         {
           "id": "D23-C03",
@@ -1870,21 +1872,22 @@
         {
           "id": "D26-C02",
           "title": "организация работы",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "Медорганизации; квалифицированные специалисты",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "healthcare-operations.html"
         }
       ]
     },
@@ -1895,21 +1898,22 @@
         {
           "id": "D27-C01",
           "title": "Организационная психология",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "Физлица; учреждения; работодатели",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "organizational-psychology.html"
         },
         {
           "id": "D27-C02",

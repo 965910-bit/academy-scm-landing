@@ -42,6 +42,9 @@ def validate_packs(data, catalog_ids):
             for key in ['id','title','author','url','published','version','checked','access','license','use']:
                 if not source.get(key):raise ValueError(cid + ': missing source ' + key)
             if not source['url'].startswith('https://'):raise ValueError(cid + ': unsafe source URL')
+        for name in course.get('case_files',[]):
+            if not name or '/' in name or '\\' in name or not name.endswith(('.json','.py')):
+                raise ValueError(cid + ': unsafe case file')
         template = course['template']
         filename = template['filename']
         if '/' in filename or '\\' in filename or not filename.endswith('.csv') or filename in seen_files:
@@ -56,6 +59,8 @@ def markdown_pack(data, course):
              'Статус: вводный материал; экспертиза и апробация не пройдены. Ответы открыты для самопроверки.', '', data['rights'], '']
     for key, title in [('audience','Аудитория'),('prerequisites','Входные знания'),('duration','Маршрут'),('equipment','Оснащение'),('scope','Границы'),('legal_basis','Нормативная область')]:
         lines.extend(['## '+title, '', course[key], ''])
+    if course.get('case_files'):
+        lines.extend(['## Воспроизводимый кабинетный расчет', 'Скачайте файлы в одну папку; прочитайте исходники. Запуск: python3 run-organization-labs.py. Только стандартная библиотека Python3, без сети. Время и вместимость — учебные допущения, не допуск к работе.']+course['case_files']+[''])
     lines.extend(['## Результаты обучения', ''])
     for result in course['outcomes']:lines.append('- '+result['id']+': '+result['text']+'; урок '+str(result['lesson'])+'; проверки '+', '.join(result['checks']))
     for n, lesson in enumerate(course['lessons'],1):
@@ -92,6 +97,8 @@ def render_packs(data, output, page):
         (output/(course['slug']+'.md')).write_text(markdown_pack(data,course))
         body = '<p>Вводный комплект написан. Профильная экспертиза, правовая проверка и апробация не пройдены. Версия ' + e(data['version']) + '.</p>'
         body += '<p><a href="' + course['id'] + '.json" download>Скачать исходный комплект JSON</a> · <a href="' + course['slug'] + '.md" download>Полный текст Markdown</a> · <a href="' + course['template']['filename'] + '" download>Рабочий шаблон CSV</a></p>'
+        if course.get('case_files'):
+            body += '<section><h2>Воспроизводимый кабинетный расчет</h2><p>Скачайте оба файла в одну папку. Прочитайте исходники и запустите python3 run-organization-labs.py. Python3, стандартная библиотека, без сети. Скрипт проверяет арифметику вымышленных условий, не безопасность и не право работы.</p><ul>'+''.join('<li><a href="'+e(name,quote=True)+'" download>'+e(name)+'</a></li>' for name in course['case_files'])+'</ul></section>'
         if course.get('downloads'):
             body += '<section><h2>Лабораторные файлы</h2><p>Скачайте все три файла в одну папку. Прочитайте исходники и запустите python3 run-digital-labs.py. Работа локальная, без сети и производственных данных.</p><ul>'
             for name, label in [('sql-lab.json','Вымышленная схема SQL, запросы и эталоны'),('python-lab.py','Открытая реализация Python'),('run-digital-labs.py','Проверка обеих лабораторий')]:

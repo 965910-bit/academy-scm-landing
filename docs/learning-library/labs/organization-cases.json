@@ -1,0 +1,7 @@
+{
+  "notice": "Вымышленные кабинетные данные. Расчеты не являются медицинскими, техническими или правовыми решениями и не разрешают реальные работы.",
+  "transport": {"pallets": 12, "places_per_vehicle": 8, "load_minutes": 30, "outbound_minutes": 45, "unload_minutes": 30, "return_minutes": 45, "start_minute": 480, "deadline_minute": 600, "planned": 10, "full_timely": 8, "full_late": 1, "open": 1},
+  "healthcare": {"available_minutes": 240, "slot_minutes": 20, "requests": 15, "total_cases": 20, "closed": 16, "transferred_open": 3, "clarification_open": 1},
+  "psychology": {"invited": 40, "responded": 24, "reported_role_issue": 15, "baseline_returns": 12, "baseline_tasks": 60, "pilot_returns": 6, "pilot_tasks": 60},
+  "maintenance": {"required_confirmations": 10, "confirmed": 8, "workers": 2, "operation_hours": 4, "preparation_hours": 1, "acceptance_hours": 1, "window_hours": 3, "total_cases": 12, "closed": 9, "awaiting_acceptance": 2, "awaiting_documents": 1}
+}
