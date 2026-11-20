@@ -1,0 +1,99 @@
+{
+  "date": "2026-11-19",
+  "status": "SCENARIO_NOT_OBSERVED_DEMAND",
+  "courses": [
+    {
+      "course": "Охрана труда: одно отдельное назначение",
+      "external_appointments_per_employee_year": 0.2,
+      "unit_price_rub": 1250,
+      "appointments_at_800": 160.0,
+      "revenue_at_800": 200000.0,
+      "price_basis": "Среднее двух ориентиров 1000 и 1500, Курсор",
+      "volume_status": "SCENARIO_ASSUMPTION_NOT_BUYER_STATISTICS"
+    },
+    {
+      "course": "Первая помощь",
+      "external_appointments_per_employee_year": 0.25,
+      "unit_price_rub": 700,
+      "appointments_at_800": 200.0,
+      "revenue_at_800": 140000.0,
+      "price_basis": "Прайс Курсор",
+      "volume_status": "SCENARIO_ASSUMPTION_NOT_BUYER_STATISTICS"
+    },
+    {
+      "course": "СИЗ",
+      "external_appointments_per_employee_year": 0.2,
+      "unit_price_rub": 1000,
+      "appointments_at_800": 160.0,
+      "revenue_at_800": 160000.0,
+      "price_basis": "Расчётное допущение, не полученный прайс",
+      "volume_status": "SCENARIO_ASSUMPTION_NOT_BUYER_STATISTICS"
+    },
+    {
+      "course": "Работы на высоте",
+      "external_appointments_per_employee_year": 0.08,
+      "unit_price_rub": 2500,
+      "appointments_at_800": 64.0,
+      "revenue_at_800": 160000.0,
+      "price_basis": "Середина диапазона 2000–3000, Курсор",
+      "volume_status": "SCENARIO_ASSUMPTION_NOT_BUYER_STATISTICS"
+    },
+    {
+      "course": "Погрузчики: сводная категория",
+      "external_appointments_per_employee_year": 0.04,
+      "unit_price_rub": 7500,
+      "appointments_at_800": 32.0,
+      "revenue_at_800": 240000.0,
+      "price_basis": "Среднее двух предложений 5000 и 10000; виды/категории требуют раздельного КП",
+      "volume_status": "SCENARIO_ASSUMPTION_NOT_BUYER_STATISTICS"
+    },
+    {
+      "course": "Машинист вышки",
+      "external_appointments_per_employee_year": 0.02,
+      "unit_price_rub": 5000,
+      "appointments_at_800": 16.0,
+      "revenue_at_800": 80000.0,
+      "price_basis": "Расчётный аналог, не прямая котировка",
+      "volume_status": "SCENARIO_ASSUMPTION_NOT_BUYER_STATISTICS"
+    },
+    {
+      "course": "ГПМ с пола / машинист крана",
+      "external_appointments_per_employee_year": 0.03,
+      "unit_price_rub": 5000,
+      "appointments_at_800": 24.0,
+      "revenue_at_800": 120000.0,
+      "price_basis": "Расчётный аналог цены крана Курсор; не тождественные программы",
+      "volume_status": "SCENARIO_ASSUMPTION_NOT_BUYER_STATISTICS"
+    }
+  ],
+  "scenarios": [
+    {
+      "scenario": "Нижний",
+      "quantity_multiplier": 0.5,
+      "price_multiplier": 0.8,
+      "object_800_annual_rub": 440000.0,
+      "network_40000_annual_rub": 22000000.0
+    },
+    {
+      "scenario": "Базовый",
+      "quantity_multiplier": 1,
+      "price_multiplier": 1,
+      "object_800_annual_rub": 1100000.0,
+      "network_40000_annual_rub": 55000000.0
+    },
+    {
+      "scenario": "Верхний",
+      "quantity_multiplier": 1.5,
+      "price_multiplier": 1.2,
+      "object_800_annual_rub": 1980000.0,
+      "network_40000_annual_rub": 99000000.0
+    }
+  ],
+  "costs": {
+    "variable_delivery_share": 0.45,
+    "tax_reserve_share": 0.06,
+    "sales_admin_variable_share": 0.03,
+    "fixed_monthly_rub": 450000,
+    "launch_rub": 1700000
+  }
+}
