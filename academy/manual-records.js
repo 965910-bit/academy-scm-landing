@@ -1,6 +1,6 @@
 'use strict';
 window.SCMManualRecords=(()=>{
- const roles=['admin','admissions','learner','teacher','applicant','employer'];
+ const roles=['admin','admissions','learner','teacher','applicant','employer','curator','alumni','superadmin'];
  const types={note:'Заметка',task:'Задача',contact:'Контакт',request:'Обращение',event:'Событие',other:'Другое'};
  const statuses={new:'Новая',active:'В работе',done:'Завершена',archived:'В архиве'};
  const e=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
