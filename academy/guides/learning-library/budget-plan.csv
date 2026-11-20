@@ -1,0 +1,2 @@
+﻿scenario,units,price_rub,variable_per_unit_rub,fixed_rub,opening_cash_rub,current_receipt_share,result_rub,closing_cash_rub,assumptions
+План,100,10000,4000,300000,100000,0.60,Рассчитать,Рассчитать,Все затраты выплачены сейчас; налоги не моделируются

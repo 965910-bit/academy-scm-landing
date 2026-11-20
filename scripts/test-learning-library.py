@@ -1,9 +1,15 @@
 """Validate content coverage, arithmetic, generated local links and scoring."""
 import csv, json, unittest, subprocess, sys
-from urllib.parse import urlsplit, unquote
+import copy
+from learning_library_packs import validate_packs
 from pathlib import Path
 from html.parser import HTMLParser
 R=Path(__file__).resolve().parents[1]; D=R/'docs/learning-library'; O=R/'academy/guides/learning-library'
+def all_packs():
+ data=json.loads((D/'course-packs.json').read_text())
+ for path in sorted(D.glob('*-packs.json')):
+  if path.name!='course-packs.json':data['courses'].extend(json.loads(path.read_text())['courses'])
+ return data
 class Links(HTMLParser):
  def __init__(self):super().__init__();self.links=[]
  def handle_starttag(self,tag,attrs):
@@ -13,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),110)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),6)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),106)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),10)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -37,9 +43,8 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(sum(q['points'] for q in c['assessment'])+sum(q['points'] for q in c['practice']['rubric']),28)
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
-  packs=json.loads((D/'course-packs.json').read_text())
-  packs['courses'].extend(json.loads((D/'digital-packs.json').read_text())['courses'])
-  self.assertEqual(len(packs['courses']),6)
+  packs=all_packs()
+  self.assertEqual(len(packs['courses']),10)
   for c in packs['courses']:
    self.assertEqual(len(c['lessons']),4)
    self.assertEqual(len(c['questions']),6)
@@ -80,14 +85,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],27)
-  self.assertEqual(progress['open_answers'],44)
-  self.assertEqual(progress['materials'],7)
-  self.assertEqual(progress['planned'],110)
+  self.assertEqual(progress['lessons'],43)
+  self.assertEqual(progress['open_answers'],68)
+  self.assertEqual(progress['materials'],11)
+  self.assertEqual(progress['planned'],106)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['27 уроков','44 открытых ответов','110 курсов']:self.assertIn(text,hub)
+  for text in ['43 уроков','68 открытых ответов','106 курсов']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -110,4 +115,51 @@ class LibraryTests(unittest.TestCase):
    parser=Anchors();parser.feed(f.read_text())
    for link in parser.hrefs:
     if link.startswith('#'):self.assertIn(link[1:],parser.ids,str(f))
+ def test_budget_case(self):
+  plan=100*10000-100*4000-300000
+  actual=80*9500-80*4500-320000
+  flexible=80*10000-80*4000-300000
+  self.assertEqual((plan,actual,flexible),(300000,80000,180000))
+  self.assertEqual(sum([-120000,-40000,-40000,-20000]),actual-plan)
+  self.assertEqual(100000+1000000*.6-700000,0)
+  self.assertEqual(100000+1000000*.5-700000,-100000)
+  self.assertEqual((300000/(10000-4000),320000/(9500-4500)),(50,64))
+ def test_procurement_case(self):
+  offers=[('A',1000,8000,7),('B',1050,0,5),('C',900,3000,15)]
+  eligible=[(100*p+d,name) for name,p,d,days in offers if days<=10]
+  self.assertEqual(min(eligible),(105000,'B'))
+  self.assertEqual(100*1050+5000,110000)
+  self.assertEqual((100-98,98-3),(2,95))
+ def test_onboarding_and_lesson_cases(self):
+  self.assertEqual(4*2,8)
+  self.assertEqual((8/10,10/10,9/10),(.8,1,.9))
+  self.assertEqual((20+8-5,20+8-5-4),(23,19))
+  self.assertEqual((30+10-7,30+10-7-5),(33,28))
+  self.assertEqual(sum([5,10,10,15,5]),45)
+  self.assertEqual(9/12,.75)
+ def test_portable_markdown(self):
+  for c in all_packs()['courses']:
+   text=(O/(c['slug']+'.md')).read_text()
+   for q in c['questions']:
+    self.assertIn(q['answer'],text)
+    self.assertIn(q['reason'],text)
+   self.assertIn(c['practice']['model'],text)
+   for lesson in c['lessons']:
+    for paragraph in lesson['paragraphs']:self.assertIn(paragraph,text)
+ def test_learning_sources_export(self):
+  rows=list(csv.DictReader((O/'learning-sources.csv').read_text(encoding='utf-8-sig').splitlines()))
+  expected=[dict(course_id=c['id'],**source) for c in all_packs()['courses'] for source in c['sources']]
+  self.assertEqual(rows,expected)
+ def test_validation_rejects_broken_material(self):
+  data=all_packs();ids={c['id'] for c in data['courses']}
+  validate_packs(data,ids)
+  for mutation in ['orphan','answer','coverage','source','filename']:
+   bad=copy.deepcopy(data);c=bad['courses'][0]
+   if mutation=='orphan':c['id']='NOT-IN-CATALOG'
+   elif mutation=='answer':c['questions'][0]['answer']=''
+   elif mutation=='coverage':c['outcomes'][0]['checks']=['NOT-THERE']
+   elif mutation=='source':c['sources'][0]['license']=''
+   elif mutation=='filename':c['template']['filename']='../unsafe.csv'
+   with self.subTest(mutation=mutation):
+    with self.assertRaises(ValueError):validate_packs(bad,ids)
 if __name__=='__main__':unittest.main()

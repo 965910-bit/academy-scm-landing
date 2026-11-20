@@ -1,7 +1,7 @@
 {
   "author": "Герасимов Дмитрий Сергеевич",
   "date": "2026-11-19",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "directions": [
     {
       "id": "D01",
@@ -296,21 +296,22 @@
         {
           "id": "D04-C03",
           "title": "адаптация",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "HR; малый бизнес; кадровые службы",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "employee-onboarding.html"
         },
         {
           "id": "D04-C04",
@@ -1504,21 +1505,22 @@
         {
           "id": "D21-C01",
           "title": "Закупки",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "Закупщики; логисты; юристы",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "procurement-basics.html"
         },
         {
           "id": "D21-C02",
@@ -1794,21 +1796,22 @@
         {
           "id": "D25-C02",
           "title": "методист",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "Образовательные организации; физлица",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "lesson-design.html"
         },
         {
           "id": "D25-C03",
@@ -2046,21 +2049,22 @@
         {
           "id": "D29-C02",
           "title": "бюджетирование",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "Предприниматели; руководители",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "budgeting.html"
         },
         {
           "id": "D29-C03",
