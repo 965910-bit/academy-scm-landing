@@ -46,18 +46,18 @@ D11,Охрана труда,D11-C03,В по видам работ,planned,missin
 D11,Охрана труда,D11-C04,СИЗ,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D11,Охрана труда,D11-C05,управление рисками,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D12,Первая помощь,D12-C01,Практика помощи пострадавшему,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D12,Первая помощь,D12-C02,подготовка обучающих,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D12,Первая помощь,D12-C02,подготовка обучающих,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D13,Пожарная безопасность,D13-C01,Повышение квалификации ответственных,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D13,Пожарная безопасность,D13-C02,обучение по роли,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D13,Пожарная безопасность,D13-C02,обучение по роли,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D14,Высота и опасные работы,D14-C01,Работы на высоте,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D14,Высота и опасные работы,D14-C02,организация безопасных работ,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D14,Высота и опасные работы,D14-C02,организация безопасных работ,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D15,Промышленная безопасность,D15-C01,Подготовка по областям,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D15,Промышленная безопасность,D15-C02,эксплуатационные риски,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D15,Промышленная безопасность,D15-C02,эксплуатационные риски,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D16,Электротехника и энергетика,D16-C01,Электромонтер,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D16,Электротехника и энергетика,D16-C02,электроустановки,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D16,Электротехника и энергетика,D16-C03,обслуживание оборудования,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D16,Электротехника и энергетика,D16-C03,обслуживание оборудования,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D17,Теплотехника и ЖКХ,D17-C01,Котельные,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D17,Теплотехника и ЖКХ,D17-C02,теплоснабжение,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D17,Теплотехника и ЖКХ,D17-C02,теплоснабжение,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D17,Теплотехника и ЖКХ,D17-C03,слесарные работы,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D18,Рабочие профессии и производство,D18-C01,Сварщик,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D18,Рабочие профессии и производство,D18-C02,слесарь,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
