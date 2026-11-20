@@ -50,6 +50,12 @@ ITEMS += [
  ('distance-copy','01/government','Постановление № 1678 — электронное обучение и ДОТ, справочная копия','РГУП','https://spec.rgup.ru/img/2026/docs/PRZ_1678.pdf','normative'),
  ('personal-data-152','01/federal-laws','152-ФЗ «О персональных данных» — справочная копия, проверить редакцию','МЦКО (справочная копия)','https://rcoi.mcko.ru/resources/upload/RichFilemanager/documents/new/152_fz.pdf','normative'),
 ]
+ITEMS += [
+ ('education-273-copy','01/federal-laws','273-ФЗ — редакция от 28.02.2025 (историческая копия)','Минздрав России','https://edu.rosminzdrav.ru/fileadmin/user_upload/documents/zakoni/Federalnyi_zakon_ot_29_12_2012_N_273_FZ_red_ot_28_02_2025.pdf','historical'),
+ ('privacy-152-copy','01/federal-laws','152-ФЗ «О персональных данных» — справочная копия, проверить редакцию','ДЦ № 2 Департамента здравоохранения Москвы','https://dc2.mos.ru/doc/152.pdf','normative'),
+ ('paid-1441-copy','01/government','Постановление № 1441 — исходная редакция без продления 2026 года','Образовательная организация (справочная копия)','https://xn--164--43dw7bi0a0gn.com/images/obshie_dokumenti/platnie_uslugi/decree1441.pdf','historical'),
+ ('vo-670','01/ministry','Приказ № 670 от 27.07.2021 — заполнение и выдача дипломов ВО','Портал ФГОС ВО','https://fgosvo.ru/uploadfiles/npo/Pr_MON_670_27072021.pdf','normative'),
+]
 def read(url):
  import subprocess
  result=subprocess.run(['curl','--fail','--location','--max-time','25','--connect-timeout','8','--silent','--show-error','--max-filesize','31457280','--user-agent','Mozilla/5.0',url],capture_output=True,timeout=30)
