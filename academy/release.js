@@ -1,7 +1,7 @@
 'use strict';
 /* Refresh public application files without deleting profiles, records or attachments. */
 (()=>{
- const version='source-files-20261119-27';
+ const version='market-research-20261119-28';
  window.SCMRelease=version;
  const status=text=>{const node=document.querySelector('#build-status');if(node)node.textContent=' · '+text;};
  window.addEventListener('error',event=>{if(event.target?.tagName==='SCRIPT')status('Не загружен модуль: '+event.target.getAttribute('src')+'. Нажмите «Обновить файлы».');},true);

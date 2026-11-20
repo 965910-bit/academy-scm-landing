@@ -13,7 +13,8 @@
     "test:unified:browser": "node tests/unified-browser.cjs",
     "test:document-folders:browser": "node tests/document-folders-browser.cjs",
     "test:navigation:browser": "node tests/navigation-browser.cjs",
-    "test:document-sources:browser": "node tests/document-sources-browser.cjs"
+    "test:document-sources:browser": "node tests/document-sources-browser.cjs",
+    "test:market-research:browser": "node tests/market-research-browser.cjs"
   },
   "devDependencies": {
     "jsdom": "^26.1.0",
