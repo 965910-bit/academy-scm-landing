@@ -1,0 +1,2 @@
+﻿event_id,event,cash_change,materials_change,liability_change,capital_change,basis,review_status
+E01,Вклад,100000,0,0,100000,Вымышленное условие,Учебный расчет

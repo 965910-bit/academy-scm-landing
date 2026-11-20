@@ -15,7 +15,7 @@ D04,HR и кадровый учет,D04-C01,Подбор,planned,missing,missing
 D04,HR и кадровый учет,D04-C02,кадровое делопроизводство,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D04,HR и кадровый учет,D04-C03,адаптация,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D04,HR и кадровый учет,D04-C04,кадровый резерв,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D05,Бухгалтерия и налоги,D05-C01,Бухучет,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D05,Бухгалтерия и налоги,D05-C01,Бухучет,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D05,Бухгалтерия и налоги,D05-C02,отчетность,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D05,Бухгалтерия и налоги,D05-C03,зарплата,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D05,Бухгалтерия и налоги,D05-C04,изменения стандартов,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
@@ -92,7 +92,7 @@ D26,Медицина и фармация,D26-C02,организация рабо
 D27,Психология и социальная работа,D27-C01,Организационная психология,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D27,Психология и социальная работа,D27-C02,консультирование,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D27,Психология и социальная работа,D27-C03,социальная помощь,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D28,Маркетинг и электронная торговля,D28-C01,Маркетплейсы,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D28,Маркетинг и электронная торговля,D28-C01,Маркетплейсы,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D28,Маркетинг и электронная торговля,D28-C02,контент,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D28,Маркетинг и электронная торговля,D28-C03,аналитика продаж,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D28,Маркетинг и электронная торговля,D28-C04,интернет-маркетинг,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
@@ -100,12 +100,12 @@ D29,Предпринимательство и финансы,D29-C01,Запус�
 D29,Предпринимательство и финансы,D29-C02,бюджетирование,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D29,Предпринимательство и финансы,D29-C03,экономика подразделения,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D30,Дизайн и креативные профессии,D30-C01,Интерьер,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D30,Дизайн и креативные профессии,D30-C02,визуальные коммуникации,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D30,Дизайн и креативные профессии,D30-C02,визуальные коммуникации,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D30,Дизайн и креативные профессии,D30-C03,дизайн,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D31,Общепит и гостеприимство,D31-C01,Повар,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D31,Общепит и гостеприимство,D31-C02,пекарь,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D31,Общепит и гостеприимство,D31-C03,сервис,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D31,Общепит и гостеприимство,D31-C04,управление заведением,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D31,Общепит и гостеприимство,D31-C04,управление заведением,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D32,"Сельское хозяйство, ветеринария, пищевое качество",D32-C01,Агротехнологии,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D32,"Сельское хозяйство, ветеринария, пищевое качество",D32-C02,ветеринарные направления,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D32,"Сельское хозяйство, ветеринария, пищевое качество",D32-C03,ХАССП,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
