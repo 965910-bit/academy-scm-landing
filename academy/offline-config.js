@@ -1,8 +1,16 @@
 /* Public files only; private API responses are never cached. */
 self.SCM_OFFLINE_CONFIG = {
-  "release": "source-files-20261119-27",
-  "cacheName": "scm-academy-shell-v27",
+  "release": "market-research-20261119-28",
+  "cacheName": "scm-academy-shell-v28",
   "files": [
+    "guides/market-research/",
+    "guides/market-research/index.html",
+    "guides/market-research/files/01-market-and-evidence.txt",
+    "guides/market-research/files/02-platform-function-matrix.txt",
+    "guides/market-research/files/03-academy-gap-audit.txt",
+    "guides/market-research/files/04-feature-proposals-and-costs.txt",
+    "guides/market-research/files/05-roadmap-and-validation.txt",
+
     "./",
     "index.html",
     "styles.css",

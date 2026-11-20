@@ -223,3 +223,17 @@ Collection: `scripts/collect-document-sources.py`; bounded public-download workf
 write to main after merge. Current legal edition and applicability require separate
 review; original publication PDFs can omit subsequent amendments. The public PDFs
 are included in the offline shell manifest; private records are not cached.
+
+### Market and platform research (release 28)
+
+The unified library now links to `guides/market-research/`: five dated research
+papers, 16 providers/products, feature and gap matrices, 14 proposed extensions,
+conditional person-day budgets, AI inference/debugging costs and validation plans.
+Proposals are explicitly not implementation claims. Closed vendor accounts and
+commercial tariffs were not tested. Skillbox and Netology are service/presentation
+references, not the main SCM competitors. No paid service is enabled by this update.
+
+Sources: `docs/platform-research-2026/*.md`. Rebuild the report and its five TXT
+downloads with `python scripts/build-market-research.py` (standard library only).
+The existing `build-guides.cjs` preserves the hub link. Report and downloads are
+listed in the public offline package; navigation remains in the existing shell.
