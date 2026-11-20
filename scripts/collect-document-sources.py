@@ -34,14 +34,14 @@ for id,folder,title,url in [
  ITEMS.append((id,folder,title,COLLEGE,'https://detak.ru/images/'+url,'example'))
 GOV = [('licensing-1490','Лицензирование образовательной деятельности — постановление № 1490','https://government.ru/docs/all/130013/'),('paid-1441','Правила платных образовательных услуг — постановление № 1441','https://government.ru/docs/all/129897/'),('frdo-825','ФИС ФРДО — постановление № 825','https://government.ru/docs/all/134483/'),('distance-1678','Электронное обучение и ДОТ — постановление № 1678','https://government.ru/docs/all/149993/')]
 def read(url):
- req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0 (public education reference collection)'})
- with urllib.request.urlopen(req,timeout=80) as r:
-  data=r.read(30*1024*1024+1)
-  if len(data)>30*1024*1024: raise ValueError('File exceeds 30 MB')
-  return data,r.geturl()
+ import subprocess
+ result=subprocess.run(['curl','--fail','--location','--max-time','25','--connect-timeout','8','--silent','--show-error','--max-filesize','31457280','--user-agent','Mozilla/5.0',url],capture_output=True,timeout=30)
+ if result.returncode: raise ValueError(result.stderr.decode(errors='replace')[-300:])
+ return result.stdout,url
 def collect(item):
  id,folder,title,publisher,url,kind=item
  try:
+  print("Downloading "+id,flush=True)
   data,final=read(url)
   if not data.lstrip().startswith(b'%PDF-'): raise ValueError('Response is not PDF')
   dest=OUT/folder/(id+'.pdf');dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data)
