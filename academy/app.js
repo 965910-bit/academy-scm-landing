@@ -211,6 +211,8 @@
     openAssignment: id => { curriculum.openAllocation(id); role = "learner"; tab = "studyplan"; render(); window.scrollTo(0,0); }
   });
   const decisionLab = window.SCMDecisionLab.create({state: () => state, esc, save, render, toast});
+  const development=window.SCMDevelopment?.create({actor:()=>{const u=identity?.target||identity?.user||{};return {id:u.id||'local:'+String(u.name||state.profile?.name||role),name:u.name||state.profile?.name||'Участник',role};},redraw:render,toast,workspace:()=>state});
+  if(identity?.user&&new URLSearchParams(location.search).has('development')){tab='development';development?.open(new URLSearchParams(location.search).get('development'));}
   const studentCard = window.SCMStudentCard.create({state:()=>state,save,render,toast,
     name:()=> (identity?.target||identity?.user)?.name||state.profile?.name||'',
     isAdmin:()=>identity?.user?.role==='admin'
@@ -241,6 +243,7 @@
     };
     const [avatar,name] = roles[role] || roles.applicant;
     navigationItems=[...(assembly?[['assembly','Все инструменты']]:[]),...(workflows?[['workflows','Рабочий центр']]:[]),...(menus[role]||menus.applicant).filter(([id])=>id!=='workflows'),...([['resources-regulations','Нормативная база'],['resources-classifiers','ОКПДТР–2026'],['resources-guides','Библиотека знаний']]),...(role==='auditor'?[]:[['manual-records','Ручные записи']])].map(([id,label])=>({id,label}));
+    navigationItems.push({id:'development',label:'Навыки, практика и результат'});
     navigationItems.push({id:'expert',label:'Эксперт рабочего пространства'},{id:'export',label:'Экспорт рабочего пространства',action:true},{id:'logout',label:'Выйти из учётной записи',action:true});
     return `<div class="container"><div class="workspace"><aside class="sidebar"><div class="profile"><div class="avatar">${avatar}</div><b>${esc((identity?.target||identity?.user)?.name||name)}</b><p>${name}</p></div>${window.SCMNavigation.render({items:navigationItems,active:window.SCMUnifiedPages?.route()!=null?'resources-'+window.SCMUnifiedPages.route().split('/')[0]:tab,role})}</aside><section>${!storageOK?'<div class="warning">Постоянное хранилище недоступно. Данные могут не сохраниться.</div>':''}${studentCard.corner(role)}${identity?.banner?.()||''}${dashboard()}</section></div></div>`;
   }
@@ -270,6 +273,7 @@
   }
   function dashboard() {
     if(window.SCMUnifiedPages?.route()!==null && window.SCMUnifiedPages?.route()!==undefined)return window.SCMUnifiedPages.placeholder();
+    if(tab==='development'&&development)return development.render(role,tab);
     if(tab==='expert')return window.SCMNavigation.expert(navigationItems);
     const assemblyScreen=assembly?.render(role,tab);if(assemblyScreen!=null)return assemblyScreen;
     const workflowScreen=workflows?.render(role,tab);
@@ -399,9 +403,12 @@
   function render() {
     const resourceRoute=window.SCMUnifiedPages?.route();
     main.innerHTML = role ? shell() : resourceRoute!=null ? '<div class="container resource-public">'+window.SCMUnifiedPages.placeholder()+'</div>' : portal.active() ? portal.render() : landing();
+    if(role&&tab==='development'&&resourceRoute==null)development?.mount(main);
     if(role)window.SCMNavigation.mount(main.querySelector('.sidebar'),role);
     if(resourceRoute!=null)window.SCMUnifiedPages.mount();
     if(role && resourceRoute==null && tab!=='documents')window.SCMManualRecords.mountSearch(main.querySelector(".workspace>section"));
+    const developmentLinks={skills:['passport','Паспорт 12 навыков и диагностика'],grading:['review','Очередь, рубрики и калибровка'],reviews:['review','Проверка и повторная сдача'],decisionlab:['simulation','SCM-симуляция'],library:['editor','Редактор версий практики'],knowledge:['sources','Контроль источников'],assistant:['assistant','Поиск с источниками и бюджет ИИ'],offline:['offline','Пакеты и конфликты'],monitoring:['corporate','Готовность команды'],planner:['routes','Ролевые маршруты']};
+    if(role&&resourceRoute==null&&developmentLinks[tab]){const [section,label]=developmentLinks[tab],panel=document.createElement('div');panel.className='panel development-bridge';panel.innerHTML='<b>Связанное расширение</b> <button class="button outline small" data-development-open="'+section+'">'+esc(label)+' →</button>';main.querySelector('.workspace>section')?.prepend(panel);}
     const pageTitle = main.querySelector("h1")?.textContent.trim();
     document.title = pageTitle ? `${pageTitle} — Академия SCM` : "Академия SCM";
     document.querySelector("#account-button").textContent = role
@@ -450,6 +457,7 @@
   document.addEventListener("click", (e) => {
     const t = e.target.closest("button,a");
     if (!t) return;
+    if(t.dataset.developmentOpen){development?.open(t.dataset.developmentOpen);tab='development';if(window.SCMUnifiedPages?.route()!=null)history.pushState(null,'',location.pathname+'#cabinet');render();return;}
     if (identity?.click?.(t, render)) return;
     if (assembly?.click(t)) return;
     if (workflows?.click(t)) return;
@@ -475,6 +483,7 @@
       return;
     }
     if (t.dataset.tab) {
+      if(tab==='development'&&t.dataset.tab!=='development'&&development&&!development.confirmLeave())return;
       if(t.dataset.tab.startsWith('resources-')){window.SCMUnifiedPages.go(t.dataset.tab.slice(10)+'/');return;}
       if(window.SCMUnifiedPages?.route()!=null)history.pushState(null,'',location.pathname+'#cabinet');
       tab = t.dataset.tab;
@@ -698,6 +707,7 @@
     document.querySelector(location.hash)?.scrollIntoView();
   });
   render();
+  if(!identity?.user&&new URLSearchParams(location.search).has('development'))login();
  }
  if(window.SCMIdentity?.ready) window.SCMIdentity.ready.then(start); else start();
 })();
