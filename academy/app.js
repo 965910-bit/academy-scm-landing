@@ -213,6 +213,8 @@
   const decisionLab = window.SCMDecisionLab.create({state: () => state, esc, save, render, toast});
   const development=window.SCMDevelopment?.create({actor:()=>{const u=identity?.target||identity?.user||{};return {id:u.id||'local:'+String(u.name||state.profile?.name||role),name:u.name||state.profile?.name||'Участник',role};},redraw:render,toast,workspace:()=>state});
   if(identity?.user&&new URLSearchParams(location.search).has('development')){tab='development';development?.open(new URLSearchParams(location.search).get('development'));}
+  const lmsOperations=window.SCMLMS?.create({state:()=>state,save,actor:()=>{const u=identity?.target||identity?.user||{};return {id:u.id||'local-participant',name:u.name||state.profile?.name||'Участник',role};},render,toast,profiles:()=>[...(state.curriculum?.students||[]),...(development?.snapshot().people||[])]});
+  if(identity?.user&&new URLSearchParams(location.search).has('lms')){tab='lms-operations';lmsOperations?.open(new URLSearchParams(location.search).get('lms'));}
   const studentCard = window.SCMStudentCard.create({state:()=>state,save,render,toast,
     name:()=> (identity?.target||identity?.user)?.name||state.profile?.name||'',
     isAdmin:()=>identity?.user?.role==='admin'
@@ -243,6 +245,7 @@
     };
     const [avatar,name] = roles[role] || roles.applicant;
     navigationItems=[...(assembly?[['assembly','Все инструменты']]:[]),...(workflows?[['workflows','Рабочий центр']]:[]),...(menus[role]||menus.applicant).filter(([id])=>id!=='workflows'),...([['resources-regulations','Нормативная база'],['resources-classifiers','ОКПДТР–2026'],['resources-guides','Библиотека знаний']]),...(role==='auditor'?[]:[['manual-records','Ручные записи']])].map(([id,label])=>({id,label}));
+    navigationItems.push({id:'lms-operations',label:'LMS: приём, обучение и расчёты'});
     navigationItems.push({id:'development',label:'Навыки, практика и результат'});
     navigationItems.push({id:'expert',label:'Эксперт рабочего пространства'},{id:'export',label:'Экспорт рабочего пространства',action:true},{id:'logout',label:'Выйти из учётной записи',action:true});
     return `<div class="container"><div class="workspace"><aside class="sidebar"><div class="profile"><div class="avatar">${avatar}</div><b>${esc((identity?.target||identity?.user)?.name||name)}</b><p>${name}</p></div>${window.SCMNavigation.render({items:navigationItems,active:window.SCMUnifiedPages?.route()!=null?'resources-'+window.SCMUnifiedPages.route().split('/')[0]:tab,role})}</aside><section>${!storageOK?'<div class="warning">Постоянное хранилище недоступно. Данные могут не сохраниться.</div>':''}${studentCard.corner(role)}${identity?.banner?.()||''}${dashboard()}</section></div></div>`;
@@ -273,6 +276,7 @@
   }
   function dashboard() {
     if(window.SCMUnifiedPages?.route()!==null && window.SCMUnifiedPages?.route()!==undefined)return window.SCMUnifiedPages.placeholder();
+    if(tab==='lms-operations'&&lmsOperations)return lmsOperations.render();
     if(tab==='development'&&development)return development.render(role,tab);
     if(tab==='expert')return window.SCMNavigation.expert(navigationItems);
     const assemblyScreen=assembly?.render(role,tab);if(assemblyScreen!=null)return assemblyScreen;
@@ -403,6 +407,7 @@
   function render() {
     const resourceRoute=window.SCMUnifiedPages?.route();
     main.innerHTML = role ? shell() : resourceRoute!=null ? '<div class="container resource-public">'+window.SCMUnifiedPages.placeholder()+'</div>' : portal.active() ? portal.render() : landing();
+    if(role&&tab==='lms-operations'&&resourceRoute==null)lmsOperations?.mount(main);
     if(role&&tab==='development'&&resourceRoute==null)development?.mount(main);
     if(role)window.SCMNavigation.mount(main.querySelector('.sidebar'),role);
     if(resourceRoute!=null)window.SCMUnifiedPages.mount();
@@ -483,6 +488,7 @@
       return;
     }
     if (t.dataset.tab) {
+      if(tab==='lms-operations'&&t.dataset.tab!=='lms-operations'&&lmsOperations&&!lmsOperations.confirmLeave())return;
       if(tab==='development'&&t.dataset.tab!=='development'&&development&&!development.confirmLeave())return;
       if(t.dataset.tab.startsWith('resources-')){window.SCMUnifiedPages.go(t.dataset.tab.slice(10)+'/');return;}
       if(window.SCMUnifiedPages?.route()!=null)history.pushState(null,'',location.pathname+'#cabinet');
@@ -707,7 +713,7 @@
     document.querySelector(location.hash)?.scrollIntoView();
   });
   render();
-  if(!identity?.user&&new URLSearchParams(location.search).has('development'))login();
+  if(!identity?.user&&(new URLSearchParams(location.search).has('development')||new URLSearchParams(location.search).has('lms')))login();
  }
  if(window.SCMIdentity?.ready) window.SCMIdentity.ready.then(start); else start();
 })();

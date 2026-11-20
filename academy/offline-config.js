@@ -1,8 +1,9 @@
 /* Public files only; private API responses are never cached. */
 self.SCM_OFFLINE_CONFIG = {
-  "release": "development-suite-20261119-29",
-  "cacheName": "scm-academy-shell-v29",
+  "release": "lms-operations-20261119-30",
+  "cacheName": "scm-academy-shell-v30",
   "files": [
+    "lms-engine.js", "lms.js", "guides/lms-operations/", "guides/lms-operations/index.html",
     "development-engine.js", "development.js", "guides/growth/", "guides/growth/index.html",
     "guides/market-research/",
     "guides/market-research/index.html",
