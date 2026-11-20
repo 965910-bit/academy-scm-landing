@@ -69,7 +69,7 @@ D19,Склады и внутренняя логистика,D19-C02,компле
 D19,Склады и внутренняя логистика,D19-C03,складские операции,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D19,Склады и внутренняя логистика,D19-C04,WMS,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D20,Транспорт и БДД,D20-C01,Безопасность движения,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D20,Транспорт и БДД,D20-C02,организация перевозок,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D20,Транспорт и БДД,D20-C02,организация перевозок,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D20,Транспорт и БДД,D20-C03,опасные грузы,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D21,"Закупки, договоры и SCM",D21-C01,Закупки,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D21,"Закупки, договоры и SCM",D21-C02,управление запасами,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
@@ -80,7 +80,7 @@ D22,Строительство и инженерия,D22-C02,проектиро�
 D22,Строительство и инженерия,D22-C03,САПР,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D22,Строительство и инженерия,D22-C04,строительный контроль,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D23,"Нефтегаз, добыча и геология",D23-C01,Эксплуатация,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D23,"Нефтегаз, добыча и геология",D23-C02,ремонт,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D23,"Нефтегаз, добыча и геология",D23-C02,ремонт,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D23,"Нефтегаз, добыча и геология",D23-C03,отраслевые технологии,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D24,Экология и отходы,D24-C01,Экологическая безопасность,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D24,Экология и отходы,D24-C02,обращение с отходами,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
@@ -88,8 +88,8 @@ D25,Педагогика и методика,D25-C01,Педагог,planned,miss
 D25,Педагогика и методика,D25-C02,методист,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D25,Педагогика и методика,D25-C03,цифровое преподавание,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D26,Медицина и фармация,D26-C01,Повышение квалификации по специальности,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D26,Медицина и фармация,D26-C02,организация работы,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D27,Психология и социальная работа,D27-C01,Организационная психология,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D26,Медицина и фармация,D26-C02,организация работы,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
+D27,Психология и социальная работа,D27-C01,Организационная психология,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D27,Психология и социальная работа,D27-C02,консультирование,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D27,Психология и социальная работа,D27-C03,социальная помощь,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D28,Маркетинг и электронная торговля,D28-C01,Маркетплейсы,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending

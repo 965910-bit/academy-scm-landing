@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),90)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),26)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),86)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),30)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,7 +45,7 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),26)
+  self.assertEqual(len(packs['courses']),30)
   for c in packs['courses']:
    self.assertEqual(len(c['lessons']),4)
    self.assertEqual(len(c['questions']),6)
@@ -86,14 +86,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],107)
-  self.assertEqual(progress['open_answers'],164)
-  self.assertEqual(progress['materials'],27)
-  self.assertEqual(progress['planned'],90)
+  self.assertEqual(progress['lessons'],123)
+  self.assertEqual(progress['open_answers'],188)
+  self.assertEqual(progress['materials'],31)
+  self.assertEqual(progress['planned'],86)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['107 уроков','164 ответов на контрольные вопросы','90 курсов','107 разборов заданий']:self.assertIn(text,hub)
+  for text in ['123 уроков','188 ответов на контрольные вопросы','86 курсов','123 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -182,14 +182,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),27)
+  self.assertEqual(len(ledger['materials']),31)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),108)
+  self.assertEqual(len(rows),124)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -213,12 +213,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,107)
+  self.assertEqual(count,123)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=164,exercise=107,practice=27))
-  self.assertEqual(len({r['id'] for r in data['entries']}),298)
+  self.assertEqual(data['counts'],dict(question=188,exercise=123,practice=31))
+  self.assertEqual(len({r['id'] for r in data['entries']}),342)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
@@ -266,6 +266,54 @@ class LibraryTests(unittest.TestCase):
      self.assertIn(text,md)
      self.assertIn(text,lookup[c['id']+'-'+q['id']]['explanation'])
   data['courses'][0]['questions'][0]['scoring'].pop('1')
+  with self.assertRaises(ValueError):validate_packs(data,{c['id'] for c in data['courses']})
+ def organization_lab(self):
+  import importlib.util
+  spec=importlib.util.spec_from_file_location('organization_labs',D/'labs/run-organization-labs.py')
+  module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+  return module,json.loads((D/'labs/organization-cases.json').read_text())
+ def test_organization_labs(self):
+  module,fixture=self.organization_lab()
+  result=module.calculate(fixture);module.check_fixture(result)
+  self.assertEqual(result['transport']['last_unload_end_minute'],735)
+  self.assertEqual(result['healthcare']['deficit_minutes'],60)
+  self.assertEqual(result['psychology']['change_percentage_points'],-10)
+  self.assertEqual(result['maintenance']['labor_person_hours'],8)
+  self.assertEqual(result['maintenance']['sequential_window_hours'],6)
+  for name in ['organization-cases.json','run-organization-labs.py']:
+   self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
+  run=subprocess.run([sys.executable,str(O/'run-organization-labs.py')],capture_output=True,text=True,timeout=10)
+  self.assertEqual(run.returncode,0,run.stderr);self.assertIn('PASS',run.stdout)
+ def test_organization_labs_reject_invalid_data(self):
+  module,fixture=self.organization_lab()
+  for section,key,value in [('transport','places_per_vehicle',0),('transport','open',2),('healthcare','slot_minutes',0),('healthcare','closed',-1),('psychology','responded',41),('psychology','reported_role_issue',25),('psychology','pilot_returns',61),('maintenance','confirmed',11),('maintenance','workers',True)]:
+   bad=copy.deepcopy(fixture);bad[section][key]=value
+   with self.subTest(section=section,key=key):
+    with self.assertRaises(ValueError):module.calculate(bad)
+  changed=copy.deepcopy(fixture);changed['transport']['outbound_minutes']=50
+  with self.assertRaises(ValueError):module.check_fixture(module.calculate(changed))
+ def test_organization_labs_edge_cases(self):
+  module,fixture=self.organization_lab()
+  fixture['transport']['pallets']=8
+  fixture['psychology']['baseline_returns']=0
+  result=module.calculate(fixture)
+  self.assertEqual(result['transport']['minimum_trips_by_places'],1)
+  self.assertEqual(result['transport']['last_unload_end_minute'],585)
+  self.assertEqual(result['transport']['lateness_minutes'],0)
+  self.assertIsNone(result['psychology']['relative_reduction_percent'])
+ def test_organization_pack_exports_and_rubrics(self):
+  import zipfile
+  data=json.loads((D/'organization-packs.json').read_text())
+  self.assertEqual({c['id'] for c in data['courses']},{'D20-C02','D26-C02','D27-C01','D23-C02'})
+  bank={e['id']:e for e in json.loads((O/'answer-bank.json').read_text())['entries']}
+  with zipfile.ZipFile(O/'learning-library.zip') as archive:
+   for c in data['courses']:
+    for name in [c['slug']+'.html',c['slug']+'.md',c['template']['filename'],c['id']+'.json',*c['case_files']]:self.assertIn(name,archive.namelist())
+    for q in c['questions']:
+     self.assertEqual(set(q['scoring']),{'0','1','2'})
+     for text in [*q['scoring'].values(),*q['acceptable_alternatives']]:
+      self.assertIn(text,bank[c['id']+'-'+q['id']]['explanation'])
+  data['courses'][0]['case_files']=['../secret.json']
   with self.assertRaises(ValueError):validate_packs(data,{c['id'] for c in data['courses']})
  def test_missing_lesson_solution_rejected(self):
   data=all_packs(); ids={c['id'] for c in data['courses']}
