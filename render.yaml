@@ -3,7 +3,7 @@ services:
     name: academy-scm
     runtime: node
     plan: starter
-    buildCommand: node --version
+    buildCommand: npm ci && node --version
     startCommand: npm start
     healthCheckPath: /academy/
     disk:
