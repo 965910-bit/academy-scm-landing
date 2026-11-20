@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "test": "node --test tests/*.test.cjs",
+    "test:documents:browser": "node tests/document-forms-browser.cjs",
     "test:pages:browser": "node tests/pages-browser.cjs",
     "test:browser": "node tests/browser-smoke.cjs",
     "test:workflows:browser": "node tests/shared-workflows-browser.cjs",

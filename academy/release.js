@@ -1,7 +1,7 @@
 'use strict';
 /* Refresh public application files without deleting profiles, records or attachments. */
 (()=>{
- const version='assembly-20261119-21';
+ const version='documents-20261119-22';
  window.SCMRelease=version;
  const status=text=>{const node=document.querySelector('#build-status');if(node)node.textContent=' · '+text;};
  window.addEventListener('error',event=>{if(event.target?.tagName==='SCRIPT')status('Не загружен модуль: '+event.target.getAttribute('src')+'. Нажмите «Обновить файлы».');},true);

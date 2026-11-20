@@ -11,7 +11,7 @@ const {chromium}=require('playwright-core'),http=require('node:http'),fs=require
  let browser;
  try{await new Promise(r=>server.listen(0,'127.0.0.1',r));browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox','--disable-dev-shm-usage'],headless:true});const context=await browser.newContext(),p=await context.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
  await p.goto('http://127.0.0.1:'+server.address().port+'/');await p.waitForURL('**/academy/');await p.locator('#assembly-entry').click();await p.locator('#login-form').waitFor();await p.locator('#login-form [name=name]').fill('Герасимов Дмитрий Сергеевич');await p.locator('#login-form button[type=submit]').click();await p.locator('#assembly-select').waitFor();
- assert.match(await p.locator('#build-version').textContent(),/assembly-20261119-21/);
+ assert.match(await p.locator('#build-version').textContent(),/documents-20261119-22/);
  const types=await p.locator('#assembly-select option').evaluateAll(nodes=>nodes.map(n=>n.value));assert.equal(types.length,28);
  for(const type of types){await p.locator('#assembly-select [name=type]').selectOption(type);await p.locator('#assembly-select button').click();await p.locator('#assembly-record [name=title]').fill('Проверка '+type);await p.locator('#assembly-record button').first().click();await p.locator('.workflow-record').waitFor();}
  for(const width of [320,390,768,1440]){await p.setViewportSize({width,height:900});assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'overflow '+width);}

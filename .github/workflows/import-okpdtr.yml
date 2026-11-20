@@ -1,0 +1,26 @@
+name: Import OKPDTR source data
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/import-okpdtr.py
+      - .github/workflows/import-okpdtr.yml
+permissions:
+  contents: read
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install beautifulsoup4==4.13.4
+      - run: python scripts/import-okpdtr.py --output imported/okpdtr.json --as-of 2026-11-19
+      - uses: actions/upload-artifact@v4
+        with:
+          name: okpdtr-source
+          path: imported/okpdtr.json
+          if-no-files-found: error
+          retention-days: 7
