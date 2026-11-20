@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),80)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),36)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),79)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),37)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,15 +45,15 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),36)
+  self.assertEqual(len(packs['courses']),37)
   for c in packs['courses']:
-   self.assertEqual(len(c['lessons']),4)
-   self.assertEqual(len(c['questions']),6)
+   self.assertEqual(len(c['lessons']),8 if c['id']=='D07-C01' else 4)
+   self.assertEqual(len(c['questions']),12 if c['id']=='D07-C01' else 6)
    self.assertEqual(sum(x['points'] for x in c['practice']['criteria']),12)
    check_ids={q['id'] for q in c['questions']}|{x['id'] for x in c['practice']['criteria']}
    for outcome in c['outcomes']:
     self.assertTrue(set(outcome['checks'])<=check_ids)
-    self.assertIn(outcome['lesson'],range(1,5))
+    self.assertIn(outcome['lesson'],range(1,len(c['lessons'])+1))
    for q in c['questions']:
     self.assertTrue(q['answer']);self.assertTrue(q['reason'])
    for source in c['sources']:
@@ -86,14 +86,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],147)
-  self.assertEqual(progress['open_answers'],224)
-  self.assertEqual(progress['materials'],37)
-  self.assertEqual(progress['planned'],80)
+  self.assertEqual(progress['lessons'],155)
+  self.assertEqual(progress['open_answers'],236)
+  self.assertEqual(progress['materials'],38)
+  self.assertEqual(progress['planned'],79)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['147 уроков','224 ответов на контрольные вопросы','80 курсов','147 разборов заданий']:self.assertIn(text,hub)
+  for text in ['155 уроков','236 ответов на контрольные вопросы','79 курсов','155 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -182,14 +182,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),37)
+  self.assertEqual(len(ledger['materials']),38)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),148)
+  self.assertEqual(len(rows),152)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -213,12 +213,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,147)
+  self.assertEqual(count,155)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=224,exercise=147,practice=37))
-  self.assertEqual(len({r['id'] for r in data['entries']}),408)
+  self.assertEqual(data['counts'],dict(question=236,exercise=155,practice=38))
+  self.assertEqual(len({r['id'] for r in data['entries']}),429)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
@@ -352,6 +352,70 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(energy*Decimal('1.163'),Decimal('13.956'))
   self.assertEqual((energy-Decimal('10.5'))/energy*100,Decimal('12.5'))
   self.assertEqual(12/16,.75)
+ def excel_lab(self):
+  import runpy
+  module=runpy.run_path(str(D/'labs/check-excel-results.py'))
+  rows=list(csv.DictReader((D/'labs/excel-orders.csv').read_text().splitlines()))
+  return module,rows
+ def test_excel_reference(self):
+  module,rows=self.excel_lab()
+  clean,issues,duplicates,metrics=module['analyze'](rows)
+  self.assertEqual([r['record_id'] for r in clean],['O001','O002','O003','O004','O007','O008','O009'])
+  self.assertEqual({r['record_id'] for r in issues},{'O005','O006'})
+  self.assertEqual(len(duplicates),1)
+  self.assertEqual((metrics['paid_records'],metrics['paid_units'],metrics['paid_amount']),(5,24,3500))
+  self.assertEqual((metrics['north_paid'],metrics['south_paid']),(1600,1900))
+  self.assertAlmostEqual(float(metrics['weighted_price']),145.8333333333)
+  self.assertEqual((metrics['reserve'],metrics['total_with_reserve'],metrics['report_delta']),(175,3675,-600))
+ def test_excel_answer_check(self):
+  module,rows=self.excel_lab();metrics=module['analyze'](rows)[3]
+  text='metric;value\n'+'\n'.join(k+';'+str(round(v,2)).replace('.',',') for k,v in metrics.items())
+  answers=module['read_answers'](text);module['check_answers'](answers,metrics)
+  for bad in [text.replace('paid_records;5','paid_records;4'),text+'\npaid_records;5',text.replace('paid_amount;3500','paid_amount;NaN')]:
+   with self.assertRaises(ValueError):module['check_answers'](module['read_answers'](bad),metrics)
+  answers.pop('reserve')
+  with self.assertRaises(ValueError):module['check_answers'](answers,metrics)
+ def test_excel_conflict_and_zero(self):
+  module,rows=self.excel_lab()
+  conflicting=copy.deepcopy(rows);conflicting[3]['units']='9'
+  with self.assertRaises(ValueError):module['analyze'](conflicting)
+  for row in rows:row['status']='pending'
+  result=module['analyze'](rows)[3]
+  self.assertIsNone(result['weighted_price']);self.assertIsNone(result['defect_units_percent'])
+ def test_excel_template_and_cli(self):
+  rows=list(csv.DictReader((O/'excel-answers-template.csv').read_text(encoding='utf-8-sig').splitlines()))
+  self.assertEqual(len(rows),15)
+  module,source=self.excel_lab();metrics=module['analyze'](source)[3]
+  import tempfile
+  with tempfile.TemporaryDirectory() as temp:
+   p=Path(temp)/'answers.csv';p.write_text('metric,value\n'+'\n'.join(k+','+str(v) for k,v in metrics.items()))
+   result=subprocess.run([sys.executable,str(O/'check-excel-results.py'),'--answers',str(p)],capture_output=True,text=True)
+   self.assertEqual(result.returncode,0,result.stderr);self.assertIn('PASS',result.stdout)
+ def test_excel_workbook_structure_and_archive(self):
+  import zipfile,xml.etree.ElementTree as ET
+  ns={'s':'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
+  with zipfile.ZipFile(O/'excel-practice.xlsx') as book:
+   for name in book.namelist():ET.fromstring(book.read(name))
+   self.assertFalse(any('vba' in n.lower() or 'externallinks' in n.lower() for n in book.namelist()))
+   root=ET.fromstring(book.read('xl/workbook.xml'))
+   self.assertEqual([e.attrib['name'] for e in root.findall('s:sheets/s:sheet',ns)],['Readme','Raw','Work','Clean','Settings','Learner','Answer','Summary','Issues'])
+   raw=ET.fromstring(book.read('xl/worksheets/sheet2.xml'))
+   self.assertEqual(len(raw.findall('s:sheetData/s:row',ns)),11)
+   clean=ET.fromstring(book.read('xl/worksheets/sheet4.xml'))
+   self.assertEqual(len(clean.findall('.//s:f',ns)),14)
+   self.assertIn('Settings!$B$2',book.read('xl/worksheets/sheet7.xml').decode())
+  with zipfile.ZipFile(O/'learning-library.zip') as archive:
+   for name in ['excel-practice.xlsx','excel-orders.csv','check-excel-results.py','excel-lab-readme.md','excel-answers-template.csv']:
+    self.assertIn(name,archive.namelist())
+ def test_variable_course_scoring_and_resources(self):
+  excel=json.loads((D/'spreadsheet-packs.json').read_text())
+  course=excel['courses'][0]
+  self.assertEqual(sum(len(l['paragraphs']) for l in course['lessons']),24)
+  self.assertIn('Максимум: 36 балла (24 вопросы + 12 практика)',(O/'excel-data-practice.html').read_text())
+  self.assertIn('Всего 36; учебный ориентир 27',(O/'excel-data-practice.md').read_text())
+  self.assertIn('8 уроков, практика, 12 ответов',(O/'index.html').read_text())
+  course['resources'][0]['filename']='../escape.xlsx'
+  with self.assertRaises(ValueError):validate_packs(excel,{'D07-C01'})
  def test_missing_lesson_solution_rejected(self):
   data=all_packs(); ids={c['id'] for c in data['courses']}
   data['courses'][0]['lessons'][0]['exercise_answer']=''

@@ -1,0 +1,11 @@
+record_id,date,region,status,units,unit_price_rub,defective_units
+O001,2026-01-10,north,paid,10,100,1
+O002,2026-01-10,south,paid,5,200,0
+O003,2026-01-11,north,pending,8,150,0
+O003,2026-01-11,north,pending,8,150,0
+O004,2026-01-12,south,paid,3,300,1
+O005,2026-01-12,north,paid,-2,100,0
+O006,2026-01-13,south,paid,4,,0
+O007,2026-01-13,north,paid,6,100,0
+O008,2026-01-14,south,cancelled,2,500,0
+O009,2026-01-14,north,paid,0,100,0

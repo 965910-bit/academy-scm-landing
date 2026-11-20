@@ -22,8 +22,12 @@ def validate_packs(data, catalog_ids):
         qids = [q['id'] for q in course['questions']]
         pids = [p['id'] for p in course['practice']['criteria']]
         if len(set(qids+pids)) != len(qids+pids):raise ValueError(cid + ': duplicate check ID')
-        if len(qids)!=6 or sum(p['points'] for p in course['practice']['criteria'])!=12:
-            raise ValueError(cid + ': scoring layout expects 6 questions and 12 practice points')
+        if not course['lessons'] or not qids or sum(p['points'] for p in course['practice']['criteria'])!=12:
+            raise ValueError(cid + ': lessons/questions required; practice expects 12 points')
+        for resource in course.get('resources',[]):
+            name=resource['filename']
+            if not name or '/' in name or '\\' in name or not name.endswith(('.csv','.xlsx','.py','.md','.json')) or not resource.get('label'):
+                raise ValueError(cid + ': unsafe resource')
         for result in course['outcomes']:
             if not result['checks'] or not set(result['checks']) <= set(qids+pids):raise ValueError(cid + ': broken outcome coverage')
             if not 1 <= result['lesson'] <= len(course['lessons']):raise ValueError(cid + ': invalid lesson reference')
@@ -50,7 +54,7 @@ def validate_packs(data, catalog_ids):
         if '/' in filename or '\\' in filename or not filename.endswith('.csv') or filename in seen_files:
             raise ValueError(cid + ': unsafe or duplicate template')
         seen_files.add(filename)
-        if len(template['columns'])!=len(template['example']):raise ValueError(cid + ': template shape mismatch')
+        if len(template['columns'])!=len(template['example']) or any(len(row)!=len(template['columns']) for row in template.get('rows',[])):raise ValueError(cid + ': template shape mismatch')
 
 
 def markdown_pack(data, course):
@@ -61,6 +65,8 @@ def markdown_pack(data, course):
         lines.extend(['## '+title, '', course[key], ''])
     if course.get('case_files'):
         lines.extend(['## Воспроизводимый кабинетный расчет', 'Скачайте файлы в одну папку; прочитайте исходники. Запуск: python3 run-organization-labs.py. Только стандартная библиотека Python3, без сети. Время и вместимость — учебные допущения, не допуск к работе.']+course['case_files']+[''])
+    if course.get('resources'):
+        lines.extend(['## Файлы практики']+[r['label']+': '+r['filename'] for r in course['resources']]+[''])
     lines.extend(['## Результаты обучения', ''])
     for result in course['outcomes']:lines.append('- '+result['id']+': '+result['text']+'; урок '+str(result['lesson'])+'; проверки '+', '.join(result['checks']))
     for n, lesson in enumerate(course['lessons'],1):
@@ -79,7 +85,8 @@ def markdown_pack(data, course):
                       'Основание: урок '+str(q['lesson'])+' и вымышленный кейс данной версии.',''])
         if q.get('scoring'):
             lines.extend(['Допустимые варианты: '+'; '.join(q['acceptable_alternatives'])]+[score+' балл(а): '+q['scoring'][score] for score in ['2','1','0']]+[''])
-    lines.extend(['Шкала: до 2 баллов за вопрос (2 — верно с обоснованием, 1 — частично, 0 — неверно). Практика до 12 баллов (0–3 по каждому критерию). Всего 24; учебный ориентир 18 без критических ошибок, не квалификационная аттестация.','','## Преподавателю',''])
+    total=2*len(course['questions'])+12; threshold=(3*total+3)//4
+    lines.extend([f'Шкала: до 2 баллов за вопрос (2 — верно с обоснованием, 1 — частично, 0 — неверно). Практика до 12 баллов (0–3 по каждому критерию). Всего {total}; учебный ориентир {threshold} без критических ошибок, не квалификационная аттестация.','','## Преподавателю',''])
     lines.extend('- '+x for x in course['teacher_notes'])
     lines.extend(['','## Источники дополнительного чтения',''])
     for source in course['sources']:
@@ -97,6 +104,8 @@ def render_packs(data, output, page):
         (output/(course['slug']+'.md')).write_text(markdown_pack(data,course))
         body = '<p>Вводный комплект написан. Профильная экспертиза, правовая проверка и апробация не пройдены. Версия ' + e(data['version']) + '.</p>'
         body += '<p><a href="' + course['id'] + '.json" download>Скачать исходный комплект JSON</a> · <a href="' + course['slug'] + '.md" download>Полный текст Markdown</a> · <a href="' + course['template']['filename'] + '" download>Рабочий шаблон CSV</a></p>'
+        if course.get('resources'):
+            body += '<section><h2>Файлы практики</h2><ul>'+''.join('<li><a href="'+e(r['filename'],quote=True)+'" download>'+e(r['label'])+'</a></li>' for r in course['resources'])+'</ul><p>Порядок работы и границы проверки — в инструкции практики. Файлы не подтверждают квалификацию и не являются секретным экзаменом.</p></section>'
         if course.get('case_files'):
             body += '<section><h2>Воспроизводимый кабинетный расчет</h2><p>Скачайте оба файла в одну папку. Прочитайте исходники и запустите python3 run-organization-labs.py. Python3, стандартная библиотека, без сети. Скрипт проверяет арифметику вымышленных условий, не безопасность и не право работы.</p><ul>'+''.join('<li><a href="'+e(name,quote=True)+'" download>'+e(name)+'</a></li>' for name in course['case_files'])+'</ul></section>'
         if course.get('downloads'):
@@ -128,7 +137,8 @@ def render_packs(data, output, page):
             body += '<h3>' + e(q['id'] + '. ' + q['question']) + '</h3><details><summary>Ответ, основание и объяснение</summary><p>' + e(q['answer']) + '</p><p>' + e(q['reason']) + '</p><p>Основание: собственный учебный кейс и <a href="#lesson-' + str(q['lesson']) + '">урок ' + str(q['lesson']) + '</a>, версия ' + e(data['version']) + '.</p></details>'
             if q.get('scoring'):
                 body += '<p>Допустимые варианты: '+e('; '.join(q['acceptable_alternatives']))+'</p><ul>'+''.join('<li>'+score+' балл(а): '+e(q['scoring'][score])+'</li>' for score in ['2','1','0'])+'</ul>'
-        body += '<p>Максимум: 24 балла (12 вопросы + 12 практика). Учебный ориентир: от 18 баллов без критических ошибок. Это внутреннее правило самопроверки, не квалификационная аттестация. Исправления после обратной связи фиксируются отдельно.</p></section>'
+        total=2*len(course['questions'])+12; threshold=(3*total+3)//4
+        body += f'<p>Максимум: {total} балла ({2*len(course["questions"])} вопросы + 12 практика). Учебный ориентир: от {threshold} баллов без критических ошибок. Это внутреннее правило самопроверки, не квалификационная аттестация. Исправления после обратной связи фиксируются отдельно.</p></section>'
         body += '<section><h2>Преподавателю</h2><ul>' + ''.join('<li>' + e(x) + '</li>' for x in course['teacher_notes']) + '</ul><p>Одна допустимая структура занятия: 5 минут — входной вопрос; 15 — объяснение; 10 — разбор примера; 10 — самостоятельное задание; 5 — обратная связь. При затруднениях повторить пример на меньшем объеме; не считать чтение доказательством освоения.</p></section>'
         body += '<section id="sources"><h2>Реестр источников</h2><p>Арифметика, примеры и ответы получены из вымышленных условий данного комплекта. Внешние ссылки — дополнительное чтение с указанным объемом проверки, не подтверждение всего содержания.</p>'
         for source in course['sources']:
@@ -139,7 +149,7 @@ def render_packs(data, output, page):
         body += '</section><section><h2>Обновление и оставшиеся работы</h2><p>Дата выпуска: ' + e(data['date']) + '. Следующая проверка — до применения в организованном обучении, а также после изменения условий кейса, законодательства или процесса. Проверяющий специалист пока не назначен; апробация не выполнена. Для полноценного курса по профессии нужны дополнительные модули, предметные источники и необходимые практические компоненты.</p></section>'
         (output/(course['slug']+'.html')).write_text(page(course['title'], body))
         (output/(cid+'.json')).write_text(json.dumps({**{k: v for k,v in data.items() if k!='courses'}, 'course': course}, ensure_ascii=False, indent=2)+'\n')
-        s=io.StringIO(); writer=csv.writer(s,lineterminator='\n'); writer.writerow(course['template']['columns']);writer.writerow(course['template']['example'])
+        s=io.StringIO(); writer=csv.writer(s,lineterminator='\n'); writer.writerow(course['template']['columns']);writer.writerows(course['template'].get('rows',[course['template']['example']]))
         (output/course['template']['filename']).write_text('\ufeff'+s.getvalue())
     sources=[]
     for course in data['courses']:
@@ -151,7 +161,7 @@ def render_packs(data, output, page):
     # Portable package of the generated library. Exam secrecy is explicitly not promised.
     with zipfile.ZipFile(output/'learning-library.zip','w',zipfile.ZIP_DEFLATED) as z:
         for path in sorted(output.iterdir()):
-            if path.is_file() and path.suffix in {'.html','.json','.csv','.py','.md','.js'}:z.write(path,path.name)
+            if path.is_file() and path.suffix in {'.html','.json','.csv','.py','.md','.js','.xlsx'}:z.write(path,path.name)
 
 
 def render_review_ledger(ledger, expected_ids, output, page):
