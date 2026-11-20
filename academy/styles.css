@@ -1972,3 +1972,12 @@ h1,h2,h3 { overflow-wrap:anywhere; }
 @media(max-width:600px){.student-card-corner{width:min(300px,100%)}.scm-id{border-radius:10px}}
 /* Cabinet-wide manual entry and list search. */
 .manual-record-body{white-space:pre-wrap;overflow-wrap:anywhere}.manual-record-list>article{min-width:0;overflow-wrap:anywhere}.cabinet-search{padding:18px;margin-bottom:20px}.cabinet-search p{font-size:12px;margin:6px 0 0;color:var(--muted)}.manual-record-list .actions{flex-wrap:wrap}#manual-record-form .two-col>*{min-width:0}#manual-record-search .two-col>*{min-width:0}
+
+/* Shared workflow desk: readable evidence and forms on narrow devices. */
+.workflow-record{min-width:0;overflow-wrap:anywhere;border-left:3px solid #174b75}
+.workflow-record dl{margin:16px 0}.workflow-record dt{font-weight:600;color:#526675;margin-top:12px}
+.workflow-record dd{margin:4px 0 12px}.workflow-record details{padding:12px 0;border-top:1px solid var(--line)}
+.workflow-record summary{cursor:pointer;font-weight:600;min-height:32px}
+.workflow-record form{margin:14px 0}.workflow-record .micro{overflow-wrap:anywhere}
+#workflow-create .two-col>*,#workflow-filter .two-col>*{min-width:0}
+.workflow-record input,.workflow-record select,.workflow-record textarea,#workflow-create input,#workflow-create select{max-width:100%;min-width:0}
