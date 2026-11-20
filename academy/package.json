@@ -3,11 +3,13 @@
   "private": true,
   "scripts": {
     "test": "node --test tests/*.test.cjs",
+    "test:documents:browser": "node tests/document-forms-browser.cjs",
     "test:pages:browser": "node tests/pages-browser.cjs",
     "test:browser": "node tests/browser-smoke.cjs",
     "test:workflows:browser": "node tests/shared-workflows-browser.cjs",
     "start": "node ../server/server.cjs",
-    "bootstrap": "node ../server/server.cjs bootstrap"
+    "bootstrap": "node ../server/server.cjs bootstrap",
+    "test:reference:browser": "node tests/reference-browser.cjs"
   },
   "devDependencies": {
     "jsdom": "^26.1.0",

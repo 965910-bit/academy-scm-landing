@@ -230,13 +230,13 @@
       applicant: [['overview','Мой маршрут'],['application','Подать заявку'],['intake-documents','Документы для приёма'],['documents','Документы'],['student-card','Студенческий билет'],['messages','Сообщения']],
       learner: [['overview','Мой учебный маршрут'],['studyplan','Назначенное обучение'],['planner','Сроки и учебный план'],['courses','Учебные модули'],['lab','Лаборатория запасов'],['decisionlab','Практикум решений'],['knowledge','База знаний'],['documents','Документы'],['student-card','Студенческий билет'],['skills','Карта навыков'],['work','Практические задания'],['assistant','Предметный помощник'],['offline','Без сети'],['messages','Сообщения']],
       teacher: [['overview','Учебные группы'],['decisionlab','Практикум решений'],['knowledge','База знаний'],['documents','Документы'],['student-card','Студенческий билет'],['responses','Назначенные работы'],['monitoring','Мониторинг обучения'],['reviews','Проверка работ'],['grading','Учебная ведомость'],['assignments','Создать задание'],['messages','Сообщения']],
-      admissions: [['accounts','Учётные записи']],
+      admissions: [['accounts','Учётные записи'],['documents','Документы']],
       admin: [['accounts','Пользователи и права'],['overview','Обзор платформы'],['decisionlab','Практикум решений'],['knowledge','База знаний'],['documents','Документы'],['student-card','Студенческий билет'],['library','Библиотека модулей'],['students','Студенты и группы'],['allocations','Назначение обучения'],['responses','Проверка назначений'],['monitoring','Мониторинг обучения'],['directions','Направления и допуски'],['applications','Заявки'],['activity','Учебные события'],['messages','Сообщения']],
-      employer: [['overview','Проверка учебной записи']],
-      curator:[['workflows','Сопровождение потоков']],
-      alumni:[['workflows','Архив и развитие']],
-      auditor:[['workflows','Журналы и контроль']],
-      superadmin:[['accounts','Пользователи и права'],['workflows','Платформа и процессы']]
+      employer: [['overview','Проверка учебной записи'],['documents','Документы']],
+      curator:[['workflows','Сопровождение потоков'],['documents','Документы']],
+      alumni:[['workflows','Архив и развитие'],['documents','Документы']],
+      auditor:[['workflows','Журналы и контроль'],['documents','Документы']],
+      superadmin:[['accounts','Пользователи и права'],['workflows','Платформа и процессы'],['documents','Документы']]
     };
     const [avatar,name] = roles[role] || roles.applicant;
     return `<div class="container"><div class="workspace"><aside class="sidebar"><div class="profile"><div class="avatar">${avatar}</div><b>${esc((identity?.target||identity?.user)?.name||name)}</b><p>${name}</p></div>${[...(assembly?[['assembly','Сборка · все разделы']]:[]),...(workflows?[['workflows','Рабочий центр']]:[]),...(menus[role]||menus.applicant).filter(([id])=>id!=='workflows'),...(role==='auditor'?[]:[['manual-records','Ручные записи']])].map(([id,label])=>`<button data-tab="${id}" class="${tab===id?'active':''}">${label}</button>`).join('')}<button data-action="export">Экспорт рабочего пространства</button><button data-action="logout">Выйти из учётной записи</button></aside><section>${!storageOK?'<div class="warning">Постоянное хранилище недоступно. Данные могут не сохраниться.</div>':''}${studentCard.corner(role)}${identity?.banner?.()||''}${dashboard()}</section></div></div>`;
@@ -273,7 +273,6 @@
     if(manualScreen!==null)return manualScreen;
     const accountScreen = identity?.render?.(role, tab);
     if (accountScreen != null) return accountScreen;
-    if (role === "admissions") return "<p>Приёмная комиссия: управление учётными записями.</p>";
     const studentCardScreen = studentCard.render(role, tab);
     if (studentCardScreen !== null) return studentCardScreen;
     const documentScreen = documents.render(role, tab);

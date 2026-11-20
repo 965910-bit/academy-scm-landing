@@ -20,14 +20,14 @@ test('Проверка: конфликт кодов, персональные п
  d=fixture();d.records[0].validUntil='2025-01-01';assert.equal(lookup(d,code,now).state,'unavailable');
  d=fixture();d.records[0].issuedAt='2026-12-01';assert.equal(lookup(d,code,now).state,'unavailable');
 });
-test('Каталог: 32 уникальных типа, реквизиты и ограничения',()=>{
- const window={};vm.runInNewContext(fs.readFileSync(path.join(root,'academy/documents/catalog.js'),'utf8'),{window});const types=window.SCMDocumentCatalog;assert.equal(types.length,32);assert.equal(new Set(types.map(t=>t.id)).size,32);for(const t of types){assert.ok(t.fields.length>20);assert.ok(t.limits.length>40);}
- const doc=new JSDOM(fs.readFileSync(path.join(root,'academy/documents/index.html'),'utf8')).window.document;assert.equal(doc.querySelectorAll('article').length,32);assert.equal(doc.querySelectorAll('h1').length,1);
+test('Каталог: 54 уникальных типа, реквизиты и ограничения',()=>{
+ const window={};vm.runInNewContext(fs.readFileSync(path.join(root,'academy/documents/catalog.js'),'utf8'),{window});const types=window.SCMDocumentCatalog;assert.equal(types.length,54);assert.equal(new Set(types.map(t=>t.id)).size,54);for(const t of types){assert.ok(t.fields.length>20);assert.ok(t.limits.length>40);}
+ const doc=new JSDOM(fs.readFileSync(path.join(root,'academy/documents/index.html'),'utf8')).window.document;assert.equal(doc.querySelectorAll('article').length,54);assert.equal(doc.querySelectorAll('h1').length,1);
 });
 test('Публичный реестр пуст, без вымышленных выдач и без внешних трекеров',()=>{
  const data=JSON.parse(fs.readFileSync(path.join(root,'registry/published.json'),'utf8'));assert.equal(data.records.length,0);assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root,'registry/certificates.json'),'utf8')),[]);
  const doc=new JSDOM(fs.readFileSync(path.join(root,'registry/registry.html'),'utf8')).window.document;assert.equal(doc.querySelectorAll('input').length,1);for(const s of doc.querySelectorAll('script[src]'))assert.ok(!s.src.startsWith('http'));assert.equal(doc.querySelector('meta[name="referrer"]').content,'no-referrer');
- const self={};vm.runInNewContext(fs.readFileSync(path.join(root,'academy/offline-config.js'),'utf8'),{self});assert.ok(!self.SCM_OFFLINE_CONFIG.files.some(f=>f.includes('published.json')||f.includes('registry')));
+ const self={};vm.runInNewContext(fs.readFileSync(path.join(root,'academy/offline-config.js'),'utf8'),{self});assert.ok(!self.SCM_OFFLINE_CONFIG.files.some(f=>f.includes('published.json')||f.startsWith('../registry/')||f.startsWith('registry/')));
 });
 
 test('HTML документа: все реквизиты и текст экранируются, печатная версия не содержит скриптов',()=>{
@@ -37,7 +37,7 @@ test('HTML документа: все реквизиты и текст экра�
  const html=window.SCMDocuments.html(type,{title:payload,organization:payload,recipient:payload,date:'2026-11-19',body:payload+'\nСтрока 2',values:{0:payload}});
  const doc=new JSDOM(html).window.document;assert.equal(doc.querySelectorAll('script,img,iframe,form').length,0);assert.equal(doc.querySelectorAll('[onerror]').length,0);assert.equal(doc.querySelector('h1').textContent,payload);assert.match(doc.querySelector('.body').textContent,/Строка 2/);assert.match(doc.querySelector('.warning').textContent,/НЕ ВЫДАННЫЙ/);assert.match(doc.querySelector('style').textContent,/@page.*A4/);assert.match(doc.querySelector('meta[http-equiv="Content-Security-Policy"]').content,/default-src 'none'/);
 });
-test('Редактор поддерживает все 32 типа, ограничивает объём и экспортирует текст без потери кириллицы',()=>{
+test('Редактор поддерживает все 54 типа, ограничивает объём и экспортирует текст без потери кириллицы',()=>{
  const window={};vm.runInNewContext(fs.readFileSync(path.join(root,'academy/documents/catalog.js'),'utf8'),{window});vm.runInNewContext(fs.readFileSync(path.join(root,'academy/documents.js'),'utf8'),{window});
  for(const type of window.SCMDocumentCatalog){const fields=window.SCMDocuments.fieldLabels(type);assert.ok(fields.length>=3);const data=window.SCMDocuments.content(type,{body:'Текст проекта',values:{0:'Первый реквизит'}});assert.equal(Object.keys(data.values).length,fields.length);assert.match(window.SCMDocuments.markdown(type,data),/Первый реквизит/);assert.match(window.SCMDocuments.html(type,data),/Текст проекта/);}
  const value=window.SCMDocuments.content(window.SCMDocumentCatalog[0],{body:'x'.repeat(14000),values:{0:'x'.repeat(3000)}});assert.equal(value.body.length,12000);assert.equal(value.values[0].length,2000);

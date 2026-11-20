@@ -1983,3 +1983,12 @@ h1,h2,h3 { overflow-wrap:anywhere; }
 .workflow-record input,.workflow-record select,.workflow-record textarea,#workflow-create input,#workflow-create select{max-width:100%;min-width:0}
 
 #assembly-record .two-col>*{min-width:0}#assembly-record input,#assembly-record select,#assembly-select select{min-width:0;max-width:100%}
+
+/* Document editors preserve readable columns without stretching mobile pages. */
+.document-table-scroll{max-width:100%;overflow:auto;margin:12px 0;border:1px solid var(--line)}
+.document-table-editor table{min-width:850px;width:100%;border-collapse:collapse}
+.document-table-editor th,.document-table-editor td{border:1px solid var(--line);padding:8px;vertical-align:top}
+.document-table-editor th{font-size:12px;text-align:left;background:#edf2f5}
+.document-table-editor textarea{width:100%;min-width:110px;resize:vertical}
+.document-table-editor{margin:24px 0}#document-editor .two-col>*{min-width:0}
+#document-editor input,#document-editor textarea{max-width:100%;min-width:0}

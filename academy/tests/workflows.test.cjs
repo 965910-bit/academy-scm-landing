@@ -497,8 +497,8 @@ test('Некорректная дата не создаёт назначение
 });
 
 test('Документы: поиск, локальный черновик, проверка подготовки и удаление без выдачи',()=>{
- const a=app();a.role('learner');a.tab('documents');assert.equal(a.w.document.querySelectorAll('[data-document-draft]').length,32);assert.match(a.$('#main').textContent,/не присвоен/);
- a.value('[name="query"]','переподготовке');a.submit('#document-search');assert.equal(a.w.document.querySelectorAll('[data-document-draft]').length,1);a.click('[data-document-draft="retraining"]');assert.equal(a.state().documentDrafts[0].status,'draft');assert.equal(a.$('[data-document-review]'),null);
+ const a=app();a.role('learner');a.tab('documents');assert.equal(a.w.document.querySelectorAll('[data-document-draft]').length,54);assert.match(a.$('#main').textContent,/не присвоен/);
+ a.value('[name="query"]','переподготовке');a.submit('#document-search');assert.equal(a.w.document.querySelectorAll('[data-document-draft]').length,2);a.click('[data-document-draft="retraining"]');assert.equal(a.state().documentDrafts[0].status,'draft');assert.equal(a.$('[data-document-review]'),null);
  const b=app(a.state());b.role('admin');b.tab('documents');b.click('[data-document-review]');assert.equal(b.state().documentDrafts[0].status,'reviewed');assert.ok(!b.$('[data-document-issue]'));b.click('[data-document-remove]');assert.equal(b.state().documentDrafts.length,0);b.dom.window.close();a.dom.window.close();
 });
 
@@ -532,7 +532,7 @@ test('Ручной журнал: комбинированные фильтры, 
  }finally{a.dom.window.close();}
 });
 test('Поиск по списку раздела скрывает и возвращает карточки без удаления данных',()=>{
- const a=app();try{a.role('admin');a.tab('documents');const search=a.$('.cabinet-search input');assert.ok(search);search.value='несуществующий-текст-123';search.dispatchEvent(new a.w.Event('input',{bubbles:true}));assert.equal(a.w.document.querySelectorAll('article.card:not([hidden])').length,0);search.value='';search.dispatchEvent(new a.w.Event('input',{bubbles:true}));assert.equal(a.w.document.querySelectorAll('article.card:not([hidden])').length,32);}finally{a.dom.window.close();}
+ const a=app();try{a.role('admin');a.tab('documents');const search=a.$('.cabinet-search input');assert.ok(search);search.value='несуществующий-текст-123';search.dispatchEvent(new a.w.Event('input',{bubbles:true}));assert.equal(a.w.document.querySelectorAll('article.card:not([hidden])').length,0);search.value='';search.dispatchEvent(new a.w.Event('input',{bubbles:true}));assert.equal(a.w.document.querySelectorAll('article.card:not([hidden])').length,54);}finally{a.dom.window.close();}
 });
 
 test('Ручной журнал экранирует текст и отклоняет обратный диапазон дат',()=>{
