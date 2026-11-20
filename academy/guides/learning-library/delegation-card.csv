@@ -1,0 +1,2 @@
+﻿task_id,result,owner_role,acceptor_role,deadline,acceptance,authority_limit,available_minutes,needed_minutes,checkpoint,escalation,version,decision
+T01,Внутренний черновик по 40 ID,Анна (учебная роль),Руководитель,Четверг 16:00; старт согласовать,40 уникальных ID; спорные отдельно,Без внешней отправки,180,160,Первые 5 записей,Прогноз более 180 минут,1,Согласовать карточку
