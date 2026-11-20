@@ -1,0 +1,17 @@
+{
+  "author": "Герасимов Дмитрий Сергеевич",
+  "version": "0.3.0",
+  "date": "2026-11-19",
+  "scope": "Вымышленные данные; создание схемы исключительно в базе SQLite в памяти",
+  "setup": "CREATE TABLE orders (order_id INTEGER PRIMARY KEY, customer_id INTEGER NOT NULL, status TEXT NOT NULL, amount_rub INTEGER); INSERT INTO orders VALUES (1,10,'paid',1000),(2,10,'paid',2000),(3,20,'cancelled',500),(4,30,'paid',NULL); CREATE TABLE lines (line_id INTEGER PRIMARY KEY, order_id INTEGER NOT NULL, sku TEXT NOT NULL); INSERT INTO lines VALUES (1,1,'A'),(2,1,'B'),(3,2,'C'),(4,4,'D');",
+  "queries": [
+    {"id": "paid", "sql": "SELECT order_id FROM orders WHERE status='paid' ORDER BY order_id", "expected": [[1],[2],[4]]},
+    {"id": "unknown", "sql": "SELECT order_id FROM orders WHERE status='paid' AND amount_rub IS NULL ORDER BY order_id", "expected": [[4]]},
+    {"id": "summary", "sql": "SELECT COUNT(*),COUNT(amount_rub),SUM(amount_rub),AVG(amount_rub) FROM orders WHERE status='paid'", "expected": [[3,2,3000,1500.0]]},
+    {"id": "grouped", "sql": "SELECT customer_id,COUNT(*),SUM(amount_rub) FROM orders WHERE status='paid' GROUP BY customer_id ORDER BY customer_id", "expected": [[10,2,3000],[30,1,null]]},
+    {"id": "having", "sql": "SELECT customer_id,COUNT(*) FROM orders WHERE status='paid' GROUP BY customer_id HAVING COUNT(*)>=2 ORDER BY customer_id", "expected": [[10,2]]},
+    {"id": "join_multiplication", "sql": "SELECT SUM(o.amount_rub) FROM orders AS o JOIN lines AS l ON o.order_id=l.order_id WHERE o.status='paid'", "expected": [[4000]]},
+    {"id": "known_total", "sql": "SELECT SUM(amount_rub) FROM orders WHERE status='paid'", "expected": [[3000]]},
+    {"id": "empty_sum", "sql": "SELECT SUM(amount_rub) FROM orders WHERE order_id<0", "expected": [[null]]}
+  ]
+}

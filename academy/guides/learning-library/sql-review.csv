@@ -1,0 +1,2 @@
+﻿query_id,grain,filter,expected_rows,expected_result,null_rule,actual_result,conclusion
+S1,заказ,status=paid,3,1;2;4,amount неизвестен у 4,Заполнить после запуска,Проверить
