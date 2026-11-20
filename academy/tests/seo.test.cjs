@@ -12,7 +12,7 @@ test('Публичные материалы имеют уникальные ме
  const url=doc.querySelector('[rel="canonical"]').href;assert.ok(url.startsWith('https://scm-news.online/academy/guides/'));assert.ok(!canonical.has(url));canonical.add(url);
  assert.ok(doc.querySelector('meta[name="description"]').content.length>50);
  const schema=JSON.parse(doc.querySelector('script[type="application/ld+json"]').textContent);assert.equal(schema.url,url);assert.ok(!JSON.stringify(schema).includes('aggregateRating'));
- assert.equal(doc.querySelectorAll('script[src]').length,0,'Содержание не зависит от JS');
+ assert.equal(doc.querySelectorAll('script[src]').length,1,'Только вход в единую оболочку; статический текст сохранён');assert.match(doc.querySelector('script[src]').src,/resource-entry\.js$/);
  }
 });
 test('Локальные ссылки библиотеки разрешаются в существующие файлы',()=>{

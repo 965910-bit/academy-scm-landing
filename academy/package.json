@@ -9,7 +9,8 @@
     "test:workflows:browser": "node tests/shared-workflows-browser.cjs",
     "start": "node ../server/server.cjs",
     "bootstrap": "node ../server/server.cjs bootstrap",
-    "test:reference:browser": "node tests/reference-browser.cjs"
+    "test:reference:browser": "node tests/reference-browser.cjs",
+    "test:unified:browser": "node tests/unified-browser.cjs"
   },
   "devDependencies": {
     "jsdom": "^26.1.0",
