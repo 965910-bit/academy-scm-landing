@@ -1,0 +1,44 @@
+window.SCMDocumentSources = [
+  {
+    "id": "dpo-266",
+    "folder": "01/ministry",
+    "title": "Приказ № 266 от 24.03.2025 — порядок ДПО",
+    "publisher": "Российская газета",
+    "source": "https://cdnstatic.rg.ru/uploads/attachments/2025/04/24/81928_c82.pdf",
+    "resolvedSource": "https://cdnstatic.rg.ru/uploads/attachments/2025/04/24/81928_c82.pdf",
+    "kind": "normative",
+    "path": "documents/sources/01/ministry/dpo-266.pdf",
+    "downloadedAt": "2026-11-19",
+    "bytes": 518678,
+    "sha256": "e9bf16f0b1db388cb92bbac00f4a2c8d0bad5807b3b7a5eb6e123347dec965c6",
+    "verification": "Формат PDF и SHA-256 проверены. Полнота и актуальная редакция юридически не удостоверены. Перед применением сверить первоисточник."
+  },
+  {
+    "id": "spo-906",
+    "folder": "01/ministry",
+    "title": "Приказ № 906 от 14.10.2022 — заполнение и выдача дипломов СПО",
+    "publisher": "Российская газета",
+    "source": "https://cdnstatic.rg.ru/uploads/attachments/2022/11/28/71119_137.pdf",
+    "resolvedSource": "https://cdnstatic.rg.ru/uploads/attachments/2022/11/28/71119_137.pdf",
+    "kind": "normative",
+    "path": "documents/sources/01/ministry/spo-906.pdf",
+    "downloadedAt": "2026-11-19",
+    "bytes": 1286530,
+    "sha256": "271a529df08440c7963dc37ccbf8e2b17940552a231f0bfcec69b2e0b622ce73",
+    "verification": "Формат PDF и SHA-256 проверены. Полнота и актуальная редакция юридически не удостоверены. Перед применением сверить первоисточник."
+  },
+  {
+    "id": "vo-645",
+    "folder": "03/diplomas",
+    "title": "Приказ № 645 от 22.07.2021 — образцы дипломов ВО",
+    "publisher": "УралГУФК (копия нормативного акта)",
+    "source": "https://uralgufk.ru/sites/default/files/no_645_ot_22.07.21.pdf",
+    "resolvedSource": "https://uralgufk.ru/sites/default/files/no_645_ot_22.07.21.pdf",
+    "kind": "normative",
+    "path": "documents/sources/03/diplomas/vo-645.pdf",
+    "downloadedAt": "2026-11-19",
+    "bytes": 465018,
+    "sha256": "99197e1d9d573988fa508dfa16cd8e25830bc4519877fef7ae8f0913c81e90db",
+    "verification": "Формат PDF и SHA-256 проверены. Полнота и актуальная редакция юридически не удостоверены. Перед применением сверить первоисточник."
+  }
+];
