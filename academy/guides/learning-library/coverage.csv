@@ -1,7 +1,7 @@
 ﻿direction_id,direction,course_id,course,status,passport,syllabus,legal_basis,lessons,practice,assessment,answer_key,teacher_notes,sources,review
 D01,Управление и лидерство,D01-C01,Руководитель подразделения,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D01,Управление и лидерство,D01-C02,делегирование,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
-D01,Управление и лидерство,D01-C03,управление изменениями,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D01,Управление и лидерство,D01-C03,управление изменениями,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D01,Управление и лидерство,D01-C04,команды,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D02,Личная эффективность и коммуникации,D02-C01,Переговоры,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D02,Личная эффективность и коммуникации,D02-C02,стресс,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
