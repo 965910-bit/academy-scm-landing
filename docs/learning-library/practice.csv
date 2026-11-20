@@ -1,0 +1,7 @@
+record_id,units,unit_price_rub,defective_units
+A001,10,100,1
+A002,20,130,0
+A003,5,80,1
+A003,5,80,1
+A004,8,,0
+A005,-2,100,0

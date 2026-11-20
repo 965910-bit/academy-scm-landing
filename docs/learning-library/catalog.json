@@ -1,0 +1,2415 @@
+{
+  "author": "Герасимов Дмитрий Сергеевич",
+  "date": "2026-11-19",
+  "version": "0.1.0",
+  "directions": [
+    {
+      "id": "D01",
+      "title": "Управление и лидерство",
+      "courses": [
+        {
+          "id": "D01-C01",
+          "title": "Руководитель подразделения",
+          "status": "planned",
+          "audience": "Предприятия всех отраслей; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D01-C02",
+          "title": "делегирование",
+          "status": "planned",
+          "audience": "Предприятия всех отраслей; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D01-C03",
+          "title": "управление изменениями",
+          "status": "planned",
+          "audience": "Предприятия всех отраслей; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D01-C04",
+          "title": "команды",
+          "status": "planned",
+          "audience": "Предприятия всех отраслей; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D02",
+      "title": "Личная эффективность и коммуникации",
+      "courses": [
+        {
+          "id": "D02-C01",
+          "title": "Переговоры",
+          "status": "planned",
+          "audience": "Линейный персонал; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D02-C02",
+          "title": "стресс",
+          "status": "planned",
+          "audience": "Линейный персонал; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D02-C03",
+          "title": "обратная связь",
+          "status": "planned",
+          "audience": "Линейный персонал; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D02-C04",
+          "title": "работа в команде",
+          "status": "planned",
+          "audience": "Линейный персонал; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D03",
+      "title": "Продажи и клиентский сервис",
+      "courses": [
+        {
+          "id": "D03-C01",
+          "title": "B2B-продажи",
+          "status": "planned",
+          "audience": "Торговля; услуги; производители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D03-C02",
+          "title": "сервис",
+          "status": "planned",
+          "audience": "Торговля; услуги; производители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D03-C03",
+          "title": "претензии",
+          "status": "planned",
+          "audience": "Торговля; услуги; производители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D03-C04",
+          "title": "call-центр",
+          "status": "planned",
+          "audience": "Торговля; услуги; производители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D04",
+      "title": "HR и кадровый учет",
+      "courses": [
+        {
+          "id": "D04-C01",
+          "title": "Подбор",
+          "status": "planned",
+          "audience": "HR; малый бизнес; кадровые службы",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D04-C02",
+          "title": "кадровое делопроизводство",
+          "status": "planned",
+          "audience": "HR; малый бизнес; кадровые службы",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D04-C03",
+          "title": "адаптация",
+          "status": "planned",
+          "audience": "HR; малый бизнес; кадровые службы",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D04-C04",
+          "title": "кадровый резерв",
+          "status": "planned",
+          "audience": "HR; малый бизнес; кадровые службы",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D05",
+      "title": "Бухгалтерия и налоги",
+      "courses": [
+        {
+          "id": "D05-C01",
+          "title": "Бухучет",
+          "status": "planned",
+          "audience": "Бухгалтеры; предприниматели; учреждения",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D05-C02",
+          "title": "отчетность",
+          "status": "planned",
+          "audience": "Бухгалтеры; предприниматели; учреждения",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D05-C03",
+          "title": "зарплата",
+          "status": "planned",
+          "audience": "Бухгалтеры; предприниматели; учреждения",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D05-C04",
+          "title": "изменения стандартов",
+          "status": "planned",
+          "audience": "Бухгалтеры; предприниматели; учреждения",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D06",
+      "title": "1С и учетные системы",
+      "courses": [
+        {
+          "id": "D06-C01",
+          "title": "1С:Бухгалтерия",
+          "status": "planned",
+          "audience": "Учетные службы; интеграторы; предприятия",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D06-C02",
+          "title": "ЗУП",
+          "status": "planned",
+          "audience": "Учетные службы; интеграторы; предприятия",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D06-C03",
+          "title": "программирование 1С",
+          "status": "planned",
+          "audience": "Учетные службы; интеграторы; предприятия",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D07",
+      "title": "Аналитика данных и SQL",
+      "courses": [
+        {
+          "id": "D07-C01",
+          "title": "Excel",
+          "status": "planned",
+          "audience": "Все офисные подразделения",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D07-C02",
+          "title": "SQL",
+          "status": "planned",
+          "audience": "Все офисные подразделения",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D07-C03",
+          "title": "визуализация",
+          "status": "planned",
+          "audience": "Все офисные подразделения",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D07-C04",
+          "title": "BI",
+          "status": "planned",
+          "audience": "Все офисные подразделения",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D07-C05",
+          "title": "бизнес-анализ",
+          "status": "planned",
+          "audience": "Все офисные подразделения",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D08",
+      "title": "Прикладной искусственный интеллект",
+      "courses": [
+        {
+          "id": "D08-C01",
+          "title": "ИИ для HR",
+          "status": "planned",
+          "audience": "Предприятия; специалисты; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D08-C02",
+          "title": "финансов",
+          "status": "planned",
+          "audience": "Предприятия; специалисты; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D08-C03",
+          "title": "закупок",
+          "status": "planned",
+          "audience": "Предприятия; специалисты; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D08-C04",
+          "title": "руководителя",
+          "status": "planned",
+          "audience": "Предприятия; специалисты; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D08-C05",
+          "title": "проверка результатов",
+          "status": "planned",
+          "audience": "Предприятия; специалисты; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D09",
+      "title": "Российское ПО и цифровая грамотность",
+      "courses": [
+        {
+          "id": "D09-C01",
+          "title": "Миграция офисных инструментов",
+          "status": "planned",
+          "audience": "ИТ; инженеры; офисные службы",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D09-C02",
+          "title": "Linux",
+          "status": "planned",
+          "audience": "ИТ; инженеры; офисные службы",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D09-C03",
+          "title": "САПР",
+          "status": "planned",
+          "audience": "ИТ; инженеры; офисные службы",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D09-C04",
+          "title": "цифровая работа",
+          "status": "planned",
+          "audience": "ИТ; инженеры; офисные службы",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D10",
+      "title": "Программирование и разработка",
+      "courses": [
+        {
+          "id": "D10-C01",
+          "title": "Python",
+          "status": "planned",
+          "audience": "Физлица; ИТ-команды; службы занятости",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D10-C02",
+          "title": "разработка",
+          "status": "planned",
+          "audience": "Физлица; ИТ-команды; службы занятости",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D10-C03",
+          "title": "базы данных",
+          "status": "planned",
+          "audience": "Физлица; ИТ-команды; службы занятости",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D10-C04",
+          "title": "тестирование",
+          "status": "planned",
+          "audience": "Физлица; ИТ-команды; службы занятости",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D11",
+      "title": "Охрана труда",
+      "courses": [
+        {
+          "id": "D11-C01",
+          "title": "А",
+          "status": "planned",
+          "audience": "Работодатели разных отраслей",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D11-C02",
+          "title": "Б",
+          "status": "planned",
+          "audience": "Работодатели разных отраслей",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D11-C03",
+          "title": "В по видам работ",
+          "status": "planned",
+          "audience": "Работодатели разных отраслей",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D11-C04",
+          "title": "СИЗ",
+          "status": "planned",
+          "audience": "Работодатели разных отраслей",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D11-C05",
+          "title": "управление рисками",
+          "status": "planned",
+          "audience": "Работодатели разных отраслей",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D12",
+      "title": "Первая помощь",
+      "courses": [
+        {
+          "id": "D12-C01",
+          "title": "Практика помощи пострадавшему",
+          "status": "planned",
+          "audience": "Работодатели; ответственные лица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D12-C02",
+          "title": "подготовка обучающих",
+          "status": "planned",
+          "audience": "Работодатели; ответственные лица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D13",
+      "title": "Пожарная безопасность",
+      "courses": [
+        {
+          "id": "D13-C01",
+          "title": "Повышение квалификации ответственных",
+          "status": "planned",
+          "audience": "Торговля; производство; учреждения",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D13-C02",
+          "title": "обучение по роли",
+          "status": "planned",
+          "audience": "Торговля; производство; учреждения",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D14",
+      "title": "Высота и опасные работы",
+      "courses": [
+        {
+          "id": "D14-C01",
+          "title": "Работы на высоте",
+          "status": "planned",
+          "audience": "Стройка; эксплуатация; промышленность",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D14-C02",
+          "title": "организация безопасных работ",
+          "status": "planned",
+          "audience": "Стройка; эксплуатация; промышленность",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D15",
+      "title": "Промышленная безопасность",
+      "courses": [
+        {
+          "id": "D15-C01",
+          "title": "Подготовка по областям",
+          "status": "planned",
+          "audience": "Промышленность; ТЭК; подрядчики",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D15-C02",
+          "title": "эксплуатационные риски",
+          "status": "planned",
+          "audience": "Промышленность; ТЭК; подрядчики",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D16",
+      "title": "Электротехника и энергетика",
+      "courses": [
+        {
+          "id": "D16-C01",
+          "title": "Электромонтер",
+          "status": "planned",
+          "audience": "Энергетика; ЖКХ; производство",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D16-C02",
+          "title": "электроустановки",
+          "status": "planned",
+          "audience": "Энергетика; ЖКХ; производство",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D16-C03",
+          "title": "обслуживание оборудования",
+          "status": "planned",
+          "audience": "Энергетика; ЖКХ; производство",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D17",
+      "title": "Теплотехника и ЖКХ",
+      "courses": [
+        {
+          "id": "D17-C01",
+          "title": "Котельные",
+          "status": "planned",
+          "audience": "ЖКХ; эксплуатация; энергетика",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D17-C02",
+          "title": "теплоснабжение",
+          "status": "planned",
+          "audience": "ЖКХ; эксплуатация; энергетика",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D17-C03",
+          "title": "слесарные работы",
+          "status": "planned",
+          "audience": "ЖКХ; эксплуатация; энергетика",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D18",
+      "title": "Рабочие профессии и производство",
+      "courses": [
+        {
+          "id": "D18-C01",
+          "title": "Сварщик",
+          "status": "planned",
+          "audience": "Производство; подрядчики; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D18-C02",
+          "title": "слесарь",
+          "status": "planned",
+          "audience": "Производство; подрядчики; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D18-C03",
+          "title": "оператор линии",
+          "status": "planned",
+          "audience": "Производство; подрядчики; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D18-C04",
+          "title": "станки",
+          "status": "planned",
+          "audience": "Производство; подрядчики; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D18-C05",
+          "title": "ОТК",
+          "status": "planned",
+          "audience": "Производство; подрядчики; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D19",
+      "title": "Склады и внутренняя логистика",
+      "courses": [
+        {
+          "id": "D19-C01",
+          "title": "Кладовщик",
+          "status": "planned",
+          "audience": "РЦ; дистрибьюторы; производство",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D19-C02",
+          "title": "комплектовщик",
+          "status": "planned",
+          "audience": "РЦ; дистрибьюторы; производство",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D19-C03",
+          "title": "складские операции",
+          "status": "planned",
+          "audience": "РЦ; дистрибьюторы; производство",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D19-C04",
+          "title": "WMS",
+          "status": "planned",
+          "audience": "РЦ; дистрибьюторы; производство",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D20",
+      "title": "Транспорт и БДД",
+      "courses": [
+        {
+          "id": "D20-C01",
+          "title": "Безопасность движения",
+          "status": "planned",
+          "audience": "Перевозчики; собственные автопарки",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D20-C02",
+          "title": "организация перевозок",
+          "status": "planned",
+          "audience": "Перевозчики; собственные автопарки",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D20-C03",
+          "title": "опасные грузы",
+          "status": "planned",
+          "audience": "Перевозчики; собственные автопарки",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D21",
+      "title": "Закупки, договоры и SCM",
+      "courses": [
+        {
+          "id": "D21-C01",
+          "title": "Закупки",
+          "status": "planned",
+          "audience": "Закупщики; логисты; юристы",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D21-C02",
+          "title": "управление запасами",
+          "status": "planned",
+          "audience": "Закупщики; логисты; юристы",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D21-C03",
+          "title": "поставщики",
+          "status": "planned",
+          "audience": "Закупщики; логисты; юристы",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D21-C04",
+          "title": "договорная работа",
+          "status": "planned",
+          "audience": "Закупщики; логисты; юристы",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D22",
+      "title": "Строительство и инженерия",
+      "courses": [
+        {
+          "id": "D22-C01",
+          "title": "Сметы",
+          "status": "planned",
+          "audience": "Строители; проектировщики; заказчики",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D22-C02",
+          "title": "проектирование",
+          "status": "planned",
+          "audience": "Строители; проектировщики; заказчики",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D22-C03",
+          "title": "САПР",
+          "status": "planned",
+          "audience": "Строители; проектировщики; заказчики",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D22-C04",
+          "title": "строительный контроль",
+          "status": "planned",
+          "audience": "Строители; проектировщики; заказчики",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D23",
+      "title": "Нефтегаз, добыча и геология",
+      "courses": [
+        {
+          "id": "D23-C01",
+          "title": "Эксплуатация",
+          "status": "planned",
+          "audience": "ТЭК; сервисные подрядчики",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D23-C02",
+          "title": "ремонт",
+          "status": "planned",
+          "audience": "ТЭК; сервисные подрядчики",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D23-C03",
+          "title": "отраслевые технологии",
+          "status": "planned",
+          "audience": "ТЭК; сервисные подрядчики",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D24",
+      "title": "Экология и отходы",
+      "courses": [
+        {
+          "id": "D24-C01",
+          "title": "Экологическая безопасность",
+          "status": "planned",
+          "audience": "Производство; ТЭК; эксплуатация",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D24-C02",
+          "title": "обращение с отходами",
+          "status": "planned",
+          "audience": "Производство; ТЭК; эксплуатация",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D25",
+      "title": "Педагогика и методика",
+      "courses": [
+        {
+          "id": "D25-C01",
+          "title": "Педагог",
+          "status": "planned",
+          "audience": "Образовательные организации; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D25-C02",
+          "title": "методист",
+          "status": "planned",
+          "audience": "Образовательные организации; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D25-C03",
+          "title": "цифровое преподавание",
+          "status": "planned",
+          "audience": "Образовательные организации; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D26",
+      "title": "Медицина и фармация",
+      "courses": [
+        {
+          "id": "D26-C01",
+          "title": "Повышение квалификации по специальности",
+          "status": "planned",
+          "audience": "Медорганизации; квалифицированные специалисты",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D26-C02",
+          "title": "организация работы",
+          "status": "planned",
+          "audience": "Медорганизации; квалифицированные специалисты",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D27",
+      "title": "Психология и социальная работа",
+      "courses": [
+        {
+          "id": "D27-C01",
+          "title": "Организационная психология",
+          "status": "planned",
+          "audience": "Физлица; учреждения; работодатели",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D27-C02",
+          "title": "консультирование",
+          "status": "planned",
+          "audience": "Физлица; учреждения; работодатели",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D27-C03",
+          "title": "социальная помощь",
+          "status": "planned",
+          "audience": "Физлица; учреждения; работодатели",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D28",
+      "title": "Маркетинг и электронная торговля",
+      "courses": [
+        {
+          "id": "D28-C01",
+          "title": "Маркетплейсы",
+          "status": "planned",
+          "audience": "Малый бизнес; торговля; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D28-C02",
+          "title": "контент",
+          "status": "planned",
+          "audience": "Малый бизнес; торговля; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D28-C03",
+          "title": "аналитика продаж",
+          "status": "planned",
+          "audience": "Малый бизнес; торговля; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D28-C04",
+          "title": "интернет-маркетинг",
+          "status": "planned",
+          "audience": "Малый бизнес; торговля; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D29",
+      "title": "Предпринимательство и финансы",
+      "courses": [
+        {
+          "id": "D29-C01",
+          "title": "Запуск бизнеса",
+          "status": "planned",
+          "audience": "Предприниматели; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D29-C02",
+          "title": "бюджетирование",
+          "status": "planned",
+          "audience": "Предприниматели; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D29-C03",
+          "title": "экономика подразделения",
+          "status": "planned",
+          "audience": "Предприниматели; руководители",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D30",
+      "title": "Дизайн и креативные профессии",
+      "courses": [
+        {
+          "id": "D30-C01",
+          "title": "Интерьер",
+          "status": "planned",
+          "audience": "Физлица; агентства; компании",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D30-C02",
+          "title": "визуальные коммуникации",
+          "status": "planned",
+          "audience": "Физлица; агентства; компании",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D30-C03",
+          "title": "дизайн",
+          "status": "planned",
+          "audience": "Физлица; агентства; компании",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D31",
+      "title": "Общепит и гостеприимство",
+      "courses": [
+        {
+          "id": "D31-C01",
+          "title": "Повар",
+          "status": "planned",
+          "audience": "Общепит; гостиницы; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D31-C02",
+          "title": "пекарь",
+          "status": "planned",
+          "audience": "Общепит; гостиницы; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D31-C03",
+          "title": "сервис",
+          "status": "planned",
+          "audience": "Общепит; гостиницы; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D31-C04",
+          "title": "управление заведением",
+          "status": "planned",
+          "audience": "Общепит; гостиницы; физлица",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D32",
+      "title": "Сельское хозяйство, ветеринария, пищевое качество",
+      "courses": [
+        {
+          "id": "D32-C01",
+          "title": "Агротехнологии",
+          "status": "planned",
+          "audience": "АПК; пищевое производство; торговля",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D32-C02",
+          "title": "ветеринарные направления",
+          "status": "planned",
+          "audience": "АПК; пищевое производство; торговля",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D32-C03",
+          "title": "ХАССП",
+          "status": "planned",
+          "audience": "АПК; пищевое производство; торговля",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D33",
+      "title": "Юриспруденция и комплаенс",
+      "courses": [
+        {
+          "id": "D33-C01",
+          "title": "Договоры",
+          "status": "planned",
+          "audience": "Юристы; HR; предприниматели",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D33-C02",
+          "title": "персональные данные",
+          "status": "planned",
+          "audience": "Юристы; HR; предприниматели",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D33-C03",
+          "title": "трудовое право",
+          "status": "planned",
+          "audience": "Юристы; HR; предприниматели",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    },
+    {
+      "id": "D34",
+      "title": "Информационная безопасность",
+      "courses": [
+        {
+          "id": "D34-C01",
+          "title": "Кибергигиена",
+          "status": "planned",
+          "audience": "Все работодатели; ИТ-службы",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D34-C02",
+          "title": "защита данных",
+          "status": "planned",
+          "audience": "Все работодатели; ИТ-службы",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        },
+        {
+          "id": "D34-C03",
+          "title": "безопасная работа",
+          "status": "planned",
+          "audience": "Все работодатели; ИТ-службы",
+          "sections": {
+            "passport": "missing",
+            "syllabus": "missing",
+            "legal_basis": "missing",
+            "lessons": "missing",
+            "practice": "missing",
+            "assessment": "missing",
+            "answer_key": "missing",
+            "teacher_notes": "missing",
+            "sources": "missing",
+            "review": "missing"
+          },
+          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+        }
+      ]
+    }
+  ]
+}
