@@ -206,3 +206,20 @@ Chromium сам запускает временный сервер и аккау
 «Эксперт рабочего пространства» — локальный навигатор по задачам и доступным пользователю разделам, не подключённый ИИ и не юридический консультант. Внешних ИИ-запросов, оплаты и новых автоматических полномочий нет. Существующий предметный помощник слушателя не заменяется.
 
 Проверки: 131 автоматический тест; `npm run test:navigation:browser` проверяет порядок групп, сохранение раскрытия, активные пункты, переходы эксперта, документы/классификатор, экспорт JSON, ширины320/390/768/1440 и офлайн. Регрессии рабочих процессов/десяти ролей, папок документов, единой оболочки и статического Pages также проходят.
+
+### Public document source files (release 27)
+
+`documents/sources/manifest.json` records successfully collected original PDF bytes,
+source URL, publisher, download date, byte length, SHA-256 and verification limits.
+`documents/sources/catalog.js` is the same successful-file index for the shared public
+and cabinet explorer. Files are physically stored by the approved folder IDs. A
+third-party local act is always an example, never an approved Academy document; an
+old law edition is historical. No missing original organization slot is marked
+complete merely because a reference/example PDF was collected. Failed downloads
+remain listed in the manifest and are not rendered as uploaded files.
+
+Collection: `scripts/collect-document-sources.py`; bounded public-download workflow
+`collect-document-sources.yml` only writes on the tracked task branch. It does not
+write to main after merge. Current legal edition and applicability require separate
+review; original publication PDFs can omit subsequent amendments. The public PDFs
+are included in the offline shell manifest; private records are not cached.
