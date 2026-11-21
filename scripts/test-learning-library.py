@@ -47,8 +47,8 @@ class LibraryTests(unittest.TestCase):
   packs=all_packs()
   self.assertEqual(len(packs['courses']),67)
   for c in packs['courses']:
-   self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02','D28-C04'} else 4)
-   self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 10 if c['id']=='D28-C04' else 6)
+   self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02','D28-C04','D09-C04'} else 4)
+   self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 10 if c['id'] in {'D28-C04','D09-C04'} else 6)
    self.assertEqual(sum(x['points'] for x in c['practice']['criteria']),12)
    check_ids={q['id'] for q in c['questions']}|{x['id'] for x in c['practice']['criteria']}
    for outcome in c['outcomes']:
@@ -835,14 +835,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],283)
-  self.assertEqual(progress['open_answers'],426)
+  self.assertEqual(progress['lessons'],287)
+  self.assertEqual(progress['open_answers'],430)
   self.assertEqual(progress['materials'],68)
   self.assertEqual(progress['planned'],49)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['283 уроков','426 ответов на контрольные вопросы','49 курсов','283 разборов заданий']:self.assertIn(text,hub)
+  for text in ['287 уроков','430 ответов на контрольные вопросы','49 курсов','287 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -962,12 +962,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,283)
+  self.assertEqual(count,287)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=426,exercise=283,practice=68))
-  self.assertEqual(len({r['id'] for r in data['entries']}),777)
+  self.assertEqual(data['counts'],dict(question=430,exercise=287,practice=68))
+  self.assertEqual(len({r['id'] for r in data['entries']}),785)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
