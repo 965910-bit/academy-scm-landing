@@ -1,6 +1,6 @@
 {
   "author": "Герасимов Дмитрий Сергеевич",
-  "version": "0.37.0",
+  "version": "0.38.0",
   "date": "2026-11-19",
   "baseline": {
     "library_version": "0.25.0",
@@ -855,18 +855,18 @@
       "direction": "Информационная безопасность",
       "title": "безопасная работа",
       "baseline_status": "planned",
-      "content_to_develop": "Рабочие сценарии почты/файлов/паролей/инцидентов",
-      "practice_evidence_to_obtain": "Безопасные имитации распознавания/сообщения/восстановления",
+      "content_to_develop": "Написаны8 уроков: риски/социальная инженерия/URL/учетная запись/файлы/права/сообщение и обновление. Остаются полный роль-специфичный маршрут, выбранные разрешенные средства, согласованные процедуры/каналы, реальная среда и разнообразные сценарии.",
+      "practice_evidence_to_obtain": "Есть12 вымышленных URL, офлайн-код без сети, независимые эталоны, исправления советов и модель сообщения. Нужны реальные разрешенные наблюдаемые упражнения, роль-специфичные процедуры/ответственные, независимые экспертизы и фактическая апробация; никакие инциденты/защищенность не подтверждены.",
       "blocking_limits": "Не собирать пароли/реальные вредоносные файлы;поведение не гарантия безопасности",
-      "current_catalog_status": "planned",
-      "introduction_url": null,
+      "current_catalog_status": "introductory_written_unreviewed",
+      "introduction_url": "safe-digital-work.html",
       "full_completion": "not_demonstrated"
     }
   ],
   "progress": {
     "baseline_titles": 65,
-    "still_planned": 48,
-    "introductions_written_unreviewed": 17,
+    "still_planned": 47,
+    "introductions_written_unreviewed": 18,
     "full_completion_demonstrated": 0
   }
 }
