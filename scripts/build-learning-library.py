@@ -9,7 +9,7 @@ packs=json.loads((D/'course-packs.json').read_text())
 for extra in sorted(D.glob('*-packs.json')):
  if extra.name != 'course-packs.json':
   packs['courses'].extend(json.loads(extra.read_text())['courses'])
-packs['version']='0.24.0'
+packs['version']='0.25.0'
 assert len({c['id'] for c in packs['courses']})==len(packs['courses']), 'Duplicate course IDs'
 for lab_file in (D/'labs').iterdir():
  if lab_file.is_file(): (O/lab_file.name).write_bytes(lab_file.read_bytes())
@@ -126,8 +126,8 @@ stats={'directions':len(catalog),
 for folder in (D,O): (folder/'progress.json').write_text(json.dumps(stats,ensure_ascii=False,indent=2)+'\n')
 coverage_text=(f"{stats['directions']} направления; {stats['catalog_courses']} предварительных курсов. "
  f"Направлений хотя бы с одним вводным комплектом: {stats['directions_with_intro']} из {stats['directions']}; это не полные программы направлений. "
- f"Для {stats['introductory_packs']} курсов написаны вводные комплекты; {stats['planned']} курсов пока запланированы. "
- f"Отдельно написан межотраслевой материал. Итого: {stats['materials']} материалов, {stats['lessons']} уроков, "
+ f"Количество курсов с написанными вводными комплектами: {stats['introductory_packs']}; {stats['planned']} курсов пока запланированы. "
+ f"Отдельно написан межотраслевой материал. Общее количество материалов: {stats['materials']}; {stats['lessons']} уроков, "
  f"{stats['open_answers']} ответов на контрольные вопросы и {stats['lesson_solutions']} разборов заданий уроков. Полное покрытие профессий не достигнуто. "
  "Одобрено специалистом: 0. Готовых регулируемых программ: 0.")
 pack_links=''.join('<li><a href="'+c['slug']+'.html">'+esc(c['title'])+'</a>: '+str(len(c['lessons']))+' уроков, практика, '+str(len(c['questions']))+' ответов, рабочий шаблон.</li>' for c in packs['courses'])

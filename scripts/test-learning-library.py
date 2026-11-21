@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),66)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),50)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),65)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),51)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,7 +45,7 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),50)
+  self.assertEqual(len(packs['courses']),51)
   for c in packs['courses']:
    self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02'} else 4)
    self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 6)
@@ -549,6 +549,69 @@ class LibraryTests(unittest.TestCase):
   entry=next(r for r in json.loads((D/'review-ledger.json').read_text())['materials'] if r['id']==c['id'])
   for stage in ['subject_review','legal_review','answer_review','pilot']:
    self.assertEqual(entry[stage]['status'],'pending');self.assertIsNone(entry[stage]['reviewer'])
+ def bi_lab(self):
+  import runpy
+  lab=runpy.run_path(str(D/'labs/bi-lab.py'))
+  data=[lab['read_csv'](D/'labs',n) for n in ['bi-products.csv','bi-sales.csv','bi-returns.csv']]
+  return lab,data
+ def test_bi_grain_join_fanout_and_filter_context(self):
+  lab,data=self.bi_lab();report=lab['calculate'](*data)
+  self.assertEqual(report['source_counts'],dict(sales_lines=6,products=2,return_events=3))
+  self.assertEqual(report['naive_join'],dict(rows=7,gross_rub=11500,returns_rub=2000,incorrect_net_rub=9500))
+  self.assertEqual(report['all'],dict(rows=6,gross_rub=9500,returns_rub=2000,net_rub=7500,orders=4,average_net_per_order_rub=1875))
+  self.assertEqual([r['net_rub'] for r in report['by_sale_month'].values()],[2500,5000])
+  self.assertEqual([r['net_rub'] for r in report['by_site'].values()],[3500,4000])
+  cats=report['by_category'];self.assertEqual([r['net_rub'] for r in cats.values()],[4000,3500])
+  self.assertEqual([r['orders'] for r in cats.values()],[3,3])
+  self.assertEqual(report['feb_A']['net_rub'],2000);self.assertEqual(report['feb_A']['orders'],1)
+  empty=report['feb_A_equipment'];self.assertEqual((empty['rows'],empty['net_rub'],empty['orders']),(0,0,0));self.assertIsNone(empty['average_net_per_order_rub'])
+  self.assertEqual(report['alternative_event_month_net_rub'],{'2026-01':3000,'2026-02':4500})
+  self.assertEqual(sum(report['alternative_event_month_net_rub'].values()),report['all']['net_rub'])
+  self.assertEqual(report['all']['net_rub']/report['all']['rows'],1250)
+ def test_bi_mutations_and_integrity_contract(self):
+  lab,data=self.bi_lab();calculate=lab['calculate']
+  no_returns=copy.deepcopy(data);no_returns[2]=[];r=calculate(*no_returns)
+  self.assertEqual(r['all']['net_rub'],9500);self.assertEqual(r['naive_join']['rows'],6)
+  added=copy.deepcopy(data);added[2].append(dict(return_id='R04',line_id='L02',return_month='2026-02',amount_rub='100'));r=calculate(*added)
+  self.assertEqual((r['all']['returns_rub'],r['all']['net_rub'],r['all']['average_net_per_order_rub']),(2100,7400,1850))
+  self.assertEqual([v['net_rub'] for v in r['by_sale_month'].values()],[2400,5000])
+  for table,index,key,value in [(0,1,'product_id','P1'),(1,1,'line_id','L01'),(2,1,'return_id','R01'),(1,0,'product_id','UNKNOWN'),(2,0,'line_id','UNKNOWN'),(1,1,'site','B'),(1,0,'amount_rub',''),(1,0,'qty','0'),(2,0,'amount_rub','2500'),(2,0,'amount_rub','-1'),(1,0,'amount_rub','1.5'),(2,2,'return_month','2026-01'),(1,0,'sale_month','2026-03')]:
+   changed=copy.deepcopy(data);changed[table][index][key]=value
+   with self.assertRaises(ValueError,msg=(table,index,key,value)):calculate(*changed)
+  changed=copy.deepcopy(data);changed[1][0]['unexpected']='x'
+  with self.assertRaises(ValueError):calculate(*changed)
+  self.assertEqual(calculate(*data)['all']['net_rub'],7500)
+ def test_bi_cli_reproducible_readonly_with_space_path(self):
+  import tempfile
+  names=['bi-products.csv','bi-sales.csv','bi-returns.csv','bi-lab.py']
+  with tempfile.TemporaryDirectory(prefix='BI lab ') as folder:
+   root=Path(folder)
+   for name in names:(root/name).write_bytes((D/'labs'/name).read_bytes())
+   before={p.name:p.read_bytes() for p in root.iterdir()}
+   command=[sys.executable,str(root/'bi-lab.py'),'--directory',str(root)]
+   first=subprocess.run(command,capture_output=True,text=True,timeout=10)
+   second=subprocess.run(command,capture_output=True,text=True,timeout=10)
+   self.assertEqual(first.returncode,0,first.stderr);self.assertEqual(second.returncode,0,second.stderr);self.assertEqual(first.stdout,second.stdout)
+   self.assertIn('"net_rub": 7500',first.stdout)
+   self.assertEqual({p.name:p.read_bytes() for p in root.iterdir()},before)
+   (root/'bi-products.csv').write_text('product_id,category,unexpected\nP1,x,y\n')
+   bad=subprocess.run(command,capture_output=True,text=True,timeout=10)
+   self.assertNotEqual(bad.returncode,0);self.assertIn('Validation failed',bad.stderr)
+ def test_bi_exports_rubrics_and_pending_reviews(self):
+  import zipfile
+  c=json.loads((D/'bi-packs.json').read_text())['courses'][0]
+  bank={r['id']:r for r in json.loads((O/'answer-bank.json').read_text())['entries']}
+  for q in c['questions']:
+   self.assertEqual(set(q['scoring']),{'0','1','2'})
+   for text in [*q['acceptable_alternatives'],*q['scoring'].values()]:self.assertIn(text,bank[c['id']+'-'+q['id']]['explanation'])
+  names=['bi-model-validation.html','bi-model-validation.md','bi-validation-card.csv','D07-C04.json','bi-products.csv','bi-sales.csv','bi-returns.csv','bi-lab.py','bi-guide.md']
+  with zipfile.ZipFile(O/'learning-library.zip') as z:
+   for name in names:self.assertIn(name,z.namelist())
+  for name in names[4:]:self.assertEqual((D/'labs'/name).read_bytes(),(O/name).read_bytes())
+  for text in ['11500','7500','1875','2500/5000','3000/4500','24','18']:self.assertIn(text,(O/'bi-model-validation.md').read_text())
+  entry=next(r for r in json.loads((D/'review-ledger.json').read_text())['materials'] if r['id']==c['id'])
+  for stage in ['subject_review','legal_review','answer_review','pilot']:
+   self.assertEqual(entry[stage]['status'],'pending');self.assertIsNone(entry[stage]['reviewer'])
  def test_management_case(self):
   available=3*6*60;needed=90*12+10*30
   self.assertEqual((available,needed,needed-available),(1080,1380,300))
@@ -574,14 +637,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],211)
-  self.assertEqual(progress['open_answers'],320)
-  self.assertEqual(progress['materials'],51)
-  self.assertEqual(progress['planned'],66)
+  self.assertEqual(progress['lessons'],215)
+  self.assertEqual(progress['open_answers'],326)
+  self.assertEqual(progress['materials'],52)
+  self.assertEqual(progress['planned'],65)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['211 уроков','320 ответов на контрольные вопросы','66 курсов','211 разборов заданий']:self.assertIn(text,hub)
+  for text in ['215 уроков','326 ответов на контрольные вопросы','65 курсов','215 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -670,14 +733,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),51)
+  self.assertEqual(len(ledger['materials']),52)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),204)
+  self.assertEqual(len(rows),208)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -701,12 +764,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,211)
+  self.assertEqual(count,215)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=320,exercise=211,practice=51))
-  self.assertEqual(len({r['id'] for r in data['entries']}),582)
+  self.assertEqual(data['counts'],dict(question=326,exercise=215,practice=52))
+  self.assertEqual(len({r['id'] for r in data['entries']}),593)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
