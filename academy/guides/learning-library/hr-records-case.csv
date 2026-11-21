@@ -1,0 +1,7 @@
+﻿case_id,version,contract_signed,copy_receipt,lna_timing,order_issued,order_matches
+H01,1,yes,yes,before,no,na
+H02,1,no,no,before,no,na
+H03,1,yes,no,before,no,na
+H04,1,yes,yes,after,no,na
+H05,1,yes,yes,unknown,no,na
+H06,1,yes,yes,before,yes,no
