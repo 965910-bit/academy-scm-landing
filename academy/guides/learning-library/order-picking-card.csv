@@ -1,0 +1,2 @@
+﻿version,order_id,cutoff,unit,bin_id,sku,lot,planned_units,excluded_reason,discrepancy,next_role,verification_limit
+0.31.0,O01,2026-11-19,Условная штука,A01,SKU-A,L01,6,Q01 карантин/B02 срок,Нет в исходном плане,Наставник/владелец задания,Не физический отбор

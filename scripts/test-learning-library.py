@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),53)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),63)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),51)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),65)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,7 +45,7 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),63)
+  self.assertEqual(len(packs['courses']),65)
   for c in packs['courses']:
    self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02'} else 4)
    self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 6)
@@ -697,10 +697,10 @@ class LibraryTests(unittest.TestCase):
   from learning_completion_plan import render_completion_plan
   source=json.loads((D/'remaining-65-plan.json').read_text());current=json.loads((D/'catalog.json').read_text())['directions']
   result=json.loads((O/'remaining-65-plan.json').read_text())
-  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=53,introductions_written_unreviewed=12,full_completion_demonstrated=0))
+  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=51,introductions_written_unreviewed=14,full_completion_demonstrated=0))
   self.assertEqual(len({r['id'] for r in result['courses']}),65)
   self.assertEqual({r['full_completion'] for r in result['courses']},{'not_demonstrated'})
-  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04','D21-C03','D28-C03','D29-C01','D29-C03'})
+  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04','D21-C03','D28-C03','D29-C01','D29-C03','D19-C02','D19-C04'})
   for r in result['courses']:
    for key in ['content_to_develop','practice_evidence_to_obtain','blocking_limits']:self.assertGreater(len(r[key]),20)
   with tempfile.TemporaryDirectory() as folder:
@@ -835,14 +835,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],263)
-  self.assertEqual(progress['open_answers'],398)
-  self.assertEqual(progress['materials'],64)
-  self.assertEqual(progress['planned'],53)
+  self.assertEqual(progress['lessons'],271)
+  self.assertEqual(progress['open_answers'],410)
+  self.assertEqual(progress['materials'],66)
+  self.assertEqual(progress['planned'],51)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['263 уроков','398 ответов на контрольные вопросы','53 курсов','263 разборов заданий']:self.assertIn(text,hub)
+  for text in ['271 уроков','410 ответов на контрольные вопросы','51 курсов','271 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -931,14 +931,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),64)
+  self.assertEqual(len(ledger['materials']),66)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),256)
+  self.assertEqual(len(rows),264)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -962,12 +962,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,263)
+  self.assertEqual(count,271)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=398,exercise=263,practice=64))
-  self.assertEqual(len({r['id'] for r in data['entries']}),725)
+  self.assertEqual(data['counts'],dict(question=410,exercise=271,practice=66))
+  self.assertEqual(len({r['id'] for r in data['entries']}),747)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
@@ -1480,5 +1480,79 @@ class LibraryTests(unittest.TestCase):
    self.assertEqual(run('startup').returncode,0)
    (folder/'department-case.csv').write_bytes((D/'labs/department-case.csv').read_bytes());(folder/'startup-case.csv').unlink();self.assertEqual(run('department').returncode,0)
    r=run('startup');self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'')
+
+ def load_warehouse_lab(self):
+  import importlib.util
+  spec=importlib.util.spec_from_file_location('warehouse_flow',D/'labs/warehouse-flow-lab.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+  stock,orders=m.load(m.read_csv(D/'labs','warehouse-stock.csv'),m.read_csv(D/'labs','warehouse-orders.csv'))
+  return m,stock,orders
+ def test_picking_independent_oracles_fefo_and_boundary(self):
+  m,stock,orders=self.load_warehouse_lab();before=copy.deepcopy((stock,orders));p=m.plan(stock,orders,'O01')
+  self.assertTrue(p['complete']);self.assertEqual([(x['bin_id'],x['sku'],x['lot'],x['units']) for x in p['allocations']],[('A01','SKU-A','L01',6),('A02','SKU-A','L02',4),('B01','SKU-B','L03',4)])
+  self.assertEqual((stock,orders),before)
+  orders['O01']['SKU-A']=16;p=m.plan(stock,orders,'O01');self.assertEqual(p['shortages'],{'SKU-A':2});self.assertEqual(p['allocations'],[])
+  orders['O01']['SKU-A']=10;stock['A01']['expiry']='2026-11-21';p=m.plan(stock,orders,'O01');self.assertFalse(p['complete']);self.assertEqual(p['shortages'],{'SKU-A':2})
+  stock['A01']['expiry']='2026-11-22';self.assertTrue(m.plan(stock,orders,'O01')['complete'])
+  stock['A02']['expiry']='2026-11-22';self.assertEqual(m.plan(stock,orders,'O01')['allocations'][0]['bin_id'],'A01')
+  stock['B01']['on_hand']=3;p=m.plan(stock,orders,'O01');self.assertEqual(p['shortages'],{'SKU-B':1});self.assertEqual(p['allocations'],[])
+  orders['O01']['MISSING']=1;self.assertIn('MISSING',m.plan(stock,orders,'O01')['shortages'])
+ def test_wms_independent_event_results_balance_and_rejections(self):
+  m,stock,orders=self.load_warehouse_lab();events=json.loads((D/'labs/warehouse-events.json').read_text());w=m.Warehouse(stock,orders);accepted=[]
+  for index,event in enumerate(events):
+   before=w.snapshot();r=w.apply(event);w.check()
+   if r['accepted']:accepted.append(index)
+   else:self.assertEqual(w.snapshot(),before);self.assertTrue(r['inventory_unchanged'])
+  self.assertEqual(accepted,[0,4,6,7,8])
+  self.assertEqual({b:x['on_hand'] for b,x in w.stock.items()},{'A01':0,'A02':4,'Q01':3,'B01':1,'B02':4})
+  self.assertEqual(sum(x['on_hand'] for x in w.stock.values()),12);self.assertEqual(w.holds,{});self.assertEqual(w.terminal,{'O01':'shipped'})
+  self.assertEqual(sum(x['on_hand'] for x in stock.values()),26)
+  self.assertTrue(m.plan(stock,orders,'O02')['complete'])
+  w=m.Warehouse(stock,orders);self.assertTrue(w.apply(dict(event_id='R1',action='reserve',order_id='O01'))['accepted'])
+  p=m.plan(w.stock,w.orders,'O02',w.holds);self.assertEqual(p['shortages'],{'SKU-A':1})
+ def test_wms_cancel_retry_and_quantity_guards(self):
+  m,stock,orders=self.load_warehouse_lab();w=m.Warehouse(stock,orders)
+  def event(i,action='reserve',oid='O01',**kw):return dict(event_id=i,action=action,order_id=oid,**kw)
+  self.assertTrue(w.apply(event('R1'))['accepted']);self.assertTrue(w.apply(event('C1','cancel'))['accepted'])
+  self.assertEqual(w.holds,{});self.assertEqual(w.terminal,{'O01':'cancelled'});self.assertEqual(w.stock,stock)
+  self.assertFalse(w.apply(event('R2'))['accepted'])
+  w=m.Warehouse(stock,orders);w.apply(event('R1'));before=w.snapshot()
+  for i,patch in enumerate([dict(sku='SKU-B'),dict(lot='wrong'),dict(bin_id='missing'),dict(units='7'),dict(units='0'),dict(units=6),dict(units='NaN')]):
+   scan=dict(bin_id='A01',sku='SKU-A',lot='L01',units='6');scan.update(patch)
+   self.assertFalse(w.apply(event('P'+str(i),'pick',**scan))['accepted']);self.assertEqual(w.snapshot(),before)
+  # Even failed event IDs are consumed. Correcting the payload is not a successful replay.
+  r=w.apply(event('P0','pick',bin_id='A01',sku='SKU-A',lot='L01',units='6'));self.assertFalse(r['accepted']);self.assertIn('Duplicate',r['error'])
+  self.assertTrue(w.apply(event('P_NEW','pick',bin_id='A01',sku='SKU-A',lot='L01',units='6'))['accepted'])
+  before=w.snapshot();self.assertFalse(w.apply(event('C2','cancel'))['accepted']);self.assertEqual(w.snapshot(),before)
+ def test_wms_rollback_after_partial_mutation_and_invalid_inputs(self):
+  m,stock,orders=self.load_warehouse_lab();w=m.Warehouse(stock,orders);events=json.loads((D/'labs/warehouse-events.json').read_text())
+  for index in [0,4,6,7]:self.assertTrue(w.apply(events[index])['accepted'])
+  # Controlled fault: eligibility changes before ship. Earlier bin decrements must roll back.
+  w.stock['B01']['status']='quarantine';before=w.snapshot();r=w.apply(events[8]);self.assertFalse(r['accepted']);self.assertEqual(w.snapshot(),before)
+  self.assertEqual(w.stock['A01']['on_hand'],6);self.assertEqual(w.stock['A02']['on_hand'],8)
+  for bad in [None,[],{},dict(event_id='NEW1',action='unknown',order_id='O01'),dict(event_id='NEW2',action='reserve',order_id='UNKNOWN'),dict(event_id='NEW3',action='reserve',order_id='O02',extra=True)]:
+   before=w.snapshot();self.assertFalse(w.apply(bad)['accepted']);self.assertEqual(w.snapshot(),before)
+  rows=m.read_csv(D/'labs','warehouse-stock.csv');o=m.read_csv(D/'labs','warehouse-orders.csv')
+  for patch in [dict(units='-1'),dict(expiry='2026-11-31'),dict(status='unknown'),dict(units='1.5')]:
+   bad=copy.deepcopy(rows);bad[0].update(patch)
+   with self.assertRaises(ValueError):m.load(bad,o)
+  with self.assertRaises(ValueError):m.load(rows+[rows[0]],o)
+  with self.assertRaises(ValueError):m.unique_object([('a',1),('a',2)])
+ def test_warehouse_published_readonly_cli_atomic_errors(self):
+  import tempfile,hashlib
+  names=['warehouse-stock.csv','warehouse-orders.csv','warehouse-events.json','warehouse-flow-lab.py','order-picking-guide.md','wms-state-guide.md']
+  for name in names:self.assertEqual((D/'labs'/name).read_bytes(),(O/name).read_bytes())
+  for slug in ['order-picking-validation','wms-state-control']:self.assertIn('/'+slug+'.html',(R/'sitemap.xml').read_text())
+  with tempfile.TemporaryDirectory(prefix='warehouse flow ') as folder:
+   folder=Path(folder)
+   for name in names[:3]:(folder/name).write_bytes((D/'labs'/name).read_bytes())
+   before={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in folder.iterdir()}
+   def run(case):return subprocess.run([sys.executable,str(D/'labs/warehouse-flow-lab.py'),'--case',case,'--directory',str(folder)],capture_output=True,text=True)
+   r=run('all');self.assertEqual(r.returncode,0,r.stderr);self.assertEqual(set(json.loads(r.stdout)),{'picking','wms'})
+   self.assertEqual(before,{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in folder.iterdir()})
+   (folder/'warehouse-events.json').write_text('{');r=run('all');self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'');self.assertIn('rejected',r.stderr)
+   self.assertEqual(run('picking').returncode,0)
+   (folder/'warehouse-events.json').write_text('[{"event_id":"X","event_id":"Y"}]');self.assertEqual(run('wms').returncode,2)
+   (folder/'warehouse-events.json').write_text('[{"event_id":"X","action":"ship","order_id":"O01"}]');r=run('wms');self.assertEqual(r.returncode,0);self.assertFalse(json.loads(r.stdout)['wms']['results'][0]['accepted'])
+   (folder/'warehouse-stock.csv').write_text('wrong\n');r=run('picking');self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'')
 
 if __name__=='__main__':unittest.main()
