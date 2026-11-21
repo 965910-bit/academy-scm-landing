@@ -1,0 +1,11 @@
+﻿call_id,status,wait_s,talk_s,hold_s,acw_s,outcome
+K01,answered,10,120,0,30,resolved
+K02,answered,20,180,30,30,resolved
+K03,answered,30,60,0,30,resolved
+K04,answered,40,240,60,30,escalated
+K05,answered,10,150,0,30,resolved
+K06,answered,20,90,0,30,resolved
+K07,answered,50,120,30,30,escalated
+K08,answered,60,210,0,30,escalated
+K09,abandoned,5,,,,not_connected
+K10,abandoned,15,,,,not_connected

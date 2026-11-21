@@ -1,0 +1,2 @@
+﻿call_id,intent,existing_case_id,verification_route,verified_fact,unknown,action,next_owner_role,handoff_receipt,agreed_next_contact,outcome,quality_check
+K04,Статус существующего обращения,Учебный ID,Утвержденное правило;без реальных данных,Что проверено в учебном источнике,Окончательное решение,Передача второй линии,Уполномоченный владелец,Подтвердить,"Согласовать, не обещать за другого",escalated,Цель;данные;владелец;неизвестное
