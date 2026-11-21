@@ -1,0 +1,9 @@
+﻿case_id,ack_hours,requested_rub,status,legal_due_status
+C01,1,1000,fulfilled,unverified
+C02,2,2000,pending_review,unverified
+C03,5,3000,resolution_sent,unverified
+C04,1,0,fulfilled,unverified
+C05,4,500,rejected_notified,unverified
+C06,7,1500,pending_review,unverified
+C07,2,1200,fulfilled,unverified
+C08,3,800,pending_review,unverified

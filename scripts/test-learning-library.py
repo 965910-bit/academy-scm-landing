@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),72)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),44)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),71)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),45)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,7 +45,7 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),44)
+  self.assertEqual(len(packs['courses']),45)
   for c in packs['courses']:
    self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02'} else 4)
    self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 6)
@@ -290,6 +290,38 @@ class LibraryTests(unittest.TestCase):
   entry=next(r for r in json.loads((D/'review-ledger.json').read_text())['materials'] if r['id']==c['id'])
   for stage in ['subject_review','legal_review','answer_review','pilot']:
    self.assertEqual(entry[stage]['status'],'pending');self.assertIsNone(entry[stage]['reviewer'])
+ def test_complaints_dataset_and_internal_metrics(self):
+  from collections import Counter
+  rows=list(csv.DictReader((D/'labs/complaints-register-case.csv').read_text(encoding='utf-8-sig').splitlines()))
+  self.assertEqual(len(rows),8);self.assertEqual(len({r['case_id'] for r in rows}),8)
+  self.assertEqual(sum(int(r['requested_rub']) for r in rows),10000)
+  hours=[int(r['ack_hours']) for r in rows]
+  self.assertEqual((sum(h<=4 for h in hours),sum(hours)/8),(6,3.125))
+  late={r['case_id'] for r in rows if int(r['ack_hours'])>4}
+  pending={r['case_id'] for r in rows if r['status']=='pending_review'}
+  self.assertEqual(late,{'C03','C06'});self.assertEqual(pending,{'C02','C06','C08'})
+  self.assertEqual(late|pending,{'C02','C03','C06','C08'})
+  self.assertEqual(Counter(r['status'] for r in rows),dict(fulfilled=3,rejected_notified=1,resolution_sent=1,pending_review=3))
+  self.assertTrue(all(r['legal_due_status']=='unverified' for r in rows))
+  self.assertEqual(next(r for r in rows if r['case_id']=='C05')['ack_hours'],'4')
+ def test_complaints_exports_rubrics_and_pending_reviews(self):
+  import zipfile
+  c=json.loads((D/'complaints-packs.json').read_text())['courses'][0]
+  self.assertEqual(c['id'],'D03-C03')
+  self.assertEqual([r['checks'][0] for r in c['outcomes']],['P1','P2','P3','P4'])
+  bank={r['id']:r for r in json.loads((O/'answer-bank.json').read_text())['entries']}
+  for q in c['questions']:
+   self.assertEqual(set(q['scoring']),{'0','1','2'})
+   for text in [*q['acceptable_alternatives'],*q['scoring'].values()]:self.assertIn(text,bank[c['id']+'-'+q['id']]['explanation'])
+  names=['complaints-handling.html','complaints-handling.md','complaint-action-card.csv','D03-C03.json','complaints-register-case.csv','complaints-practice-guide.md']
+  with zipfile.ZipFile(O/'learning-library.zip') as archive:
+   for name in names:self.assertIn(name,archive.namelist())
+  for name in names[-2:]:self.assertEqual((D/'labs'/name).read_bytes(),(O/name).read_bytes())
+  text=(O/'complaints-handling.md').read_text()
+  for value in ['10000','75%','3,125','unverified','не универсальное','24','18']:self.assertIn(value,text)
+  entry=next(r for r in json.loads((D/'review-ledger.json').read_text())['materials'] if r['id']==c['id'])
+  for stage in ['subject_review','legal_review','answer_review','pilot']:
+   self.assertEqual(entry[stage]['status'],'pending');self.assertIsNone(entry[stage]['reviewer'])
  def test_management_case(self):
   available=3*6*60;needed=90*12+10*30
   self.assertEqual((available,needed,needed-available),(1080,1380,300))
@@ -315,14 +347,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],187)
-  self.assertEqual(progress['open_answers'],284)
-  self.assertEqual(progress['materials'],45)
-  self.assertEqual(progress['planned'],72)
+  self.assertEqual(progress['lessons'],191)
+  self.assertEqual(progress['open_answers'],290)
+  self.assertEqual(progress['materials'],46)
+  self.assertEqual(progress['planned'],71)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['187 уроков','284 ответов на контрольные вопросы','72 курсов','187 разборов заданий']:self.assertIn(text,hub)
+  for text in ['191 уроков','290 ответов на контрольные вопросы','71 курсов','191 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -411,14 +443,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),45)
+  self.assertEqual(len(ledger['materials']),46)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),180)
+  self.assertEqual(len(rows),184)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -442,12 +474,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,187)
+  self.assertEqual(count,191)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=284,exercise=187,practice=45))
-  self.assertEqual(len({r['id'] for r in data['entries']}),516)
+  self.assertEqual(data['counts'],dict(question=290,exercise=191,practice=46))
+  self.assertEqual(len({r['id'] for r in data['entries']}),527)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
