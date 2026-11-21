@@ -73,7 +73,7 @@ D20,Транспорт и БДД,D20-C02,организация перевозо
 D20,Транспорт и БДД,D20-C03,опасные грузы,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D21,"Закупки, договоры и SCM",D21-C01,Закупки,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D21,"Закупки, договоры и SCM",D21-C02,управление запасами,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
-D21,"Закупки, договоры и SCM",D21-C03,поставщики,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D21,"Закупки, договоры и SCM",D21-C03,поставщики,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D21,"Закупки, договоры и SCM",D21-C04,договорная работа,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D22,Строительство и инженерия,D22-C01,Сметы,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D22,Строительство и инженерия,D22-C02,проектирование,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
@@ -94,7 +94,7 @@ D27,Психология и социальная работа,D27-C02,консу
 D27,Психология и социальная работа,D27-C03,социальная помощь,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D28,Маркетинг и электронная торговля,D28-C01,Маркетплейсы,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D28,Маркетинг и электронная торговля,D28-C02,контент,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D28,Маркетинг и электронная торговля,D28-C03,аналитика продаж,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D28,Маркетинг и электронная торговля,D28-C03,аналитика продаж,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D28,Маркетинг и электронная торговля,D28-C04,интернет-маркетинг,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D29,Предпринимательство и финансы,D29-C01,Запуск бизнеса,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D29,Предпринимательство и финансы,D29-C02,бюджетирование,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending

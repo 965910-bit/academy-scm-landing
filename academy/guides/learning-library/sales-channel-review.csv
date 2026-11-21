@@ -1,0 +1,2 @@
+﻿version,cohort,return_window,channel,net_rub,net_cost_rub,channel_cost_rub,contribution_rub,orders,average_order,limitations,next_check_owner
+0.29.0,O01–O04,Только R01/R02,market,4500,2700,1500,300,2,2250,Не прибыль/не причинность; пригодный возврат,Роль аналитика и владельца бюджета

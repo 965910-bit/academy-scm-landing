@@ -1,0 +1,7 @@
+﻿line_id,order_id,channel,units,unit_price_rub,unit_discount_rub,unit_cost_rub
+L01,O01,direct,2,1000,100,500
+L02,O01,direct,1,1000,0,600
+L03,O02,direct,3,1000,100,600
+L04,O03,market,2,2000,200,1100
+L05,O04,market,1,2000,0,1200
+L06,O04,market,1,1000,100,500

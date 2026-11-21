@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),57)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),59)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),55)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),61)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,7 +45,7 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),59)
+  self.assertEqual(len(packs['courses']),61)
   for c in packs['courses']:
    self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02'} else 4)
    self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 6)
@@ -697,10 +697,10 @@ class LibraryTests(unittest.TestCase):
   from learning_completion_plan import render_completion_plan
   source=json.loads((D/'remaining-65-plan.json').read_text());current=json.loads((D/'catalog.json').read_text())['directions']
   result=json.loads((O/'remaining-65-plan.json').read_text())
-  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=57,introductions_written_unreviewed=8,full_completion_demonstrated=0))
+  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=55,introductions_written_unreviewed=10,full_completion_demonstrated=0))
   self.assertEqual(len({r['id'] for r in result['courses']}),65)
   self.assertEqual({r['full_completion'] for r in result['courses']},{'not_demonstrated'})
-  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04'})
+  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04','D21-C03','D28-C03'})
   for r in result['courses']:
    for key in ['content_to_develop','practice_evidence_to_obtain','blocking_limits']:self.assertGreater(len(r[key]),20)
   with tempfile.TemporaryDirectory() as folder:
@@ -835,14 +835,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],247)
-  self.assertEqual(progress['open_answers'],374)
-  self.assertEqual(progress['materials'],60)
-  self.assertEqual(progress['planned'],57)
+  self.assertEqual(progress['lessons'],255)
+  self.assertEqual(progress['open_answers'],386)
+  self.assertEqual(progress['materials'],62)
+  self.assertEqual(progress['planned'],55)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['247 уроков','374 ответов на контрольные вопросы','57 курсов','247 разборов заданий']:self.assertIn(text,hub)
+  for text in ['255 уроков','386 ответов на контрольные вопросы','55 курсов','255 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -931,14 +931,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),60)
+  self.assertEqual(len(ledger['materials']),62)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),240)
+  self.assertEqual(len(rows),248)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -962,12 +962,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,247)
+  self.assertEqual(count,255)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=374,exercise=247,practice=60))
-  self.assertEqual(len({r['id'] for r in data['entries']}),681)
+  self.assertEqual(data['counts'],dict(question=386,exercise=255,practice=62))
+  self.assertEqual(len({r['id'] for r in data['entries']}),703)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
@@ -1329,5 +1329,88 @@ class LibraryTests(unittest.TestCase):
    for case in ['finance','procurement']:
     run=subprocess.run([sys.executable,str(lab),'--case',case,'--directory',str(folder)],capture_output=True,text=True)
     self.assertEqual(run.returncode,0,run.stderr)
+
+ def load_supplier_sales_lab(self):
+  import importlib.util
+  spec=importlib.util.spec_from_file_location('supplier_sales',D/'labs/supplier-sales-labs.py')
+  m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+  return m
+ def test_supplier_independent_oracles_and_unknown(self):
+  m=self.load_supplier_sales_lab();rows=m.rows(D/'labs','supplier-deliveries.csv')
+  r=m.suppliers(rows)['suppliers'];a=r['A'];b=r['B']
+  self.assertEqual((a['obligations'],a['on_time'],a['otif'],a['accepted']),(3,2,1,298))
+  self.assertEqual((b['obligations'],b['on_time'],b['otif'],b['received'],b['accepted']),(3,3,2,190,190))
+  self.assertAlmostEqual(a['otif_lower_percent'],100/3);self.assertAlmostEqual(b['otif_lower_percent'],200/3)
+  self.assertEqual((a['ordered_value_share_percent'],b['ordered_value_share_percent']),(60,40))
+  self.assertEqual((a['recorded_fill_percent'],b['recorded_fill_percent']),(100,95))
+  rows[2].update(received_date='unknown',received_units='0',accepted_units='0')
+  a=m.suppliers(rows)['suppliers']['A']
+  self.assertEqual((a['known'],a['unknown'],a['otif_lower_percent'],a['recorded_fill_percent']),(2,1,0,50))
+  self.assertAlmostEqual(a['otif_upper_percent'],100/3);self.assertAlmostEqual(a['on_time_upper_percent'],200/3)
+  self.assertAlmostEqual(a['accepted_of_recorded_receipts_percent'],14800/150)
+  for row in rows:
+   row.update(received_date='unknown',received_units='0',accepted_units='0',unit_rub='0')
+  for a in m.suppliers(rows)['suppliers'].values():
+   self.assertEqual((a['otif_lower_percent'],a['otif_upper_percent']),(0,100))
+   self.assertIsNone(a['accepted_of_recorded_receipts_percent']);self.assertIsNone(a['ordered_value_share_percent'])
+ def test_supplier_rejects_invalid_evidence_without_mutation(self):
+  m=self.load_supplier_sales_lab();rows=m.rows(D/'labs','supplier-deliveries.csv');before=copy.deepcopy(rows)
+  for patch in [dict(received_date='2026-11-31'),dict(due_date='2026-11-11'),dict(received_date='2026-11-11'),dict(accepted_units='101'),dict(received_units='101'),dict(ordered_units='0'),dict(received_date='unknown'),dict(unit_rub='-1'),dict(unit_rub='NaN'),dict(unit_rub='10000001')]:
+   bad=copy.deepcopy(rows);bad[0].update(patch)
+   with self.assertRaises(ValueError,msg=str(patch)):m.suppliers(bad)
+  with self.assertRaises(ValueError):m.suppliers(rows+[rows[0]])
+  m.suppliers(rows);self.assertEqual(rows,before)
+ def test_sales_independent_oracles_and_window(self):
+  m=self.load_supplier_sales_lab();lines=m.rows(D/'labs','sales-lines.csv');returns=m.rows(D/'labs','sales-returns.csv');costs=m.rows(D/'labs','sales-channel-costs.csv')
+  r=m.sales(lines,returns,costs);t=r['total'];a=r['channels']['direct'];b=r['channels']['market']
+  self.assertEqual((t['gross_rub'],t['discount_rub'],t['refund_rub'],t['net_rub'],t['net_cost_rub']),(13000,1000,2900,9100,5500))
+  self.assertEqual((t['contribution_before_channel_rub'],t['contribution_after_channel_rub'],t['orders'],t['average_order_rub']),(3600,1400,4,2275))
+  self.assertEqual((a['net_rub'],a['net_cost_rub'],a['contribution_after_channel_rub'],a['average_order_rub']),(4600,2800,1100,2300))
+  self.assertEqual((b['net_rub'],b['net_cost_rub'],b['contribution_after_channel_rub'],b['average_order_rub']),(4500,2700,300,2250))
+  self.assertEqual((a['net_revenue_per_ad_ruble'],b['net_revenue_per_ad_ruble']),(9.2,15))
+  self.assertAlmostEqual(t['refund_of_billed_percent'],2900/12000*100)
+  t=m.sales(lines,returns[:1],costs)['total']
+  self.assertEqual((t['net_rub'],t['net_cost_rub'],t['contribution_after_channel_rub'],t['average_order_rub']),(11100,6700,2200,2775))
+  costs[0]['advertising_rub']='0';a=m.sales(lines,returns,costs)['channels']['direct']
+  self.assertIsNone(a['net_revenue_per_ad_ruble']);self.assertEqual(a['contribution_after_channel_rub'],1600)
+  for row in lines:row['unit_discount_rub']=row['unit_price_rub']
+  t=m.sales(lines,[],costs)['total'];self.assertEqual(t['orders'],4);self.assertEqual(t['net_rub'],0);self.assertIsNone(t['refund_of_billed_percent'])
+ def test_sales_integrity_rejections_multiple_returns_and_readonly(self):
+  m=self.load_supplier_sales_lab();base=[m.rows(D/'labs',name) for name in ['sales-lines.csv','sales-returns.csv','sales-channel-costs.csv']];before=copy.deepcopy(base)
+  m.sales(*base);self.assertEqual(base,before)
+  for index,record,patch in [(0,0,dict(unit_discount_rub='1001')),(0,1,dict(channel='market')),(1,0,dict(line_id='missing')),(1,0,dict(units='4',refund_rub='3600')),(1,0,dict(refund_rub='901')),(1,0,dict(units='0',refund_rub='0')),(2,0,dict(advertising_rub='1.5'))]:
+   bad=copy.deepcopy(base);bad[index][record].update(patch)
+   with self.assertRaises(ValueError,msg=str(patch)):m.sales(*bad)
+  for index in [0,1,2]:
+   bad=copy.deepcopy(base);bad[index].append(copy.deepcopy(bad[index][0]))
+   with self.assertRaises(ValueError):m.sales(*bad)
+  bad=copy.deepcopy(base);bad[2].pop()
+  with self.assertRaises(ValueError):m.sales(*bad)
+  # Multiple uniquely keyed partial returns are legitimate, not duplicates.
+  data=copy.deepcopy(base);data[1].append(dict(return_id='R03',line_id='L03',units='2',refund_rub='1800'))
+  r=m.sales(*data);self.assertEqual(r['channels']['direct']['refund_rub'],2700);self.assertEqual(r['total']['orders'],4)
+  data[1].append(dict(return_id='R04',line_id='L03',units='1',refund_rub='900'))
+  with self.assertRaises(ValueError):m.sales(*data)
+ def test_supplier_sales_published_files_cli_and_atomic_errors(self):
+  import tempfile,hashlib
+  names=['supplier-sales-labs.py','supplier-deliveries.csv','sales-lines.csv','sales-returns.csv','sales-channel-costs.csv','supplier-performance-guide.md','sales-channel-analytics-guide.md']
+  for name in names:self.assertEqual((D/'labs'/name).read_bytes(),(O/name).read_bytes())
+  for slug in ['supplier-performance','sales-channel-analytics','ai-finance','ai-procurement','ai-manager']:
+   self.assertIn('/'+slug+'.html',(R/'sitemap.xml').read_text())
+  lab=D/'labs/supplier-sales-labs.py'
+  with tempfile.TemporaryDirectory(prefix='supplier sales ') as folder:
+   folder=Path(folder)
+   for name in names[1:5]:(folder/name).write_bytes((D/'labs'/name).read_bytes())
+   before={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in folder.iterdir()}
+   def run(case):return subprocess.run([sys.executable,str(lab),'--case',case,'--directory',str(folder)],capture_output=True,text=True)
+   r=run('all');self.assertEqual(r.returncode,0,r.stderr);self.assertEqual(set(json.loads(r.stdout)),{'suppliers','sales'})
+   self.assertEqual(before,{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in folder.iterdir()})
+   (folder/'sales-returns.csv').write_text('wrong\n')
+   r=run('all');self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'');self.assertIn('rejected',r.stderr)
+   self.assertEqual(run('suppliers').returncode,0)
+   (folder/'sales-returns.csv').write_text('return_id,line_id,units,refund_rub\n')
+   self.assertEqual(run('sales').returncode,0)
+   (folder/'supplier-deliveries.csv').unlink();self.assertEqual(run('sales').returncode,0)
+   r=run('suppliers');self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'')
 
 if __name__=='__main__':unittest.main()
