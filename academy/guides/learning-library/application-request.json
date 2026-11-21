@@ -1,0 +1,8 @@
+{
+  "currency": "RUB",
+  "lines": [
+    {"line_id": "L01", "qty": 2, "unit_price_kopecks": 12550},
+    {"line_id": "L02", "qty": 3, "unit_price_kopecks": 9990},
+    {"line_id": "L03", "qty": 1, "unit_price_kopecks": 0}
+  ]
+}

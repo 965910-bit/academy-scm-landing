@@ -1,5 +1,5 @@
 {
-  "version": "0.26.0",
+  "version": "0.27.0",
   "date": "2026-11-19",
   "author": "Герасимов Дмитрий Сергеевич",
   "note": "Редакционный журнал. Проверяющие не назначены; автоматические тесты не являются предметной или правовой экспертизой. Публичный файл не содержит личных результатов слушателей.",
@@ -1009,6 +1009,78 @@
           "date": "2026-11-19",
           "author": "Герасимов Дмитрий Сергеевич",
           "change": "Добавлены отдельные разборы заданий каждого урока; экспертиза и апробация не заявлены."
+        }
+      ]
+    },
+    {
+      "id": "D10-C02",
+      "subject_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "legal_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "answer_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "pilot": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "open_issues": "Вводный кабинетный комплект, не полный курс по роли. Открыты независимые экспертизы, апробация, углубленная практика и промышленная приемка/безопасность.",
+      "changes": [
+        {
+          "version": "0.27.0",
+          "date": "2026-11-19",
+          "author": "Герасимов Дмитрий Сергеевич",
+          "change": "Разработка: контракт JSON, целые копейки, ограниченное чтение, валидация до результата, CLI/ошибки и независимые проверки."
+        }
+      ]
+    },
+    {
+      "id": "D10-C03",
+      "subject_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "legal_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "answer_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "pilot": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "open_issues": "Вводный кабинетный комплект, не полный курс по роли. Открыты независимые экспертизы, апробация, углубленная практика и промышленная приемка/безопасность.",
+      "changes": [
+        {
+          "version": "0.27.0",
+          "date": "2026-11-19",
+          "author": "Герасимов Дмитрий Сергеевич",
+          "change": "Базы данных: ключи/ограничения, атомарное перемещение и откат, контроль журнала, логическая копия и два последовательных писателя."
         }
       ]
     },

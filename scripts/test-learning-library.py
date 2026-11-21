@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),62)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),54)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),60)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),56)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,7 +45,7 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),54)
+  self.assertEqual(len(packs['courses']),56)
   for c in packs['courses']:
    self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02'} else 4)
    self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 6)
@@ -697,10 +697,10 @@ class LibraryTests(unittest.TestCase):
   from learning_completion_plan import render_completion_plan
   source=json.loads((D/'remaining-65-plan.json').read_text());current=json.loads((D/'catalog.json').read_text())['directions']
   result=json.loads((O/'remaining-65-plan.json').read_text())
-  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=62,introductions_written_unreviewed=3,full_completion_demonstrated=0))
+  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=60,introductions_written_unreviewed=5,full_completion_demonstrated=0))
   self.assertEqual(len({r['id'] for r in result['courses']}),65)
   self.assertEqual({r['full_completion'] for r in result['courses']},{'not_demonstrated'})
-  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C05','D10-C04'})
+  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C05','D10-C02','D10-C03','D10-C04'})
   for r in result['courses']:
    for key in ['content_to_develop','practice_evidence_to_obtain','blocking_limits']:self.assertGreater(len(r[key]),20)
   with tempfile.TemporaryDirectory() as folder:
@@ -712,6 +712,104 @@ class LibraryTests(unittest.TestCase):
   with zipfile.ZipFile(O/'learning-library.zip') as z:
    for suffix in ['html','md','json','csv']:self.assertIn('remaining-65-plan.'+suffix,z.namelist())
   self.assertIn('remaining-65-plan.html',(O/'index.html').read_text())
+ def application_lab(self):
+  import runpy
+  lab=runpy.run_path(str(D/'labs/application-lab.py'))
+  return lab,lab['load_request'](D/'labs/application-request.json')
+ def test_application_contract_arithmetic_and_mutations(self):
+  lab,request=self.application_lab();before=copy.deepcopy(request);result=lab['calculate'](request)
+  self.assertEqual(result,dict(currency='RUB',line_count=3,lines=[dict(line_id='L01',amount_kopecks=25100),dict(line_id='L02',amount_kopecks=29970),dict(line_id='L03',amount_kopecks=0)],total_kopecks=55070))
+  self.assertEqual(request,before)
+  for key,value in [('qty',True),('qty',0),('qty',1001),('qty',1.5),('unit_price_kopecks',-1),('unit_price_kopecks',True),('unit_price_kopecks',1.5),('unit_price_kopecks',100000001),('line_id','L01')]:
+   changed=copy.deepcopy(request);changed['lines'][1][key]=value
+   with self.assertRaises(ValueError,msg=(key,value)):lab['calculate'](changed)
+  for changed in [[],{},dict(currency='USD',lines=request['lines']),dict(currency='RUB',lines=[]),dict(request,extra=1),dict(request,lines=[dict(request['lines'][0],discount=1)])]:
+   with self.assertRaises(ValueError):lab['calculate'](changed)
+  maximum=dict(currency='RUB',lines=[dict(line_id=f'L{i:02}',qty=1000,unit_price_kopecks=100000000) for i in range(100)])
+  self.assertEqual(lab['calculate'](maximum)['total_kopecks'],10000000000000)
+  maximum['lines'].append(dict(line_id='L00',qty=1,unit_price_kopecks=0))
+  with self.assertRaises(ValueError):lab['calculate'](maximum)
+ def test_application_cli_json_limits_codes_and_readonly(self):
+  import tempfile
+  lab,request=self.application_lab();payload=json.dumps(request)
+  with tempfile.TemporaryDirectory(prefix='Application lab ') as folder:
+   root=Path(folder)
+   for n in ['application-lab.py','application-request.json']:(root/n).write_bytes((D/'labs'/n).read_bytes())
+   before={p.name:p.read_bytes() for p in root.iterdir()}
+   command=[sys.executable,str(root/'application-lab.py')]
+   a=subprocess.run(command,capture_output=True,text=True,timeout=10);b=subprocess.run(command,capture_output=True,text=True,timeout=10)
+   self.assertEqual((a.returncode,b.returncode),(0,0));self.assertEqual(a.stdout,b.stdout);self.assertEqual(json.loads(a.stdout)['total_kopecks'],55070)
+   self.assertEqual({p.name:p.read_bytes() for p in root.iterdir()},before)
+   bad=root/'bad request.json'
+   for text in ['{','{"currency":"RUB","currency":"USD","lines":[]}','{"currency":"RUB","lines":[NaN]}',json.dumps(dict(request,lines=[dict(request['lines'][0]),dict(request['lines'][1],qty=True)])),payload+' '*65536]:
+    bad.write_text(text)
+    p=subprocess.run(command+['--input',str(bad)],capture_output=True,text=True,timeout=10)
+    self.assertEqual(p.returncode,2,p.stderr);self.assertEqual(p.stdout,'');self.assertIn('Request rejected',p.stderr)
+   bad.write_text(payload+' '*(65536-len(payload.encode())))
+   self.assertEqual(lab['calculate'](lab['load_request'](bad))['total_kopecks'],55070)
+   bad.write_text(payload+' '*(65537-len(payload.encode())))
+   with self.assertRaises(ValueError):lab['load_request'](bad)
+ def database_lab(self):
+  import runpy
+  return runpy.run_path(str(D/'labs/database-transactions-lab.py'))
+ def test_database_atomic_state_and_full_rollback(self):
+  import sqlite3
+  lab=self.database_lab();db=lab['connect']()
+  try:
+   lab['initialize'](db);self.assertEqual(lab['state'](db),dict(stock=[['B1','SKU1',10],['B2','SKU1',3]],movements=[]))
+   lab['transfer'](db,'M01','B1','B2','SKU1',4);expected=dict(stock=[['B1','SKU1',6],['B2','SKU1',7]],movements=[['M01','B1','B2','SKU1',4]])
+   self.assertEqual(lab['state'](db),expected)
+   with self.assertRaises(RuntimeError):lab['transfer'](db,'M02','B1','B2','SKU1',2,True)
+   self.assertEqual(lab['state'](db),expected);self.assertFalse(db.in_transaction)
+   for args in [('M03','B1','B2','SKU1',7),('M01','B1','B2','SKU1',1),('M04','B1','UNKNOWN','SKU1',1),('M05','B1','B2','BAD',1),('M06','B1','B2','SKU1',True),('M07','B1','B1','SKU1',1)]:
+    with self.assertRaises((ValueError,sqlite3.IntegrityError)):lab['transfer'](db,*args)
+    self.assertEqual(lab['state'](db),expected);self.assertFalse(db.in_transaction)
+   lab['transfer'](db,'M08','B1','B2','SKU1',6)
+   self.assertEqual(lab['state'](db)['stock'],[['B1','SKU1',0],['B2','SKU1',13]])
+  finally:db.close()
+ def test_database_constraints_and_connection_fk(self):
+  import sqlite3
+  lab=self.database_lab();db=lab['connect']()
+  try:
+   lab['initialize'](db);self.assertEqual(db.execute('PRAGMA foreign_keys').fetchone(),(1,))
+   before=lab['state'](db)
+   for sql,params in [('INSERT INTO stock VALUES (?,?,?)',('BAD','SKU1',1)),('INSERT INTO stock VALUES (?,?,?)',('B1','BAD',1)),('UPDATE stock SET quantity=? WHERE bin_id=?',(-1,'B1')),('UPDATE stock SET quantity=? WHERE bin_id=?',(1.5,'B1')),('UPDATE stock SET quantity=? WHERE bin_id=?',(None,'B1')),('INSERT INTO bins VALUES (?)',('B1',)),('INSERT INTO bins VALUES (?)',(None,)),('DELETE FROM products WHERE sku=?',('SKU1',))]:
+    with self.assertRaises(sqlite3.IntegrityError,msg=(sql,params)):db.execute(sql,params)
+    self.assertEqual(lab['state'](db),before)
+   self.assertEqual(list(db.execute('PRAGMA foreign_key_check')),[])
+   self.assertEqual(db.execute('PRAGMA integrity_check').fetchone(),('ok',))
+   self.assertEqual(lab['writer_lock_demo'](db),dict(second_writer_busy=True,writer_allowed_after_rollback=True,source_unchanged=True))
+   self.assertEqual(lab['state'](db),before)
+  finally:db.close()
+ def test_database_cli_reproducibility_and_report(self):
+  import tempfile
+  with tempfile.TemporaryDirectory(prefix='Database lab ') as folder:
+   root=Path(folder);script=root/'database-transactions-lab.py';script.write_bytes((D/'labs'/script.name).read_bytes());before=script.read_bytes()
+   command=[sys.executable,str(script)]
+   a=subprocess.run(command,capture_output=True,text=True,timeout=10);b=subprocess.run(command,capture_output=True,text=True,timeout=10)
+   self.assertEqual((a.returncode,b.returncode),(0,0),a.stderr+b.stderr);self.assertEqual(a.stdout,b.stdout)
+   report=json.loads(a.stdout)
+   self.assertEqual(report['after_success']['stock'],[['B1','SKU1',6],['B2','SKU1',7]])
+   self.assertEqual(report['after_success'],report['after_injected_failure'])
+   self.assertEqual(report['rejected_without_changes'],['overdraw','duplicate_id','unknown_destination'])
+   self.assertTrue(report['logical_backup_matches']);self.assertEqual(report['foreign_key_check'],[]);self.assertEqual(report['integrity_check'],'ok');self.assertEqual(report['schema_version'],1)
+   self.assertEqual(script.read_bytes(),before);self.assertEqual([p.name for p in root.iterdir()],[script.name])
+ def test_application_database_exports_reviews_and_roadmap(self):
+  import zipfile
+  bank={r['id']:r for r in json.loads((O/'answer-bank.json').read_text())['entries']};ledger=json.loads((D/'review-ledger.json').read_text())
+  for filename in ['application-development-packs.json','database-packs.json']:
+   c=json.loads((D/filename).read_text())['courses'][0]
+   for q in c['questions']:
+    self.assertEqual(set(q['scoring']),{'0','1','2'})
+    for text in [*q['acceptable_alternatives'],*q['scoring'].values()]:self.assertIn(text,bank[c['id']+'-'+q['id']]['explanation'])
+   names=[c['slug']+'.html',c['slug']+'.md',c['id']+'.json',c['template']['filename'],*[r['filename'] for r in c['resources']]]
+   with zipfile.ZipFile(O/'learning-library.zip') as z:
+    for name in names:self.assertIn(name,z.namelist())
+   for r in c['resources']:self.assertEqual((D/'labs'/r['filename']).read_bytes(),(O/r['filename']).read_bytes())
+   entry=next(r for r in ledger['materials'] if r['id']==c['id'])
+   for stage in ['subject_review','legal_review','answer_review','pilot']:
+    self.assertEqual(entry[stage]['status'],'pending');self.assertIsNone(entry[stage]['reviewer'])
+   roadmap=json.loads((O/'remaining-65-plan.json').read_text());r=next(r for r in roadmap['courses'] if r['id']==c['id']);self.assertEqual(r['full_completion'],'not_demonstrated');self.assertEqual(r['introduction_url'],c['slug']+'.html')
  def test_management_case(self):
   available=3*6*60;needed=90*12+10*30
   self.assertEqual((available,needed,needed-available),(1080,1380,300))
@@ -737,14 +835,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],227)
-  self.assertEqual(progress['open_answers'],344)
-  self.assertEqual(progress['materials'],55)
-  self.assertEqual(progress['planned'],62)
+  self.assertEqual(progress['lessons'],235)
+  self.assertEqual(progress['open_answers'],356)
+  self.assertEqual(progress['materials'],57)
+  self.assertEqual(progress['planned'],60)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['227 уроков','344 ответов на контрольные вопросы','62 курсов','227 разборов заданий']:self.assertIn(text,hub)
+  for text in ['235 уроков','356 ответов на контрольные вопросы','60 курсов','235 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -833,14 +931,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),55)
+  self.assertEqual(len(ledger['materials']),57)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),220)
+  self.assertEqual(len(rows),228)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -864,12 +962,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,227)
+  self.assertEqual(count,235)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=344,exercise=227,practice=55))
-  self.assertEqual(len({r['id'] for r in data['entries']}),626)
+  self.assertEqual(data['counts'],dict(question=356,exercise=235,practice=57))
+  self.assertEqual(len({r['id'] for r in data['entries']}),648)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())

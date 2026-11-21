@@ -1,0 +1,2 @@
+﻿version,contract,environment,input,command,expected,actual,exit_code,negative_checks,source_unchanged,limits,next_change
+0.27.0,RUB; 1–100; int-not-bool,Заполнить фактический Python,application-request.json,python3 application-lab.py,55070 коп; код 0,Заполнить по запуску,,bool/дубликат/NaN/размер,,Не оплата/не промышленный API,Скидка только новой версией

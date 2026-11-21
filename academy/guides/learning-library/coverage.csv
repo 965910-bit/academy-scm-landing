@@ -37,8 +37,8 @@ D09,Российское ПО и цифровая грамотность,D09-C02
 D09,Российское ПО и цифровая грамотность,D09-C03,САПР,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D09,Российское ПО и цифровая грамотность,D09-C04,цифровая работа,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D10,Программирование и разработка,D10-C01,Python,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
-D10,Программирование и разработка,D10-C02,разработка,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
-D10,Программирование и разработка,D10-C03,базы данных,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
+D10,Программирование и разработка,D10-C02,разработка,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
+D10,Программирование и разработка,D10-C03,базы данных,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D10,Программирование и разработка,D10-C04,тестирование,introductory_written_unreviewed,draft,draft,draft,draft,draft,draft,draft,draft,draft,pending
 D11,Охрана труда,D11-C01,А,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
 D11,Охрана труда,D11-C02,Б,planned,missing,missing,missing,missing,missing,missing,missing,missing,missing,missing
