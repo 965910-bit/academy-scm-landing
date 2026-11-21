@@ -1,0 +1,4 @@
+﻿return_id,line_id,return_month,amount_rub
+R01,L01,2026-01,500
+R02,L01,2026-02,500
+R03,L05,2026-02,1000
