@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),67)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),49)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),66)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),50)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,7 +45,7 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),49)
+  self.assertEqual(len(packs['courses']),50)
   for c in packs['courses']:
    self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02'} else 4)
    self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 6)
@@ -486,6 +486,69 @@ class LibraryTests(unittest.TestCase):
   entry=next(r for r in json.loads((D/'review-ledger.json').read_text())['materials'] if r['id']==c['id'])
   for stage in ['subject_review','legal_review','answer_review','pilot']:
    self.assertEqual(entry[stage]['status'],'pending');self.assertIsNone(entry[stage]['reviewer'])
+ def visualization_rows(self):
+  return list(csv.DictReader((D/'labs/visualization-case.csv').read_text(encoding='utf-8-sig').splitlines()))
+ def visualization_aggregate(self,rows):
+  received=sum(int(r['received']) for r in rows)
+  if not received or any(r['closed']=='' for r in rows):return None
+  if any(not 0<=int(r['closed'])<=int(r['received']) for r in rows):raise ValueError('Invalid cohort count')
+  return sum(int(r['closed']) for r in rows)/received*100
+ def test_visualization_denominators_and_missing(self):
+  rows=self.visualization_rows()
+  self.assertEqual(len({(r['month'],r['site']) for r in rows}),len(rows))
+  jan=[r for r in rows if r['month']=='2026-01'];feb=[r for r in rows if r['month']=='2026-02'];march=[r for r in rows if r['month']=='2026-03']
+  self.assertEqual([self.visualization_aggregate(x) for x in [jan,feb,jan+feb]],[90,90,90])
+  self.assertEqual((sum(int(r['closed']) for r in jan),sum(int(r['closed']) for r in feb)),(108,126))
+  self.assertAlmostEqual((126-108)/108*100,16.6666666667)
+  self.assertIsNone(self.visualization_aggregate(march))
+  self.assertEqual(sum(int(r['received']) for r in march),150)
+  self.assertEqual(99/150*100,66);self.assertAlmostEqual(139/150*100,92.6666666667)
+  self.assertEqual(len([r for r in rows if r['closed']=='']),1)
+  completed=copy.deepcopy(march)
+  next(r for r in completed if r['site']=='B')['closed']='36'
+  self.assertEqual(self.visualization_aggregate(completed),90)
+  next(r for r in completed if r['site']=='B')['closed']='0'
+  self.assertEqual(self.visualization_aggregate(completed),66)
+  next(r for r in completed if r['site']=='B')['closed']='41'
+  with self.assertRaises(ValueError):self.visualization_aggregate(completed)
+  self.assertIsNone(self.visualization_aggregate([{'received':'0','closed':'0'}]))
+  self.assertIsNone(self.visualization_aggregate(march))
+  counter=[{'received':'10','closed':'9'},{'received':'100','closed':'10'}]
+  self.assertAlmostEqual(self.visualization_aggregate(counter),17.2727272727)
+  self.assertEqual((90+10)/2,50)
+ def test_visualization_example_structure_and_geometry(self):
+  from xml.etree import ElementTree as ET
+  text=(O/'visualization-example.html').read_text();svg=text[text.index('<svg '):text.index('</svg>')+6];root=ET.fromstring(svg)
+  self.assertEqual(root.attrib['role'],'img')
+  self.assertTrue(root.find('title').text);self.assertTrue(root.find('desc').text)
+  ids={node.attrib['id'] for node in root.iter() if 'id' in node.attrib}
+  self.assertTrue(set(root.attrib['aria-labelledby'].split())<=ids)
+  bars=list(root.iter('rect'));self.assertEqual(len(bars),2)
+  for bar in bars:
+   self.assertEqual(int(bar.attrib['x']),80);self.assertEqual(int(bar.attrib['width'])/500,.9)
+  for phrase in ['0–100%','72 / 80','54 / 60','scope="col"','scope="row"','<caption>','id="data"','aria-labelledby','полный аудит']:self.assertIn(phrase,text)
+  for forbidden in ['<script','<iframe','<form','https://','http://','@import']:self.assertNotIn(forbidden,text)
+ def test_visualization_resource_filenames(self):
+  pack=json.loads((D/'visualization-packs.json').read_text())
+  validate_packs(pack,{'D07-C03'})
+  for name in ['../escape.html','folder/escape.html','folder\\escape.html','example.html.js','example.svg','']:
+   changed=copy.deepcopy(pack);changed['courses'][0]['resources'][2]['filename']=name
+   with self.assertRaises(ValueError,msg=name):validate_packs(changed,{'D07-C03'})
+ def test_visualization_exports_and_reviews(self):
+  import zipfile
+  c=json.loads((D/'visualization-packs.json').read_text())['courses'][0]
+  bank={r['id']:r for r in json.loads((O/'answer-bank.json').read_text())['entries']}
+  for q in c['questions']:
+   self.assertEqual(set(q['scoring']),{'0','1','2'})
+   for text in [*q['acceptable_alternatives'],*q['scoring'].values()]:self.assertIn(text,bank[c['id']+'-'+q['id']]['explanation'])
+  names=['data-visualisation.html','data-visualisation.md','visualization-publication-card.csv','D07-C03.json','visualization-case.csv','visualization-guide.md','visualization-example.html']
+  with zipfile.ZipFile(O/'learning-library.zip') as z:
+   for name in names:self.assertIn(name,z.namelist())
+  for name in names[-3:]:self.assertEqual((D/'labs'/name).read_bytes(),(O/name).read_bytes())
+  for value in ['16,67%','0 п.п.','234/260','92,67%','17,27%','24','18']:self.assertIn(value,(O/'data-visualisation.md').read_text())
+  entry=next(r for r in json.loads((D/'review-ledger.json').read_text())['materials'] if r['id']==c['id'])
+  for stage in ['subject_review','legal_review','answer_review','pilot']:
+   self.assertEqual(entry[stage]['status'],'pending');self.assertIsNone(entry[stage]['reviewer'])
  def test_management_case(self):
   available=3*6*60;needed=90*12+10*30
   self.assertEqual((available,needed,needed-available),(1080,1380,300))
@@ -511,14 +574,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],207)
-  self.assertEqual(progress['open_answers'],314)
-  self.assertEqual(progress['materials'],50)
-  self.assertEqual(progress['planned'],67)
+  self.assertEqual(progress['lessons'],211)
+  self.assertEqual(progress['open_answers'],320)
+  self.assertEqual(progress['materials'],51)
+  self.assertEqual(progress['planned'],66)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['207 уроков','314 ответов на контрольные вопросы','67 курсов','207 разборов заданий']:self.assertIn(text,hub)
+  for text in ['211 уроков','320 ответов на контрольные вопросы','66 курсов','211 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -607,14 +670,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),50)
+  self.assertEqual(len(ledger['materials']),51)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),200)
+  self.assertEqual(len(rows),204)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -638,12 +701,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,207)
+  self.assertEqual(count,211)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=314,exercise=207,practice=50))
-  self.assertEqual(len({r['id'] for r in data['entries']}),571)
+  self.assertEqual(data['counts'],dict(question=320,exercise=211,practice=51))
+  self.assertEqual(len({r['id'] for r in data['entries']}),582)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())

@@ -26,7 +26,7 @@ def validate_packs(data, catalog_ids):
             raise ValueError(cid + ': lessons/questions required; practice expects 12 points')
         for resource in course.get('resources',[]):
             name=resource['filename']
-            if not name or '/' in name or '\\' in name or not name.endswith(('.csv','.xlsx','.py','.md','.json','.sh')) or not resource.get('label'):
+            if not name or '/' in name or '\\' in name or not name.endswith(('.csv','.xlsx','.py','.md','.json','.sh','.html')) or not resource.get('label'):
                 raise ValueError(cid + ': unsafe resource')
         for result in course['outcomes']:
             if not result['checks'] or not set(result['checks']) <= set(qids+pids):raise ValueError(cid + ': broken outcome coverage')
