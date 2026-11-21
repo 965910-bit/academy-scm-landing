@@ -1,0 +1,2 @@
+﻿version,purpose,recipient_role,source_of_manifest,listed_files,byte_check,hash_check,approval_status,unverified,next_role,repeat_version
+0.32.0,Учебная проверка передачи,Получатель по условию,Уточнить доверенный источник,Повестка/проект решения,441/479,Сверить SHA-256,Не согласовано,Авторство/права/полнота/отправка,Владелец версии,Отдельная исправленная попытка

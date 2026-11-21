@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),51)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),65)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),50)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),66)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,7 +45,7 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),65)
+  self.assertEqual(len(packs['courses']),66)
   for c in packs['courses']:
    self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02'} else 4)
    self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 6)
@@ -697,10 +697,10 @@ class LibraryTests(unittest.TestCase):
   from learning_completion_plan import render_completion_plan
   source=json.loads((D/'remaining-65-plan.json').read_text());current=json.loads((D/'catalog.json').read_text())['directions']
   result=json.loads((O/'remaining-65-plan.json').read_text())
-  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=51,introductions_written_unreviewed=14,full_completion_demonstrated=0))
+  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=50,introductions_written_unreviewed=15,full_completion_demonstrated=0))
   self.assertEqual(len({r['id'] for r in result['courses']}),65)
   self.assertEqual({r['full_completion'] for r in result['courses']},{'not_demonstrated'})
-  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04','D21-C03','D28-C03','D29-C01','D29-C03','D19-C02','D19-C04'})
+  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04','D21-C03','D28-C03','D29-C01','D29-C03','D19-C02','D19-C04','D09-C04'})
   for r in result['courses']:
    for key in ['content_to_develop','practice_evidence_to_obtain','blocking_limits']:self.assertGreater(len(r[key]),20)
   with tempfile.TemporaryDirectory() as folder:
@@ -835,14 +835,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],271)
-  self.assertEqual(progress['open_answers'],410)
-  self.assertEqual(progress['materials'],66)
-  self.assertEqual(progress['planned'],51)
+  self.assertEqual(progress['lessons'],275)
+  self.assertEqual(progress['open_answers'],416)
+  self.assertEqual(progress['materials'],67)
+  self.assertEqual(progress['planned'],50)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['271 уроков','410 ответов на контрольные вопросы','51 курсов','271 разборов заданий']:self.assertIn(text,hub)
+  for text in ['275 уроков','416 ответов на контрольные вопросы','50 курсов','275 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -931,14 +931,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),66)
+  self.assertEqual(len(ledger['materials']),67)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),264)
+  self.assertEqual(len(rows),268)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -962,12 +962,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,271)
+  self.assertEqual(count,275)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=410,exercise=271,practice=66))
-  self.assertEqual(len({r['id'] for r in data['entries']}),747)
+  self.assertEqual(data['counts'],dict(question=416,exercise=275,practice=67))
+  self.assertEqual(len({r['id'] for r in data['entries']}),758)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
@@ -1554,5 +1554,73 @@ class LibraryTests(unittest.TestCase):
    (folder/'warehouse-events.json').write_text('[{"event_id":"X","event_id":"Y"}]');self.assertEqual(run('wms').returncode,2)
    (folder/'warehouse-events.json').write_text('[{"event_id":"X","action":"ship","order_id":"O01"}]');r=run('wms');self.assertEqual(r.returncode,0);self.assertFalse(json.loads(r.stdout)['wms']['results'][0]['accepted'])
    (folder/'warehouse-stock.csv').write_text('wrong\n');r=run('picking');self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'')
+
+ def load_digital_handover_lab(self):
+  import importlib.util
+  spec=importlib.util.spec_from_file_location('digital_handover',D/'labs/digital-handover-lab.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+ def test_digital_handover_fixed_byte_oracles_and_same_size_change(self):
+  import tempfile
+  m=self.load_digital_handover_lab();names=['digital-agenda-v1.md','digital-decision-v1.md'];expected=[(441,'ed1f0435c1e251b92ae3e8a3827c7a5a8db954b0da25b0f888ed65f832655f07'),(479,'d1d5ac8750e878deea1972d4f479d9a5f60c384fe0775be7ae8186ed6ebb02cf')]
+  r=m.verify(D/'labs');self.assertTrue(r['ok']);self.assertEqual([(x['actual_bytes'],x['actual_sha256']) for x in r['files']],expected)
+  with tempfile.TemporaryDirectory(prefix='digital work ') as folder:
+   folder=Path(folder)
+   for name in names+[m.MANIFEST]:(folder/name).write_bytes((D/'labs'/name).read_bytes())
+   p=folder/names[0];original=p.read_bytes();p.write_bytes(original.replace(b'1',b'2',1));r=m.verify(folder)
+   self.assertFalse(r['ok']);self.assertTrue(r['files'][0]['size_matches']);self.assertFalse(r['files'][0]['hash_matches']);self.assertEqual(r['files'][0]['actual_bytes'],441)
+   p.write_bytes(original+b'\n');r=m.verify(folder);self.assertEqual(r['files'][0]['actual_bytes'],442);self.assertFalse(r['files'][0]['size_matches'])
+   p.write_bytes(original);self.assertTrue(m.verify(folder)['ok'])
+ def test_digital_handover_joint_tampering_and_unlisted_file_limit(self):
+  import tempfile,hashlib
+  m=self.load_digital_handover_lab()
+  with tempfile.TemporaryDirectory() as folder:
+   folder=Path(folder)
+   for name in [m.MANIFEST,'digital-agenda-v1.md','digital-decision-v1.md']:(folder/name).write_bytes((D/'labs'/name).read_bytes())
+   p=folder/'digital-agenda-v1.md';changed=p.read_bytes()+b'changed';p.write_bytes(changed)
+   self.assertFalse(m.verify(folder)['ok'])
+   manifest=json.loads((folder/m.MANIFEST).read_text());manifest['files'][0].update(bytes=len(changed),sha256=hashlib.sha256(changed).hexdigest());manifest['author']='Unverified declaration'
+   (folder/m.MANIFEST).write_text(json.dumps(manifest));r=m.verify(folder);self.assertTrue(r['ok']);self.assertEqual(r['declared_author'],'Unverified declaration')
+   (folder/'extra-note.txt').write_text('Not listed');self.assertTrue(m.verify(folder)['ok']);self.assertEqual(len(m.verify(folder)['files']),2)
+ def test_digital_handover_schema_path_and_duplicate_guards(self):
+  m=self.load_digital_handover_lab();base=json.loads((D/'labs'/m.MANIFEST).read_text())
+  for key,value in [('name','../digital-file.md'),('name','/tmp/digital-file.md'),('name','a\\digital-file.md'),('name','digital-UPPER.md'),('bytes',True),('bytes',-1),('bytes',65537),('sha256','a'*63),('sha256','z'*64)]:
+   bad=copy.deepcopy(base);bad['files'][0][key]=value
+   with self.assertRaises(ValueError,msg=str((key,value))):m.validate_manifest(bad)
+  for bad in [dict(base,format_version=True),dict(base,files=[]),dict(base,extra=1),dict(base,author=' '),dict(base,files=base['files']+[base['files'][0]])]:
+   with self.assertRaises(ValueError):m.validate_manifest(bad)
+  with self.assertRaises(ValueError):m.unique_object([('a',1),('a',2)])
+  twenty=dict(base,files=[dict(name=f'digital-{i}.md',bytes=0,sha256='0'*64) for i in range(20)]);self.assertEqual(len(m.validate_manifest(twenty)),20)
+  twenty['files'].append(dict(name='digital-extra.md',bytes=0,sha256='0'*64))
+  with self.assertRaises(ValueError):m.validate_manifest(twenty)
+ def test_digital_handover_byte_limits_and_symlinks(self):
+  import tempfile,hashlib
+  m=self.load_digital_handover_lab()
+  with tempfile.TemporaryDirectory() as folder:
+   folder=Path(folder)
+   for name in [m.MANIFEST,'digital-agenda-v1.md','digital-decision-v1.md']:(folder/name).write_bytes((D/'labs'/name).read_bytes())
+   p=folder/'digital-agenda-v1.md';data=b'x'*65536;p.write_bytes(data)
+   manifest=json.loads((folder/m.MANIFEST).read_text());manifest['files'][0].update(bytes=65536,sha256=hashlib.sha256(data).hexdigest());raw=json.dumps(manifest).encode()
+   (folder/m.MANIFEST).write_bytes(raw+b' '*(32768-len(raw)));self.assertTrue(m.verify(folder)['ok'])
+   (folder/m.MANIFEST).write_bytes(raw+b' '*(32769-len(raw)))
+   with self.assertRaises(ValueError):m.verify(folder)
+   (folder/m.MANIFEST).write_bytes(raw);p.write_bytes(data+b'x')
+   with self.assertRaises(ValueError):m.verify(folder)
+   p.unlink();p.symlink_to(folder/'digital-decision-v1.md')
+   with self.assertRaises(ValueError):m.verify(folder)
+   link=folder/'root-link';link.symlink_to(folder,target_is_directory=True)
+   with self.assertRaises(ValueError):m.verify(link)
+ def test_digital_handover_published_readonly_cli_codes_atomic_errors(self):
+  import tempfile,hashlib
+  m=self.load_digital_handover_lab();names=[m.MANIFEST,'digital-agenda-v1.md','digital-decision-v1.md','digital-handover-lab.py','digital-work-guide.md']
+  for name in names:self.assertEqual((D/'labs'/name).read_bytes(),(O/name).read_bytes())
+  self.assertIn('/digital-work-handover.html',(R/'sitemap.xml').read_text())
+  with tempfile.TemporaryDirectory(prefix='handover space ') as folder:
+   folder=Path(folder)
+   for name in names[:3]:(folder/name).write_bytes((D/'labs'/name).read_bytes())
+   before={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in folder.iterdir()}
+   def run():return subprocess.run([sys.executable,str(D/'labs/digital-handover-lab.py'),'--directory',str(folder)],capture_output=True,text=True)
+   r=run();self.assertEqual(r.returncode,0,r.stderr);self.assertTrue(json.loads(r.stdout)['ok']);self.assertEqual(before,{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in folder.iterdir()})
+   p=folder/'digital-agenda-v1.md';p.write_bytes(p.read_bytes()+b'\n');r=run();self.assertEqual(r.returncode,1);self.assertFalse(json.loads(r.stdout)['ok'])
+   (folder/'digital-decision-v1.md').unlink();r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'');self.assertIn('rejected',r.stderr)
+   (folder/m.MANIFEST).write_text('{"format_version":1,"format_version":1}');r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'')
 
 if __name__=='__main__':unittest.main()

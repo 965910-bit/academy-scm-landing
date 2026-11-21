@@ -1,0 +1,17 @@
+{
+  "format_version": 1,
+  "bundle_version": "1.0.0",
+  "author": "Герасимов Дмитрий Сергеевич",
+  "files": [
+    {
+      "name": "digital-agenda-v1.md",
+      "bytes": 441,
+      "sha256": "ed1f0435c1e251b92ae3e8a3827c7a5a8db954b0da25b0f888ed65f832655f07"
+    },
+    {
+      "name": "digital-decision-v1.md",
+      "bytes": 479,
+      "sha256": "d1d5ac8750e878deea1972d4f479d9a5f60c384fe0775be7ae8186ed6ebb02cf"
+    }
+  ]
+}
