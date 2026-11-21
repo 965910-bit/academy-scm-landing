@@ -618,6 +618,8 @@ class LibraryTests(unittest.TestCase):
   return lab,lab['load_cases'](D/'labs/testing-cases.csv')
  def test_testing_reference_buggy_and_independent_mutations(self):
   import io
+  self.assertIn('type(value) is int',(O/'software-testing-boundaries.md').read_text())
+  self.assertNotIn('type(value)isint',(O/'software-testing-boundaries.md').read_text())
   lab,cases=self.router_lab();self.assertEqual(len(cases),12)
   def run(fn):return unittest.TextTestRunner(stream=io.StringIO()).run(lab['make_suite'](fn,cases))
   ref=run(lab['route_reference']);self.assertTrue(ref.wasSuccessful());self.assertEqual(ref.testsRun,12)

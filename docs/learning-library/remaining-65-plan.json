@@ -50,7 +50,7 @@
     {
       "id": "D06-C02",
       "direction_id": "D06",
-      "direction": "1 С и учетные системы",
+      "direction": "1С и учетные системы",
       "title": "ЗУП",
       "baseline_status": "planned",
       "content_to_develop": "Версия/конфигурация ЗУП, кадровые события и расчетные документы",
@@ -60,8 +60,8 @@
     {
       "id": "D06-C03",
       "direction_id": "D06",
-      "direction": "1 С и учетные системы",
-      "title": "программирование 1 С",
+      "direction": "1С и учетные системы",
+      "title": "программирование 1С",
       "baseline_status": "planned",
       "content_to_develop": "Платформа/конфигурация, метаданные, запросы и расширения",
       "practice_evidence_to_obtain": "Код в учебной базе, тесты, миграция/откат и ревью",
