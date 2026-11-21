@@ -1,0 +1,5 @@
+﻿record_id,kind,plan_rub,actual_rub
+F01,revenue,1000000,1100000
+F02,cost,400000,470000
+F03,cost,300000,300000
+F04,cost,100000,90000

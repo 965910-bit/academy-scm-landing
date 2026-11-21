@@ -104,8 +104,8 @@
       "content_to_develop": "Применение ИИ в финансовых задачах с проверкой источников/расчетов",
       "practice_evidence_to_obtain": "Сценарии бюджета/отклонений с ручной сверкой, стоимостью контроля и отказом",
       "blocking_limits": "Конфиденциальность/полномочия;не автоматическое финансовое решение",
-      "current_catalog_status": "planned",
-      "introduction_url": null,
+      "current_catalog_status": "introductory_written_unreviewed",
+      "introduction_url": "ai-finance.html",
       "full_completion": "not_demonstrated"
     },
     {
@@ -117,8 +117,8 @@
       "content_to_develop": "ИИ в поиске/сравнении закупочной информации и подготовке проектов",
       "practice_evidence_to_obtain": "Проверка спецификации/предложений/ссылок и расчет полной стоимости",
       "blocking_limits": "Режим закупки/равный доступ/тайна;не автоматический выбор поставщика",
-      "current_catalog_status": "planned",
-      "introduction_url": null,
+      "current_catalog_status": "introductory_written_unreviewed",
+      "introduction_url": "ai-procurement.html",
       "full_completion": "not_demonstrated"
     },
     {
@@ -130,8 +130,8 @@
       "content_to_develop": "ИИ для управленческих гипотез, ресурсов и коммуникации",
       "practice_evidence_to_obtain": "Разбор альтернатив с допущениями, человеческой проверкой и критерием остановки",
       "blocking_limits": "Ответственность/кадровые данные;не делегировать решение модели",
-      "current_catalog_status": "planned",
-      "introduction_url": null,
+      "current_catalog_status": "introductory_written_unreviewed",
+      "introduction_url": "ai-manager.html",
       "full_completion": "not_demonstrated"
     },
     {
@@ -865,8 +865,8 @@
   ],
   "progress": {
     "baseline_titles": 65,
-    "still_planned": 60,
-    "introductions_written_unreviewed": 5,
+    "still_planned": 57,
+    "introductions_written_unreviewed": 8,
     "full_completion_demonstrated": 0
   }
 }

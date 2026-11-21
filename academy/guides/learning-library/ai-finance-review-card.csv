@@ -1,0 +1,2 @@
+﻿version,source,metric_definition,verified_numbers,unsupported_claims,correction,review_cost,limits,next_action
+0.28.0,ai-finance-case.csv,Условный результат/маржа,"200000→240000; +1,82 п.п.",Денежный поток/причины,Разделить факт и гипотезу,875/1025 при условиях,Не бухучет/не модельный тест,Запросить основания у владельца

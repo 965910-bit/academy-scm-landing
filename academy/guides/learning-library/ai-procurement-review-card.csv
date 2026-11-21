@@ -1,0 +1,2 @@
+﻿version,source,quantity,deadline,required_evidence,known_totals,conditional_minimum,missing_data,human_review_cost,authority_limits,next_action
+0.28.0,ai-procurement-case.csv,100,≤5,verified,A105000; B111000; C94000,A при условиях,C: подтверждение unknown,"573,33/706,67",Не победитель/не заказ,Нейтрально запросить подтверждение

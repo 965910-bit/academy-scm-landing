@@ -1,0 +1,2 @@
+﻿version,source,capacity,required_review,initial_load,deficit,conditional_change,approval_status,planning_cost,open_checks,next_owner_role
+0.28.0,ai-manager-case.csv,A240/B180,A30,A270/B180,A30,T02=90→A240/B180,Не подтверждено; учебный сценарий,800/860/660,Качество/последовательность/доступность,Владелец процесса
