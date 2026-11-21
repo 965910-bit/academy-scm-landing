@@ -1,0 +1,2 @@
+﻿role_id,candidate_id,required_result,practice_evidence,availability_window,gap,development_action,participant_minutes,mentor_minutes,approval_owner_role,verification,next_review,limits
+ROLE-B,P05,Результат роли по профилю,gap;проверку спланировать,Общее учебное окно,Не подтверждена практика,180 практики+60 разбора,240,120,Уполномоченный владелец,Наблюдение по критерию и свидетельство,Согласовать после изменения/проверки,Не назначение;ресурс210/90 недостаточен

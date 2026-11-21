@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),68)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),48)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),67)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),49)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,7 +45,7 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),48)
+  self.assertEqual(len(packs['courses']),49)
   for c in packs['courses']:
    self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02'} else 4)
    self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 6)
@@ -434,6 +434,58 @@ class LibraryTests(unittest.TestCase):
   entry=next(r for r in json.loads((D/'review-ledger.json').read_text())['materials'] if r['id']==c['id'])
   for stage in ['subject_review','legal_review','answer_review','pilot']:
    self.assertEqual(entry[stage]['status'],'pending');self.assertIsNone(entry[stage]['reviewer'])
+ def succession_rows(self):
+  return list(csv.DictReader((D/'labs/succession-reserve-case.csv').read_text(encoding='utf-8-sig').splitlines()))
+ def max_succession_coverage(self,rows):
+  from itertools import product
+  roles=sorted({r['role_id'] for r in rows})
+  choices=[[None]+[r['candidate_id'] for r in rows if r['role_id']==role and r['practice']=='verified' and r['available']=='yes'] for role in roles]
+  feasible=[]
+  for assignment in product(*choices):
+   selected=[p for p in assignment if p is not None]
+   if len(set(selected))==len(selected):feasible.append(len(selected))
+  return max(feasible)
+ def test_succession_individual_vs_simultaneous_coverage(self):
+  rows=self.succession_rows();roles={r['role_id'] for r in rows};people={r['candidate_id'] for r in rows}
+  self.assertEqual((len(rows),len(roles),len(people)),(6,5,5))
+  ready={r['role_id'] for r in rows if r['practice']=='verified' and r['available']=='yes'}
+  self.assertEqual(ready,{'ROLE-A','ROLE-B','ROLE-E'})
+  self.assertEqual(self.max_succession_coverage(rows),2)
+  trained={r['candidate_id'] for r in rows if r['training_completed']=='yes'}
+  self.assertEqual(len(trained)/len(people)*100,80)
+  trained_only=copy.deepcopy(rows)
+  for r in trained_only:r['training_completed']='yes'
+  self.assertEqual(self.max_succession_coverage(trained_only),2)
+  absent=copy.deepcopy(rows)
+  for r in absent:
+   if r['candidate_id']=='P01':r['available']='no'
+  self.assertEqual(self.max_succession_coverage(absent),1)
+  changed=copy.deepcopy(rows)
+  for r in changed:
+   if r['candidate_id']=='P05':r.update(practice='verified',available='yes')
+  self.assertEqual(self.max_succession_coverage(changed),3)
+ def test_succession_resources_and_change_metrics(self):
+  self.assertEqual((180+60,60+60),(240,120))
+  self.assertEqual((240-210,120-90),(30,30))
+  self.assertEqual((3/5*100-2/5*100,(3-2)/2*100),(20,50))
+ def test_succession_exports_rubrics_and_pending_reviews(self):
+  import zipfile
+  c=json.loads((D/'succession-packs.json').read_text())['courses'][0]
+  self.assertEqual(c['id'],'D04-C04')
+  self.assertEqual([r['checks'][0] for r in c['outcomes']],['P1','P2','P3','P4'])
+  bank={r['id']:r for r in json.loads((O/'answer-bank.json').read_text())['entries']}
+  for q in c['questions']:
+   self.assertEqual(set(q['scoring']),{'0','1','2'})
+   for text in [*q['acceptable_alternatives'],*q['scoring'].values()]:self.assertIn(text,bank[c['id']+'-'+q['id']]['explanation'])
+  names=['succession-reserve.html','succession-reserve.md','succession-development-card.csv','D04-C04.json','succession-reserve-case.csv','succession-reserve-guide.md']
+  with zipfile.ZipFile(O/'learning-library.zip') as archive:
+   for name in names:self.assertIn(name,archive.namelist())
+  for name in names[-2:]:self.assertEqual((D/'labs'/name).read_bytes(),(O/name).read_bytes())
+  text=(O/'succession-reserve.md').read_text()
+  for value in ['100%','60%','40%','80%','20 п.п.','50%','24','18']:self.assertIn(value,text)
+  entry=next(r for r in json.loads((D/'review-ledger.json').read_text())['materials'] if r['id']==c['id'])
+  for stage in ['subject_review','legal_review','answer_review','pilot']:
+   self.assertEqual(entry[stage]['status'],'pending');self.assertIsNone(entry[stage]['reviewer'])
  def test_management_case(self):
   available=3*6*60;needed=90*12+10*30
   self.assertEqual((available,needed,needed-available),(1080,1380,300))
@@ -459,14 +511,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],203)
-  self.assertEqual(progress['open_answers'],308)
-  self.assertEqual(progress['materials'],49)
-  self.assertEqual(progress['planned'],68)
+  self.assertEqual(progress['lessons'],207)
+  self.assertEqual(progress['open_answers'],314)
+  self.assertEqual(progress['materials'],50)
+  self.assertEqual(progress['planned'],67)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['203 уроков','308 ответов на контрольные вопросы','68 курсов','203 разборов заданий']:self.assertIn(text,hub)
+  for text in ['207 уроков','314 ответов на контрольные вопросы','67 курсов','207 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -555,14 +607,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),49)
+  self.assertEqual(len(ledger['materials']),50)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),196)
+  self.assertEqual(len(rows),200)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -586,12 +638,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,203)
+  self.assertEqual(count,207)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=308,exercise=203,practice=49))
-  self.assertEqual(len({r['id'] for r in data['entries']}),560)
+  self.assertEqual(data['counts'],dict(question=314,exercise=207,practice=50))
+  self.assertEqual(len({r['id'] for r in data['entries']}),571)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
