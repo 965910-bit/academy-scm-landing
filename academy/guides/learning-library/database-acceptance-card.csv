@@ -1,0 +1,2 @@
+﻿version,environment,schema_version,initial,operation,expected_state,actual_state,rollback_and_log,fk_integrity,backup_and_lock,open_limits,next_action
+0.27.0,Заполнить фактические Python/SQLite,1,B1=10;B2=3;log0,M01 qty4;M02 fail qty2,6/7;total13;log M01,,,,,Нет DR/RLS/нагрузки/миграции,Независимо сверить состояния и границы

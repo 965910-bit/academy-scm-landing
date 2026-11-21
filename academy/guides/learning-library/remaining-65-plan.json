@@ -1,6 +1,6 @@
 {
   "author": "Герасимов Дмитрий Сергеевич",
-  "version": "0.26.0",
+  "version": "0.27.0",
   "date": "2026-11-19",
   "baseline": {
     "library_version": "0.25.0",
@@ -182,8 +182,8 @@
       "content_to_develop": "Выбранный язык/стек, контракт, структура приложения и ошибки",
       "practice_evidence_to_obtain": "Работающее учебное приложение, тесты, зависимости и инструкция воспроизведения",
       "blocking_limits": "Ревью/лицензии/секреты;не промышленный запуск без проверок",
-      "current_catalog_status": "planned",
-      "introduction_url": null,
+      "current_catalog_status": "introductory_written_unreviewed",
+      "introduction_url": "application-development.html",
       "full_completion": "not_demonstrated"
     },
     {
@@ -195,8 +195,8 @@
       "content_to_develop": "Схема, ключи, ограничения, транзакции и миграции",
       "practice_evidence_to_obtain": "Изолированная БД, запросы/конкурентность/резервное восстановление",
       "blocking_limits": "Права/целостность/данные;не выполнять учебную миграцию на рабочей БД",
-      "current_catalog_status": "planned",
-      "introduction_url": null,
+      "current_catalog_status": "introductory_written_unreviewed",
+      "introduction_url": "database-transactions.html",
       "full_completion": "not_demonstrated"
     },
     {
@@ -865,8 +865,8 @@
   ],
   "progress": {
     "baseline_titles": 65,
-    "still_planned": 62,
-    "introductions_written_unreviewed": 3,
+    "still_planned": 60,
+    "introductions_written_unreviewed": 5,
     "full_completion_demonstrated": 0
   }
 }
