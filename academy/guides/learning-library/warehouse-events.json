@@ -1,0 +1,78 @@
+[
+  {
+    "event_id": "E01",
+    "action": "reserve",
+    "order_id": "O01"
+  },
+  {
+    "event_id": "E02",
+    "action": "reserve",
+    "order_id": "O02"
+  },
+  {
+    "event_id": "E03",
+    "action": "ship",
+    "order_id": "O01"
+  },
+  {
+    "event_id": "E04",
+    "action": "pick",
+    "order_id": "O01",
+    "bin_id": "A01",
+    "sku": "SKU-B",
+    "lot": "L01",
+    "units": "6"
+  },
+  {
+    "event_id": "E05",
+    "action": "pick",
+    "order_id": "O01",
+    "bin_id": "A01",
+    "sku": "SKU-A",
+    "lot": "L01",
+    "units": "6"
+  },
+  {
+    "event_id": "E06",
+    "action": "cancel",
+    "order_id": "O01"
+  },
+  {
+    "event_id": "E07",
+    "action": "pick",
+    "order_id": "O01",
+    "bin_id": "A02",
+    "sku": "SKU-A",
+    "lot": "L02",
+    "units": "4"
+  },
+  {
+    "event_id": "E08",
+    "action": "pick",
+    "order_id": "O01",
+    "bin_id": "B01",
+    "sku": "SKU-B",
+    "lot": "L03",
+    "units": "4"
+  },
+  {
+    "event_id": "E09",
+    "action": "ship",
+    "order_id": "O01"
+  },
+  {
+    "event_id": "E10",
+    "action": "ship",
+    "order_id": "O01"
+  },
+  {
+    "event_id": "E11",
+    "action": "cancel",
+    "order_id": "O01"
+  },
+  {
+    "event_id": "E09",
+    "action": "ship",
+    "order_id": "O01"
+  }
+]

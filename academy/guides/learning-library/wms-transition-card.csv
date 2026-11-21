@@ -1,0 +1,2 @@
+﻿version,event_id,action,order_id,before,expected,actual,balance,missing_evidence,next_role
+0.31.0,E02,reserve,O02,Свободно 4A,Отказ/дефицит 1/запас без изменений,Проверить запуском,26 наличие/14 резерв,Нет реального сканера/прав/конкуренции,Наставник/владелец приемки

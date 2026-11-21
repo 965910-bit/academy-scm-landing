@@ -1,0 +1,4 @@
+﻿line_id,order_id,sku,units
+OL01,O01,SKU-A,10
+OL02,O01,SKU-B,4
+OL03,O02,SKU-A,5

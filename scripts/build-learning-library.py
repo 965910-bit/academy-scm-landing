@@ -9,7 +9,7 @@ packs=json.loads((D/'course-packs.json').read_text())
 for extra in sorted(D.glob('*-packs.json')):
  if extra.name != 'course-packs.json':
   packs['courses'].extend(json.loads(extra.read_text())['courses'])
-packs['version']='0.30.0'
+packs['version']='0.31.0'
 assert len({c['id'] for c in packs['courses']})==len(packs['courses']), 'Duplicate course IDs'
 for lab_file in (D/'labs').iterdir():
  if lab_file.is_file(): (O/lab_file.name).write_bytes(lab_file.read_bytes())

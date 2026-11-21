@@ -1,0 +1,6 @@
+﻿bin_id,sku,lot,expiry,units,status
+A01,SKU-A,L01,2026-11-25,6,available
+A02,SKU-A,L02,2026-12-10,8,available
+Q01,SKU-A,L00,2026-11-20,3,quarantine
+B01,SKU-B,L03,2026-11-30,5,available
+B02,SKU-B,L04,2026-11-18,4,available
