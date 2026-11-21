@@ -1,0 +1,4 @@
+﻿supplier_id,unit_rub,delivery_rub,inspection_rub,lead_days,evidence
+A,1000,5000,0,5,verified
+B,960,12000,3000,3,verified
+C,900,4000,0,4,unknown

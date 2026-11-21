@@ -1,5 +1,5 @@
 {
-  "version": "0.27.0",
+  "version": "0.28.0",
   "date": "2026-11-19",
   "author": "Герасимов Дмитрий Сергеевич",
   "note": "Редакционный журнал. Проверяющие не назначены; автоматические тесты не являются предметной или правовой экспертизой. Публичный файл не содержит личных результатов слушателей.",
@@ -2053,6 +2053,114 @@
           "date": "2026-11-19",
           "author": "Герасимов Дмитрий Сергеевич",
           "change": "Добавлены отдельные разборы заданий каждого урока; экспертиза и апробация не заявлены."
+        }
+      ]
+    },
+    {
+      "id": "D08-C02",
+      "subject_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "legal_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "answer_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "pilot": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "open_issues": "Вводный комплект: нужны предметная и правовая экспертизы, проверка ответов и апробация. Полная программа и работа с реальными процессами не подтверждены.",
+      "changes": [
+        {
+          "date": "2026-11-19",
+          "version": "0.28.0",
+          "author": "Герасимов Дмитрий Сергеевич",
+          "change": "Добавлен вводный ролевой комплект с независимым расчетом, ответами и условными сценариями; экспертизы не пройдены."
+        }
+      ]
+    },
+    {
+      "id": "D08-C03",
+      "subject_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "legal_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "answer_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "pilot": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "open_issues": "Вводный комплект: нужны предметная и правовая экспертизы, проверка ответов и апробация. Полная программа и работа с реальными процессами не подтверждены.",
+      "changes": [
+        {
+          "date": "2026-11-19",
+          "version": "0.28.0",
+          "author": "Герасимов Дмитрий Сергеевич",
+          "change": "Добавлен вводный ролевой комплект с независимым расчетом, ответами и условными сценариями; экспертизы не пройдены."
+        }
+      ]
+    },
+    {
+      "id": "D08-C04",
+      "subject_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "legal_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "answer_review": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "pilot": {
+        "status": "pending",
+        "reviewer": null,
+        "date": null,
+        "evidence": null
+      },
+      "open_issues": "Вводный комплект: нужны предметная и правовая экспертизы, проверка ответов и апробация. Полная программа и работа с реальными процессами не подтверждены.",
+      "changes": [
+        {
+          "date": "2026-11-19",
+          "version": "0.28.0",
+          "author": "Герасимов Дмитрий Сергеевич",
+          "change": "Добавлен вводный ролевой комплект с независимым расчетом, ответами и условными сценариями; экспертизы не пройдены."
         }
       ]
     }

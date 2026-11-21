@@ -1,0 +1,5 @@
+﻿task_id,minutes,allowed_owner,proposed_owner
+T01,120,A,A
+T02,120,A|B,A
+T03,90,B,B
+T04,90,B,B
