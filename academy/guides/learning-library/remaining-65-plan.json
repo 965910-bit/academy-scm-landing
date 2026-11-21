@@ -1,6 +1,6 @@
 {
   "author": "Герасимов Дмитрий Сергеевич",
-  "version": "0.36.0",
+  "version": "0.37.0",
   "date": "2026-11-19",
   "baseline": {
     "library_version": "0.25.0",
@@ -608,11 +608,11 @@
       "direction": "Педагогика и методика",
       "title": "цифровое преподавание",
       "baseline_status": "planned",
-      "content_to_develop": "Цифровой урок, доступность, синхронный/асинхронный формат",
-      "practice_evidence_to_obtain": "Работающий учебный модуль, задания/обратная связь/офлайн-альтернатива",
+      "content_to_develop": "Написаны8 уроков: результаты/сценарий/инструкции/доступная альтернатива/форматы/обратная связь/калибровка/права и приемка. Остаются полный предметный маршрут, разные аудитории/предметы, выбранная LMS/российское ПО, реальное ведение и долгосрочная оценка переноса.",
+      "practice_evidence_to_obtain": "Есть автономный инструмент, проект микроурока, модельные ответы/повторные версии и5 вымышленных карточек. Нужны фактические наблюдаемые занятия, согласованная среда/доступность/права, независимые экспертизы и реальная апробация с переработкой; образцы не результаты слушателей.",
       "blocking_limits": "Права на контент/данные/защищенность оценок;не просто загрузка PDF",
-      "current_catalog_status": "planned",
-      "introduction_url": null,
+      "current_catalog_status": "introductory_written_unreviewed",
+      "introduction_url": "digital-teaching-feedback.html",
       "full_completion": "not_demonstrated"
     },
     {
@@ -865,8 +865,8 @@
   ],
   "progress": {
     "baseline_titles": 65,
-    "still_planned": 49,
-    "introductions_written_unreviewed": 16,
+    "still_planned": 48,
+    "introductions_written_unreviewed": 17,
     "full_completion_demonstrated": 0
   }
 }

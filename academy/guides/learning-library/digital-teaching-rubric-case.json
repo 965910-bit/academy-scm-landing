@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "fictional": true,
+  "records": [
+    {"record_id": "EX01", "scores": {"P1": 3, "P2": 3, "P3": 3, "P4": 3}, "critical_errors": []},
+    {"record_id": "EX02", "scores": {"P1": 3, "P2": 2, "P3": 2, "P4": 2}, "critical_errors": ["invented_evidence"]},
+    {"record_id": "EX03", "scores": {"P1": 2, "P2": 2, "P3": 2, "P4": 2}, "critical_errors": []},
+    {"record_id": "EX04", "scores": {"P1": 3, "P2": null, "P3": 3, "P4": 3}, "critical_errors": []},
+    {"record_id": "EX05", "scores": {"P1": 3, "P2": 2, "P3": 2, "P4": 2}, "critical_errors": []}
+  ]
+}
