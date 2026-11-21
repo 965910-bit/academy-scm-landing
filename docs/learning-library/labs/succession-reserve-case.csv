@@ -1,0 +1,7 @@
+﻿role_id,candidate_id,practice,available,training_completed
+ROLE-A,P01,verified,yes,yes
+ROLE-B,P01,verified,yes,yes
+ROLE-B,P05,gap,yes,yes
+ROLE-C,P02,verified,no,yes
+ROLE-D,P03,unknown,yes,yes
+ROLE-E,P04,verified,yes,no
