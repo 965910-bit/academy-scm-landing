@@ -1,0 +1,7 @@
+position_id,sku,location,lot,unit,book_qty,count_qty,recount_qty,cost_kopecks
+A01,SKU1,R01,LOT1,pcs,100,100,,100
+B01,SKU2,R01,LOT2,pcs,50,48,49,200
+C01,SKU3,R02,LOT3,pcs,0,3,3,300
+D01,SKU4,R03,LOT4,pcs,20,19,,100
+E01,SKU5,R03,LOT5,pcs,10,,,400
+F01,SKU6,R04,LOT6,pcs,5,2,2,500
