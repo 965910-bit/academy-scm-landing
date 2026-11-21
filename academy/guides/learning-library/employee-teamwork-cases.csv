@@ -1,0 +1,15 @@
+﻿task_id,version,status,source,receipt
+T01,1,ready,fictional-T01,yes
+T02,1,ready,fictional-T02,no
+T03,1,blocked,,yes
+T04,1,draft,,no
+T04,2,ready,fictional-T04,yes
+T05,1,ready,fictional-T05,yes
+T06,1,ready,fictional-T06,yes
+T07,1,blocked,,no
+T08,1,ready,fictional-T08,yes
+T09,1,draft,,no
+T09,2,ready,fictional-T09,yes
+T10,1,ready,fictional-T10,yes
+T11,1,blocked,,yes
+T12,1,ready,fictional-T12,yes

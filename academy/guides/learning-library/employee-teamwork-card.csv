@@ -1,0 +1,2 @@
+﻿task_id,expected_result,version,sender_role,next_owner_role,deadline,criterion,available_minutes,needed_minutes,status,handoff_evidence,blocker,help_request,decision_owner,next_check
+T07,Передать проверяемую карточку,1,Участник,Следующий владелец,Согласовать,ready;source;receipt=yes,60,72,blocked,receipt=no,Нет разрешенного источника,Нужен владелец источника и подтверждение получения,Координатор,После согласованного ответа
