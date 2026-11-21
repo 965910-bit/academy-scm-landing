@@ -1,6 +1,6 @@
 {
   "author": "Герасимов Дмитрий Сергеевич",
-  "version": "0.32.0",
+  "version": "0.33.0",
   "date": "2026-11-19",
   "baseline": {
     "library_version": "0.25.0",
@@ -686,11 +686,11 @@
       "direction": "Маркетинг и электронная торговля",
       "title": "интернет-маркетинг",
       "baseline_status": "planned",
-      "content_to_develop": "Каналы/аудитории/воронка, бюджет и гипотезы",
-      "practice_evidence_to_obtain": "Медиаплан/креатив/разметка/эксперимент с полной стоимостью",
+      "content_to_develop": "Вводные задача/UTM/воронка/экономика написаны; остаются полные стратегия/медиаплан/SEO/контент/площадки, выбранные разрешенные инструменты/настройки, актуальная правовая маркировка/данные, статистический дизайн и причинная оценка.",
+      "practice_evidence_to_obtain": "Помимо двух вымышленных строк: разнообразные события/окна/атрибуция/качество, разрешенный изолированный стенд, независимые сверки, предметная/правовая/ответная экспертизы и фактическая апробация; реальную рекламу без отдельного разрешения не запускать.",
       "blocking_limits": "Реклама/согласия/маркировка;не платный запуск без одобрения",
-      "current_catalog_status": "planned",
-      "introduction_url": null,
+      "current_catalog_status": "introductory_written_unreviewed",
+      "introduction_url": "internet-marketing-measurement.html",
       "full_completion": "not_demonstrated"
     },
     {
@@ -865,8 +865,8 @@
   ],
   "progress": {
     "baseline_titles": 65,
-    "still_planned": 50,
-    "introductions_written_unreviewed": 15,
+    "still_planned": 49,
+    "introductions_written_unreviewed": 16,
     "full_completion_demonstrated": 0
   }
 }
