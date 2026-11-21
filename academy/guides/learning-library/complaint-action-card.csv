@@ -1,0 +1,2 @@
+﻿case_id,received_at,channel,reported_fact,requested_result,verified_evidence,owner_role,internal_ack_target,legal_due_basis,legal_due_status,next_action,agreed_update,execution_evidence,status
+C02,Учебное время;сохранить,Учебный канал,Заявитель сообщает о спорном списании,Возврат заявленной суммы,Проверить в разрешенном источнике,Уполномоченный проверяющий,4 часа только правило кейса,Проверить вид отношений/требования/норму/начало,unverified,Регистрация и проверка,Согласовать с учетом применимого срока,Пока нет,pending_review
