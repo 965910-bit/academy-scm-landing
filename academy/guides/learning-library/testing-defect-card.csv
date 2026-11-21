@@ -1,0 +1,2 @@
+﻿case_id,contract_version,environment,implementation,input,steps,expected,actual,result,risk,next_action,limits
+T03,0.26.0,Заполнить фактическую версию Python,buggy,100000,route_buggy(100000),manager,operator,fail,Неверный маршрут на границе,>= и регрессия всего набора,Учебная функция;не аудит качества

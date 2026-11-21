@@ -9,7 +9,7 @@ packs=json.loads((D/'course-packs.json').read_text())
 for extra in sorted(D.glob('*-packs.json')):
  if extra.name != 'course-packs.json':
   packs['courses'].extend(json.loads(extra.read_text())['courses'])
-packs['version']='0.25.0'
+packs['version']='0.26.0'
 assert len({c['id'] for c in packs['courses']})==len(packs['courses']), 'Duplicate course IDs'
 for lab_file in (D/'labs').iterdir():
  if lab_file.is_file(): (O/lab_file.name).write_bytes(lab_file.read_bytes())
@@ -143,6 +143,7 @@ for d in catalog:
   b+='</section>'
  b+='<h2>Условие готовности</h2><p>Для каждого результата обучения: объяснение → пример → самостоятельная практика → проверка → обоснованный ответ или рубрика. Источники проверяются по дате, редакции и правам использования. Требования к практике, преподавателям и допуску определяются отдельно для каждой программы. Пробелы нельзя закрывать копированием одного общего текста.</p>'
  (O/name).write_text(page(d['title'],b))
+index+='<section><h2>Исходные 65 незаполненных курсов</h2><p><a href="remaining-65-plan.html">Поименный план разработки, практика и условия завершения</a>. План не является готовыми курсами; вводные комплекты и полное завершение учитываются раздельно.</p></section>'
 (O/'index.html').write_text(page('Учебная база по 34 направлениям',index))
 (O/'catalog.json').write_bytes((D/'catalog.json').read_bytes())
 buf=io.StringIO();w=csv.writer(buf,lineterminator='\n');w.writerow(['direction_id','direction','course_id','course','status',*catalog[0]['courses'][0]['sections']])
@@ -157,5 +158,7 @@ render_review_ledger(json.loads((D/'review-ledger.json').read_text()), {'FOUNDAT
 (O/'review-checklist.md').write_bytes((D/'review-checklist.md').read_bytes())
 from learning_answer_bank import build_answer_bank
 build_answer_bank(packs,course,O,page)
+from learning_completion_plan import render_completion_plan
+render_completion_plan(json.loads((D/'remaining-65-plan.json').read_text()), catalog, O, page)
 render_packs(packs,O,page)
 print("All course packs rendered; no expert approvals.")

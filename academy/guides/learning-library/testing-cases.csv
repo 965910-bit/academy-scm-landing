@@ -1,0 +1,13 @@
+﻿case_id,input_json,expected_value,expected_error
+T01,0,operator,
+T02,99999,operator,
+T03,100000,manager,
+T04,100001,manager,
+T05,1000000,manager,
+T06,-1,,ValueError
+T07,1000001,,ValueError
+T08,"""100000""",,TypeError
+T09,1.5,,TypeError
+T10,null,,TypeError
+T11,true,,TypeError
+T12,false,,TypeError

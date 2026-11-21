@@ -1,0 +1,7 @@
+﻿case_id,amount_rub,expected_route,requirement_id
+B01,99999,operator,REQ-02
+B02,100000,manager,REQ-02
+B03,100001,manager,REQ-02
+B04,0,operator,REQ-01
+B05,-1,reject,REQ-01
+B06,,reject,REQ-01
