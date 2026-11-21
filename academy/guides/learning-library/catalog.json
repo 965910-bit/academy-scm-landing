@@ -1,7 +1,7 @@
 {
   "author": "Герасимов Дмитрий Сергеевич",
   "date": "2026-11-19",
-  "version": "0.23.0",
+  "version": "0.24.0",
   "directions": [
     {
       "id": "D01",
@@ -541,21 +541,22 @@
         {
           "id": "D07-C03",
           "title": "визуализация",
-          "status": "planned",
+          "status": "introductory_written_unreviewed",
           "audience": "Все офисные подразделения",
           "sections": {
-            "passport": "missing",
-            "syllabus": "missing",
-            "legal_basis": "missing",
-            "lessons": "missing",
-            "practice": "missing",
-            "assessment": "missing",
-            "answer_key": "missing",
-            "teacher_notes": "missing",
-            "sources": "missing",
-            "review": "missing"
+            "passport": "draft",
+            "syllabus": "draft",
+            "legal_basis": "draft",
+            "lessons": "draft",
+            "practice": "draft",
+            "assessment": "draft",
+            "answer_key": "draft",
+            "teacher_notes": "draft",
+            "sources": "draft",
+            "review": "pending"
           },
-          "note": "Рабочее название. Содержание, трудоемкость и требования допуска не утверждены."
+          "note": "Написан вводный комплект; полный курс по роли не закрыт. Экспертиза и апробация не пройдены.",
+          "url": "data-visualisation.html"
         },
         {
           "id": "D07-C04",

@@ -1,0 +1,2 @@
+﻿source_file,report_version,question,cohort_and_cutoff,numerator,denominator,missing_values,chart_and_scale,rounding,text_equivalent,limitations,verification,next_action
+visualization-case.csv,0.24.0,Сравнить долю A/B февраля,Входящие месяца/участка;сопоставимый срез по условию,closed,received,Март B неизвестен,Февраль полосы 0–100%;динамика с пропуском,До 2 знаков только при показе,Подписи+описание+текстовая таблица,Не причинное исследование;не полный аудит,Сверить 234/260 и отсутствие выдуманного марта,Запросить closed марта B;пересчитать все представления

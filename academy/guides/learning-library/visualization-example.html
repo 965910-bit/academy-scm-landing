@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Февраль: доля закрытых заявок A/B — учебный пример</title>
+<style>
+body{font:1.1rem/1.6 system-ui,sans-serif;max-width:54rem;margin:auto;padding:1.25rem;color:#182536;background:#fff}h1{line-height:1.25}figure{margin:1.5rem 0}svg{display:block;width:100%;height:auto}table{border-collapse:collapse;width:100%}th,td{border:1px solid #617086;padding:.5rem;text-align:left}caption{text-align:left;font-weight:bold}a{color:#064b95}footer{border-top:1px solid #617086;margin-top:2rem;padding-top:1rem}code{overflow-wrap:anywhere}
+</style></head>
+<body><main>
+<h1>Доля закрытия заявок участков A/B в феврале 2026: обе 90%</h1>
+<p>Собственный вымышленный учебный кейс. Сравниваются закрытые заявки из входящих того же месяца и участка к сопоставимому контрольному срезу по условию задачи. Это доля когорты, не доказательство скорости, качества работы или эффекта обучения.</p>
+<figure>
+<svg viewBox="0 0 640 250" role="img" aria-labelledby="chart-title chart-desc">
+<title id="chart-title">Февраль: доля закрытых заявок A/B, проценты</title>
+<desc id="chart-desc">Две горизонтальные полосы одинаковой длины, обе 90 процентов. Участок A: 72 из 80, участок B: 54 из 60. Общая шкала от 0 до 100 процентов. Числа и ограничения также доступны в тексте и таблице после графика.</desc>
+<g stroke="#617086" fill="none"><path d="M80 35V190H580"/><path d="M180 185V195M280 185V195M380 185V195M480 185V195M580 35V195"/></g>
+<g fill="#174f78"><rect x="80" y="55" width="450" height="38"/><rect x="80" y="120" width="450" height="38"/></g>
+<g font-family="sans-serif" font-size="18" fill="#182536"><text x="12" y="80">A</text><text x="12" y="145">B</text><text x="80" y="225" text-anchor="middle">0</text><text x="180" y="225" text-anchor="middle">20</text><text x="280" y="225" text-anchor="middle">40</text><text x="380" y="225" text-anchor="middle">60</text><text x="480" y="225" text-anchor="middle">80</text><text x="580" y="225" text-anchor="middle">100%</text></g>
+<g font-family="sans-serif" font-size="19" fill="#fff"><text x="98" y="81">90% · 72 / 80</text><text x="98" y="146">90% · 54 / 60</text></g>
+</svg>
+<figcaption>Рисунок 1. Доля закрытия: A и B по 90%. Общая линейная шкала 0–100%; длина полос пропорциональна доле, не количеству заявок. Названия, значения и знаменатели подписаны непосредственно, цвет не различает участки. <a href="#data">Текстовая таблица и развернутое описание</a>.</figcaption>
+</figure>
+<section id="data" aria-labelledby="description-heading"><h2 id="description-heading">Значения и ограничения</h2>
+<p>В феврале A закрыл 72 из 80 полученных заявок, B — 54 из 60. Обе доли равны 90%, хотя число закрытых у A больше на 18. Вместе закрыто 126 из 140, то есть 90%. Нельзя заключить, что один участок эффективнее: график показывает только долю заданных когорт, не трудоемкость и качество.</p>
+<table><caption>Февраль 2026: исходные значения и расчет доли</caption><thead><tr><th scope="col">Участок</th><th scope="col">Получено, заявок</th><th scope="col">Закрыто из когорты, заявок</th><th scope="col">Доля</th></tr></thead><tbody><tr><th scope="row">A</th><td>80</td><td>72</td><td>90%</td></tr><tr><th scope="row">B</th><td>60</td><td>54</td><td>90%</td></tr><tr><th scope="row">Вместе</th><td>140</td><td>126</td><td>90%</td></tr></tbody></table>
+<p>Доля рассчитана как закрыто / получено × 100%. Значения целые, отображение без округления в данном месяце. Источник: <a href="visualization-case.csv">visualization-case.csv</a>, вымышленные данные. Версия примера 0.24.0 от 2026-11-19. Контрольный срез сопоставим только по условию кейса.</p>
+<h2>Чего этот график не показывает</h2><p>В январе общий показатель также 90% (108/120). Рост числа закрытых с 108 до 126 составляет около 16,67%, но изменение доли равно 0 процентных пунктов. Эффект обучения не установлен. В марте closed участка B неизвестен, поэтому общей точки марта здесь нет. Март не заменен нулем или 90% по известному участку A.</p>
+<h2>Проверка представления</h2><p>Изменяйте масштаб страницы и проверяйте читаемость текста/таблицы. Перейдите по ссылкам клавиатурой. Сопоставьте длины полос со значениями и нулевой базой. Наличие разметки и текстовой таблицы не означает, что проведен полный аудит контраста, экранного диктора, разных браузеров или понимания пользователями. Такая апробация еще требуется.</p></section>
+</main><footer>Автор исходного примера: Герасимов Дмитрий Сергеевич. Лицензия распространения собственных материалов подлежит утверждению правообладателем. Нет внешних скриптов, шрифтов, трекеров и отправки данных. <a href="data-visualisation.html">Уроки и открытые ответы</a> · <a href="visualization-guide.md">Инструкция практики</a></footer></body></html>
