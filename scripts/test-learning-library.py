@@ -47,8 +47,8 @@ class LibraryTests(unittest.TestCase):
   packs=all_packs()
   self.assertEqual(len(packs['courses']),67)
   for c in packs['courses']:
-   self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02','D28-C04','D09-C04'} else 4)
-   self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 10 if c['id'] in {'D28-C04','D09-C04'} else 6)
+   self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02','D28-C04','D09-C04','D10-C04'} else 4)
+   self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 10 if c['id'] in {'D28-C04','D09-C04','D10-C04'} else 6)
    self.assertEqual(sum(x['points'] for x in c['practice']['criteria']),12)
    check_ids={q['id'] for q in c['questions']}|{x['id'] for x in c['practice']['criteria']}
    for outcome in c['outcomes']:
@@ -835,14 +835,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],287)
-  self.assertEqual(progress['open_answers'],430)
+  self.assertEqual(progress['lessons'],291)
+  self.assertEqual(progress['open_answers'],434)
   self.assertEqual(progress['materials'],68)
   self.assertEqual(progress['planned'],49)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['287 уроков','430 ответов на контрольные вопросы','49 курсов','287 разборов заданий']:self.assertIn(text,hub)
+  for text in ['291 уроков','434 ответов на контрольные вопросы','49 курсов','291 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -962,12 +962,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,287)
+  self.assertEqual(count,291)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=430,exercise=287,practice=68))
-  self.assertEqual(len({r['id'] for r in data['entries']}),785)
+  self.assertEqual(data['counts'],dict(question=434,exercise=291,practice=68))
+  self.assertEqual(len({r['id'] for r in data['entries']}),793)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
@@ -1698,5 +1698,24 @@ class LibraryTests(unittest.TestCase):
    for bad in [b'x\n',raw+b' '*(65537-len(raw)),raw.replace(b'300',b'-300'),raw.replace(b'2026-10-01',b'2026-02-30'),raw+b'E1,sale,O1,A,2026-10-01,2\n']:
     p.write_bytes(bad);r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'');self.assertIn('rejected',r.stderr)
    p.unlink();self.assertEqual(run().returncode,2)
+
+ def test_browser_evidence_bound_to_exact_published_bytes_and_runner(self):
+  import hashlib
+  report=json.loads((D/'labs/digital-browser-report.json').read_text())
+  self.assertEqual(report['status'],'automated_browser_checks_only')
+  self.assertEqual(report['target_sha256'],hashlib.sha256((D/'labs/digital-access-practice.html').read_bytes()).hexdigest())
+  self.assertEqual(report['runner_sha256'],hashlib.sha256((R/'academy/tests/digital-access-browser.cjs').read_bytes()).hexdigest())
+  self.assertEqual({x['id'] for x in report['checks']},{'B'+str(i) for i in range(1,10)})
+  self.assertTrue(all(x['result']=='pass' and x['evidence'] for x in report['checks']))
+  self.assertTrue(report['browser']['headless']);self.assertGreaterEqual(len(report['not_checked']),7)
+  for name in ['digital-access-practice.html','digital-access-guide.md','digital-browser-report.json','testing-browser-guide.md','testing-guide.md']:
+   self.assertEqual((D/'labs'/name).read_bytes(),(O/name).read_bytes())
+ def test_browser_evidence_does_not_approve_review_gates(self):
+  ledger=json.loads((D/'review-ledger.json').read_text())
+  for cid in ['D09-C04','D10-C04']:
+   row=next(r for r in ledger['materials'] if r['id']==cid)
+   for gate in ['subject_review','legal_review','answer_review','pilot']:
+    self.assertEqual(row[gate]['status'],'pending');self.assertIsNone(row[gate]['reviewer'])
+  self.assertEqual(json.loads((O/'progress.json').read_text())['expert_approved'],0)
 
 if __name__=='__main__':unittest.main()

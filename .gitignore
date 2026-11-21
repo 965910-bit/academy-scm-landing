@@ -7,3 +7,6 @@ node_modules/
 
 # Local research build environment
 .venv/
+
+# Disposable browser binaries and extracted runtime libraries
+.cache/
