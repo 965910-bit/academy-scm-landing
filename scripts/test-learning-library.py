@@ -47,8 +47,8 @@ class LibraryTests(unittest.TestCase):
   packs=all_packs()
   self.assertEqual(len(packs['courses']),67)
   for c in packs['courses']:
-   self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02'} else 4)
-   self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 6)
+   self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02','D28-C04'} else 4)
+   self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 10 if c['id']=='D28-C04' else 6)
    self.assertEqual(sum(x['points'] for x in c['practice']['criteria']),12)
    check_ids={q['id'] for q in c['questions']}|{x['id'] for x in c['practice']['criteria']}
    for outcome in c['outcomes']:
@@ -835,14 +835,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],279)
-  self.assertEqual(progress['open_answers'],422)
+  self.assertEqual(progress['lessons'],283)
+  self.assertEqual(progress['open_answers'],426)
   self.assertEqual(progress['materials'],68)
   self.assertEqual(progress['planned'],49)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['279 уроков','422 ответов на контрольные вопросы','49 курсов','279 разборов заданий']:self.assertIn(text,hub)
+  for text in ['283 уроков','426 ответов на контрольные вопросы','49 курсов','283 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -962,12 +962,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,279)
+  self.assertEqual(count,283)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=422,exercise=279,practice=68))
-  self.assertEqual(len({r['id'] for r in data['entries']}),769)
+  self.assertEqual(data['counts'],dict(question=426,exercise=283,practice=68))
+  self.assertEqual(len({r['id'] for r in data['entries']}),777)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
@@ -1665,5 +1665,38 @@ class LibraryTests(unittest.TestCase):
    for bad in [b'wrong\n',raw+b'B,1,1,1,1,1,1,1\n',raw+b' '*(65537-len(raw)),raw.replace(b'4000,16000',b'-1,16000')]:
     p.write_bytes(bad);r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'');self.assertIn('rejected',r.stderr)
    p.unlink();r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'')
+
+ def load_marketing_events(self):
+  import importlib.util
+  spec=importlib.util.spec_from_file_location('marketing_events',D/'labs/marketing-events-lab.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+ def test_marketing_events_independent_oracle_and_reordering(self):
+  m=self.load_marketing_events();rows=m.read_case(D/'labs');before=copy.deepcopy(rows);r=m.reconcile(rows)
+  self.assertEqual(r['total'],dict(orders=2,gross_rub=3000,refund_rub=300,net_rub=2700));self.assertEqual(r['campaigns']['A']['net_rub'],700);self.assertEqual(r['campaigns']['B']['net_rub'],2000)
+  self.assertEqual(r['duplicates'],[dict(line=6,event_id='E4',reason='exact_duplicate')]);self.assertEqual({x['event_id']:x['reason'] for x in r['excluded']},{'E3':'outside_sale_cohort','E5':'after_refund_cutoff','E6':'outside_sale_cohort'})
+  self.assertEqual((r['input_rows'],r['unique_events']),(7,6));self.assertEqual(rows,before)
+  self.assertEqual(m.reconcile(rows[::-1])['total'],r['total']);self.assertEqual(m.reconcile(rows+[rows[1]])['total'],r['total'])
+ def test_marketing_events_cutoff_partial_refunds_and_atomic_validation(self):
+  m=self.load_marketing_events();rows=m.read_case(D/'labs');rows[5]['date']='2026-11-07';self.assertEqual(m.reconcile(rows)['total']['net_rub'],1700)
+  rows=m.read_case(D/'labs');extra=dict(event_id='E7',kind='refund',order_id='O1',campaign_id='A',date='2026-11-07',amount_rub='700');self.assertEqual(m.reconcile(rows+[extra])['total']['net_rub'],2000)
+  for patch in [dict(amount_rub='701'),dict(order_id='UNKNOWN'),dict(campaign_id='B'),dict(date='2026-09-30'),dict(date='2026-02-30'),dict(date='2026-1-01'),dict(amount_rub='0'),dict(amount_rub='-1'),dict(amount_rub='1.5'),dict(amount_rub='100000001'),dict(kind='cancel'),dict(event_id='bad')]:
+   bad=rows+[dict(extra,**patch)];before=copy.deepcopy(bad)
+   with self.assertRaises(ValueError,msg=str(patch)):m.reconcile(bad)
+   self.assertEqual(before,bad)
+  for bad in [[],rows*144,rows+[dict(rows[0],amount_rub='2')],rows+[dict(rows[0],event_id='E8')],rows+[dict(extra,extra='x')]]:
+   with self.assertRaises(ValueError):m.reconcile(bad)
+  # Late invalid events still invalidate the complete dataset.
+  with self.assertRaises(ValueError):m.reconcile(rows+[dict(extra,date='2027-01-01',amount_rub='701')])
+ def test_marketing_events_cli_bounds_readonly_and_public_parity(self):
+  import tempfile
+  m=self.load_marketing_events()
+  for name in ['marketing-events-lab.py','marketing-events-case.csv','marketing-events-guide.md']:self.assertEqual((D/'labs'/name).read_bytes(),(O/name).read_bytes())
+  with tempfile.TemporaryDirectory() as folder:
+   folder=Path(folder);p=folder/'marketing-events-case.csv';raw=(D/'labs'/p.name).read_bytes();p.write_bytes(raw)
+   def run():return subprocess.run([sys.executable,str(D/'labs/marketing-events-lab.py'),'--directory',str(folder)],capture_output=True,text=True)
+   r=run();self.assertEqual(r.returncode,0,r.stderr);self.assertEqual(json.loads(r.stdout)['total']['net_rub'],2700);self.assertEqual(p.read_bytes(),raw)
+   p.write_bytes(b'\xef\xbb\xbf'+raw);self.assertEqual(run().returncode,0)
+   for bad in [b'x\n',raw+b' '*(65537-len(raw)),raw.replace(b'300',b'-300'),raw.replace(b'2026-10-01',b'2026-02-30'),raw+b'E1,sale,O1,A,2026-10-01,2\n']:
+    p.write_bytes(bad);r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'');self.assertIn('rejected',r.stderr)
+   p.unlink();self.assertEqual(run().returncode,2)
 
 if __name__=='__main__':unittest.main()

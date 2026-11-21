@@ -1,0 +1,8 @@
+event_id,kind,order_id,campaign_id,date,amount_rub
+E1,sale,O1,A,2026-10-01,1000
+E2,sale,O2,B,2026-10-31,2000
+E3,sale,O3,A,2026-09-30,500
+E4,refund,O1,A,2026-11-07,300
+E4,refund,O1,A,2026-11-07,300
+E5,refund,O2,B,2026-11-08,1000
+E6,refund,O3,A,2026-10-10,100
