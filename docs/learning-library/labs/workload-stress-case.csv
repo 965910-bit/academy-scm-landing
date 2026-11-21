@@ -1,0 +1,5 @@
+﻿activity,quantity,minutes_per_unit,note
+cards,24,10,Вымышленные карточки
+meeting,1,60,Отдельное время
+report,1,90,Исходный объем отчета
+interruptions,1,60,Не включены в остальные оценки
