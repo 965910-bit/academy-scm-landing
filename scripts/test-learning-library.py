@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),65)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),51)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),62)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),54)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,7 +45,7 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),51)
+  self.assertEqual(len(packs['courses']),54)
   for c in packs['courses']:
    self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02'} else 4)
    self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 6)
@@ -612,6 +612,104 @@ class LibraryTests(unittest.TestCase):
   entry=next(r for r in json.loads((D/'review-ledger.json').read_text())['materials'] if r['id']==c['id'])
   for stage in ['subject_review','legal_review','answer_review','pilot']:
    self.assertEqual(entry[stage]['status'],'pending');self.assertIsNone(entry[stage]['reviewer'])
+ def router_lab(self):
+  import runpy
+  lab=runpy.run_path(str(D/'labs/testing-router.py'))
+  return lab,lab['load_cases'](D/'labs/testing-cases.csv')
+ def test_testing_reference_buggy_and_independent_mutations(self):
+  import io
+  lab,cases=self.router_lab();self.assertEqual(len(cases),12)
+  def run(fn):return unittest.TextTestRunner(stream=io.StringIO()).run(lab['make_suite'](fn,cases))
+  ref=run(lab['route_reference']);self.assertTrue(ref.wasSuccessful());self.assertEqual(ref.testsRun,12)
+  buggy=run(lab['route_buggy']);self.assertEqual({t._testMethodName for t,_ in buggy.failures},{'test_T03','test_T11','test_T12'});self.assertFalse(buggy.errors)
+  def threshold_only(value):
+   if type(value) is not int:raise TypeError()
+   if not 0<=value<=1000000:raise ValueError()
+   return 'manager' if value>100000 else 'operator'
+  def bool_only(value):
+   if not isinstance(value,int):raise TypeError()
+   if not 0<=value<=1000000:raise ValueError()
+   return 'manager' if value>=100000 else 'operator'
+  self.assertEqual({t._testMethodName for t,_ in run(threshold_only).failures},{'test_T03'})
+  self.assertEqual({t._testMethodName for t,_ in run(bool_only).failures},{'test_T11','test_T12'})
+  self.assertEqual((12-len(buggy.failures))/12*100,75)
+ def test_testing_cli_codes_readonly_and_invalid_cases(self):
+  import tempfile
+  with tempfile.TemporaryDirectory(prefix='Testing lab ') as folder:
+   root=Path(folder)
+   for name in ['testing-router.py','testing-cases.csv']:(root/name).write_bytes((D/'labs'/name).read_bytes())
+   before={p.name:p.read_bytes() for p in root.iterdir()}
+   for implementation,code,expected in [('reference',0,'OK'),('buggy',1,'FAILED (failures=3)')]:
+    result=subprocess.run([sys.executable,str(root/'testing-router.py'),'--implementation',implementation],capture_output=True,text=True,timeout=10)
+    self.assertEqual(result.returncode,code,result.stderr);self.assertIn(expected,result.stderr);self.assertIn('Ran 12 tests',result.stderr)
+   self.assertEqual({p.name:p.read_bytes() for p in root.iterdir()},before)
+   (root/'testing-cases.csv').write_text('case_id,input_json,expected_value,expected_error\n')
+   result=subprocess.run([sys.executable,str(root/'testing-router.py')],capture_output=True,text=True,timeout=10)
+   self.assertEqual(result.returncode,2);self.assertIn('No cases',result.stderr)
+ def test_business_analysis_boundaries_resource_and_change(self):
+  lab,_=self.router_lab();rows=list(csv.DictReader((D/'labs/business-analysis-cases.csv').read_text(encoding='utf-8-sig').splitlines()))
+  self.assertEqual(len(rows),6)
+  results=[]
+  for r in rows:
+   try:actual=lab['route_reference'](int(r['amount_rub']))
+   except (TypeError,ValueError):actual='reject'
+   self.assertEqual(actual,r['expected_route']);results.append(actual)
+  self.assertEqual(results,['operator','manager','manager','operator','reject','reject'])
+  base=120*6;current=120*2+30*4;gain=base-current
+  self.assertEqual((base,current,gain,600+current-base),(720,360,360,240))
+  from math import ceil
+  self.assertEqual(ceil(600/gain),2)
+  changed=120*2+30*8;self.assertEqual((changed,base-changed,ceil(600/(base-changed))),(480,240,3))
+  self.assertEqual(['manager' if x>=120000 else 'operator' for x in [99999,100000,100001,119999,120000,120001]],['operator','operator','operator','operator','manager','manager'])
+ def test_ai_claim_statuses_calculations_and_limits(self):
+  claims=list(csv.DictReader((D/'labs/ai-claims.csv').read_text(encoding='utf-8-sig').splitlines()))
+  self.assertEqual([r['claim_id'] for r in claims],['C01','C02','C03','C04','C05','C06'])
+  evidence=(D/'labs/ai-evidence.md').read_text()
+  statuses={line.split('|')[1].strip():line.split('|')[2].strip() for line in evidence.splitlines() if line.startswith('| C')}
+  self.assertEqual(statuses,dict(C01='supported',C02='contradicted',C03='insufficient',C04='insufficient',C05='contradicted',C06='insufficient'))
+  self.assertEqual([list(statuses.values()).count(x) for x in ['supported','contradicted','insufficient']],[1,2,3])
+  self.assertAlmostEqual((126-108)/108*100,16.6666666667);self.assertEqual(126/140*100-108/120*100,0)
+  self.assertEqual((99+36)/150*100,90);self.assertEqual((99+0)/150*100,66)
+  manual=30/60*600;checked=20+(5+15+10)/60*600;optimistic=20+(5+5+10)/60*600
+  self.assertEqual((manual,checked,optimistic,checked-manual,manual-optimistic),(300,320,220,20,80))
+  for phrase in ['не вывод реального сервиса','не оценка','не правовая экспертиза','Недостаточно']:
+   self.assertIn(phrase.lower(),(evidence+(D/'labs/ai-verification-guide.md').read_text()).lower())
+ def test_three_new_course_exports_rubrics_and_pending_reviews(self):
+  import zipfile
+  bank={r['id']:r for r in json.loads((O/'answer-bank.json').read_text())['entries']}
+  ledger=json.loads((D/'review-ledger.json').read_text())
+  for name in ['business-analysis-packs.json','ai-verification-packs.json','testing-packs.json']:
+   c=json.loads((D/name).read_text())['courses'][0]
+   for q in c['questions']:
+    self.assertEqual(set(q['scoring']),{'0','1','2'})
+    for text in [*q['acceptable_alternatives'],*q['scoring'].values()]:self.assertIn(text,bank[c['id']+'-'+q['id']]['explanation'])
+   names=[c['slug']+'.html',c['slug']+'.md',c['id']+'.json',c['template']['filename'],*[r['filename'] for r in c['resources']]]
+   with zipfile.ZipFile(O/'learning-library.zip') as z:
+    for file in names:self.assertIn(file,z.namelist())
+   for r in c['resources']:self.assertEqual((D/'labs'/r['filename']).read_bytes(),(O/r['filename']).read_bytes())
+   entry=next(r for r in ledger['materials'] if r['id']==c['id'])
+   for stage in ['subject_review','legal_review','answer_review','pilot']:
+    self.assertEqual(entry[stage]['status'],'pending');self.assertIsNone(entry[stage]['reviewer'])
+ def test_remaining_65_plan_never_grants_completion(self):
+  import tempfile
+  from learning_completion_plan import render_completion_plan
+  source=json.loads((D/'remaining-65-plan.json').read_text());current=json.loads((D/'catalog.json').read_text())['directions']
+  result=json.loads((O/'remaining-65-plan.json').read_text())
+  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=62,introductions_written_unreviewed=3,full_completion_demonstrated=0))
+  self.assertEqual(len({r['id'] for r in result['courses']}),65)
+  self.assertEqual({r['full_completion'] for r in result['courses']},{'not_demonstrated'})
+  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C05','D10-C04'})
+  for r in result['courses']:
+   for key in ['content_to_develop','practice_evidence_to_obtain','blocking_limits']:self.assertGreater(len(r[key]),20)
+  with tempfile.TemporaryDirectory() as folder:
+   broken=copy.deepcopy(source);broken['courses'][1]['id']=broken['courses'][0]['id']
+   with self.assertRaises(ValueError):render_completion_plan(broken,current,Path(folder),lambda title,body:body)
+   broken=copy.deepcopy(source);broken['courses'][0]['practice_evidence_to_obtain']=''
+   with self.assertRaises(ValueError):render_completion_plan(broken,current,Path(folder),lambda title,body:body)
+  import zipfile
+  with zipfile.ZipFile(O/'learning-library.zip') as z:
+   for suffix in ['html','md','json','csv']:self.assertIn('remaining-65-plan.'+suffix,z.namelist())
+  self.assertIn('remaining-65-plan.html',(O/'index.html').read_text())
  def test_management_case(self):
   available=3*6*60;needed=90*12+10*30
   self.assertEqual((available,needed,needed-available),(1080,1380,300))
@@ -637,14 +735,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],215)
-  self.assertEqual(progress['open_answers'],326)
-  self.assertEqual(progress['materials'],52)
-  self.assertEqual(progress['planned'],65)
+  self.assertEqual(progress['lessons'],227)
+  self.assertEqual(progress['open_answers'],344)
+  self.assertEqual(progress['materials'],55)
+  self.assertEqual(progress['planned'],62)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['215 уроков','326 ответов на контрольные вопросы','65 курсов','215 разборов заданий']:self.assertIn(text,hub)
+  for text in ['227 уроков','344 ответов на контрольные вопросы','62 курсов','227 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -733,14 +831,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),52)
+  self.assertEqual(len(ledger['materials']),55)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),208)
+  self.assertEqual(len(rows),220)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -764,12 +862,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,215)
+  self.assertEqual(count,227)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=326,exercise=215,practice=52))
-  self.assertEqual(len({r['id'] for r in data['entries']}),593)
+  self.assertEqual(data['counts'],dict(question=344,exercise=227,practice=55))
+  self.assertEqual(len({r['id'] for r in data['entries']}),626)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())

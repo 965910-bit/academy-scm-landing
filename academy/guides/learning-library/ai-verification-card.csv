@@ -1,0 +1,2 @@
+﻿claim_id,claim_version,type,evidence,status,calculation_or_reason,correction,permitted_use,review_owner_role,limits
+C03,0.26.0,Числовое,ai-evidence.md,insufficient,B марта неизвестен,Общая доля не установлена,Не публиковать 90% как факт,Проверяющий,Учебный набор;не оценка модели

@@ -1,0 +1,2 @@
+﻿version,need,actor,requirement_id,rule,acceptance_example,open_questions,owner_role,effect_assumption,evidence,change
+0.26.0,Объяснимый маршрут,Оператор,REQ-02,amount>=100000→manager,100000→manager,Предел времени/нагрузка не согласованы,Владелец процесса,720→360 при данных допущениях,Учебная таблица;не пилот,Новый порог только новой версией
