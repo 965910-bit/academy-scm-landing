@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),50)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),66)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),49)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),67)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,7 +45,7 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),66)
+  self.assertEqual(len(packs['courses']),67)
   for c in packs['courses']:
    self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02'} else 4)
    self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 6)
@@ -697,10 +697,10 @@ class LibraryTests(unittest.TestCase):
   from learning_completion_plan import render_completion_plan
   source=json.loads((D/'remaining-65-plan.json').read_text());current=json.loads((D/'catalog.json').read_text())['directions']
   result=json.loads((O/'remaining-65-plan.json').read_text())
-  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=50,introductions_written_unreviewed=15,full_completion_demonstrated=0))
+  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=49,introductions_written_unreviewed=16,full_completion_demonstrated=0))
   self.assertEqual(len({r['id'] for r in result['courses']}),65)
   self.assertEqual({r['full_completion'] for r in result['courses']},{'not_demonstrated'})
-  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04','D21-C03','D28-C03','D29-C01','D29-C03','D19-C02','D19-C04','D09-C04'})
+  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04','D21-C03','D28-C03','D29-C01','D29-C03','D19-C02','D19-C04','D09-C04','D28-C04'})
   for r in result['courses']:
    for key in ['content_to_develop','practice_evidence_to_obtain','blocking_limits']:self.assertGreater(len(r[key]),20)
   with tempfile.TemporaryDirectory() as folder:
@@ -835,14 +835,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],275)
-  self.assertEqual(progress['open_answers'],416)
-  self.assertEqual(progress['materials'],67)
-  self.assertEqual(progress['planned'],50)
+  self.assertEqual(progress['lessons'],279)
+  self.assertEqual(progress['open_answers'],422)
+  self.assertEqual(progress['materials'],68)
+  self.assertEqual(progress['planned'],49)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['275 уроков','416 ответов на контрольные вопросы','50 курсов','275 разборов заданий']:self.assertIn(text,hub)
+  for text in ['279 уроков','422 ответов на контрольные вопросы','49 курсов','279 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -931,14 +931,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),67)
+  self.assertEqual(len(ledger['materials']),68)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),268)
+  self.assertEqual(len(rows),272)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -962,12 +962,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,275)
+  self.assertEqual(count,279)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=416,exercise=275,practice=67))
-  self.assertEqual(len({r['id'] for r in data['entries']}),758)
+  self.assertEqual(data['counts'],dict(question=422,exercise=279,practice=68))
+  self.assertEqual(len({r['id'] for r in data['entries']}),769)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
@@ -1622,5 +1622,48 @@ class LibraryTests(unittest.TestCase):
    p=folder/'digital-agenda-v1.md';p.write_bytes(p.read_bytes()+b'\n');r=run();self.assertEqual(r.returncode,1);self.assertFalse(json.loads(r.stdout)['ok'])
    (folder/'digital-decision-v1.md').unlink();r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'');self.assertIn('rejected',r.stderr)
    (folder/m.MANIFEST).write_text('{"format_version":1,"format_version":1}');r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'')
+
+ def load_internet_marketing_lab(self):
+  import importlib.util
+  spec=importlib.util.spec_from_file_location('internet_marketing',D/'labs/internet-marketing-lab.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+ def test_marketing_independent_oracles_and_weighted_totals(self):
+  m=self.load_internet_marketing_lab();rows=m.read_case(D/'labs');before=copy.deepcopy(rows);r=m.calculate(rows);a,b=r['campaigns'];t=r['total']
+  self.assertEqual((a['ctr_percent'],a['click_to_lead_percent'],a['lead_to_order_percent'],a['click_to_order_percent']),(5,10,20,2))
+  self.assertEqual((b['ctr_percent'],b['click_to_lead_percent'],b['lead_to_order_percent'],b['click_to_order_percent']),(5,20,10,2))
+  self.assertEqual((a['cpc_rub'],b['cpc_rub'],a['cpl_rub'],b['cpl_rub']),(10,10,100,50))
+  self.assertEqual((a['cost_per_attributed_order_rub'],b['cost_per_attributed_order_rub']),(500,500))
+  self.assertEqual((a['contribution_after_ad_rub'],b['contribution_after_ad_rub'],t['contribution_after_ad_rub']),(3000,2400,5400))
+  self.assertEqual((t['impressions'],t['clicks'],t['leads'],t['orders'],t['ad_spend_rub']),(18000,900,130,18,9000))
+  self.assertAlmostEqual(t['cpl_rub'],9000/130);self.assertNotEqual(t['cpl_rub'],75);self.assertAlmostEqual(t['click_to_lead_percent'],13000/900)
+  self.assertEqual(rows,before)
+ def test_marketing_cost_sensitivity_zero_bases_and_negative_result(self):
+  m=self.load_internet_marketing_lab();rows=m.read_case(D/'labs');rows[1]['ad_spend_rub']='5000';r=m.calculate(rows);b=r['campaigns'][1]
+  self.assertEqual((b['cpc_rub'],b['cpl_rub'],b['cost_per_attributed_order_rub'],b['net_revenue_per_ad_ruble'],b['contribution_after_ad_rub'],r['total']['contribution_after_ad_rub']),(12.5,62.5,625,3.2,1400,4400))
+  rows[1]['ad_spend_rub']='0';r=m.calculate(rows);self.assertIsNone(r['campaigns'][1]['net_revenue_per_ad_ruble']);self.assertEqual(r['total']['contribution_after_ad_rub'],9400)
+  rows=m.read_case(D/'labs');rows[1].update(orders='0',net_revenue_rub='0',variable_cost_rub='0');r=m.calculate(rows);self.assertEqual(r['campaigns'][1]['cpl_rub'],50);self.assertIsNone(r['campaigns'][1]['cost_per_attributed_order_rub']);self.assertEqual(r['total']['contribution_after_ad_rub'],-1000)
+  for row in rows:
+   for key in m.COLUMNS[1:]:row[key]='0'
+  t=m.calculate(rows)['total'];self.assertIsNone(t['ctr_percent']);self.assertIsNone(t['cpl_rub']);self.assertEqual(t['contribution_after_ad_rub'],0)
+ def test_marketing_rejects_invalid_contract_without_mutating_inputs(self):
+  m=self.load_internet_marketing_lab();rows=m.read_case(D/'labs')
+  for patch in [dict(campaign_id='a'),dict(campaign_id='B'),dict(clicks='10001'),dict(leads='501'),dict(orders='51'),dict(orders='0'),dict(ad_spend_rub='-1'),dict(ad_spend_rub='NaN'),dict(ad_spend_rub='1.5'),dict(ad_spend_rub='100000001'),dict(ad_spend_rub='')]:
+   bad=copy.deepcopy(rows);bad[0].update(patch);before=copy.deepcopy(bad)
+   with self.assertRaises(ValueError,msg=str(patch)):m.calculate(bad)
+   self.assertEqual(bad,before)
+  with self.assertRaises(ValueError):m.calculate(rows+[rows[0]])
+  with self.assertRaises(ValueError):m.calculate([])
+  with self.assertRaises(ValueError):m.calculate([dict(rows[0],extra='1')])
+ def test_marketing_published_cli_readonly_and_bounded_atomic_errors(self):
+  import tempfile,hashlib
+  names=['internet-marketing-case.csv','internet-marketing-lab.py','internet-marketing-guide.md']
+  for name in names:self.assertEqual((D/'labs'/name).read_bytes(),(O/name).read_bytes())
+  self.assertIn('/internet-marketing-measurement.html',(R/'sitemap.xml').read_text())
+  with tempfile.TemporaryDirectory(prefix='marketing case ') as folder:
+   folder=Path(folder);p=folder/names[0];raw=(D/'labs'/names[0]).read_bytes();p.write_bytes(raw);before=hashlib.sha256(raw).hexdigest()
+   def run():return subprocess.run([sys.executable,str(D/'labs'/names[1]),'--directory',str(folder)],capture_output=True,text=True)
+   r=run();self.assertEqual(r.returncode,0,r.stderr);self.assertEqual(json.loads(r.stdout)['total']['orders'],18);self.assertEqual(hashlib.sha256(p.read_bytes()).hexdigest(),before)
+   for bad in [b'wrong\n',raw+b'B,1,1,1,1,1,1,1\n',raw+b' '*(65537-len(raw)),raw.replace(b'4000,16000',b'-1,16000')]:
+    p.write_bytes(bad);r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'');self.assertIn('rejected',r.stderr)
+   p.unlink();r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'')
 
 if __name__=='__main__':unittest.main()

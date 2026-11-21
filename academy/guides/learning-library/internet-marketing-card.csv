@@ -1,0 +1,2 @@
+﻿version,goal,cohort_window,attribution_limits,utm_source,utm_medium,utm_campaign,cpl,cost_per_order,contribution,unverified,next_owner,stop_rule
+0.33.0,Проверить качество и экономику,Общее условное окно/возвраты,Нет причинности/новых клиентов,training,practice,case_a,100,500,3000,Полнота/права/настройка/дизайн,Уполномоченная роль,Дефект данных/прав→не запускать
