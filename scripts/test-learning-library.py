@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),47)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),69)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),46)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),70)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,10 +45,10 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),69)
+  self.assertEqual(len(packs['courses']),70)
   for c in packs['courses']:
-   self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02','D28-C04','D09-C04','D10-C04','D25-C03','D34-C03'} else 4)
-   self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02','D25-C03','D34-C03'} else 10 if c['id'] in {'D28-C04','D09-C04','D10-C04','D25-C03','D34-C03'} else 6)
+   self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02','D28-C04','D09-C04','D10-C04','D25-C03','D34-C03','D19-C01'} else 4)
+   self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02','D25-C03','D34-C03','D19-C01'} else 10 if c['id'] in {'D28-C04','D09-C04','D10-C04','D25-C03','D34-C03','D19-C01'} else 6)
    self.assertEqual(sum(x['points'] for x in c['practice']['criteria']),12)
    check_ids={q['id'] for q in c['questions']}|{x['id'] for x in c['practice']['criteria']}
    for outcome in c['outcomes']:
@@ -697,10 +697,10 @@ class LibraryTests(unittest.TestCase):
   from learning_completion_plan import render_completion_plan
   source=json.loads((D/'remaining-65-plan.json').read_text());current=json.loads((D/'catalog.json').read_text())['directions']
   result=json.loads((O/'remaining-65-plan.json').read_text())
-  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=47,introductions_written_unreviewed=18,full_completion_demonstrated=0))
+  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=46,introductions_written_unreviewed=19,full_completion_demonstrated=0))
   self.assertEqual(len({r['id'] for r in result['courses']}),65)
   self.assertEqual({r['full_completion'] for r in result['courses']},{'not_demonstrated'})
-  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04','D21-C03','D28-C03','D29-C01','D29-C03','D19-C02','D19-C04','D09-C04','D28-C04','D25-C03','D34-C03'})
+  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04','D21-C03','D28-C03','D29-C01','D29-C03','D19-C02','D19-C04','D09-C04','D28-C04','D25-C03','D34-C03','D19-C01'})
   for r in result['courses']:
    for key in ['content_to_develop','practice_evidence_to_obtain','blocking_limits']:self.assertGreater(len(r[key]),20)
   with tempfile.TemporaryDirectory() as folder:
@@ -835,14 +835,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],307)
-  self.assertEqual(progress['open_answers'],458)
-  self.assertEqual(progress['materials'],70)
-  self.assertEqual(progress['planned'],47)
+  self.assertEqual(progress['lessons'],315)
+  self.assertEqual(progress['open_answers'],470)
+  self.assertEqual(progress['materials'],71)
+  self.assertEqual(progress['planned'],46)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['307 уроков','458 ответов на контрольные вопросы','47 курсов','307 разборов заданий']:self.assertIn(text,hub)
+  for text in ['315 уроков','470 ответов на контрольные вопросы','46 курсов','315 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -931,14 +931,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),70)
+  self.assertEqual(len(ledger['materials']),71)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),280)
+  self.assertEqual(len(rows),284)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -962,12 +962,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,307)
+  self.assertEqual(count,315)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=458,exercise=307,practice=70))
-  self.assertEqual(len({r['id'] for r in data['entries']}),835)
+  self.assertEqual(data['counts'],dict(question=470,exercise=315,practice=71))
+  self.assertEqual(len({r['id'] for r in data['entries']}),856)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
@@ -1807,5 +1807,55 @@ class LibraryTests(unittest.TestCase):
    for bad in [raw+b'\n'*(65537-len(raw)),b'wrong\n',raw+b'L01,https://portal.example.invalid\n',raw+b'L00,"broken\n',raw.replace(b'L12,https:',b'L12,,https:')]:
     p.write_bytes(bad);r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'');self.assertIn('rejected',r.stderr)
    p.unlink();r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'')
+
+ def storekeeper_lab(self):
+  import importlib.util
+  spec=importlib.util.spec_from_file_location('storekeeper_count',D/'labs/storekeeper-count.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+ def test_storekeeper_independent_oracles_no_mutation_or_netting(self):
+  m=self.storekeeper_lab();rows=m.read_case(D/'labs');before=copy.deepcopy(rows);r=m.reconcile(rows);s=r['summary']
+  self.assertEqual([x['status'] for x in r['positions']],['matched','recount_conflict','repeated_difference','recount_required','not_counted','repeated_difference'])
+  self.assertEqual([x['initial_delta_qty'] for x in r['positions']],[0,-2,3,-1,None,-3]);self.assertEqual([x['repeated_delta_qty'] for x in r['positions']],[0,None,3,None,None,-3]);self.assertEqual([x['repeated_value_kopecks'] for x in r['positions']],[0,None,900,None,None,-1500])
+  self.assertEqual(s,dict(status_counts=dict(matched=1,not_counted=1,recount_required=1,recount_conflict=1,repeated_difference=2),unresolved_positions=3,repeated_surplus_value_kopecks=900,repeated_shortage_value_kopecks=-1500,repeated_net_value_kopecks=-600,repeated_gross_value_kopecks=2400))
+  self.assertEqual(rows,before);self.assertIn('not approved corrections',r['limits']);self.assertTrue(r['fictional'])
+  rows[2]['cost_kopecks']='500';s=m.reconcile(rows)['summary'];self.assertEqual((s['repeated_surplus_value_kopecks'],s['repeated_shortage_value_kopecks'],s['repeated_net_value_kopecks'],s['repeated_gross_value_kopecks'],s['unresolved_positions']),(1500,-1500,0,3000,3))
+ def test_storekeeper_separate_recount_scenarios(self):
+  m=self.storekeeper_lab()
+  cases=[(1,dict(count_qty='49'),(900,-1700,-800,2600,2)),(3,dict(recount_qty='19'),(900,-1600,-700,2500,2)),(4,dict(count_qty='0',recount_qty='0'),(900,-5500,-4600,6400,2)),(2,dict(cost_kopecks='0'),(0,-1500,-1500,1500,3))]
+  for index,patch,expected in cases:
+   rows=m.read_case(D/'labs');rows[index].update(patch);s=m.reconcile(rows)['summary'];self.assertEqual(tuple(s[k] for k in ['repeated_surplus_value_kopecks','repeated_shortage_value_kopecks','repeated_net_value_kopecks','repeated_gross_value_kopecks','unresolved_positions']),expected)
+  rows=m.read_case(D/'labs')
+  for row in rows:row['count_qty']=row['book_qty'];row['recount_qty']=''
+  r=m.reconcile(rows);self.assertEqual(r['summary']['status_counts']['matched'],6);self.assertEqual(r['summary']['unresolved_positions'],0);self.assertEqual(r['summary']['repeated_gross_value_kopecks'],0)
+ def test_storekeeper_zero_missing_conflict_precedence_and_identity(self):
+  m=self.storekeeper_lab();rows=m.read_case(D/'labs');rows[4]['count_qty']='0';r=m.reconcile(rows);self.assertEqual((r['positions'][4]['status'],r['positions'][4]['initial_delta_qty'],r['positions'][4]['repeated_delta_qty']),('recount_required',-10,None))
+  rows[0]['recount_qty']='99';r=m.reconcile(rows);self.assertEqual(r['positions'][0]['status'],'recount_conflict');self.assertIsNone(r['positions'][0]['repeated_value_kopecks']);self.assertEqual(r['summary']['unresolved_positions'],4)
+  row=dict(rows[0],position_id='A02',lot='LOTNEW',recount_qty='');self.assertEqual(len(m.reconcile(rows+[row])['positions']),7)
+  zero=dict(rows[0],book_qty='0',count_qty='0',recount_qty='0',cost_kopecks='0');self.assertEqual(m.reconcile([zero])['positions'][0]['status'],'matched')
+  for count,repeat,status in [('','', 'not_counted'),('3','', 'recount_required'),('3','3','repeated_difference'),('3','4','recount_conflict'),('5','','matched'),('5','4','recount_conflict')]:
+   row=dict(rows[0],book_qty='5',count_qty=count,recount_qty=repeat);self.assertEqual(m.reconcile([row])['positions'][0]['status'],status)
+ def test_storekeeper_strict_schema_bounds_and_atomic_refusal(self):
+  m=self.storekeeper_lab();rows=m.read_case(D/'labs')
+  for patch in [dict(unit='kg'),dict(position_id='bad'),dict(book_qty='-1'),dict(book_qty='1.0'),dict(book_qty='1000001'),dict(book_qty=''),dict(cost_kopecks=True),dict(cost_kopecks='1e2'),dict(count_qty='',recount_qty='1'),dict(count_qty=' '),dict(extra='x')]:
+   bad=copy.deepcopy(rows);bad[-1].update(patch);before=copy.deepcopy(bad)
+   with self.assertRaises(ValueError,msg=str(patch)):m.reconcile(bad)
+   self.assertEqual(before,bad)
+  for bad in [[],rows*17,rows+[rows[0]],rows+[dict(rows[0],position_id='NEW')]]:
+   with self.assertRaises(ValueError):m.reconcile(bad)
+  hundred=[dict(rows[0],position_id='P'+str(i),lot='LOT'+str(i),book_qty='1000000',count_qty='0',recount_qty='0',cost_kopecks='1000000') for i in range(100)]
+  self.assertEqual(m.reconcile(hundred)['summary']['repeated_shortage_value_kopecks'],-100000000000000)
+ def test_storekeeper_cli_readonly_bounds_and_public_parity(self):
+  import tempfile
+  names=['storekeeper-count.py','storekeeper-count-case.csv','storekeeper-guide.md']
+  for name in names:self.assertEqual((D/'labs'/name).read_bytes(),(O/name).read_bytes())
+  c=json.loads((D/'storekeeper-packs.json').read_text())['courses'][0];self.assertEqual((len(c['lessons']),len(c['questions'])),(8,12));self.assertIn('/storekeeper-stock-count.html',(R/'sitemap.xml').read_text())
+  with tempfile.TemporaryDirectory(prefix='storekeeper case ') as folder:
+   folder=Path(folder);p=folder/names[1];raw=(D/'labs'/p.name).read_bytes();p.write_bytes(raw)
+   def run():return subprocess.run([sys.executable,str(D/'labs'/names[0]),'--directory',str(folder)],capture_output=True,text=True)
+   r=run();self.assertEqual(r.returncode,0,r.stderr);self.assertEqual(json.loads(r.stdout)['summary']['repeated_net_value_kopecks'],-600);self.assertEqual(p.read_bytes(),raw)
+   p.write_bytes(b'\xef\xbb\xbf'+raw);self.assertEqual(run().returncode,0)
+   p.write_bytes(raw+b'\n'*(65536-len(raw)));self.assertEqual(run().returncode,0)
+   for bad in [raw+b'\n'*(65537-len(raw)),b'wrong\n',raw+raw.splitlines(keepends=True)[1],raw.replace(b'pcs',b'kg'),raw+b'A00,"broken\n']:
+    p.write_bytes(bad);r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'');self.assertIn('rejected',r.stderr)
+   p.unlink();self.assertEqual(run().returncode,2)
 
 if __name__=='__main__':unittest.main()

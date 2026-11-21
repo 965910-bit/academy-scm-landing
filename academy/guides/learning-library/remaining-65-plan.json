@@ -1,6 +1,6 @@
 {
   "author": "Герасимов Дмитрий Сергеевич",
-  "version": "0.38.0",
+  "version": "0.39.0",
   "date": "2026-11-19",
   "baseline": {
     "library_version": "0.25.0",
@@ -426,11 +426,11 @@
       "direction": "Склады и внутренняя логистика",
       "title": "Кладовщик",
       "baseline_status": "planned",
-      "content_to_develop": "Приемка, размещение, учет, инвентаризация и ответственность",
-      "practice_evidence_to_obtain": "Вымышленная партия/расхождения/адреса и документы со сверкой",
+      "content_to_develop": "Написаны8 уроков: приемка/идентичность/хранение/выдача/срез/повтор/оценка/протокол. Остаются полная профессия, разнообразные товары/оснащение, физическая практика, применимые условия/документы/права, реальные системы учета.",
+      "practice_evidence_to_obtain": "Есть6 вымышленных позиций, офлайн-сверка/null/конфликтов/раздельной стоимости, сценарии приемки/передачи и рубрика. Нужны разрешенная физическая практика/оснащение/наблюдение, реальные товарные/учетные основания, независимые экспертизы и фактическая апробация.",
       "blocking_limits": "Режим товара/техника/полномочия;не полный допуск к механизации",
-      "current_catalog_status": "planned",
-      "introduction_url": null,
+      "current_catalog_status": "introductory_written_unreviewed",
+      "introduction_url": "storekeeper-stock-count.html",
       "full_completion": "not_demonstrated"
     },
     {
@@ -865,8 +865,8 @@
   ],
   "progress": {
     "baseline_titles": 65,
-    "still_planned": 47,
-    "introductions_written_unreviewed": 18,
+    "still_planned": 46,
+    "introductions_written_unreviewed": 19,
     "full_completion_demonstrated": 0
   }
 }
