@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),55)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),61)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),53)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),63)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,7 +45,7 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),61)
+  self.assertEqual(len(packs['courses']),63)
   for c in packs['courses']:
    self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02'} else 4)
    self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02'} else 6)
@@ -697,10 +697,10 @@ class LibraryTests(unittest.TestCase):
   from learning_completion_plan import render_completion_plan
   source=json.loads((D/'remaining-65-plan.json').read_text());current=json.loads((D/'catalog.json').read_text())['directions']
   result=json.loads((O/'remaining-65-plan.json').read_text())
-  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=55,introductions_written_unreviewed=10,full_completion_demonstrated=0))
+  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=53,introductions_written_unreviewed=12,full_completion_demonstrated=0))
   self.assertEqual(len({r['id'] for r in result['courses']}),65)
   self.assertEqual({r['full_completion'] for r in result['courses']},{'not_demonstrated'})
-  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04','D21-C03','D28-C03'})
+  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04','D21-C03','D28-C03','D29-C01','D29-C03'})
   for r in result['courses']:
    for key in ['content_to_develop','practice_evidence_to_obtain','blocking_limits']:self.assertGreater(len(r[key]),20)
   with tempfile.TemporaryDirectory() as folder:
@@ -835,14 +835,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],255)
-  self.assertEqual(progress['open_answers'],386)
-  self.assertEqual(progress['materials'],62)
-  self.assertEqual(progress['planned'],55)
+  self.assertEqual(progress['lessons'],263)
+  self.assertEqual(progress['open_answers'],398)
+  self.assertEqual(progress['materials'],64)
+  self.assertEqual(progress['planned'],53)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['255 уроков','386 ответов на контрольные вопросы','55 курсов','255 разборов заданий']:self.assertIn(text,hub)
+  for text in ['263 уроков','398 ответов на контрольные вопросы','53 курсов','263 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -931,14 +931,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),62)
+  self.assertEqual(len(ledger['materials']),64)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),248)
+  self.assertEqual(len(rows),256)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -962,12 +962,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,255)
+  self.assertEqual(count,263)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=386,exercise=255,practice=62))
-  self.assertEqual(len({r['id'] for r in data['entries']}),703)
+  self.assertEqual(data['counts'],dict(question=398,exercise=263,practice=64))
+  self.assertEqual(len({r['id'] for r in data['entries']}),725)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
@@ -1412,5 +1412,73 @@ class LibraryTests(unittest.TestCase):
    self.assertEqual(run('sales').returncode,0)
    (folder/'supplier-deliveries.csv').unlink();self.assertEqual(run('sales').returncode,0)
    r=run('suppliers');self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'')
+
+ def load_business_economics_lab(self):
+  import importlib.util
+  spec=importlib.util.spec_from_file_location('business_economics',D/'labs/business-economics-labs.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+ def test_startup_independent_oracles_and_cash_stresses(self):
+  m=self.load_business_economics_lab();data=m.read_rows(D/'labs','startup-case.csv');before=copy.deepcopy(data);r=m.startup(data)
+  self.assertEqual((r['unit_contribution_rub'],r['breakeven_units'],r['cash_after_setup_rub']),(3000,30,130000))
+  self.assertEqual([x['operating_result_rub'] for x in r['months']],[-30000,0,30000])
+  self.assertEqual([x['closing_cash_rub'] for x in r['months']],[50000,25000,30000])
+  self.assertEqual([x['receivable_rub'] for x in r['months']],[50000,75000,100000])
+  self.assertEqual(r['minimum_checkpoint_cash_rub'],25000);self.assertEqual(r['cumulative_operating_result_rub'],0);self.assertEqual(data,before)
+  data[0]['collected_now_percent']='0';r=m.startup(data)
+  self.assertEqual([x['closing_cash_rub'] for x in r['months']],[0,-50000,-70000]);self.assertEqual(r['extra_opening_cash_to_nonnegative_checkpoints_rub'],70000);self.assertEqual(r['cumulative_operating_result_rub'],0)
+  data=copy.deepcopy(before);data[0]['unit_price_rub']='4500';r=m.startup(data)
+  self.assertEqual((r['breakeven_units'],r['cumulative_operating_result_rub']),(36,-45000))
+  self.assertEqual([x['closing_cash_rub'] for x in r['months']],[45000,7500,-5000]);self.assertEqual(r['extra_opening_cash_to_nonnegative_checkpoints_rub'],5000)
+ def test_startup_zero_bases_capacity_and_initial_checkpoint(self):
+  m=self.load_business_economics_lab();base=m.read_rows(D/'labs','startup-case.csv')
+  for price in ['2000','1000']:
+   data=copy.deepcopy(base);data[0]['unit_price_rub']=price;r=m.startup(data);self.assertIsNone(r['breakeven_units']);self.assertFalse(r['breakeven_within_capacity'])
+  data=copy.deepcopy(base);data[0]['monthly_capacity']='25';r=m.startup(data);self.assertFalse(r['breakeven_within_capacity']);self.assertFalse(r['capacity_feasible']);self.assertEqual([x['capacity_feasible'] for x in r['months']],[True,False,False])
+  data=copy.deepcopy(base);data[0].update(opening_cash_rub='0',monthly_fixed_rub='0',month1_units='0',month2_units='0',month3_units='0');r=m.startup(data)
+  self.assertEqual(r['minimum_checkpoint_cash_rub'],-120000);self.assertEqual(r['extra_opening_cash_to_nonnegative_checkpoints_rub'],120000);self.assertEqual(r['breakeven_units'],0)
+  data=copy.deepcopy(base);data[0].update(unit_price_rub='1',unit_variable_rub='0',monthly_fixed_rub='0',setup_cash_rub='0',opening_cash_rub='0',month1_units='1',month2_units='0',month3_units='0',collected_now_percent='33')
+  r=m.startup(data);self.assertEqual([x['closing_cash_rub'] for x in r['months']],[.33,1,1]);self.assertEqual(r['months'][0]['receivable_rub'],.67)
+ def test_department_independent_oracles_allocation_and_closure(self):
+  m=self.load_business_economics_lab();data=m.read_rows(D/'labs','department-case.csv');before=copy.deepcopy(data);r=m.department(data)
+  self.assertEqual([x['segment_result_rub'] for x in r['products']],[42000,50000]);self.assertEqual([x['allocated_result_rub'] for x in r['products']],[42000,-10000])
+  self.assertEqual([x['contribution_per_minute_rub'] for x in r['products']],[60,50])
+  t=r['totals'];self.assertEqual((t['revenue_rub'],t['variable_rub'],t['contribution_rub'],t['operating_result_rub'],t['minutes'],t['spare_minutes']),(220000,88000,132000,32000,2400,0));self.assertEqual(data,before)
+  for row in data:row['allocated_common_rub']='30000'
+  r=m.department(data);self.assertEqual([x['allocated_result_rub'] for x in r['products']],[12000,20000]);self.assertEqual(r['totals']['operating_result_rub'],32000)
+  data=copy.deepcopy(before);data[1].update(units='0',allocated_common_rub='0');data[0]['allocated_common_rub']='60000'
+  self.assertEqual(m.department(data)['totals']['operating_result_rub'],-28000)
+  data[1]['direct_fixed_rub']='0';self.assertEqual(m.department(data)['totals']['operating_result_rub'],-18000)
+  data[0]['units']='80';r=m.department(data);self.assertEqual(r['totals']['operating_result_rub'],54000);self.assertTrue(r['totals']['capacity_feasible'])
+ def test_department_opportunity_cost_and_validation(self):
+  m=self.load_business_economics_lab();base=m.read_rows(D/'labs','department-case.csv');data=copy.deepcopy(base);data[0]['units']='50'
+  r=m.department(data);self.assertFalse(r['totals']['capacity_feasible']);self.assertEqual(r['totals']['deficit_minutes'],300);self.assertEqual(r['totals']['operating_result_rub'],50000)
+  data[1]['units']='15';r=m.department(data);self.assertTrue(r['totals']['capacity_feasible']);self.assertEqual(r['totals']['operating_result_rub'],35000)
+  for key,value in [('allocated_common_rub','1'),('minutes_per_unit','0'),('unit_variable_rub','NaN'),('units','-1'),('units','1.5'),('unit_price_rub','10000001')]:
+   data=copy.deepcopy(base);data[0][key]=value
+   with self.assertRaises(ValueError,msg=key+'='+value):m.department(data)
+  with self.assertRaises(ValueError):m.department(base+[base[0]])
+  data=copy.deepcopy(base);data[0]['unit_variable_rub']='4000';self.assertLess(m.department(data)['products'][0]['contribution_rub'],0)
+  startup=m.read_rows(D/'labs','startup-case.csv')
+  for key,value in [('collected_now_percent','101'),('monthly_capacity','0'),('month1_units',''),('unit_price_rub','True')]:
+   data=copy.deepcopy(startup);data[0][key]=value
+   with self.assertRaises(ValueError):m.startup(data)
+  other=copy.deepcopy(startup[0]);other['scenario_id']='OTHER'
+  with self.assertRaises(ValueError):m.startup(startup+[other])
+ def test_business_economics_published_cli_readonly_and_atomic_error(self):
+  import tempfile,hashlib
+  names=['business-economics-labs.py','startup-case.csv','department-case.csv','business-launch-guide.md','department-economics-guide.md']
+  for name in names:self.assertEqual((D/'labs'/name).read_bytes(),(O/name).read_bytes())
+  for slug in ['business-launch-validation','department-economics']:self.assertIn('/'+slug+'.html',(R/'sitemap.xml').read_text())
+  lab=D/'labs/business-economics-labs.py'
+  with tempfile.TemporaryDirectory(prefix='business economics ') as folder:
+   folder=Path(folder)
+   for name in names[1:3]:(folder/name).write_bytes((D/'labs'/name).read_bytes())
+   before={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in folder.iterdir()}
+   def run(case):return subprocess.run([sys.executable,str(lab),'--case',case,'--directory',str(folder)],capture_output=True,text=True)
+   r=run('all');self.assertEqual(r.returncode,0,r.stderr);self.assertEqual(set(json.loads(r.stdout)),{'startup','department'})
+   self.assertEqual(before,{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in folder.iterdir()})
+   (folder/'department-case.csv').write_text('invalid\n');r=run('all');self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'');self.assertIn('rejected',r.stderr)
+   self.assertEqual(run('startup').returncode,0)
+   (folder/'department-case.csv').write_bytes((D/'labs/department-case.csv').read_bytes());(folder/'startup-case.csv').unlink();self.assertEqual(run('department').returncode,0)
+   r=run('startup');self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'')
 
 if __name__=='__main__':unittest.main()
