@@ -1,6 +1,6 @@
 {
   "author": "Герасимов Дмитрий Сергеевич",
-  "version": "0.27.0",
+  "version": "0.29.0",
   "date": "2026-11-19",
   "baseline": {
     "library_version": "0.25.0",
@@ -491,11 +491,11 @@
       "direction": "Закупки, договоры и SCM",
       "title": "поставщики",
       "baseline_status": "planned",
-      "content_to_develop": "Требования к поставщику, данные проверки, риски и мониторинг",
-      "practice_evidence_to_obtain": "Сравнение вымышленных предложений/доказательств и план контроля",
+      "content_to_develop": "Вводный мониторинг написан; остаются сегментация и поиск поставщиков, требования категории, основания/источники проверки, финансовые/операционные риски, договорные процедуры, частичные поставки и управление отношениями.",
+      "practice_evidence_to_obtain": "Помимо кабинетных шести обязательств: разнообразные подтвержденные кейсы проверки/рисков, протокол улучшений и повторного мониторинга; независимая предметная/правовая/ответная экспертизы и фактическая апробация.",
       "blocking_limits": "Режим закупки/конфликт интересов/тайна;не автоматическое исключение",
-      "current_catalog_status": "planned",
-      "introduction_url": null,
+      "current_catalog_status": "introductory_written_unreviewed",
+      "introduction_url": "supplier-performance.html",
       "full_completion": "not_demonstrated"
     },
     {
@@ -673,11 +673,11 @@
       "direction": "Маркетинг и электронная торговля",
       "title": "аналитика продаж",
       "baseline_status": "planned",
-      "content_to_develop": "Метрики/воронка/когорты/сезонность и источники продаж",
-      "practice_evidence_to_obtain": "Набор заказов, маржа/возвраты/конверсия и независимая сверка",
+      "content_to_develop": "Вводная экономика каналов написана; остаются воронка/конверсия, полные временные когорты, сезонность, атрибуция, неопределенность/статистика, прогноз, реальные интеграции и контроль качества данных.",
+      "practice_evidence_to_obtain": "Помимо четырех вымышленных заказов: разнообразные наборы с временными окнами/возвратами, конверсией и независимой сверкой; предметная/правовая/ответная экспертизы и фактическая апробация, не только автотесты.",
       "blocking_limits": "Определения/полнота/причинность;не считать выручку прибылью",
-      "current_catalog_status": "planned",
-      "introduction_url": null,
+      "current_catalog_status": "introductory_written_unreviewed",
+      "introduction_url": "sales-channel-analytics.html",
       "full_completion": "not_demonstrated"
     },
     {
@@ -865,8 +865,8 @@
   ],
   "progress": {
     "baseline_titles": 65,
-    "still_planned": 57,
-    "introductions_written_unreviewed": 8,
+    "still_planned": 55,
+    "introductions_written_unreviewed": 10,
     "full_completion_demonstrated": 0
   }
 }
