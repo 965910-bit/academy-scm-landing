@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "author": "Герасимов Дмитрий Сергеевич",
+  "library_version": "0.36.0",
+  "date": "2026-11-19",
+  "status": "automated_browser_checks_only",
+  "target": "digital-access-practice.html",
+  "runner_sha256": "1c91c869b359a0141c5e8f9fd8a1bb27f3b9e62c661df20255b9a1265c8aa39b",
+  "target_sha256": "bb52263c19ee8a3a4ef3fd02869a9cf7f33827b67f22667ce485c98318c991e7",
+  "browser": {
+    "engine": "Chromium",
+    "version": "153.0.8010.0",
+    "headless": true
+  },
+  "tool": {
+    "name": "playwright-core",
+    "version": "1.65.1"
+  },
+  "checks": [
+    {
+      "id": "B1",
+      "result": "pass",
+      "evidence": "Tab/Enter traversal to submit; missing=4 focuses s1; computed outline at least3px."
+    },
+    {
+      "id": "B2",
+      "result": "pass",
+      "evidence": "Native Tab/ArrowRight/Space/Enter selects b,a,b,b, reports4/4, opens4 explanations."
+    },
+    {
+      "id": "B3",
+      "result": "pass",
+      "evidence": "Keyboard reset clears selections, disclosures and previous result."
+    },
+    {
+      "id": "B4",
+      "result": "pass",
+      "evidence": "No document horizontal overflow at320/390/768/1440CSSpx; submit visible. Not a visual audit."
+    },
+    {
+      "id": "B5",
+      "result": "pass",
+      "evidence": "36px body text (200% of18px) at320CSSpx: no horizontal overflow. Not browser zoom or OS magnifier testing."
+    },
+    {
+      "id": "B6",
+      "result": "pass",
+      "evidence": "Fresh reload resets transient choices; local file loaded with network offline."
+    },
+    {
+      "id": "B7",
+      "result": "pass",
+      "evidence": "JavaScript-disabled offline context:4groups, buttons disabled, native disclosure opens readable answer, noscript visible."
+    },
+    {
+      "id": "B9",
+      "result": "pass",
+      "evidence": "Removing body overflow-wrap reproduces overflow at320CSSpx/36px text; unchanged file passesB5. Mutation is in-memory only."
+    },
+    {
+      "id": "B8",
+      "result": "pass",
+      "evidence": "No pageerror in scripted context; no HTTP(S) requests in scripted context. No remote integration tested."
+    }
+  ],
+  "not_checked": [
+    "Screen readers and assistive technology announcements",
+    "Human keyboard or usability session",
+    "Browser zoom/OS magnification",
+    "Firefox/WebKit and other browser/OS combinations",
+    "Independent subject/legal/answer review",
+    "Learner pilot or complete WCAG conformance",
+    "Server permissions and production browser behavior"
+  ]
+}

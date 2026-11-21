@@ -18,7 +18,8 @@
     "test:development:browser": "node tests/development-browser.cjs",
     "test:lms:browser": "node tests/lms-browser.cjs",
     "build:studio": "esbuild ../scripts/studio-packages-entry.js --bundle --minify --outfile=vendor/studio-packages.js --legal-comments=eof",
-    "test:studio:browser": "node tests/studio-browser.cjs"
+    "test:studio:browser": "node tests/studio-browser.cjs",
+    "test:digital-access:browser": "node tests/digital-access-browser.cjs"
   },
   "devDependencies": {
     "dompurify": "^3.4.18",
