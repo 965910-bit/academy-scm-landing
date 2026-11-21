@@ -1,0 +1,13 @@
+case_id,url
+L01,https://portal.example.invalid/training
+L02,http://portal.example.invalid/training
+L03,https://portal.example.invalid.other.invalid/training
+L04,https://portal.example.invalid@other.invalid/training
+L05,https://PORTAL.EXAMPLE.INVALID:443/help
+L06,https://portal.example.invalid:8443/help
+L07,https://portal.example.invalid./help
+L08,https://portal.example.invalid/training?next=https://other.invalid
+L09,https://portal.example.invalid/%74raining
+L10,//portal.example.invalid/help
+L11,https://xn--e1afmkfd.invalid/help
+L12,https://portal.example.invalid:bad/help

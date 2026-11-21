@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),48)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),68)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),47)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),69)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,10 +45,10 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),68)
+  self.assertEqual(len(packs['courses']),69)
   for c in packs['courses']:
-   self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02','D28-C04','D09-C04','D10-C04','D25-C03'} else 4)
-   self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02','D25-C03'} else 10 if c['id'] in {'D28-C04','D09-C04','D10-C04','D25-C03'} else 6)
+   self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02','D28-C04','D09-C04','D10-C04','D25-C03','D34-C03'} else 4)
+   self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02','D25-C03','D34-C03'} else 10 if c['id'] in {'D28-C04','D09-C04','D10-C04','D25-C03','D34-C03'} else 6)
    self.assertEqual(sum(x['points'] for x in c['practice']['criteria']),12)
    check_ids={q['id'] for q in c['questions']}|{x['id'] for x in c['practice']['criteria']}
    for outcome in c['outcomes']:
@@ -697,10 +697,10 @@ class LibraryTests(unittest.TestCase):
   from learning_completion_plan import render_completion_plan
   source=json.loads((D/'remaining-65-plan.json').read_text());current=json.loads((D/'catalog.json').read_text())['directions']
   result=json.loads((O/'remaining-65-plan.json').read_text())
-  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=48,introductions_written_unreviewed=17,full_completion_demonstrated=0))
+  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=47,introductions_written_unreviewed=18,full_completion_demonstrated=0))
   self.assertEqual(len({r['id'] for r in result['courses']}),65)
   self.assertEqual({r['full_completion'] for r in result['courses']},{'not_demonstrated'})
-  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04','D21-C03','D28-C03','D29-C01','D29-C03','D19-C02','D19-C04','D09-C04','D28-C04','D25-C03'})
+  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04','D21-C03','D28-C03','D29-C01','D29-C03','D19-C02','D19-C04','D09-C04','D28-C04','D25-C03','D34-C03'})
   for r in result['courses']:
    for key in ['content_to_develop','practice_evidence_to_obtain','blocking_limits']:self.assertGreater(len(r[key]),20)
   with tempfile.TemporaryDirectory() as folder:
@@ -835,14 +835,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],299)
-  self.assertEqual(progress['open_answers'],446)
-  self.assertEqual(progress['materials'],69)
-  self.assertEqual(progress['planned'],48)
+  self.assertEqual(progress['lessons'],307)
+  self.assertEqual(progress['open_answers'],458)
+  self.assertEqual(progress['materials'],70)
+  self.assertEqual(progress['planned'],47)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['299 уроков','446 ответов на контрольные вопросы','48 курсов','299 разборов заданий']:self.assertIn(text,hub)
+  for text in ['307 уроков','458 ответов на контрольные вопросы','47 курсов','307 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -931,14 +931,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),69)
+  self.assertEqual(len(ledger['materials']),70)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),276)
+  self.assertEqual(len(rows),280)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -962,12 +962,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,299)
+  self.assertEqual(count,307)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=446,exercise=299,practice=69))
-  self.assertEqual(len({r['id'] for r in data['entries']}),814)
+  self.assertEqual(data['counts'],dict(question=458,exercise=307,practice=70))
+  self.assertEqual(len({r['id'] for r in data['entries']}),835)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
@@ -1757,6 +1757,54 @@ class LibraryTests(unittest.TestCase):
    r=run();self.assertEqual(r.returncode,0,r.stderr);self.assertEqual(json.loads(r.stdout)['results'][1]['status'],'critical_block');self.assertEqual(p.read_bytes(),raw)
    p.write_bytes(b'\xef\xbb\xbf'+raw);self.assertEqual(run().returncode,0)
    for bad in [b'{',raw+b' '*(65537-len(raw)),raw.replace(b'"fictional": true',b'"fictional": true,"fictional": true'),raw.replace(b'"P1": 3',b'"P1": true'),raw.replace(b'EX05',b'EX01')]:
+    p.write_bytes(bad);r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'');self.assertIn('rejected',r.stderr)
+   p.unlink();r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'')
+
+ def safe_work_lab(self):
+  import importlib.util
+  spec=importlib.util.spec_from_file_location('safe_work_links',D/'labs/safe-work-links.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+ def test_safe_work_independent_oracles_and_no_safety_verdict(self):
+  m=self.safe_work_lab();rows=m.read_case(D/'labs');before=copy.deepcopy(rows);report=m.calculate(rows)
+  expected=['manual_verification_required','non_https','host_not_listed','userinfo','manual_verification_required','port_not_listed','noncanonical_authority','extra_components','path_not_listed','non_https','noncanonical_authority','invalid_authority']
+  self.assertEqual([r['reason'] for r in report['results']],expected);self.assertEqual([r['case_id'] for r in report['results']],['L'+str(i).zfill(2) for i in range(1,13)])
+  self.assertEqual(report['results'][2]['host'],'portal.example.invalid.other.invalid');self.assertIsNone(report['results'][3]['host']);self.assertEqual(rows,before)
+  self.assertTrue(report['fictional']);self.assertIn('No safety/authenticity verdict',report['limits'])
+  self.assertTrue(all('url' not in row and 'safe' not in row for row in report['results']))
+ def test_safe_work_parser_boundaries_and_first_failure_precedence(self):
+  m=self.safe_work_lab();base='https://portal.example.invalid'
+  for value in [base,base+'/',base+'/help',base+'/training','HTTPS://PORTAL.EXAMPLE.INVALID:443/help',base+':0443/help']:
+   self.assertEqual(m.inspect_url(value)['reason'],'manual_verification_required',value)
+  examples={base+'/help?':'extra_components',base+'/help#':'extra_components',base+'/help#ok':'extra_components',base+'/HELP':'path_not_listed',base+'/%68elp':'path_not_listed',base+'/../help':'path_not_listed',base+'//help':'path_not_listed',base+':8443/unknown?x=1':'port_not_listed','https://portal.example.invalid.evil.invalid:8443/help':'host_not_listed','https://user:secret@portal.example.invalid:8443/help':'userinfo',base+':/help':'noncanonical_authority',base+':65536/help':'invalid_authority',base+':-1/help':'invalid_authority','https:///help':'invalid_authority','https://[bad/help':'invalid_authority','javascript:alert(1)':'non_https','https://%70ortal.example.invalid/help':'noncanonical_authority','https://[::1]/help':'noncanonical_authority'}
+  for value,reason in examples.items():self.assertEqual(m.inspect_url(value)['reason'],reason,value)
+  for value in [' '+base,base+'\t/help',base+'\n/help',base+'\r/help',base+'\\help',base+'\x00',base+'\x7f','https://портал.invalid/help']:
+   self.assertEqual(m.inspect_url(value)['reason'],'noncanonical_input')
+  report=m.calculate([dict(case_id='L00',url='https://user:secret@portal.example.invalid/help')]);self.assertNotIn('secret',json.dumps(report));self.assertIsNone(report['results'][0]['host'])
+ def test_safe_work_contract_bounds_atomic_validation_and_no_network(self):
+  from unittest.mock import patch
+  import socket,urllib.request
+  m=self.safe_work_lab();rows=m.read_case(D/'labs')
+  with patch.object(socket,'socket',side_effect=AssertionError('Network forbidden')),patch.object(socket,'getaddrinfo',side_effect=AssertionError('DNS forbidden')),patch.object(urllib.request,'urlopen',side_effect=AssertionError('HTTP forbidden')):
+   self.assertEqual(len(m.calculate(rows)['results']),12)
+  for value in ['',None,True,[],b'https://portal.example.invalid','x'*2049]:
+   with self.assertRaises(ValueError):m.inspect_url(value)
+  self.assertEqual(m.inspect_url('x'*2048)['reason'],'non_https')
+  hundred=[dict(case_id='L'+str(i).zfill(2),url=rows[0]['url']) for i in range(100)];self.assertEqual(len(m.calculate(hundred)['results']),100)
+  for bad in [[],hundred+[hundred[0]],rows+[rows[0]],rows+[dict(case_id='A01',url=rows[0]['url'])],rows+[dict(case_id='L00',url='')],rows+[dict(case_id='L00',url=rows[0]['url'],extra='1')]]:
+   before=copy.deepcopy(bad)
+   with self.assertRaises(ValueError):m.calculate(bad)
+   self.assertEqual(bad,before)
+ def test_safe_work_cli_readonly_byte_bounds_and_public_parity(self):
+  import tempfile
+  names=['safe-work-links.py','safe-work-links-case.csv','safe-work-guide.md']
+  for name in names:self.assertEqual((D/'labs'/name).read_bytes(),(O/name).read_bytes())
+  c=json.loads((D/'safe-work-packs.json').read_text())['courses'][0];self.assertEqual((len(c['lessons']),len(c['questions'])),(8,12));self.assertIn('/safe-digital-work.html',(R/'sitemap.xml').read_text())
+  with tempfile.TemporaryDirectory(prefix='safe work ') as folder:
+   folder=Path(folder);p=folder/names[1];raw=(D/'labs'/p.name).read_bytes();p.write_bytes(raw)
+   def run():return subprocess.run([sys.executable,str(D/'labs'/names[0]),'--directory',str(folder)],capture_output=True,text=True)
+   r=run();self.assertEqual(r.returncode,0,r.stderr);self.assertEqual(len(json.loads(r.stdout)['results']),12);self.assertEqual(p.read_bytes(),raw)
+   p.write_bytes(b'\xef\xbb\xbf'+raw);self.assertEqual(run().returncode,0)
+   p.write_bytes(raw+b'\n'*(65536-len(raw)));self.assertEqual(run().returncode,0)
+   for bad in [raw+b'\n'*(65537-len(raw)),b'wrong\n',raw+b'L01,https://portal.example.invalid\n',raw+b'L00,"broken\n',raw.replace(b'L12,https:',b'L12,,https:')]:
     p.write_bytes(bad);r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'');self.assertIn('rejected',r.stderr)
    p.unlink();r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'')
 

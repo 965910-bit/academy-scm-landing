@@ -1,0 +1,2 @@
+﻿version,case_id,observation,policy_reason,unverified,independent_channel,stopped_action,next_role
+0.38.0,L01,Точная форма по учебным правилам,manual_verification_required,DNS/TLS/содержимое/отправитель/права,Ранее известный разрешенный,Не переходить по кейсу,"Уполномоченная роль, не назначена"
