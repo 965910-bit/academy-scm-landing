@@ -1,0 +1,2 @@
+﻿case_id,work_fact,available_minutes,needed_minutes,shortfall,proposed_change,approval_owner_role,support_route,agreed_response_time,verification,limits
+WS01,Работа 450 минут при ресурсе 360,360,450,90,16 карточек;отчет 60;резерв 20,Уполномоченный координатор/принимающий,Приоритеты и разрешенная поддержка,Согласовать,Ресурс;качество;срочные;нагрузка коллег,Не диагноз;без личных данных
