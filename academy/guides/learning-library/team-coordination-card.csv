@@ -1,0 +1,2 @@
+﻿task_id,result,preparer_role,reviewer_role,acceptor_role,version,handoff_rule,status,available_minutes,needed_minutes,blocker,decision_owner,next_check
+T01,24 внутренние карточки (объем согласовать),Ирина (учебная роль),Павел (учебная роль),Координатор,1,ID;источник;статус;явное получение,Требует решения,150/90,120/96,Дефицит проверки 6 минут,Координатор в границах полномочий,До подтверждения срока
