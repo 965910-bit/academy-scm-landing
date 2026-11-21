@@ -1,0 +1,6 @@
+﻿candidate_id,data_score,communication_score,planning_score,evidence_ref
+R01,2,1,2,guide-R01
+R02,1,2,2,guide-R02
+R03,2,2,0,guide-R03
+R04,2,,1,guide-R04
+R05,1,1,1,guide-R05
