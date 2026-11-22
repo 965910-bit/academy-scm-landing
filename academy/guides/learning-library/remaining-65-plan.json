@@ -1,6 +1,6 @@
 {
   "author": "Герасимов Дмитрий Сергеевич",
-  "version": "0.39.0",
+  "version": "0.40.0",
   "date": "2026-11-19",
   "baseline": {
     "library_version": "0.25.0",
@@ -738,11 +738,11 @@
       "direction": "Дизайн и креативные профессии",
       "title": "дизайн",
       "baseline_status": "planned",
-      "content_to_develop": "Выбрать вид дизайна, аудиторию/носитель и критерии",
-      "practice_evidence_to_obtain": "Работы по брифу, итерации/доступность/подготовка передачи",
+      "content_to_develop": "Написаны8 уроков: бриф/структура/композиция/типографика/цвет/контраст/состояния/передача. Остаются полная профессия, разные проекты/инструменты/носители, реальные пользователи/браузеры, полная доступность и приемка.",
+      "practice_evidence_to_obtain": "Есть автономный HTML-макет,10 непрозрачных sRGB-пар/код/эталоны, бриф/матрица состояний/рубрика. Нужны реальная визуальная/браузерная/дикторская/пользовательская практика, разные проекты/условия/права, независимые экспертизы и фактическая апробация.",
       "blocking_limits": "Лицензии шрифтов/изображений;не полный курс всех видов дизайна",
-      "current_catalog_status": "planned",
-      "introduction_url": null,
+      "current_catalog_status": "introductory_written_unreviewed",
+      "introduction_url": "design-brief-to-handover.html",
       "full_completion": "not_demonstrated"
     },
     {
@@ -865,8 +865,8 @@
   ],
   "progress": {
     "baseline_titles": 65,
-    "still_planned": 46,
-    "introductions_written_unreviewed": 19,
+    "still_planned": 45,
+    "introductions_written_unreviewed": 20,
     "full_completion_demonstrated": 0
   }
 }

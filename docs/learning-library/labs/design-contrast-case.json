@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "fictional": true,
+  "pairs": [
+    {
+      "pair_id": "C01",
+      "foreground": "#000000",
+      "background": "#FFFFFF",
+      "declared_role": "normal_text"
+    },
+    {
+      "pair_id": "C02",
+      "foreground": "#777777",
+      "background": "#FFFFFF",
+      "declared_role": "normal_text"
+    },
+    {
+      "pair_id": "C03",
+      "foreground": "#767676",
+      "background": "#FFFFFF",
+      "declared_role": "normal_text"
+    },
+    {
+      "pair_id": "C04",
+      "foreground": "#949494",
+      "background": "#FFFFFF",
+      "declared_role": "normal_text"
+    },
+    {
+      "pair_id": "C05",
+      "foreground": "#949494",
+      "background": "#FFFFFF",
+      "declared_role": "large_text"
+    },
+    {
+      "pair_id": "C06",
+      "foreground": "#959595",
+      "background": "#FFFFFF",
+      "declared_role": "large_text"
+    },
+    {
+      "pair_id": "C07",
+      "foreground": "#FFFFFF",
+      "background": "#FFFFFF",
+      "declared_role": "normal_text"
+    },
+    {
+      "pair_id": "C08",
+      "foreground": "#123F65",
+      "background": "#FFFFFF",
+      "declared_role": "normal_text"
+    },
+    {
+      "pair_id": "C09",
+      "foreground": "#17283A",
+      "background": "#FFFFFF",
+      "declared_role": "normal_text"
+    },
+    {
+      "pair_id": "C10",
+      "foreground": "#FFFFFF",
+      "background": "#123F65",
+      "declared_role": "normal_text"
+    }
+  ]
+}

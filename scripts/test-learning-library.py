@@ -19,8 +19,8 @@ class LibraryTests(unittest.TestCase):
   data=json.loads((D/'catalog.json').read_text());self.assertEqual(len(data['directions']),34)
   courses=[c for d in data['directions'] for c in d['courses']]
   self.assertEqual(len(courses),116);self.assertEqual(len({c['id'] for c in courses}),116)
-  self.assertEqual(sum(c['status']=='planned' for c in courses),46)
-  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),70)
+  self.assertEqual(sum(c['status']=='planned' for c in courses),45)
+  self.assertEqual(sum(c['status']=='introductory_written_unreviewed' for c in courses),71)
   for c in courses:
    if c['status']=='planned':self.assertEqual(set(c['sections'].values()),{'missing'})
    else:self.assertEqual(c['sections']['review'],'pending');self.assertTrue((O/c['url']).exists())
@@ -45,10 +45,10 @@ class LibraryTests(unittest.TestCase):
   self.assertEqual(c['review']['subject_expert'],'pending')
  def test_pack_outcome_coverage(self):
   packs=all_packs()
-  self.assertEqual(len(packs['courses']),70)
+  self.assertEqual(len(packs['courses']),71)
   for c in packs['courses']:
-   self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02','D28-C04','D09-C04','D10-C04','D25-C03','D34-C03','D19-C01'} else 4)
-   self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02','D25-C03','D34-C03','D19-C01'} else 10 if c['id'] in {'D28-C04','D09-C04','D10-C04','D25-C03','D34-C03','D19-C01'} else 6)
+   self.assertEqual(len(c['lessons']),8 if c['id'] in {'D07-C01','D09-C02','D28-C04','D09-C04','D10-C04','D25-C03','D34-C03','D19-C01','D30-C03'} else 4)
+   self.assertEqual(len(c['questions']),12 if c['id'] in {'D07-C01','D09-C02','D25-C03','D34-C03','D19-C01','D30-C03'} else 10 if c['id'] in {'D28-C04','D09-C04','D10-C04','D25-C03','D34-C03','D19-C01','D30-C03'} else 6)
    self.assertEqual(sum(x['points'] for x in c['practice']['criteria']),12)
    check_ids={q['id'] for q in c['questions']}|{x['id'] for x in c['practice']['criteria']}
    for outcome in c['outcomes']:
@@ -697,10 +697,10 @@ class LibraryTests(unittest.TestCase):
   from learning_completion_plan import render_completion_plan
   source=json.loads((D/'remaining-65-plan.json').read_text());current=json.loads((D/'catalog.json').read_text())['directions']
   result=json.loads((O/'remaining-65-plan.json').read_text())
-  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=46,introductions_written_unreviewed=19,full_completion_demonstrated=0))
+  self.assertEqual(result['progress'],dict(baseline_titles=65,still_planned=45,introductions_written_unreviewed=20,full_completion_demonstrated=0))
   self.assertEqual(len({r['id'] for r in result['courses']}),65)
   self.assertEqual({r['full_completion'] for r in result['courses']},{'not_demonstrated'})
-  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04','D21-C03','D28-C03','D29-C01','D29-C03','D19-C02','D19-C04','D09-C04','D28-C04','D25-C03','D34-C03','D19-C01'})
+  self.assertEqual({r['id'] for r in result['courses'] if r['introduction_url']},{'D07-C05','D08-C02','D08-C03','D08-C04','D08-C05','D10-C02','D10-C03','D10-C04','D21-C03','D28-C03','D29-C01','D29-C03','D19-C02','D19-C04','D09-C04','D28-C04','D25-C03','D34-C03','D19-C01','D30-C03'})
   for r in result['courses']:
    for key in ['content_to_develop','practice_evidence_to_obtain','blocking_limits']:self.assertGreater(len(r[key]),20)
   with tempfile.TemporaryDirectory() as folder:
@@ -835,14 +835,14 @@ class LibraryTests(unittest.TestCase):
     self.assertIn(name,z.namelist())
  def test_progress(self):
   progress=json.loads((O/'progress.json').read_text())
-  self.assertEqual(progress['lessons'],315)
-  self.assertEqual(progress['open_answers'],470)
-  self.assertEqual(progress['materials'],71)
-  self.assertEqual(progress['planned'],46)
+  self.assertEqual(progress['lessons'],323)
+  self.assertEqual(progress['open_answers'],482)
+  self.assertEqual(progress['materials'],72)
+  self.assertEqual(progress['planned'],45)
   self.assertEqual(progress['expert_approved'],0)
   self.assertEqual((O/'progress.json').read_bytes(),(D/'progress.json').read_bytes())
   hub=(O/'index.html').read_text()
-  for text in ['315 уроков','470 ответов на контрольные вопросы','46 курсов','315 разборов заданий']:self.assertIn(text,hub)
+  for text in ['323 уроков','482 ответов на контрольные вопросы','45 курсов','323 разборов заданий']:self.assertIn(text,hub)
  def test_published_lab_matches_source_and_runs(self):
   for name in ['python-lab.py','sql-lab.json','run-digital-labs.py']:
    self.assertEqual((O/name).read_bytes(),(D/'labs'/name).read_bytes())
@@ -931,14 +931,14 @@ class LibraryTests(unittest.TestCase):
   ledger=json.loads((D/'review-ledger.json').read_text())
   expected={'FOUNDATION-DATA-01'}|{c['id'] for c in all_packs()['courses']}
   self.assertEqual({m['id'] for m in ledger['materials']},expected)
-  self.assertEqual(len(ledger['materials']),71)
+  self.assertEqual(len(ledger['materials']),72)
   self.assertEqual((O/'review-checklist.md').read_bytes(),(D/'review-checklist.md').read_bytes())
   for m in ledger['materials']:
    for stage in ['subject_review','legal_review','answer_review','pilot']:
     self.assertEqual(m[stage]['status'],'pending')
     self.assertIsNone(m[stage]['reviewer'])
   rows=list(csv.DictReader((O/'review-ledger.csv').read_text(encoding='utf-8-sig').splitlines()))
-  self.assertEqual(len(rows),284)
+  self.assertEqual(len(rows),288)
   self.assertEqual(json.loads((O/'review-ledger.json').read_text()),ledger)
  def test_false_review_rejected(self):
   import tempfile
@@ -962,12 +962,12 @@ class LibraryTests(unittest.TestCase):
   foundation=json.loads((D/'foundation-data.json').read_text())
   self.assertTrue(all(l['exercise_answer'] for l in foundation['lessons']))
   count+=len(foundation['lessons'])
-  self.assertEqual(count,315)
+  self.assertEqual(count,323)
   self.assertEqual(json.loads((O/'progress.json').read_text())['lesson_solutions'],count)
  def test_answer_bank(self):
   data=json.loads((O/'answer-bank.json').read_text())
-  self.assertEqual(data['counts'],dict(question=470,exercise=315,practice=71))
-  self.assertEqual(len({r['id'] for r in data['entries']}),856)
+  self.assertEqual(data['counts'],dict(question=482,exercise=323,practice=72))
+  self.assertEqual(len({r['id'] for r in data['entries']}),877)
   for row in data['entries']:
    self.assertTrue(row['answer']);self.assertTrue(row['explanation'])
    self.assertTrue((O/row['material_url'].split('#')[0]).exists())
@@ -1857,5 +1857,55 @@ class LibraryTests(unittest.TestCase):
    for bad in [raw+b'\n'*(65537-len(raw)),b'wrong\n',raw+raw.splitlines(keepends=True)[1],raw.replace(b'pcs',b'kg'),raw+b'A00,"broken\n']:
     p.write_bytes(bad);r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'');self.assertIn('rejected',r.stderr)
    p.unlink();self.assertEqual(run().returncode,2)
+
+ def design_contrast_lab(self):
+  import importlib.util
+  spec=importlib.util.spec_from_file_location('design_contrast',D/'labs/design-contrast.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
+ def test_design_contrast_independent_oracles_and_roles(self):
+  m=self.design_contrast_lab();data=m.read_case(D/'labs');before=copy.deepcopy(data);r=m.calculate(data)
+  expected=[21,4.478089453577214,4.542224959605253,3.0334698257384747,3.0334698257384747,2.9953461357088114,1,10.911134662722588,14.988800459483883,10.911134662722588]
+  self.assertEqual([x['meets_numeric_threshold'] for x in r['results']],[True,False,True,False,True,False,False,True,True,True])
+  for row,value in zip(r['results'],expected):self.assertAlmostEqual(row['contrast_ratio'],value,places=10)
+  self.assertEqual(data,before);self.assertIn('Role supplied, not measured',r['limits']);self.assertTrue(r['fictional'])
+  self.assertEqual(r['results'][3]['contrast_ratio'],r['results'][4]['contrast_ratio']);self.assertEqual((r['results'][3]['numeric_threshold'],r['results'][4]['numeric_threshold']),(4.5,3))
+ def test_design_contrast_channel_boundaries_primaries_and_symmetry(self):
+  m=self.design_contrast_lab();self.assertEqual(m.linear(0),0);self.assertEqual(m.linear(1),1);self.assertAlmostEqual(m.linear(.04045),.0031308049535603713,places=15)
+  for color,value in [('#FF0000',.2126),('#00FF00',.7152),('#0000FF',.0722),('#000000',0),('#FFFFFF',1)]:self.assertAlmostEqual(m.luminance(color),value,places=14)
+  for pair in m.read_case(D/'labs')['pairs']:
+   a,b=pair['foreground'],pair['background'];self.assertEqual(m.ratio(a,b),m.ratio(b,a));self.assertTrue(1<=m.ratio(a,b)<=21);self.assertEqual(m.ratio(a,a),1)
+  self.assertEqual(m.ratio('#aAbBcC','#FFFFFF'),m.ratio('#AABBCC','#ffffff'))
+  # A rounded display is not used as the oracle: 2.995... rounds to3.00 but fails3.
+  row=m.calculate(m.read_case(D/'labs'))['results'][5];self.assertEqual(round(row['contrast_ratio'],2),3);self.assertFalse(row['meets_numeric_threshold'])
+ def test_design_contrast_strict_schema_color_role_and_bounds(self):
+  m=self.design_contrast_lab();base=m.read_case(D/'labs')
+  for value in ['#fff','#FFFFFF80',' #FFFFFF','#GG0000','red','rgba(0,0,0,1)',True,None,123,[]]:
+   bad=copy.deepcopy(base);bad['pairs'][-1]['foreground']=value;before=copy.deepcopy(bad)
+   with self.assertRaises(ValueError,msg=str(value)):m.calculate(bad)
+   self.assertEqual(bad,before)
+  for bad in [dict(base,fictional=False),dict(base,schema_version=True),dict(base,pairs=[]),dict(base,extra=1),dict(base,pairs=base['pairs']+[base['pairs'][0]])]:
+   with self.assertRaises(ValueError):m.calculate(bad)
+  for patch in [dict(declared_role='logo'),dict(declared_role=True),dict(pair_id='bad'),dict(extra=1)]:
+   bad=copy.deepcopy(base);bad['pairs'][0].update(patch)
+   with self.assertRaises(ValueError):m.calculate(bad)
+  for value in [-1,1.01,True,'0',float('nan'),float('inf')]:
+   with self.assertRaises(ValueError):m.linear(value)
+  hundred=dict(base,pairs=[dict(base['pairs'][0],pair_id='C'+str(i).zfill(2)) for i in range(100)]);self.assertEqual(len(m.calculate(hundred)['results']),100)
+  with self.assertRaises(ValueError):m.calculate(dict(base,pairs=hundred['pairs']+[base['pairs'][0]]))
+ def test_design_contrast_cli_atomic_errors_readonly_and_byte_limits(self):
+  import tempfile
+  with tempfile.TemporaryDirectory(prefix='design contrast ') as folder:
+   folder=Path(folder);p=folder/'design-contrast-case.json';raw=(D/'labs'/p.name).read_bytes();p.write_bytes(raw)
+   def run():return subprocess.run([sys.executable,str(D/'labs/design-contrast.py'),'--directory',str(folder)],capture_output=True,text=True)
+   r=run();self.assertEqual(r.returncode,0,r.stderr);self.assertEqual(len(json.loads(r.stdout)['results']),10);self.assertEqual(p.read_bytes(),raw)
+   p.write_bytes(b'\xef\xbb\xbf'+raw);self.assertEqual(run().returncode,0)
+   p.write_bytes(raw+b' '*(65536-len(raw)));self.assertEqual(run().returncode,0)
+   for bad in [raw+b' '*(65537-len(raw)),b'{',raw.replace(b'"fictional": true',b'"fictional": true,"fictional": true'),raw.replace(b'C10',b'C01'),raw.replace(b'#000000',b'#00000000')]:
+    p.write_bytes(bad);r=run();self.assertEqual(r.returncode,2);self.assertEqual(r.stdout,'');self.assertIn('rejected',r.stderr)
+   p.unlink();self.assertEqual(run().returncode,2)
+ def test_design_assets_public_parity_and_pending_reviews(self):
+  for name in ['design-layout-example.html','design-contrast.py','design-contrast-case.json','design-project-guide.md']:self.assertEqual((D/'labs'/name).read_bytes(),(O/name).read_bytes())
+  c=json.loads((D/'design-packs.json').read_text())['courses'][0];self.assertEqual((len(c['lessons']),len(c['questions'])),(8,12));self.assertIn('/design-brief-to-handover.html',(R/'sitemap.xml').read_text())
+  row=next(r for r in json.loads((D/'review-ledger.json').read_text())['materials'] if r['id']=='D30-C03')
+  for gate in ['subject_review','legal_review','answer_review','pilot']:self.assertEqual(row[gate]['status'],'pending');self.assertIsNone(row[gate]['reviewer'])
 
 if __name__=='__main__':unittest.main()
