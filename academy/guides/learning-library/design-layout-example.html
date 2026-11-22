@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Карточка учебного занятия — проект по дизайну</title>
+<style>
+:root{--ink:#17283A;--accent:#123F65;--paper:#FFFFFF;--space:8px}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:18px/1.65 system-ui,sans-serif;overflow-wrap:anywhere}header,main,footer{max-width:1050px;margin:auto;padding:24px}a{color:var(--accent)}a:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:5px}nav{display:flex;flex-wrap:wrap;gap:16px}h1,h2,h3{line-height:1.25}h1{font-size:clamp(2rem,5vw,3.2rem);max-width:22ch}h2{font-size:1.6rem}h3{font-size:1.2rem}.kicker{font-weight:700;letter-spacing:.04em}.lead{max-width:62ch}.grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:24px}.card{min-width:0;border:2px solid var(--accent);border-radius:16px;padding:24px;margin:24px 0}.action{display:inline-block;background:var(--accent);color:var(--paper);padding:12px 20px;border-radius:8px;text-underline-offset:4px;max-width:100%}.action:focus-visible{outline:3px solid var(--ink);outline-offset:5px}summary{cursor:pointer;font-weight:700;padding:8px 0}.notice{border-left:5px solid var(--accent);padding-left:16px}li{margin-block:8px}footer{border-top:2px solid var(--accent)}@media(max-width:650px){.grid{grid-template-columns:minmax(0,1fr)}header,main,footer{padding:16px}.card{padding:16px}}
+</style>
+</head>
+<body>
+<header>
+<a href="#content">Перейти к содержанию</a>
+<p class="kicker">Учебный проект · цифровой дизайн</p>
+<nav aria-label="Материалы проекта"><a href="index.html">Библиотека</a><a href="design-brief-to-handover.html">Курс</a><a href="design-project-guide.md">Задание и эталон</a></nav>
+</header>
+<main id="content">
+<p>Автор: Герасимов Дмитрий Сергеевич · версия 0.40.0 · 2026-11-19</p>
+<h1>Проверка источников: объяснить решение, а не угадать ответ</h1>
+<p class="lead">Вымышленная карточка занятия для взрослых. За 45 минут по учебному плану участник разбирает четыре ситуации и записывает, что подтверждено, а что еще нужно проверить.</p>
+<p class="notice">Это макет в рамках учебного проекта. Запись на обучение, оплата, лицензия, аккредитация и проведение занятия здесь не оформлены.</p>
+<div class="grid">
+<section class="card" aria-labelledby="outcome">
+<h2 id="outcome">Что нужно сделать</h2>
+<ol><li>Прочитать ситуацию и выделить проверяемое утверждение.</li><li>Назвать источник и границы его применимости.</li><li>Составить короткое заключение без выдуманных фактов.</li></ol>
+<a class="action" href="#practice">Перейти к условиям задания</a>
+</section>
+<aside class="card" aria-labelledby="format">
+<h2 id="format">Формат и условия</h2>
+<p><strong>45 минут</strong> — предлагаемый учебный сценарий, не установленная трудоемкость программы.</p>
+<p>Браузер или бумажный текст. Внешняя регистрация и рабочие данные не нужны.</p>
+<p>Критерии и ответы открыты для самопроверки.</p>
+</aside>
+</div>
+<section id="practice" class="card" aria-labelledby="task-heading">
+<h2 id="task-heading">Условия задания</h2>
+<p>В вымышленном сообщении утверждается, что документ актуален, потому что его имя — final. Запишите, что это доказывает и какой проверки не хватает.</p>
+<details><summary>Открыть текстовый разбор</summary><p>Имя файла не подтверждает актуальность или согласование. Нужны источник версии, дата/область применимости и уполномоченное решение; при их отсутствии статус не установлен.</p></details>
+<p>Без сети используйте этот же текст на бумаге. Выбор формата не отменяет требование обоснования.</p>
+</section>
+<section aria-labelledby="handover">
+<h2 id="handover">Что проверено этим макетом</h2>
+<p>Заданы структура, ссылки внутри страницы, текст и три цветовых токена. Числовой расчет пар цветов хранится отдельно в задании. Макет не объявлен полностью доступным или соответствующим WCAG: нужны реальные проверки состояний, клавиатуры, масштабирования, браузеров и вспомогательных технологий.</p>
+<p>Ссылки навигации работают офлайн только при наличии соседних файлов; сам текст и раскрываемый разбор автономны, JavaScript и сеть для них не нужны.</p>
+</section>
+</main>
+<footer><p>Оригинальный текст и оформление для учебного проекта. Лицензия распространения требует утверждения правообладателем. Предметная, правовая и ответная экспертизы и апробация не проведены.</p></footer>
+</body>
+</html>
